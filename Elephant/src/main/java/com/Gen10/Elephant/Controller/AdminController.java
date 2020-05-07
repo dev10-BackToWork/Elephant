@@ -35,7 +35,7 @@ public class AdminController {
     
     @GetMapping("/noanswers")
     public ResponseEntity<List<User>> getInactiveUsers() {
-        return ResponseEntity.ok(service.getInactiveUsers())
+        return ResponseEntity.ok(service.getInactiveUsers());
     
     }
     @PostMapping("/newAccount")

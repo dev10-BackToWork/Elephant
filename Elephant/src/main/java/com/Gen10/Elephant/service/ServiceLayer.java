@@ -5,7 +5,22 @@
  */
 package com.Gen10.Elephant.service;
 
+import com.Gen10.Elephant.dao.ArrivalRepository;
+import com.Gen10.Elephant.dao.AttendanceRepository;
+import com.Gen10.Elephant.dao.DepartureRepository;
+import com.Gen10.Elephant.dao.LocationRepository;
+import com.Gen10.Elephant.dao.RolesRepository;
+import com.Gen10.Elephant.dao.TimeSlotRepository;
+import com.Gen10.Elephant.dao.UsersRepository;
+import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Attendance;
+import com.Gen10.Elephant.dto.Departure;
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.Role;
+import com.Gen10.Elephant.dto.TimeSlot;
+import com.Gen10.Elephant.dto.User;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
