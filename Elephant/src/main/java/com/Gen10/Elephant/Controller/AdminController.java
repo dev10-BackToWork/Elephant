@@ -37,13 +37,8 @@ public class AdminController {
     @GetMapping("/noAnswers")
     public ResponseEntity<List<User>> getInactiveUsers() {
         return ResponseEntity.ok(service.getInactiveUsers());
-<<<<<<< HEAD
-=======
     }
     */
->>>>>>> 343f8a52ae62eda3e4ac9358aa7cbdd3eac0b695
-    
-    }
 
     @PostMapping("/newUser")
     public ResponseEntity<User> createUser(@RequestBody User user) {
