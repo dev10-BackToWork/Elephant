@@ -48,10 +48,10 @@ public class AdminController {
         return ResponseEntity.ok(editUser);
     }
 
-    @PostMapping("/capacity/{num}")
-    public ResponseEntity<Location> editCapacity(@PathVariable int num){
-        return ResponseEntity.ok(service.editCapacity(num));
+    @PostMapping("/capacity/{id}/{num")
+    public ResponseEntity<Location> editCapacity(@PathVariable int id, @PathVariable int num){
+        return ResponseEntity.ok(service.editCapacity(id, num));
     }
 
-    @
+    @PostMapping("/timeIncrement")
 }
