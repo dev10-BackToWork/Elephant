@@ -32,10 +32,10 @@ public class User {
 	
 	@ManyToOne
 	@JoinColumn(name = "locationid")
-	private int locationId;
+	private Location location;
 	
 	@ManyToOne
 	@JoinColumn(name = "roleid")
-	private int roleId;
+	private Role role;
 	
 }
