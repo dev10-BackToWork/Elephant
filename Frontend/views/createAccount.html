@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>Create Account</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Logo</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#"
+                >Dashboard
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Employees</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Time</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h1 class="mt-5">Create Account</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div class="card">
+            <div class="card-header">
+              New Employee
+            </div>
+            <div class="card-body">
+              <form>
+                <div class="row my-2">
+                  <div class="col">
+                    <label for="firstName">First Name</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col">
+                    <label for="lastName">Last Name</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="row my-2">
+                  <div class="col">
+                    <label for="email">Employee Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col">
+                    <label for="password">Temporary Password</label>
+                    <!-- <button class="btn btn-primary btn-sm">
+                      Generate Random Password
+                    </button> -->
+                    <!-- <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      class="form-control"
+                    /> -->
+                    <input
+                      type="text"
+                      name="password"
+                      id="password"
+                      class="form-control"
+                      readonly
+                      value="Password auto-generated. Available in account details page."
+                    />
+                  </div>
+                </div>
+                <div class="row my-2">
+                  <div class="col">
+                    <label for="location">Employee location</label>
+                    <select name="location" id="location" class="form-control">
+                      <option selected>--Select Location--</option>
+                      <option value="location1">Location 1</option>
+                      <option value="location2">Location 2</option>
+                    </select>
+                  </div>
+
+                  <div class="col">
+                    <label for="role">Employee Role</label>
+                    <select name="role" id="role" class="form-control">
+                      <option selected>--Select Role--</option>
+                      <option value="branchAdmin">Branch Administrator</option>
+                      <option value="user">Branch Employee</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row my-2 ml-2">
+                  <a href="#" class="btn btn-primary">Create New Location</a>
+                </div>
+                <div class="row mt-4">
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                      Create Account
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>
