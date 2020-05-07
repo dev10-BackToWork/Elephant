@@ -5,7 +5,22 @@
  */
 package com.Gen10.Elephant.service;
 
+import com.Gen10.Elephant.dao.ArrivalRepository;
+import com.Gen10.Elephant.dao.AttendanceRepository;
+import com.Gen10.Elephant.dao.DepartureRepository;
+import com.Gen10.Elephant.dao.LocationRepository;
+import com.Gen10.Elephant.dao.RolesRepository;
+import com.Gen10.Elephant.dao.TimeSlotRepository;
+import com.Gen10.Elephant.dao.UsersRepository;
+import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Attendance;
+import com.Gen10.Elephant.dto.Departure;
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.Role;
+import com.Gen10.Elephant.dto.TimeSlot;
+import com.Gen10.Elephant.dto.User;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -118,8 +133,8 @@ public class ServiceLayer {
         return locationRepo.findAll();
     }
 
-    public Location findLocationByIdentifier(String identifier) {
-        Location location = locationRepo.findById(identifier).orElse(null);
+    public Location findLocationById(int locationId) {
+        Location location = locationRepo.findById(locationId).orElse(null);
 
         if (location == null) {
             System.out.println("The location object is null");
@@ -136,6 +151,17 @@ public class ServiceLayer {
     public void saveLocation(Location location) {
         locationRepo.save(location);
     }
+    
+    public Location editCapacity(int id, int num) {
+//  Due to auto-incrementing of locations in database, the specific user object needs to be acquired and altered to prevent duplicate location with different field(s).
+        Location existingLocation = findLocationById(id);
+        
+        existingLocation.setMaxOccupancy(num);
+        
+        Location editedLocation = locationRepo.save(existingLocation);
+        
+        return editedLocation;
+    }
 
 //  **********
 //  Role(s)
@@ -144,7 +170,7 @@ public class ServiceLayer {
     }
     
     public Role findRoleByIdentifier(String identifier) {
-        Role role = roleRepo.findById(identifier).orElse(null);
+        Role role = rolesRepo.findById(identifier).orElse(null);
         
         if(role == null) {
             System.out.println("The role object is null");
@@ -164,8 +190,16 @@ public class ServiceLayer {
 
 //  **********    
 //  TimeSlot
-    public List<TimeSlot> findAllTimeSlots() {
-        return timeSlotRepo.findAll();
+    public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
+        List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
+        List<TimeSlot> locationTimeSlots = null;
+        
+        for(TimeSlot ts : allTimeSlots) {
+            if (ts.getLocation().getLocationId() == locationId)
+                locationTimeSlots.add(ts);
+        }
+        
+        return locationTimeSlots;
     }
     
     public TimeSlot findTimeSlotByLocation(String identifier) {
@@ -189,12 +223,13 @@ public class ServiceLayer {
     
 //  **********
 //  User(s)
-    public List<User> findAllUsers() {
+
+    public List<User> getUsers() {
         return usersRepo.findAll();
     }
 
-    public User findUserByIdentifier(int userId) {
-        User user = userRepo.findById(userId).orElse(null);
+    public User getUserById(int userId) {
+        User user = usersRepo.findById(userId).orElse(null);
 
         if (user == null) {
             System.out.println("The user object is null");
@@ -205,11 +240,29 @@ public class ServiceLayer {
     }
 
     public void deleteUserById(int userId) {
-        userRepo.deleteById(userId);
+        usersRepo.deleteById(userId);
     }
 
-    public void saveUser(User user) {
-        userRepo.save(user);
+    public User createUser(User user) {
+        
+        
+        return usersRepo.save(user);
+    }
+    
+    public User editUser(User user) {
+//  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
+        User existingUser = getUserById(user.getUserId());
+        
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setLocation(user.getLocation());
+        existingUser.setRole(user.getRole());
+        
+        User editedUser = usersRepo.save(existingUser);
+        
+        return editedUser;
     }
 
 }
