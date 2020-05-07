@@ -169,8 +169,8 @@ public class ServiceLayer {
         return rolesRepo.findAll();
     }
     
-    public Role findRoleByIdentifier(String identifier) {
-        Role role = rolesRepo.findById(identifier).orElse(null);
+    public Role findRoleByIdentifier(int id) {
+        Role role = rolesRepo.findById(id).orElse(null);
         
         if(role == null) {
             System.out.println("The role object is null");
@@ -202,8 +202,8 @@ public class ServiceLayer {
         return locationTimeSlots;
     }
     
-    public TimeSlot findTimeSlotByLocation(String identifier) {
-        TimeSlot timeSlot = timeSlotRepo.findById(identifier).orElse(null);
+    public TimeSlot findTimeSlotByLocation(int id) {
+        TimeSlot timeSlot = timeSlotRepo.findById(id).orElse(null);
         
         if(timeSlot == null) {
             System.out.println("The timeSlot object is null");
