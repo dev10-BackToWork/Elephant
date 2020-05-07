@@ -28,5 +28,5 @@ public class Attendance {
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
-	private int userId;
+	private User user;
 }

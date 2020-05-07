@@ -25,9 +25,9 @@ public class Departure {
 	
 	@ManyToOne
 	@JoinColumn(name = "timeslotid")
-	private int timeSlotId;
+	private TimeSlot timeSlot;
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
-	private int userId;
+	private User user;
 }

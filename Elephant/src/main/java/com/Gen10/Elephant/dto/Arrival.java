@@ -17,12 +17,11 @@ public class Arrival {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int arrivalId;
 	
-	
 	@ManyToOne
 	@JoinColumn(name = "timeslotid")
-	private int timeSlotId;
+	private TimeSlot timeSlot;
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
-	private int userId;
+	private User user;
 }
