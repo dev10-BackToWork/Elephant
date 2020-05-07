@@ -23,28 +23,28 @@ public class AdminController {
     @Autowired
     ServiceLayer service;
 
-    @GetMapping("/account/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(service.getUserById(id));
     }
 
-    @GetMapping("/accounts")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(service.getUsers());
     }
     
-    @GetMapping("/noanswers")
+    @GetMapping("/noAnswers")
     public ResponseEntity<List<User>> getInactiveUsers() {
         return ResponseEntity.ok(service.getInactiveUsers())
     
     }
-    @PostMapping("/newAccount")
+    @PostMapping("/newUser")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User newUser = service.createUser(user);
         return ResponseEntity.ok(newUser);
     }
 
-    @PostMapping("/account")
+    @PostMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody User user) {
         User editUser = service.editUser(user);
         return ResponseEntity.ok(editUser);

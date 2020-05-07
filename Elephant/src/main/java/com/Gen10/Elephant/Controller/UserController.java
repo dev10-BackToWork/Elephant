@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(service.reserveArrivalByTimeSlotId(id));
     }
 
-    @PostMapping("/time/{id}")
+    @PostMapping("/departure/{id}")
     public ResponseEntity<Departure> reserveDeparture(@PathVariable int id) {
         return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(id));
     }
