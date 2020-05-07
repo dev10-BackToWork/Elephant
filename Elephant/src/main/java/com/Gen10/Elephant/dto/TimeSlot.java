@@ -20,5 +20,5 @@ public class TimeSlot {
 	
 	@ManyToOne
 	@JoinColumn(name = "locationid")
-	private int locationId;
+	private Location location;
 }
