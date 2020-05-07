@@ -17,7 +17,6 @@ public class Arrival {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int arrivalId;
 	
-	
 	@ManyToOne
 	@JoinColumn(name = "timeslotid")
 	private TimeSlot timeSlot;
