@@ -32,8 +32,7 @@ public class AdminController {
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(service.getUsers());
-        
+        return ResponseEntity.ok(service.getUsers());    
     }
     
     /*
