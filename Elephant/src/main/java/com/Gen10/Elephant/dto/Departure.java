@@ -21,7 +21,7 @@ public class Departure {
 	private int departureId;
 	
 	@Column
-	private Date date;
+	private Date departureDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "timeslotid")
