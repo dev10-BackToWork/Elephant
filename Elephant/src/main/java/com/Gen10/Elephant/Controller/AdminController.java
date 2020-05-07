@@ -48,5 +48,10 @@ public class AdminController {
         return ResponseEntity.ok(editUser);
     }
 
-    @PostMapping("/capacity/{")
+    @PostMapping("/capacity/{num}")
+    public ResponseEntity<Location> editCapacity(@PathVariable int num){
+        return ResponseEntity.ok(service.editCapacity(num));
+    }
+
+    @
 }
