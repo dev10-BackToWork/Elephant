@@ -40,4 +40,5 @@ public class AdminController {
     public ResponseEntity<User> createUser(@RequestBody User user)
         User newUser = service.createUser(user);
         return ResponseEntity.ok(newUser);
+        
 }
