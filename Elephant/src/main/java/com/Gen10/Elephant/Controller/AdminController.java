@@ -2,10 +2,6 @@ package com.Gen10.Elephant.Controller;
 
 import java.util.List;
 
-import com.Gen10.Elephant.dto.Location;
-import com.Gen10.Elephant.dto.User;
-import com.Gen10.Elephant.service.ServiceLayer;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.User;
+import com.Gen10.Elephant.service.ServiceLayer;
 
 @RestController
 @RequestMapping("api/admin")
@@ -33,9 +33,15 @@ public class AdminController {
         return ResponseEntity.ok(service.getUsers());
     }
     
+    /*
     @GetMapping("/noAnswers")
     public ResponseEntity<List<User>> getInactiveUsers() {
         return ResponseEntity.ok(service.getInactiveUsers());
+<<<<<<< HEAD
+=======
+    }
+    */
+>>>>>>> 343f8a52ae62eda3e4ac9358aa7cbdd3eac0b695
     
     }
 
@@ -56,13 +62,18 @@ public class AdminController {
         return ResponseEntity.ok(service.editCapacity(id, num));
     }
 
+    
+    /*
+     * 
     @PostMapping("/timeIncrement/{id}/{num}")
     public ResponseEntity<Location> editIncrement(@PathVariable int id, @PathVariable int num){
         return ResponseEntity.ok(service.editIncrement(id, num));
     }
+    
+    */
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        return ResponseEntity.ok(service.deleteUserById(id));
+    public void deleteUser(@PathVariable int id) {
+        service.deleteUserById(id);
     }
 }
