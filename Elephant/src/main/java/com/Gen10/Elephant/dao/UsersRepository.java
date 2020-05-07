@@ -10,8 +10,9 @@ import com.Gen10.Elephant.dto.User;
 
 @Repository
 public interface UsersRepository extends JpaRepository<User, Integer>{
-    
-	User findByUsername(String username);
+
+	User findByEmail(String email);
+
 	
 	List<User> findAllByLocation(Location location);
 }

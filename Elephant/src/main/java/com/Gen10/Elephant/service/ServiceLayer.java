@@ -169,8 +169,8 @@ public class ServiceLayer {
         return rolesRepo.findAll();
     }
     
-    public Role findRoleByIdentifier(int id) {
-        Role role = rolesRepo.findById(id).orElse(null);
+    public Role findRoleByName(String identifier) {
+        Role role = rolesRepo.findByName(identifier).orElse(null);
         
         if(role == null) {
             System.out.println("The role object is null");
@@ -202,8 +202,8 @@ public class ServiceLayer {
         return locationTimeSlots;
     }
     
-    public TimeSlot findTimeSlotByLocation(int id) {
-        TimeSlot timeSlot = timeSlotRepo.findById(id).orElse(null);
+    public TimeSlot findTimeSlotByLocation(int timeSlotId) {
+        TimeSlot timeSlot = timeSlotRepo.findById(timeSlotId).orElse(null);
         
         if(timeSlot == null) {
             System.out.println("The timeSlot object is null");
@@ -238,6 +238,8 @@ public class ServiceLayer {
             return user;
         }
     }
+    
+//    getAllUsersByLocation()
 
     public void deleteUserById(int userId) {
         usersRepo.deleteById(userId);
@@ -263,6 +265,10 @@ public class ServiceLayer {
         User editedUser = usersRepo.save(existingUser);
         
         return editedUser;
+    }
+    
+    public List<User> getInactiveUsers() {
+        
     }
 
 }

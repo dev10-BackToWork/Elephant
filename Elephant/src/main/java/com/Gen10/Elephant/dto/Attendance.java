@@ -24,7 +24,7 @@ public class Attendance {
 	private boolean isAttending;
 	
 	@Column
-	private Date date;
+	private Date attendanceDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")

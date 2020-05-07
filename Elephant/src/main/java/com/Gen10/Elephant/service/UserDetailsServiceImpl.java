@@ -26,8 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	 * Post Condition: Grants permission based on role of user
 	 */
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = usersRepo.findByUsername(userName);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = usersRepo.findByEmail(email);
 		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		
