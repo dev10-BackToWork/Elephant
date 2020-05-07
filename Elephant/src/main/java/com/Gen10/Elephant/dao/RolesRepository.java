@@ -8,4 +8,5 @@ import com.Gen10.Elephant.dto.Role;
 @Repository
 public interface RolesRepository extends JpaRepository<Role, Integer>{
 
+	Role findByName(String name);
 }
