@@ -39,7 +39,7 @@ public class AdminController {
         return ResponseEntity.ok(service.getInactiveUsers());
     }
     */
-    
+
     @PostMapping("/newUser")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User newUser = service.createUser(user);
