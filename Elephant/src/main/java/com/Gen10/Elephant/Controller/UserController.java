@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/times/{id}")
     public ResponseEntity<List<TimeSlot>> getTimes(@PathVariable int id) {
-        return ResponseEntity.ok(service.findAllTimeSlots(id));
+        return ResponseEntity.ok(service.getOpenTimeSlotsByLocationId(id));
     }
 
     // @PostMapping("/login")
@@ -41,6 +41,12 @@ public class UserController {
     @PostMapping("/departure/{id}")
     public ResponseEntity<Departure> reserveDeparture(@PathVariable int id) {
         return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(id));
+    }
+    
+    @PostMapping("/editUser")
+    public ResponseEntity<User> editUser(@RequestBody User user) {
+        User editUser = service.editUser(user);
+        return ResponseEntity.ok(editUser);
     }
 
     @DeleteMapping("/time/{id}")
