@@ -30,4 +30,37 @@ public class Departure {
 	@ManyToOne
 	@JoinColumn(name = "userid")
 	private User user;
+
+	public int getDepartureId() {
+		return this.departureId;
+	}
+
+	public void setDepartureId(int departureId) {
+		this.departureId = departureId;
+	}
+
+	public Date getDepartureDate() {
+		return this.departureDate;
+	}
+
+	public void setDepartureDate(Date departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	public TimeSlot getTimeSlot() {
+		return this.timeSlot;
+	}
+
+	public void setTimeSlot(TimeSlot timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

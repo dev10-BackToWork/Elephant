@@ -29,4 +29,41 @@ public class Attendance {
 	@ManyToOne
 	@JoinColumn(name = "userid")
 	private User user;
+
+	public int getAttendanceId() {
+		return this.attendanceId;
+	}
+
+	public void setAttendanceId(int attendanceId) {
+		this.attendanceId = attendanceId;
+	}
+
+	public boolean isIsAttending() {
+		return this.isAttending;
+	}
+
+	public boolean getIsAttending() {
+		return this.isAttending;
+	}
+
+	public void setIsAttending(boolean isAttending) {
+		this.isAttending = isAttending;
+	}
+
+	public Date getAttendanceDate() {
+		return this.attendanceDate;
+	}
+
+	public void setAttendanceDate(Date attendanceDate) {
+		this.attendanceDate = attendanceDate;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

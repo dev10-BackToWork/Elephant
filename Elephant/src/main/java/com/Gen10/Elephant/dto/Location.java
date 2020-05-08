@@ -25,4 +25,37 @@ public class Location {
 	
 	@Column
 	private int maxOccupancy;
+
+	public int getLocationId() {
+		return this.locationId;
+	}
+
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
+
+	public String getCityName() {
+		return this.cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public int getTimeIncrement() {
+		return this.timeIncrement;
+	}
+
+	public void setTimeIncrement(int timeIncrement) {
+		this.timeIncrement = timeIncrement;
+	}
+
+	public int getMaxOccupancy() {
+		return this.maxOccupancy;
+	}
+
+	public void setMaxOccupancy(int maxOccupancy) {
+		this.maxOccupancy = maxOccupancy;
+	}
+	
 }

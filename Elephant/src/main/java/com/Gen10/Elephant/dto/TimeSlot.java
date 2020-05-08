@@ -27,4 +27,29 @@ public class TimeSlot {
 	@ManyToOne
 	@JoinColumn(name = "locationid")
 	private Location location;
+
+	public int getTimeSlotId() {
+		return this.timeSlotId;
+	}
+
+	public void setTimeSlotId(int timeSlotId) {
+		this.timeSlotId = timeSlotId;
+	}
+
+	public Time getStartTime() {
+		return this.startTime;
+	}
+
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 }
