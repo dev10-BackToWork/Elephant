@@ -18,17 +18,17 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	
-	@Column
+	@Column(name = "firstname")
 	private String firstName;
 	
-	@Column
+	@Column(name = "lastname")
 	private String lastName;
+        
+        @Column
+	private String email;
 	
 	@Column 
-	private String password;
-	
-	@Column
-	private String email;
+	private String passwords;
 	
 	@ManyToOne
 	@JoinColumn(name = "locationid")
