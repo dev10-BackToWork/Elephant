@@ -11,9 +11,27 @@ import lombok.Data;
 public class Role {
 	
 	@Id
+	@Column(name = "roleid")
 	private int roleId;
 	
-	@Column
+	@Column(name = "rolename")
 	private String name;
+
+
+	public int getRoleId() {
+		return this.roleId;
+	}
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }
