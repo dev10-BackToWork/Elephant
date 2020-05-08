@@ -53,7 +53,7 @@ public class ServiceLayer {
         return arrivalRepo.findAll();
     }
 
-    public Arrival findArrivalByArrivalId(int arrivalId) {
+    public Arrival getArrivalByArrivalId(int arrivalId) {
         Arrival arrival = arrivalRepo.findById(arrivalId).orElse(null);
 
         if (arrival == null) {
@@ -74,6 +74,24 @@ public class ServiceLayer {
 
     public void saveArrival(Arrival arrival) {
         arrivalRepo.save(arrival);
+    }
+    
+    public void saveArrivalAndDeparture(Arrival arrival, Departure departure) {
+        saveArrival(arrival);
+        saveDeparture(departure);
+    }
+    
+    public Arrival reserveArrivalByTimeSlotId(int id) {
+        List<Arrival> arrivals = findAllArrivals();
+        Arrival targetArrivalTimeSlot;
+        
+        for(Arrival arrival : arrivals) {
+            if(arrival.getTimeSlot().getTimeSlotId() == id) {
+                targetArrivalTimeSlot = arrival;
+            }
+        }
+        
+        return targetArrivalTimeSlot;
     }
 
 //  **********
@@ -97,7 +115,7 @@ public class ServiceLayer {
         attendanceRepo.deleteById(attendanceId);
     }
     
-    public void saveAttendance(Attendance attendance) {
+    public void takeAttendance(Attendance attendance) {
         attendanceRepo.save(attendance);
     }
     
@@ -107,7 +125,7 @@ public class ServiceLayer {
         return departureRepo.findAll();
     }
     
-    public Departure findDepartureByDepatureId(int departureId) {
+    public Departure getDepartureByDepatureId(int departureId) {
         Departure departure = departureRepo.findById(departureId).orElse(null);
         
         if(departure == null) {
@@ -129,7 +147,7 @@ public class ServiceLayer {
 
 //  **********
 //  Location
-    public List<Location> findAllLocations() {
+    public List<Location> getAllLocations() {
         return locationRepo.findAll();
     }
 
@@ -148,7 +166,7 @@ public class ServiceLayer {
         locationRepo.deleteById(locationId);
     }
 
-    public void saveLocation(Location location) {
+    public void newLocation(Location location) {
         locationRepo.save(location);
     }
     
@@ -162,10 +180,14 @@ public class ServiceLayer {
         
         return editedLocation;
     }
+    
+    public Location editIncrement(int id, int num) {
+        
+    }
 
 //  **********
 //  Role(s)
-    public List<Role> findAllRoles() {
+    public List<Role> getAllRoles() {
         return rolesRepo.findAll();
     }
     
@@ -227,6 +249,14 @@ public class ServiceLayer {
     public List<User> getUsers() {
         return usersRepo.findAll();
     }
+    
+    public List<User> getAllUsersByLocation(Location location) {
+        return usersRepo.findAllByLocation(location);
+    }
+    
+    public List<User> currentUsersInOffice(Location location) {
+        usersRepo.findUsersByLocationByAttendance(location);
+    }
 
     public User getUserById(int userId) {
         User user = usersRepo.findById(userId).orElse(null);
@@ -238,15 +268,14 @@ public class ServiceLayer {
             return user;
         }
     }
-    
-//    getAllUsersByLocation()
+
 
     public void deleteUserById(int userId) {
         usersRepo.deleteById(userId);
     }
 
     public User createUser(User user) {
-        
+        user.setPassword("password");
         
         return usersRepo.save(user);
     }
