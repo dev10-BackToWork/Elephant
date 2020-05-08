@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
    
-    <title>Elephant</title>
+    <title>All Employees</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -27,12 +27,12 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Dashboard
+                            <a class="nav-link" href="index.html">Dashboard
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Employees</a>
+                            <a class="nav-link" href="allEmployees.html">Employees</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Time</a>
@@ -46,12 +46,39 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
-                    <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-                    <ul class="list-unstyled">
-                        <li>Bootstrap 4.3.1</li>
-                        <li>jQuery 3.4.1</li>
-                    </ul>
+                    <h1 class="mt-5">All Employees</h1>
+                    <div class="col text-center">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Location</th>
+                                    <th>Completed Survey?</th>
+                                    <th></th>
+                                    <th><button class="btn btn-primary" href="#">Create Employee</button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>johndoe@genesis.com</td>
+                                    <td>Minneapolis</td>
+                                    <td>Yes</td>
+                                    <td><a class="btn btn-info" href="employeeInfo.html">Edit</a></td>
+                                    <td><a class="btn btn-danger" href="#">Delete</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Doe</td>
+                                    <td>janedoe@genesis.com</td>
+                                    <td>Minneapolis</td>
+                                    <td>Yes</td>
+                                    <td><a class="btn btn-info" href="employeeInfo.html">Edit</a></td>
+                                    <td><a class="btn btn-danger" href="#">Delete</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
