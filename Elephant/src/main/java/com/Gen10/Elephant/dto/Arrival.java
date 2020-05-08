@@ -1,5 +1,8 @@
 package com.Gen10.Elephant.dto;
 
+import java.sql.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +19,9 @@ public class Arrival {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int arrivalId;
+	
+	@Column
+	private Date arrivalDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "timeslotid")

@@ -80,4 +80,10 @@ VALUES ("Minneapolis", 5, 20);
 
 INSERT INTO roles (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
-(2, "ROLE_USER"); 
+(2, "ROLE_USER");
+
+INSERT INTO users (userId, firstName, lastName, email, passwords, locationId, roleId) VALUES 
+	(1, "Keely", "Brennan", "keely@keely.com", "password", 1, 2),
+    (2, "Ethan", "Bettenga", "ethan@ethan.com", "password", 1, 2),
+    (3, "Nate", "Wood", "nate@nate.com", "password", 1, 2),
+    (4, "Matthew", "Gerszewski", "matthew@matthew.com", "password", 1, 2);

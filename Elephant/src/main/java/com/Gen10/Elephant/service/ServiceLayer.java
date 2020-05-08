@@ -5,7 +5,22 @@
  */
 package com.Gen10.Elephant.service;
 
+import com.Gen10.Elephant.dao.ArrivalRepository;
+import com.Gen10.Elephant.dao.AttendanceRepository;
+import com.Gen10.Elephant.dao.DepartureRepository;
+import com.Gen10.Elephant.dao.LocationRepository;
+import com.Gen10.Elephant.dao.RolesRepository;
+import com.Gen10.Elephant.dao.TimeSlotRepository;
+import com.Gen10.Elephant.dao.UsersRepository;
+import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Attendance;
+import com.Gen10.Elephant.dto.Departure;
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.Role;
+import com.Gen10.Elephant.dto.TimeSlot;
+import com.Gen10.Elephant.dto.User;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -38,7 +53,7 @@ public class ServiceLayer {
         return arrivalRepo.findAll();
     }
 
-    public Arrival findArrivalByArrivalId(int arrivalId) {
+    public Arrival getArrivalByArrivalId(int arrivalId) {
         Arrival arrival = arrivalRepo.findById(arrivalId).orElse(null);
 
         if (arrival == null) {
@@ -60,10 +75,28 @@ public class ServiceLayer {
     public void saveArrival(Arrival arrival) {
         arrivalRepo.save(arrival);
     }
+    
+    public void saveArrivalAndDeparture(Arrival arrival, Departure departure) {
+        saveArrival(arrival);
+        saveDeparture(departure);
+    }
+    
+    public Arrival reserveArrivalByTimeSlotId(int id) {
+        List<Arrival> arrivals = findAllArrivals();
+        Arrival targetArrivalTimeSlot = null;
+        
+        for(Arrival arrival : arrivals) {
+            if(arrival.getTimeSlot().getTimeSlotId() == id) {
+                targetArrivalTimeSlot = arrival;
+            }
+        }
+        
+        return targetArrivalTimeSlot;
+    }
 
 //  **********
 //  Attendance
-    public List<Attendance> findAllAttendances() {
+    public List<Attendance> findAllAttendance() {
         return attendanceRepo.findAll();
     }
     
@@ -82,7 +115,7 @@ public class ServiceLayer {
         attendanceRepo.deleteById(attendanceId);
     }
     
-    public void saveAttendance(Attendance attendance) {
+    public void takeAttendance(Attendance attendance) {
         attendanceRepo.save(attendance);
     }
     
@@ -92,7 +125,7 @@ public class ServiceLayer {
         return departureRepo.findAll();
     }
     
-    public Departure findDepartureByDepatureId(int departureId) {
+    public Departure getDepartureByDepatureId(int departureId) {
         Departure departure = departureRepo.findById(departureId).orElse(null);
         
         if(departure == null) {
@@ -114,12 +147,12 @@ public class ServiceLayer {
 
 //  **********
 //  Location
-    public List<Location> findAllLocations() {
+    public List<Location> getAllLocations() {
         return locationRepo.findAll();
     }
 
-    public Location findLocationByIdentifier(String identifier) {
-        Location location = locationRepo.findById(identifier).orElse(null);
+    public Location findLocationById(int locationId) {
+        Location location = locationRepo.findById(locationId).orElse(null);
 
         if (location == null) {
             System.out.println("The location object is null");
@@ -133,18 +166,33 @@ public class ServiceLayer {
         locationRepo.deleteById(locationId);
     }
 
-    public void saveLocation(Location location) {
+    public void newLocation(Location location) {
         locationRepo.save(location);
     }
+    
+    public Location editCapacity(int id, int num) {
+//  Due to auto-incrementing of locations in database, the specific user object needs to be acquired and altered to prevent duplicate location with different field(s).
+        Location existingLocation = findLocationById(id);
+        
+        existingLocation.setMaxOccupancy(num);
+        
+        Location editedLocation = locationRepo.save(existingLocation);
+        
+        return editedLocation;
+    }
+    
+//    public Location editIncrement(int id, int num) {
+//        
+//    }
 
 //  **********
 //  Role(s)
-    public List<Role> findAllRoles() {
+    public List<Role> getAllRoles() {
         return rolesRepo.findAll();
     }
     
-    public Role findRoleByIdentifier(String identifier) {
-        Role role = roleRepo.findById(identifier).orElse(null);
+    public Role findRoleByName(String identifier) {
+        Role role = rolesRepo.findByName(identifier);
         
         if(role == null) {
             System.out.println("The role object is null");
@@ -164,12 +212,20 @@ public class ServiceLayer {
 
 //  **********    
 //  TimeSlot
-    public List<TimeSlot> findAllTimeSlots() {
-        return timeSlotRepo.findAll();
+    public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
+        List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
+        List<TimeSlot> locationTimeSlots = null;
+        
+        for(TimeSlot ts : allTimeSlots) {
+            if (ts.getLocation().getLocationId() == locationId)
+                locationTimeSlots.add(ts);
+        }
+        
+        return locationTimeSlots;
     }
     
-    public TimeSlot findTimeSlotByLocation(String identifier) {
-        TimeSlot timeSlot = timeSlotRepo.findById(identifier).orElse(null);
+    public TimeSlot findTimeSlotByLocation(int timeSlotId) {
+        TimeSlot timeSlot = timeSlotRepo.findById(timeSlotId).orElse(null);
         
         if(timeSlot == null) {
             System.out.println("The timeSlot object is null");
@@ -189,12 +245,32 @@ public class ServiceLayer {
     
 //  **********
 //  User(s)
-    public List<User> findAllUsers() {
-        return usersRepo.findAll();
+
+    public List<User> getUsers() {
+        List<User> users = usersRepo.findAll();
+        
+        return users;
+    }
+    
+    public List<User> getAllUsersByLocation(Location location) {
+        return usersRepo.findAllByLocation(location);
+    }
+    
+    public List<User> currentUsersInOffice(Location location) {
+        List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationInAttendance = null;
+        
+        for (User users : usersByLocation) {
+            if (findAttendanceByUserId(users.getUserId()).isAttending()) {
+                usersByLocationInAttendance.add(users);
+            }
+        }
+        
+        return usersByLocationInAttendance;
     }
 
-    public User findUserByIdentifier(int userId) {
-        User user = userRepo.findById(userId).orElse(null);
+    public User getUserById(int userId) {
+        User user = usersRepo.findById(userId).orElse(null);
 
         if (user == null) {
             System.out.println("The user object is null");
@@ -204,12 +280,35 @@ public class ServiceLayer {
         }
     }
 
+
     public void deleteUserById(int userId) {
-        userRepo.deleteById(userId);
+        usersRepo.deleteById(userId);
     }
 
-    public void saveUser(User user) {
-        userRepo.save(user);
+    public User createUser(User user) {
+        user.setPassword("password");
+        
+        return usersRepo.save(user);
     }
+    
+    public User editUser(User user) {
+//  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
+        User existingUser = getUserById(user.getUserId());
+        
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setLocation(user.getLocation());
+        existingUser.setRole(user.getRole());
+        
+        User editedUser = usersRepo.save(existingUser);
+        
+        return editedUser;
+    }
+    
+//    public List<User> getInactiveUsers() {
+//        
+//    }
 
 }
