@@ -83,7 +83,7 @@ public class ServiceLayer {
     
     public Arrival reserveArrivalByTimeSlotId(int id) {
         List<Arrival> arrivals = findAllArrivals();
-        Arrival targetArrivalTimeSlot;
+        Arrival targetArrivalTimeSlot = null;
         
         for(Arrival arrival : arrivals) {
             if(arrival.getTimeSlot().getTimeSlotId() == id) {
@@ -96,7 +96,7 @@ public class ServiceLayer {
 
 //  **********
 //  Attendance
-    public List<Attendance> findAllAttendances() {
+    public List<Attendance> findAllAttendance() {
         return attendanceRepo.findAll();
     }
     
@@ -181,9 +181,9 @@ public class ServiceLayer {
         return editedLocation;
     }
     
-    public Location editIncrement(int id, int num) {
-        
-    }
+//    public Location editIncrement(int id, int num) {
+//        
+//    }
 
 //  **********
 //  Role(s)
@@ -192,7 +192,7 @@ public class ServiceLayer {
     }
     
     public Role findRoleByName(String identifier) {
-        Role role = rolesRepo.findByName(identifier).orElse(null);
+        Role role = rolesRepo.findByName(identifier);
         
         if(role == null) {
             System.out.println("The role object is null");
@@ -247,7 +247,9 @@ public class ServiceLayer {
 //  User(s)
 
     public List<User> getUsers() {
-        return usersRepo.findAll();
+        List<User> users = usersRepo.findAll();
+        
+        return users;
     }
     
     public List<User> getAllUsersByLocation(Location location) {
@@ -255,7 +257,16 @@ public class ServiceLayer {
     }
     
     public List<User> currentUsersInOffice(Location location) {
-        usersRepo.findUsersByLocationByAttendance(location);
+        List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationInAttendance = null;
+        
+        for (User users : usersByLocation) {
+            if (findAttendanceByUserId(users.getUserId()).isAttending()) {
+                usersByLocationInAttendance.add(users);
+            }
+        }
+        
+        return usersByLocationInAttendance;
     }
 
     public User getUserById(int userId) {
@@ -296,8 +307,8 @@ public class ServiceLayer {
         return editedUser;
     }
     
-    public List<User> getInactiveUsers() {
-        
-    }
+//    public List<User> getInactiveUsers() {
+//        
+//    }
 
 }
