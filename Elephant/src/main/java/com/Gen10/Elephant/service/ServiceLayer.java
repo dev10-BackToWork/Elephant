@@ -247,7 +247,14 @@ public class ServiceLayer {
 //  User(s)
 
     public List<User> getUsers() {
+        System.out.println("cp11");
+        
         List<User> users = usersRepo.findAll();
+        
+        for(User u : users) {
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
+            System.out.println(u.getFirstName());
+        }
         
         return users;
     }
@@ -286,7 +293,7 @@ public class ServiceLayer {
     }
 
     public User createUser(User user) {
-        user.setPassword("password");
+        user.setPasswords("password");
         
         return usersRepo.save(user);
     }
@@ -297,7 +304,7 @@ public class ServiceLayer {
         
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setPasswords(user.getPasswords());
         existingUser.setEmail(user.getEmail());
         existingUser.setLocation(user.getLocation());
         existingUser.setRole(user.getRole());

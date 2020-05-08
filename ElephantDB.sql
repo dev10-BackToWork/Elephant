@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS elephantDB;
 CREATE DATABASE elephantDB;
 USE elephantDB;
 
-CREATE TABLE roles (
+CREATE TABLE `role` (
 	roleId int primary key,
 	roleName varchar(10) not null
 );
@@ -23,7 +23,7 @@ CREATE TABLE timeSlot (
         REFERENCES location(locationId)
 );
 
-CREATE TABLE users (
+CREATE TABLE `user` (
 	userId int primary key auto_increment,
     firstName varchar(25) not null,
     lastName varchar(25) not null,
@@ -31,12 +31,12 @@ CREATE TABLE users (
     passwords varchar(15) not null,
     locationId int,
     roleId int,
-    CONSTRAINT fk_users_location
+    CONSTRAINT fk_user_location
 		FOREIGN KEY (locationId)
         REFERENCES location(locationId),
-	CONSTRAINT fk_users_roles
+	CONSTRAINT fk_user_role
 		FOREIGN KEY (roleId)
-        REFERENCES roles(roleId)
+        REFERENCES role(roleId)
 );
         
 CREATE TABLE arrival (
@@ -49,7 +49,7 @@ CREATE TABLE arrival (
         REFERENCES timeSlot(timeSlotId),
 	CONSTRAINT fk_arrival_user
 		FOREIGN KEY (userId)
-        REFERENCES users(userId)
+        REFERENCES user(userId)
 );
 	
 CREATE TABLE departure (
@@ -62,7 +62,7 @@ CREATE TABLE departure (
         REFERENCES timeSlot(timeSlotId),
 	CONSTRAINT fk_departure_user
 		FOREIGN KEY (userId)
-        REFERENCES users(userId)
+        REFERENCES user(userId)
 );
 
 CREATE TABLE attendance (
@@ -70,19 +70,19 @@ CREATE TABLE attendance (
     isAttending boolean default false,
     attendanceDate date not null,
     userId int,
-    CONSTRAINT fk_attendance_users
+    CONSTRAINT fk_attendance_user
 		FOREIGN KEY (userId)
-        REFERENCES users(userId)
+        REFERENCES user(userId)
 );
 
 INSERT INTO location (cityName, timeIncrement, maxOccupancy)
 VALUES ("Minneapolis", 5, 20);
 
-INSERT INTO roles (roleId, roleName)
+INSERT INTO `role` (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
-INSERT INTO users (userId, firstName, lastName, email, passwords, locationId, roleId) VALUES 
+INSERT INTO `user` (userId, firstName, lastName, email, passwords, locationId, roleId) VALUES 
 	(1, "Keely", "Brennan", "keely@keely.com", "password", 1, 2),
     (2, "Ethan", "Bettenga", "ethan@ethan.com", "password", 1, 2),
     (3, "Nate", "Wood", "nate@nate.com", "password", 1, 2),
