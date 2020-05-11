@@ -3,7 +3,9 @@ package com.Gen10.Elephant.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,33 +26,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * Post-condition: decides if you can view desired endpoint
 	 * 
 	 */
-	// @Override
-	// protected void configure(HttpSecurity http) throws Exception {
-	// 	http
-	// 	.authorizeRequests()
-    //     .antMatchers("/account", "/accounts", "/noanswers").hasRole("ADMIN")
-    //     .antMatchers("/times").hasAnyRole("ADMIN", "USER")
-    //     .antMatchers("/", "home").permitAll()
-    //     .antMatchers("/css/**", "/js/**", "/fonts/**").permitAll()
-    //     .antMatchers("/createUser").permitAll()
-    //    // .anyRequest().hasAnyRole("ADMIN", "STUDENT")
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+		.authorizeRequests()
+		.antMatchers("/api/**").permitAll()
+		// .antMatchers(HttpMethod.DELETE, "/user/**").hasRole("ADMIN")
+        // .antMatchers("/times").hasAnyRole("ADMIN", "USER")
+        // // .antMatchers("/", "home").permitAll()
+        // .antMatchers("/css/**", "/js/**", "/fonts/**").permitAll()
+        // .antMatchers("/createUser").permitAll()
+       // .anyRequest().hasAnyRole("ADMIN", "STUDENT")
     // .and()
     // .formLogin()
     //     .loginPage("/login")
     //     .failureUrl("/login?login_error=1")
     //     .permitAll()
-    // .and()
-    // .logout()
-    //     .logoutSuccessUrl("/")
-    //     .permitAll();
-			
-	// }
-
-	@Override
-protected void configure(HttpSecurity http) throws Exception {
-     http
-         .csrf().disable();
-}
+    .and()
+    .logout()
+        .logoutSuccessUrl("/")
+		.permitAll()
+	.and()
+		.csrf().disable();
+	}
 	
 	/*
 	 * Colin berry
