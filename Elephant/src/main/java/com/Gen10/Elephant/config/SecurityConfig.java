@@ -24,27 +24,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * Post-condition: decides if you can view desired endpoint
 	 * 
 	 */
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-		.authorizeRequests()
-        .antMatchers("/account", "/accounts", "/noanswers").hasRole("ADMIN")
-        .antMatchers("/times").hasAnyRole("ADMIN", "USER")
-        .antMatchers("/", "home").permitAll()
-        .antMatchers("/css/**", "/js/**", "/fonts/**").permitAll()
-        .antMatchers("/createUser").permitAll()
-       // .anyRequest().hasAnyRole("ADMIN", "STUDENT")
-    .and()
-    .formLogin()
-        .loginPage("/login")
-        .failureUrl("/login?login_error=1")
-        .permitAll()
-    .and()
-    .logout()
-        .logoutSuccessUrl("/")
-        .permitAll();
+	// @Override
+	// protected void configure(HttpSecurity http) throws Exception {
+	// 	http
+	// 	.authorizeRequests()
+    //     .antMatchers("/account", "/accounts", "/noanswers").hasRole("ADMIN")
+    //     .antMatchers("/times").hasAnyRole("ADMIN", "USER")
+    //     .antMatchers("/", "home").permitAll()
+    //     .antMatchers("/css/**", "/js/**", "/fonts/**").permitAll()
+    //     .antMatchers("/createUser").permitAll()
+    //    // .anyRequest().hasAnyRole("ADMIN", "STUDENT")
+    // .and()
+    // .formLogin()
+    //     .loginPage("/login")
+    //     .failureUrl("/login?login_error=1")
+    //     .permitAll()
+    // .and()
+    // .logout()
+    //     .logoutSuccessUrl("/")
+    //     .permitAll();
 			
-	}
+	// }
+
+	@Override
+protected void configure(HttpSecurity http) throws Exception {
+     http
+         .csrf().disable();
+}
 	
 	/*
 	 * Colin berry
