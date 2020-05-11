@@ -31,6 +31,7 @@ public class UserController {
     }
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
+    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         return ResponseEntity.ok(service.checkLogin(user));

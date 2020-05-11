@@ -58,7 +58,7 @@
                 <div class="card card-signin">
                     <div class="card-body">
                         <h5 class="card-title text-center">Sign In</h5>
-                        <form class="form-signin">
+                        <form onsubmit="loginSubmit();" class="form-signin">
                             <div class="form-label-group">
                                 <input type="email" id="inputEmail" class="form-control" required autofocus>
                                 <label for="inputEmail">Email address</label>
@@ -73,7 +73,7 @@
                                 <input type="checkbox" class="custom-control-input" id="customCheck1">
                                 <label class="custom-control-label" for="customCheck1">Remember password</label>
                             </div>
-                            <button onclick="loginSubmit();" class="btn btn-lg btn-primary btn-block text-uppercase"
+                            <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
                                 type="submit">Sign
                                 In</button>
                             <hr class="my-4">
