@@ -10,6 +10,7 @@ import com.Gen10.Elephant.service.ServiceLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,7 @@ public class UserController {
     public ResponseEntity<User> login(@RequestBody User user) {
         return ResponseEntity.ok(service.checkLogin(user));
     }
+
 
     @PostMapping("/arrival/{id}")
     public ResponseEntity<Arrival> reserveArrival(@PathVariable int id, @RequestBody User user) {
