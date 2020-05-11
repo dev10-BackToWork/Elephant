@@ -351,8 +351,10 @@ public class ServiceLayer {
 	public User checkLogin(User user) {
         if((usersRepo.findByEmail(user.getEmail()) != null) &&
                 (usersRepo.findByEmail(user.getEmail()).getPasswords() == user.getPasswords())){
+            System.out.println("Found user match!");
             return usersRepo.findByEmail(user.getEmail());
         }
+        System.out.println("Didn't find user match");
         return null;
 	}
 

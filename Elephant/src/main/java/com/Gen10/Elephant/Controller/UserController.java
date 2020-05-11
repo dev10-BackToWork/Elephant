@@ -10,6 +10,7 @@ import com.Gen10.Elephant.service.ServiceLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +33,13 @@ public class UserController {
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
     @PostMapping("/login")
+    @CrossOrigin(origins= "http://localhost:8000")
     public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+        System.out.println("Starting search for user with email: " + email + " and password: " + password);
         User user = new User(email, password);
-        return ResponseEntity.ok(service.checkLogin(user));
+        user = service.checkLogin(user);
+        System.out.println("Found user with email: " + user.getEmail() + " and password: " + user.getPassword());
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/arrival/{id}")
