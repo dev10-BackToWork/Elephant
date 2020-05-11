@@ -5,6 +5,9 @@
  */
 package com.Gen10.Elephant.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.Gen10.Elephant.dao.ArrivalRepository;
 import com.Gen10.Elephant.dao.AttendanceRepository;
 import com.Gen10.Elephant.dao.DepartureRepository;
@@ -19,7 +22,7 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
-import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -144,6 +147,18 @@ public class ServiceLayer {
         departureRepo.save(departure);
     }
     
+    public Departure reserveDepartureByTimeSlotId(int id) {
+        List<Departure> departures = findAllDepartures();
+        Departure targetDepartureTimeSlot = null;
+        
+        for(Departure departure : departures) {
+            if(departure.getTimeSlot().getTimeSlotId() == id) {
+                targetDepartureTimeSlot = departure;
+            }
+        }
+        
+        return targetDepartureTimeSlot;
+    }
 
 //  **********
 //  Location
@@ -181,9 +196,15 @@ public class ServiceLayer {
         return editedLocation;
     }
     
-//    public Location editIncrement(int id, int num) {
-//        
-//    }
+    public Location editIncrement(int locationId, int timeIncrement) {
+        Location currentLocation = locationRepo.findById(locationId).orElse(null);
+        
+        currentLocation.setTimeIncrement(timeIncrement);
+        
+        Location updatedLocation = locationRepo.save(currentLocation);
+        
+        return updatedLocation;
+    }
 
 //  **********
 //  Role(s)
@@ -265,7 +286,7 @@ public class ServiceLayer {
     
     public List<User> currentUsersInOffice(Location location) {
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationInAttendance = null;
+        List<User> usersByLocationInAttendance = new ArrayList<>();
         
         for (User users : usersByLocation) {
             if (findAttendanceByUserId(users.getUserId()).getIsAttending()) {
@@ -274,6 +295,19 @@ public class ServiceLayer {
         }
         
         return usersByLocationInAttendance;
+    }
+    
+    public List<User> getInactiveUsers(Location location) {
+        List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationNotInAttendance = null;
+        
+        for (User users : usersByLocation) {
+            if (!findAttendanceByUserId(users.getUserId()).getIsAttending()) {
+                usersByLocationNotInAttendance.add(users);
+            }
+        }
+        
+        return usersByLocationNotInAttendance;
     }
 
     public User getUserById(int userId) {
@@ -313,9 +347,5 @@ public class ServiceLayer {
         
         return editedUser;
     }
-    
-//    public List<User> getInactiveUsers() {
-//        
-//    }
 
 }

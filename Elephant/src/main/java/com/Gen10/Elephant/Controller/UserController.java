@@ -1,5 +1,6 @@
 package com.Gen10.Elephant.Controller;
 
+import com.Gen10.Elephant.dto.Arrival;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,12 @@ public class UserController {
     //     return ResponseEntity.ok(login)
     // }
 
-    /*
     @PostMapping("/arrival/{id}")
     public ResponseEntity<Arrival> reserveArrival(@PathVariable int id) {
         return ResponseEntity.ok(service.reserveArrivalByTimeSlotId(id));
     }
 
+    /*
     @PostMapping("/departure/{id}")
     public ResponseEntity<Departure> reserveDeparture(@PathVariable int id) {
         return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(id));
