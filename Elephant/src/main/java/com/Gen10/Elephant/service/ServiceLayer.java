@@ -268,7 +268,7 @@ public class ServiceLayer {
         List<User> usersByLocationInAttendance = null;
         
         for (User users : usersByLocation) {
-            if (findAttendanceByUserId(users.getUserId()).isAttending()) {
+            if (findAttendanceByUserId(users.getUserId()).getIsAttending()) {
                 usersByLocationInAttendance.add(users);
             }
         }
