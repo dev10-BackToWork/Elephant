@@ -14,6 +14,13 @@ import lombok.Data;
 @Data
 public class User {
 
+	public User() {
+	}
+
+	public User(String email, String password) {
+		this.email = email;
+		this.passwords = password;
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;

@@ -348,4 +348,22 @@ public class ServiceLayer {
         return editedUser;
     }
 
+	public User checkLogin(User user) {
+        if((usersRepo.findByEmail(user.getEmail()) != null) &&
+                (usersRepo.findByEmail(user.getEmail()).getPasswords() == user.getPasswords())){
+            return usersRepo.findByEmail(user.getEmail());
+        }
+        return null;
+	}
+
+	public User checkAdmin(String email, String password) {
+        User dbUser = usersRepo.findByEmail(email);
+		if((dbUser != null) &&
+                (dbUser.getPasswords() == password) && 
+                dbUser.getRole().getName() == "ROLE_ADMIN"){
+            return dbUser;
+        }
+        return null;
+	}
+
 }
