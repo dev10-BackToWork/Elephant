@@ -1,12 +1,11 @@
 $(document).ready(function () {
-
 });
 
 
 
 function loginSubmit() {
-	var password = $(this.#inputPassword).val();
-	var email = $(this.#inputEmail).val();
+	var password = $("#inputPassword").val();
+	var email = $("#inputEmail").val();
 
 	var sendObject = {
 		"password": password,
@@ -15,7 +14,7 @@ function loginSubmit() {
 
 	$.ajax({
 		type: "post",
-		url: "localhost:8080/api/user/login",
+		url: "http://localhost:8080/api/user/login",
 		data: sendObject,
 		dataType: "json",
 		success: function (response) {
