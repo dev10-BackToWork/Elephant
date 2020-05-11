@@ -7,7 +7,7 @@ $(document).ready(function () {
 	
 		$.ajax({
 			type: "post",
-			url: "http://localhost:8080/api/user/login",
+			url: "http://localhost:8080/api/users/login",
 			headers: {
 				"email": email,
 				"password": password
