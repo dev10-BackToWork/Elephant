@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +32,8 @@ public class UserController {
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User user = new User(email, password);
         return ResponseEntity.ok(service.checkLogin(user));
     }
 
