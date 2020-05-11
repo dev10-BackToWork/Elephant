@@ -147,6 +147,18 @@ public class ServiceLayer {
         departureRepo.save(departure);
     }
     
+    public Departure reserveDepartureByTimeSlotId(int id) {
+        List<Departure> departures = findAllDepartures();
+        Departure targetDepartureTimeSlot = null;
+        
+        for(Departure departure : departures) {
+            if(departure.getTimeSlot().getTimeSlotId() == id) {
+                targetDepartureTimeSlot = departure;
+            }
+        }
+        
+        return targetDepartureTimeSlot;
+    }
 
 //  **********
 //  Location
@@ -184,9 +196,15 @@ public class ServiceLayer {
         return editedLocation;
     }
     
-//    public Location editIncrement(int id, int num) {
-//        
-//    }
+    public Location editIncrement(int locationId, int timeIncrement) {
+        Location currentLocation = locationRepo.findById(locationId).orElse(null);
+        
+        currentLocation.setTimeIncrement(timeIncrement);
+        
+        Location updatedLocation = locationRepo.save(currentLocation);
+        
+        return updatedLocation;
+    }
 
 //  **********
 //  Role(s)
@@ -278,6 +296,19 @@ public class ServiceLayer {
         
         return usersByLocationInAttendance;
     }
+    
+    public List<User> getInactiveUsers(Location location) {
+        List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationNotInAttendance = null;
+        
+        for (User users : usersByLocation) {
+            if (!findAttendanceByUserId(users.getUserId()).getIsAttending()) {
+                usersByLocationNotInAttendance.add(users);
+            }
+        }
+        
+        return usersByLocationNotInAttendance;
+    }
 
     public User getUserById(int userId) {
         User user = usersRepo.findById(userId).orElse(null);
@@ -316,9 +347,5 @@ public class ServiceLayer {
         
         return editedUser;
     }
-    
-//    public List<User> getInactiveUsers() {
-//        
-//    }
 
 }
