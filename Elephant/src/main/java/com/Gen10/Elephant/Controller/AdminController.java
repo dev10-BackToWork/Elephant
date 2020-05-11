@@ -36,12 +36,10 @@ public class AdminController {
         return ResponseEntity.ok(service.getUsers());    
     }
     
-    /*
     @GetMapping("/noAnswers")
-    public ResponseEntity<List<User>> getInactiveUsers() {
-        return ResponseEntity.ok(service.getInactiveUsers());
+    public ResponseEntity<List<User>> getInactiveUsers(Location location) {
+        return ResponseEntity.ok(service.getInactiveUsers(location));
     }
-    */
     
     @PostMapping("/newUser")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -59,16 +57,11 @@ public class AdminController {
     public ResponseEntity<Location> editCapacity(@PathVariable int id, @PathVariable int num){
         return ResponseEntity.ok(service.editCapacity(id, num));
     }
-
     
-    /*
-     * 
     @PostMapping("/timeIncrement/{id}/{num}")
     public ResponseEntity<Location> editIncrement(@PathVariable int id, @PathVariable int num){
         return ResponseEntity.ok(service.editIncrement(id, num));
     }
-    
-    */
 
     @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable int id) {
