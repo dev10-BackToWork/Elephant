@@ -1,5 +1,7 @@
 package com.Gen10.Elephant.Controller;
 
+import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Departure;
 import java.util.List;
 
 import com.Gen10.Elephant.dto.Arrival;
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.Gen10.Elephant.dto.TimeSlot;
+import com.Gen10.Elephant.dto.User;
+import com.Gen10.Elephant.service.ServiceLayer;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,14 +52,13 @@ public class UserController {
 
 
     @PostMapping("/arrival/{id}")
-    public ResponseEntity<Arrival> reserveArrival(@PathVariable int id, @RequestBody User user) {
-        return ResponseEntity.ok(service.reserveArrivalByTimeSlotId(id, user));
+    public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id) {
+        return ResponseEntity.ok(service.reserveArrivalByTimeSlotId(user, id));
     }
-
     
     @PostMapping("/departure/{id}")
-    public ResponseEntity<Departure> reserveDeparture(@PathVariable int id, @RequestBody User user) {
-        return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(id, user));
+    public ResponseEntity<Departure> reserveDeparture(@RequestBody User user, @PathVariable int id) {
+        return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(user, id));
     }
     
     @PostMapping("/editUser")
@@ -62,10 +67,4 @@ public class UserController {
         return ResponseEntity.ok(editUser);
         
     }
-    /*
-    @DeleteMapping("/time/{id}")
-    public ResponseEntity<TimeSlot> deleteReservedTime(@PathVariable int id) {
-        return ResponseEntity.ok(service.deleteReservationByTimeSlotId(id));
-    }
-    */
 }
