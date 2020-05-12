@@ -5,6 +5,9 @@
  */
 package com.Gen10.Elephant.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.Gen10.Elephant.dao.ArrivalRepository;
 import com.Gen10.Elephant.dao.AttendanceRepository;
 import com.Gen10.Elephant.dao.DepartureRepository;
@@ -296,7 +299,7 @@ public class ServiceLayer {
     
     public List<User> currentUsersInOffice(Location location) {
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationInAttendance = null;
+        List<User> usersByLocationInAttendance = new ArrayList<>();
         
         for (User users : usersByLocation) {
             if (findAttendanceByUserId(users.getUserId()).getIsAttending()) {
@@ -357,5 +360,23 @@ public class ServiceLayer {
         
         return editedUser;
     }
+
+	public User checkLogin(User user) {
+        if((usersRepo.findByEmail(user.getEmail()) != null) &&
+                (usersRepo.findByEmail(user.getEmail()).getPasswords() == user.getPasswords())){
+            return usersRepo.findByEmail(user.getEmail());
+        }
+        return null;
+	}
+
+	public User checkAdmin(String email, String password) {
+        User dbUser = usersRepo.findByEmail(email);
+		if((dbUser != null) &&
+                (dbUser.getPasswords() == password) && 
+                dbUser.getRole().getName() == "ROLE_ADMIN"){
+            return dbUser;
+        }
+        return null;
+	}
 
 }
