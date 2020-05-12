@@ -349,10 +349,11 @@ public class ServiceLayer {
     }
 
 	public User checkLogin(User user) {
-        if((usersRepo.findByEmail(user.getEmail()) != null) &&
-                (usersRepo.findByEmail(user.getEmail()).getPasswords() == user.getPasswords())){
+        User dbUser = usersRepo.findByEmail(user.getEmail());
+        if((dbUser != null) &&
+                (dbUser.getPasswords()).equals(user.getPasswords())){
             System.out.println("Found user match!");
-            return usersRepo.findByEmail(user.getEmail());
+            return dbUser;
         }
         System.out.println("Didn't find user match");
         return null;
@@ -361,8 +362,8 @@ public class ServiceLayer {
 	public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
 		if((dbUser != null) &&
-                (dbUser.getPasswords() == password) && 
-                dbUser.getRole().getName() == "ROLE_ADMIN"){
+                (dbUser.getPasswords().equals(password)) && 
+                dbUser.getRole().getName().equals("ROLE_ADMIN")){
             return dbUser;
         }
         return null;
