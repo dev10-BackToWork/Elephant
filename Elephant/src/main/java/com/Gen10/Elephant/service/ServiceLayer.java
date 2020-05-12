@@ -212,7 +212,18 @@ public class ServiceLayer {
     
     public void editDailyTimeInterval(int timeIncrement) {
         int objectCount = 0;
+        List<Arrival> arrivals = null;
+        List<Departure> departures = null;
         
+//  Start of time interval is 7:00 AM (7 hrs * 60 min/hr = 420 min)
+//        LocalDateTime dailyTimeIntervalBasis = LocalDateTime.of(localDate).plusMinutes(420);
+        
+//  Total number of minutes from 7:00 AM to 7:00 PM (12 hr * 60 min/hr = 720 min)
+        objectCount = 720 / timeIncrement;
+        
+        for (int i = 0; i < objectCount; i++) {
+//            LocalDateTime newTimeSlot = 
+        }
     }
 
 //  **********
