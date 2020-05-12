@@ -22,7 +22,8 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
-
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -84,7 +85,7 @@ public class ServiceLayer {
         saveDeparture(departure);
     }
     
-    public Arrival reserveArrivalByTimeSlotId(int id) {
+    public Arrival reserveArrivalByTimeSlotId(User user, int id) {
         List<Arrival> arrivals = findAllArrivals();
         Arrival targetArrivalTimeSlot = null;
         
@@ -94,7 +95,9 @@ public class ServiceLayer {
             }
         }
         
-        return targetArrivalTimeSlot;
+        targetArrivalTimeSlot.setUser(user);
+        
+        return arrivalRepo.save(targetArrivalTimeSlot);
     }
 
 //  **********
@@ -147,17 +150,19 @@ public class ServiceLayer {
         departureRepo.save(departure);
     }
     
-    public Departure reserveDepartureByTimeSlotId(int id) {
+    public Departure reserveDepartureByTimeSlotId(User user, int departureId) {
         List<Departure> departures = findAllDepartures();
         Departure targetDepartureTimeSlot = null;
         
         for(Departure departure : departures) {
-            if(departure.getTimeSlot().getTimeSlotId() == id) {
+            if(departure.getTimeSlot().getTimeSlotId() == departureId) {
                 targetDepartureTimeSlot = departure;
             }
         }
         
-        return targetDepartureTimeSlot;
+        targetDepartureTimeSlot.setUser(user);
+        
+        return departureRepo.save(targetDepartureTimeSlot);
     }
 
 //  **********
@@ -203,7 +208,14 @@ public class ServiceLayer {
         
         Location updatedLocation = locationRepo.save(currentLocation);
         
+        editDailyTimeInterval(timeIncrement);
+        
         return updatedLocation;
+    }
+    
+    public void editDailyTimeInterval(int timeIncrement) {
+        int objectCount = 0;
+        
     }
 
 //  **********
@@ -267,17 +279,18 @@ public class ServiceLayer {
 //  **********
 //  User(s)
 
-    public List<User> getUsers() {
-        System.out.println("cp11");
+    public List<User> getUsers(int locationId) {
         
         List<User> users = usersRepo.findAll();
+        List<User> usersOfLocation = null;
         
         for(User u : users) {
-            System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
-            System.out.println(u.getFirstName());
+            if(u.getLocation().getLocationId() == locationId) {
+                usersOfLocation.add(u);
+            }
         }
         
-        return users;
+        return usersOfLocation;
     }
     
     public List<User> getAllUsersByLocation(Location location) {
