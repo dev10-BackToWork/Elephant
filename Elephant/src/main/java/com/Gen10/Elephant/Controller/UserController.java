@@ -61,9 +61,10 @@ public class UserController {
         return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(user, id));
     }
     
+    //eidts a user, restricted to password only
     @PostMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody User user) {
-        User editUser = service.editUser(user);
+        User editUser = service.editUserPassword(user);
         return ResponseEntity.ok(editUser);
         
     }

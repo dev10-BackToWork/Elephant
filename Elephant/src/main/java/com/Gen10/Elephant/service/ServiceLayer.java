@@ -372,14 +372,24 @@ public class ServiceLayer {
         return editedUser;
     }
 
+    public User editUserPassword(User user) {
+        //  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
+        //  Changes only the user password, used by users without admin role
+                User existingUser = getUserById(user.getUserId());
+                
+                existingUser.setPasswords(user.getPasswords());
+                
+                User editedUser = usersRepo.save(existingUser);
+                
+                return editedUser;
+            }
+
 	public User checkLogin(User user) {
         User dbUser = usersRepo.findByEmail(user.getEmail());
         if((dbUser != null) &&
                 (dbUser.getPasswords()).equals(user.getPasswords())){
-            System.out.println("Found user match!");
             return dbUser;
         }
-        System.out.println("Didn't find user match");
         return null;
 	}
 
