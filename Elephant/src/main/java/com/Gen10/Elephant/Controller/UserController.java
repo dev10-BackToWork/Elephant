@@ -40,9 +40,13 @@ public class UserController {
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
     @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/login")
+    @CrossOrigin(origins= "http://localhost:8000")
     public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+        System.out.println("Starting search for user with email: " + email + " and password: " + password);
         User user = new User(email, password);
-        return ResponseEntity.ok(service.checkLogin(user));
+        user = service.checkLogin(user);
+        System.out.println("Found user with email: " + user.getEmail() + " and password: " + user.getPassword());
+        return ResponseEntity.ok(user);
     }
 
 
