@@ -1,25 +1,30 @@
 $(document).ready(function () {
 
+	$("#submitLoginButton").click(function(e) {
+		e.preventDefault();
+		var password = $("#inputPassword").val();
+		var email = $("#inputEmail").val();
+	
+		$.ajax({
+			type: "post",
+			url: "http://localhost:8080/api/users/login",
+			headers: {
+				"email": email,
+				"password": password
+			},
+			success: function (response) {
+				console.log(response);
+				return false;
+			},
+			error: function(err) {
+				console.log(err);
+				return false;
+			} 
+		});
+	
+		return false;
+	});
 });
 
 
 
-function loginSubmit() {
-	var password = $(this.#inputPassword).val();
-	var email = $(this.#inputEmail).val();
-
-	var sendObject = {
-		"password": password,
-		"email": email
-	}
-
-	$.ajax({
-		type: "post",
-		url: "localhost:8080/api/user/login",
-		data: sendObject,
-		dataType: "json",
-		success: function (response) {
-			
-		}
-	});
-}

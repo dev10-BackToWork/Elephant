@@ -32,6 +32,7 @@ public class UserController {
     }
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
+    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/login")
     @CrossOrigin(origins= "http://localhost:8000")
     public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
@@ -41,6 +42,7 @@ public class UserController {
         System.out.println("Found user with email: " + user.getEmail() + " and password: " + user.getPassword());
         return ResponseEntity.ok(user);
     }
+
 
     @PostMapping("/arrival/{id}")
     public ResponseEntity<Arrival> reserveArrival(@PathVariable int id, @RequestBody User user) {
