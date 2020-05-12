@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	console.log("ready")
+
 	$("#submitLoginButton").click(function(e) {
 		e.preventDefault();
 		var password = $("#inputPassword").val();
