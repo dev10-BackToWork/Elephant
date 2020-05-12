@@ -401,6 +401,16 @@ public class ServiceLayer {
             return dbUser;
         }
         return null;
+    }
+    
+	public User checkUser(String email, String password) {
+        User dbUser = usersRepo.findByEmail(email);
+		if((dbUser != null) &&
+                (dbUser.getPasswords().equals(password)) && 
+                (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_USER"))) {
+            return dbUser;
+        }
+        return null;
 	}
 
 }
