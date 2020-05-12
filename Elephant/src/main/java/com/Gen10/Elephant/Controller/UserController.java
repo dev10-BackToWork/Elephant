@@ -12,6 +12,7 @@ import com.Gen10.Elephant.service.ServiceLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,15 +39,15 @@ public class UserController {
     }
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
-    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/login")
     @CrossOrigin(origins= "http://localhost:8000")
     public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
-        System.out.println("Starting search for user with email: " + email + " and password: " + password);
         User user = new User(email, password);
-        user = service.checkLogin(user);
-        System.out.println("Found user with email: " + user.getEmail() + " and password: " + user.getPassword());
-        return ResponseEntity.ok(user);
+        User dbUser = service.checkLogin(user);
+        if (dbUser != null){
+            return new ResponseEntity<User>(dbUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
     }
 
 
@@ -60,9 +61,10 @@ public class UserController {
         return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(user, id));
     }
     
+    //eidts a user, restricted to password only
     @PostMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody User user) {
-        User editUser = service.editUser(user);
+        User editUser = service.editUserPassword(user);
         return ResponseEntity.ok(editUser);
         
     }

@@ -31,7 +31,7 @@ public class AdminController {
     public ResponseEntity<User> getUserById(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
-            return new ResponseEntity<User>(dbAdmin, HttpStatus.OK);
+            return new ResponseEntity<User>(service.getUserById(id), HttpStatus.OK);
         }
         return new ResponseEntity<User>(dbAdmin, HttpStatus.UNAUTHORIZED);
     }

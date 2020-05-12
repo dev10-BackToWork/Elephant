@@ -372,21 +372,32 @@ public class ServiceLayer {
         return editedUser;
     }
 
+    public User editUserPassword(User user) {
+        //  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
+        //  Changes only the user password, used by users without admin role
+                User existingUser = getUserById(user.getUserId());
+                
+                existingUser.setPasswords(user.getPasswords());
+                
+                User editedUser = usersRepo.save(existingUser);
+                
+                return editedUser;
+            }
+
 	public User checkLogin(User user) {
-        if((usersRepo.findByEmail(user.getEmail()) != null) &&
-                (usersRepo.findByEmail(user.getEmail()).getPasswords() == user.getPasswords())){
-            System.out.println("Found user match!");
-            return usersRepo.findByEmail(user.getEmail());
+        User dbUser = usersRepo.findByEmail(user.getEmail());
+        if((dbUser != null) &&
+                (dbUser.getPasswords()).equals(user.getPasswords())){
+            return dbUser;
         }
-        System.out.println("Didn't find user match");
         return null;
 	}
 
 	public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
 		if((dbUser != null) &&
-                (dbUser.getPasswords() == password) && 
-                dbUser.getRole().getName() == "ROLE_ADMIN"){
+                (dbUser.getPasswords().equals(password)) && 
+                dbUser.getRole().getName().equals("ROLE_ADMIN")){
             return dbUser;
         }
         return null;
