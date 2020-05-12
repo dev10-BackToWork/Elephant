@@ -3,6 +3,7 @@ package com.Gen10.Elephant.Controller;
 import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Departure;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Departure;
@@ -21,10 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.Gen10.Elephant.dto.TimeSlot;
-import com.Gen10.Elephant.dto.User;
-import com.Gen10.Elephant.service.ServiceLayer;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,8 +31,12 @@ public class UserController {
     ServiceLayer service;
 
     @GetMapping("/times/{id}")
-    public ResponseEntity<List<TimeSlot>> getTimes(@PathVariable int id) {
-        return ResponseEntity.ok(service.getOpenTimeSlotsByLocationId(id));
+    public ResponseEntity<List<TimeSlot>> getTimes(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        if(dbUser != null){
+            return new ResponseEntity<List<TimeSlot>>(service.getOpenTimeSlotsByLocationId(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<List<TimeSlot>>(new ArrayList<TimeSlot>(), HttpStatus.UNAUTHORIZED);
     }
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
@@ -52,20 +53,32 @@ public class UserController {
 
 
     @PostMapping("/arrival/{id}")
-    public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id) {
-        return ResponseEntity.ok(service.reserveArrivalByTimeSlotId(user, id));
+    public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        if(dbUser != null){
+            return new ResponseEntity<Arrival>(service.reserveArrivalByTimeSlotId(user, id), HttpStatus.OK);
+        }
+        return new ResponseEntity<Arrival>(new Arrival(), HttpStatus.UNAUTHORIZED);
     }
     
     @PostMapping("/departure/{id}")
-    public ResponseEntity<Departure> reserveDeparture(@RequestBody User user, @PathVariable int id) {
-        return ResponseEntity.ok(service.reserveDepartureByTimeSlotId(user, id));
+    public ResponseEntity<Departure> reserveDeparture(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        if(dbUser != null){
+            return new ResponseEntity<Departure>(service.reserveDepartureByTimeSlotId(user, id), HttpStatus.OK);
+        }
+        return new ResponseEntity<Departure>(new Departure(), HttpStatus.UNAUTHORIZED);
     }
     
     //eidts a user, restricted to password only
     @PostMapping("/editUser")
-    public ResponseEntity<User> editUser(@RequestBody User user) {
+    public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
         User editUser = service.editUserPassword(user);
-        return ResponseEntity.ok(editUser);
+        if(dbUser != null){
+            return new ResponseEntity<User>(editUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);
         
     }
 }
