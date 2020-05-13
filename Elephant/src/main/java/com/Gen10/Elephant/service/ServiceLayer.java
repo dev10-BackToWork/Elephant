@@ -23,7 +23,9 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
-
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -232,6 +234,17 @@ public class ServiceLayer {
         for (int i = 0; i < objectCount; i++) {
             // LocalDateTime newTimeSlot =
         }
+        
+        return updatedLocation;
+    }
+    
+    public Location editDailyTimeInterval(int locationId, Time startTime, Time endTime) {
+        Location currentLocation = locationRepo.findById(locationId).orElse(null);
+        
+        currentLocation.setBeginningTime(startTime);
+        currentLocation.setEndTime(endTime);
+        
+        return locationRepo.save(currentLocation);
     }
 
     // **********
