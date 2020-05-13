@@ -9,5 +9,4 @@ public class ElephantApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ElephantApplication.class, args);
 	}
-
 }

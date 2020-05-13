@@ -30,8 +30,8 @@ public class Attendance {
 	@JoinColumn(name = "userid")
 	private User user;
         
-        @Column
-        private boolean isAuthorized;
+	@Column
+	private boolean isAuthorized;
 
 	public int getAttendanceId() {
 		return this.attendanceId;
@@ -69,12 +69,11 @@ public class Attendance {
 		this.user = user;
 	}
 
-        public boolean isIsAuthorized() {
-            return isAuthorized;
-        }
+	public boolean getIsAuthorized() {
+		return isAuthorized;
+	}
 
-        public void setIsAuthorized(boolean isAuthorized) {
-            this.isAuthorized = isAuthorized;
-        }
-
+	public void setIsAuthorized(boolean isAuthorized) {
+		this.isAuthorized = isAuthorized;
+	}
 }

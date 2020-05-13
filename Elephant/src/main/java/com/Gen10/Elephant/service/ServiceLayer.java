@@ -215,27 +215,6 @@ public class ServiceLayer {
 
         Location updatedLocation = locationRepo.save(currentLocation);
 
-        editDailyTimeInterval(timeIncrement);
-
-        return updatedLocation;
-    }
-
-    public void editDailyTimeInterval(int timeIncrement) {
-        int objectCount = 0;
-        List<Arrival> arrivals = null;
-        List<Departure> departures = null;
-
-        // Start of time interval is 7:00 AM (7 hrs * 60 min/hr = 420 min)
-        // LocalDateTime dailyTimeIntervalBasis =
-        // LocalDateTime.of(localDate).plusMinutes(420);
-
-        // Total number of minutes from 7:00 AM to 7:00 PM (12 hr * 60 min/hr = 720 min)
-        objectCount = 720 / timeIncrement;
-
-        for (int i = 0; i < objectCount; i++) {
-            // LocalDateTime newTimeSlot =
-        }
-        
         return updatedLocation;
     }
     
@@ -247,8 +226,7 @@ public class ServiceLayer {
         
         return locationRepo.save(currentLocation);
     }
-
-    // **********
+    
     // Role(s)
     public List<Role> getAllRoles() {
         return rolesRepo.findAll();
@@ -405,7 +383,7 @@ public class ServiceLayer {
         System.out.println("to database: " + password + " and " + encryptPass);
 
         User dbUser = usersRepo.save(user);
-        System.out.println("from database: " + password + " and " + BCrypt.);
+        // System.out.println("from database: " + password + " and " + BCrypt.);
         return usersRepo.save(user); 
     }
 
