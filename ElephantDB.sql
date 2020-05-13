@@ -211,7 +211,7 @@ END$$
 
 CREATE EVENT elephantdb.generateTimeSlots
 	ON SCHEDULE EVERY '1' day
-	STARTS '2020-05-13 12:39:00'
+	STARTS '2020-05-13 14:08:40'
 DO
 BEGIN
 	CALL genMinneapolisTimeSlots();

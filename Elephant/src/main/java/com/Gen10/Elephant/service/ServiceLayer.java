@@ -27,7 +27,7 @@ import com.Gen10.Elephant.dto.User;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.Time;
-import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -96,11 +96,17 @@ public class ServiceLayer {
     }
 
     public Arrival reserveArrivalByTimeSlotId(User user, int id) {
+        TimeSlot timeSlot = getTimeSlotById(id);
+        timeSlot.setIsTaken(true);
+        timeSlotRepo.save(timeSlot);
+        
         Arrival newArrival = new Arrival();
         
-        newArrival.setArrivalDate((java.sql.Date) new Date());
+        java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        
+        newArrival.setArrivalDate(newDate);
         newArrival.setTimeSlot(getTimeSlotById(id));
-        newArrival.setUser(user);
+        newArrival.setUser(getUserById(user.getUserId()));
         
         return arrivalRepo.save(newArrival);
     }
@@ -155,19 +161,20 @@ public class ServiceLayer {
         departureRepo.save(departure);
     }
 
-    public Departure reserveDepartureByTimeSlotId(User user, int departureId) {
-        List<Departure> departures = findAllDepartures();
-        Departure targetDepartureTimeSlot = null;
-
-        for (Departure departure : departures) {
-            if (departure.getTimeSlot().getTimeSlotId() == departureId) {
-                targetDepartureTimeSlot = departure;
-            }
-        }
-
-        targetDepartureTimeSlot.setUser(user);
-
-        return departureRepo.save(targetDepartureTimeSlot);
+    public Departure reserveDepartureByTimeSlotId(User user, int id) {
+        TimeSlot timeSlot = getTimeSlotById(id);
+        timeSlot.setIsTaken(true);
+        timeSlotRepo.save(timeSlot);
+        
+        Departure newDeparture = new Departure();
+        
+        java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        
+        newDeparture.setDepartureDate(newDate);
+        newDeparture.setTimeSlot(getTimeSlotById(id));
+        newDeparture.setUser(getUserById(user.getUserId()));
+        
+        return departureRepo.save(newDeparture);
     }
 
     // **********
@@ -258,7 +265,7 @@ public class ServiceLayer {
         List<TimeSlot> locationTimeSlots = new ArrayList<>();
 
         for (TimeSlot ts : allTimeSlots) {
-            if (ts.getLocation().getLocationId() == locationId)
+            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false)
                 locationTimeSlots.add(ts);
         }
 
