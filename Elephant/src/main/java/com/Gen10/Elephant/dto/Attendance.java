@@ -1,6 +1,6 @@
 package com.Gen10.Elephant.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +24,7 @@ public class Attendance {
 	private boolean isAttending;
 	
 	@Column
-	private Date attendanceDate;
+	private LocalDate attendanceDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
@@ -53,11 +53,11 @@ public class Attendance {
 		this.isAttending = isAttending;
 	}
 
-	public Date getAttendanceDate() {
+	public LocalDate getAttendanceDate() {
 		return this.attendanceDate;
 	}
 
-	public void setAttendanceDate(Date attendanceDate) {
+	public void setAttendanceDate(LocalDate attendanceDate) {
 		this.attendanceDate = attendanceDate;
 	}
 

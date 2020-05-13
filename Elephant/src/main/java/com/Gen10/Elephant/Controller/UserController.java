@@ -1,6 +1,7 @@
 package com.Gen10.Elephant.Controller;
 
 import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Departure;
 import java.util.List;
 import java.util.ArrayList;
@@ -51,6 +52,26 @@ public class UserController {
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
     }
 
+    //edts a user, restricted to password only
+    @PostMapping("/editUser")
+    public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        User editUser = service.editUserPassword(user);
+        if(dbUser != null){
+            return new ResponseEntity<User>(editUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);
+    }
+
+    // Round 2
+    @PostMapping("/coming/{id}")
+    public ResponseEntity<Attendance> markAttendance(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        if(dbUser != null){
+            return new ResponseEntity<Attendance>(service.markAttendance(attendance), HttpStatus.OK);
+        }
+        return new ResponseEntity<Attendance>(new Attendance(), HttpStatus.UNAUTHORIZED);
+    }
 
     @PostMapping("/arrival/{id}")
     public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
@@ -68,17 +89,5 @@ public class UserController {
             return new ResponseEntity<Departure>(service.reserveDepartureByTimeSlotId(user, id), HttpStatus.OK);
         }
         return new ResponseEntity<Departure>(new Departure(), HttpStatus.UNAUTHORIZED);
-    }
-    
-    //eidts a user, restricted to password only
-    @PostMapping("/editUser")
-    public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
-        User dbUser = service.checkUser(email, password);
-        User editUser = service.editUserPassword(user);
-        if(dbUser != null){
-            return new ResponseEntity<User>(editUser, HttpStatus.OK);
-        }
-        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);
-        
-    }
+    }   
 }
