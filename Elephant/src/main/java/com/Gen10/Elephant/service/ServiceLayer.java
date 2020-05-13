@@ -5,6 +5,7 @@
  */
 package com.Gen10.Elephant.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,9 @@ public class ServiceLayer {
     private final TimeSlotRepository timeSlotRepo;
     private final UsersRepository usersRepo;
 
-    public ServiceLayer(ArrivalRepository arrivalRepo, AttendanceRepository attendanceRepo, DepartureRepository departureRepo, LocationRepository locationRepo, RolesRepository rolesRepo, TimeSlotRepository timeSlotRepo, UsersRepository usersRepo) {
+    public ServiceLayer(ArrivalRepository arrivalRepo, AttendanceRepository attendanceRepo,
+            DepartureRepository departureRepo, LocationRepository locationRepo, RolesRepository rolesRepo,
+            TimeSlotRepository timeSlotRepo, UsersRepository usersRepo) {
         this.arrivalRepo = arrivalRepo;
         this.attendanceRepo = attendanceRepo;
         this.departureRepo = departureRepo;
@@ -52,8 +55,8 @@ public class ServiceLayer {
         this.usersRepo = usersRepo;
     }
 
-//  **********
-//  Arrival
+    // **********
+    // Arrival
     public List<Arrival> findAllArrivals() {
         return arrivalRepo.findAll();
     }
@@ -72,102 +75,102 @@ public class ServiceLayer {
     public void deleteArrivalById(int arrivalId) {
         arrivalRepo.deleteById(arrivalId);
     }
-    
-//    public void deleteArrivalByUserId(){
-//        
-//    }
+
+    // public void deleteArrivalByUserId(){
+    //
+    // }
 
     public void saveArrival(Arrival arrival) {
         arrivalRepo.save(arrival);
     }
-    
+
     public void saveArrivalAndDeparture(Arrival arrival, Departure departure) {
         saveArrival(arrival);
         saveDeparture(departure);
     }
-    
+
     public Arrival reserveArrivalByTimeSlotId(User user, int id) {
         List<Arrival> arrivals = findAllArrivals();
         Arrival targetArrivalTimeSlot = null;
-        
-        for(Arrival arrival : arrivals) {
-            if(arrival.getTimeSlot().getTimeSlotId() == id) {
+
+        for (Arrival arrival : arrivals) {
+            if (arrival.getTimeSlot().getTimeSlotId() == id) {
                 targetArrivalTimeSlot = arrival;
             }
         }
-        
+
         targetArrivalTimeSlot.setUser(user);
-        
+
         return arrivalRepo.save(targetArrivalTimeSlot);
     }
 
-//  **********
-//  Attendance
+    // **********
+    // Attendance
     public List<Attendance> findAllAttendance() {
         return attendanceRepo.findAll();
     }
-    
+
     public Attendance findAttendanceByUserId(int userId) {
         Attendance attendance = attendanceRepo.findById(userId).orElse(null);
-        
-        if(attendance == null) {
+
+        if (attendance == null) {
             System.out.println("The attendance object is null");
             return attendance;
         } else {
             return attendance;
         }
     }
-    
+
     public void deleteAttendanceById(int attendanceId) {
         attendanceRepo.deleteById(attendanceId);
     }
-    
+
     public void takeAttendance(Attendance attendance) {
         attendanceRepo.save(attendance);
     }
-    
-//  **********
-//  Departure
+
+    // **********
+    // Departure
     public List<Departure> findAllDepartures() {
         return departureRepo.findAll();
     }
-    
+
     public Departure getDepartureByDepatureId(int departureId) {
         Departure departure = departureRepo.findById(departureId).orElse(null);
-        
-        if(departure == null) {
+
+        if (departure == null) {
             System.out.println("The departure object is null");
             return departure;
         } else {
             return departure;
         }
     }
-    
+
     public void deleteDepartureById(int departureId) {
         departureRepo.deleteById(departureId);
     }
-    
+
     public void saveDeparture(Departure departure) {
         departureRepo.save(departure);
     }
-    
+
     public Departure reserveDepartureByTimeSlotId(User user, int departureId) {
         List<Departure> departures = findAllDepartures();
         Departure targetDepartureTimeSlot = null;
-        
-        for(Departure departure : departures) {
-            if(departure.getTimeSlot().getTimeSlotId() == departureId) {
+
+        for (Departure departure : departures) {
+            if (departure.getTimeSlot().getTimeSlotId() == departureId) {
                 targetDepartureTimeSlot = departure;
             }
         }
-        
+
         targetDepartureTimeSlot.setUser(user);
-        
+
         return departureRepo.save(targetDepartureTimeSlot);
     }
 
-//  **********
-//  Location
+    // **********
+    // Location
     public List<Location> getAllLocations() {
         return locationRepo.findAll();
     }
@@ -190,24 +193,47 @@ public class ServiceLayer {
     public void newLocation(Location location) {
         locationRepo.save(location);
     }
-    
+
     public Location editCapacity(int id, int num) {
-//  Due to auto-incrementing of locations in database, the specific user object needs to be acquired and altered to prevent duplicate location with different field(s).
+        // Due to auto-incrementing of locations in database, the specific user object
+        // needs to be acquired and altered to prevent duplicate location with different
+        // field(s).
         Location existingLocation = findLocationById(id);
-        
+
         existingLocation.setMaxOccupancy(num);
-        
+
         Location editedLocation = locationRepo.save(existingLocation);
-        
+
         return editedLocation;
     }
-    
+
     public Location editIncrement(int locationId, int timeIncrement) {
         Location currentLocation = locationRepo.findById(locationId).orElse(null);
-        
+
         currentLocation.setTimeIncrement(timeIncrement);
-        
+
         Location updatedLocation = locationRepo.save(currentLocation);
+
+        editDailyTimeInterval(timeIncrement);
+
+        return updatedLocation;
+    }
+
+    public void editDailyTimeInterval(int timeIncrement) {
+        int objectCount = 0;
+        List<Arrival> arrivals = null;
+        List<Departure> departures = null;
+
+        // Start of time interval is 7:00 AM (7 hrs * 60 min/hr = 420 min)
+        // LocalDateTime dailyTimeIntervalBasis =
+        // LocalDateTime.of(localDate).plusMinutes(420);
+
+        // Total number of minutes from 7:00 AM to 7:00 PM (12 hr * 60 min/hr = 720 min)
+        objectCount = 720 / timeIncrement;
+
+        for (int i = 0; i < objectCount; i++) {
+            // LocalDateTime newTimeSlot =
+        }
         
         return updatedLocation;
     }
@@ -221,110 +247,128 @@ public class ServiceLayer {
         return locationRepo.save(currentLocation);
     }
 
-//  **********
-//  Role(s)
+    // **********
+    // Role(s)
     public List<Role> getAllRoles() {
         return rolesRepo.findAll();
     }
-    
+
     public Role findRoleByName(String identifier) {
         Role role = rolesRepo.findByName(identifier);
-        
-        if(role == null) {
+
+        if (role == null) {
             System.out.println("The role object is null");
             return role;
         } else {
             return role;
         }
     }
-    
-//    public void deleteRoleById(int roleId) {
-//        roleRepo.deleteById(roleId);
-//    }
-    
-//    public void saveRole(Role role) {
-//        roleRepo.save(role);
-//    }
 
-//  **********    
-//  TimeSlot
+    // public void deleteRoleById(int roleId) {
+    // roleRepo.deleteById(roleId);
+    // }
+
+    // public void saveRole(Role role) {
+    // roleRepo.save(role);
+    // }
+
+    // **********
+    // TimeSlot
     public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
         List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
         List<TimeSlot> locationTimeSlots = null;
-        
-        for(TimeSlot ts : allTimeSlots) {
+
+        for (TimeSlot ts : allTimeSlots) {
             if (ts.getLocation().getLocationId() == locationId)
                 locationTimeSlots.add(ts);
         }
-        
+
         return locationTimeSlots;
     }
-    
+
     public TimeSlot findTimeSlotByLocation(int timeSlotId) {
         TimeSlot timeSlot = timeSlotRepo.findById(timeSlotId).orElse(null);
-        
-        if(timeSlot == null) {
+
+        if (timeSlot == null) {
             System.out.println("The timeSlot object is null");
             return timeSlot;
         } else {
             return timeSlot;
         }
     }
-    
+
     public void deleteTimeSlotById(int timeSlotId) {
         timeSlotRepo.deleteById(timeSlotId);
     }
-    
+
     public void saveTimeSlot(TimeSlot timeSlot) {
         timeSlotRepo.save(timeSlot);
     }
-    
-//  **********
-//  User(s)
+
+    // **********
+    // User(s)
 
     public List<User> getUsers(int locationId) {
-        
+
         List<User> users = usersRepo.findAll();
         List<User> usersOfLocation = null;
-        
-        for(User u : users) {
-            if(u.getLocation().getLocationId() == locationId) {
+
+        for (User u : users) {
+            if (u.getLocation().getLocationId() == locationId) {
                 usersOfLocation.add(u);
             }
         }
-        
+
         return usersOfLocation;
     }
-    
+
     public List<User> getAllUsersByLocation(Location location) {
         return usersRepo.findAllByLocation(location);
     }
-    
-    public List<User> currentUsersInOffice(Location location) {
+
+    public List<User> currentUsersInOffice(int id) {
+        Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationInAttendance = new ArrayList<>();
-        
+
         for (User users : usersByLocation) {
             if (findAttendanceByUserId(users.getUserId()).getIsAttending()) {
                 usersByLocationInAttendance.add(users);
             }
         }
-        
+
         return usersByLocationInAttendance;
     }
-    
-    public List<User> getInactiveUsers(Location location) {
+
+    // Edited Nate Wood 05/13/2020
+    public List<User> getInactiveUsers(int id) {
+        Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotInAttendance = null;
-        
-        for (User users : usersByLocation) {
-            if (!findAttendanceByUserId(users.getUserId()).getIsAttending()) {
-                usersByLocationNotInAttendance.add(users);
+        List<User> usersByLocationNotAnswered = usersByLocation;
+
+        for (User user : usersByLocation) {
+            if(attendanceRepo.findByUser(user) != null) {
+                usersByLocationNotAnswered.remove(user);
             }
         }
-        
-        return usersByLocationNotInAttendance;
+
+        return usersByLocationNotAnswered;
     }
+
+    
+	public List<User> getFlaggedUsers(int id) {
+		Location location = locationRepo.findById(id).orElse(null);
+        List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationFlagged = new ArrayList<>();
+
+        for (User user : usersByLocation) {
+            if(attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized == false) {
+                usersByLocationFlagged.add(user);
+            }
+        }
+
+        return usersByLocationFlagged;
+	}
 
     public User getUserById(int userId) {
         User user = usersRepo.findById(userId).orElse(null);
@@ -337,72 +381,88 @@ public class ServiceLayer {
         }
     }
 
-
     public void deleteUserById(int userId) {
         usersRepo.deleteById(userId);
     }
 
     public User createUser(User user) {
         user.setPasswords("password");
-        
+
         return usersRepo.save(user);
     }
-    
+
     public User editUser(User user) {
-//  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
+        // Due to auto-incrementing of users in database, the specific user object needs
+        // to be acquired and altered to prevent duplicate user with different field(s).
         User existingUser = getUserById(user.getUserId());
-        
+
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setPasswords(user.getPasswords());
         existingUser.setEmail(user.getEmail());
         existingUser.setLocation(user.getLocation());
         existingUser.setRole(user.getRole());
-        
+
         User editedUser = usersRepo.save(existingUser);
-        
+
         return editedUser;
     }
 
     public User editUserPassword(User user) {
-        //  Due to auto-incrementing of users in database, the specific user object needs to be acquired and altered to prevent duplicate user with different field(s).
-        //  Changes only the user password, used by users without admin role
-                User existingUser = getUserById(user.getUserId());
-                
-                existingUser.setPasswords(user.getPasswords());
-                
-                User editedUser = usersRepo.save(existingUser);
-                
-                return editedUser;
-            }
+        // Due to auto-incrementing of users in database, the specific user object needs
+        // to be acquired and altered to prevent duplicate user with different field(s).
+        // Changes only the user password, used by users without admin role
+        User existingUser = getUserById(user.getUserId());
 
-	public User checkLogin(User user) {
-        User dbUser = usersRepo.findByEmail(user.getEmail());
-        if((dbUser != null) &&
-                (dbUser.getPasswords()).equals(user.getPasswords())){
-            return dbUser;
+        existingUser.setPasswords(user.getPasswords());
+
+        User editedUser = usersRepo.save(existingUser);
+
+        return editedUser;
+    }
+
+    public Attendance markAttendance(Attendance attendance) {
+        attendance.setAttendanceDate(LocalDate.now());
+        if (attendanceRepo.findByUser(attendance.getUser()) != null) {
+            Attendance existingAttendance = attendanceRepo.findByUser(attendance.getUser());
+            existingAttendance.setIsAttending(attendance.getIsAttending());
+            attendanceRepo.save(existingAttendance);
         }
-        return null;
+        return attendanceRepo.save(attendance);
+    }
+
+	public List<Arrival> getAllArrivalsByLocationId(int id) {
+        return getAllArrivalsByLocationId(id);
 	}
 
-	public User checkAdmin(String email, String password) {
-        User dbUser = usersRepo.findByEmail(email);
-		if((dbUser != null) &&
-                (dbUser.getPasswords().equals(password)) && 
-                dbUser.getRole().getName().equals("ROLE_ADMIN")){
+	public List<Departure> getAllDeparturesByLocationId(int id) {
+		return getAllDeparturesByLocationId(id)
+	}
+
+    public User checkLogin(User user) {
+        User dbUser = usersRepo.findByEmail(user.getEmail());
+        if ((dbUser != null) && (dbUser.getPasswords()).equals(user.getPasswords())) {
             return dbUser;
         }
         return null;
     }
-    
-	public User checkUser(String email, String password) {
+
+    public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
-		if((dbUser != null) &&
-                (dbUser.getPasswords().equals(password)) && 
-                (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_USER"))) {
+        if ((dbUser != null) && (dbUser.getPasswords().equals(password))
+                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {
             return dbUser;
         }
         return null;
-	}
+    }
 
+    public User checkUser(String email, String password) {
+        User dbUser = usersRepo.findByEmail(email);
+        if ((dbUser != null) && (dbUser.getPasswords().equals(password))
+                && (dbUser.getRole().getName().equals("ROLE_ADMIN")
+                        || dbUser.getRole().getName().equals("ROLE_USER"))) {
+            return dbUser;
+        }
+        return null;
+    }
 }
