@@ -24,6 +24,7 @@ import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -87,18 +88,13 @@ public class ServiceLayer {
     }
     
     public Arrival reserveArrivalByTimeSlotId(User user, int id) {
-        List<Arrival> arrivals = findAllArrivals();
-        Arrival targetArrivalTimeSlot = null;
+        Arrival newArrival = new Arrival();
         
-        for(Arrival arrival : arrivals) {
-            if(arrival.getTimeSlot().getTimeSlotId() == id) {
-                targetArrivalTimeSlot = arrival;
-            }
-        }
+        newArrival.setArrivalDate((java.sql.Date) new Date());
+        newArrival.setTimeSlot(getTimeSlotById(id));
+        newArrival.setUser(user);
         
-        targetArrivalTimeSlot.setUser(user);
-        
-        return arrivalRepo.save(targetArrivalTimeSlot);
+        return arrivalRepo.save(newArrival);
     }
 
 //  **********
@@ -250,7 +246,7 @@ public class ServiceLayer {
 //  TimeSlot
     public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
         List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
-        List<TimeSlot> locationTimeSlots = null;
+        List<TimeSlot> locationTimeSlots = new ArrayList();
         
         for(TimeSlot ts : allTimeSlots) {
             if (ts.getLocation().getLocationId() == locationId)
@@ -277,6 +273,17 @@ public class ServiceLayer {
     
     public void saveTimeSlot(TimeSlot timeSlot) {
         timeSlotRepo.save(timeSlot);
+    }
+    
+    public TimeSlot getTimeSlotById(int TimeSlotId) {
+        TimeSlot timeSlot = timeSlotRepo.findById(TimeSlotId).orElse(null);
+        
+        if(timeSlot == null) {
+            System.out.println("The timeSlot object is null");
+            return timeSlot;
+        } else {
+            return timeSlot;
+        }
     }
     
 //  **********

@@ -19,6 +19,7 @@ CREATE TABLE location (
 CREATE TABLE timeSlot (
 	timeSlotId int primary key auto_increment,
     startTime time not null,
+    isTaken boolean default false,
     locationId int,
     CONSTRAINT fk_timeSlot_location
 		FOREIGN KEY (locationId)
@@ -72,6 +73,7 @@ CREATE TABLE attendance (
     isAttending boolean default false,
     attendanceDate date not null,
     userId int,
+    isAuthorized boolean default false,
     CONSTRAINT fk_attendance_user
 		FOREIGN KEY (userId)
         REFERENCES user(userId)
@@ -206,11 +208,14 @@ BEGIN
 	END LOOP;
 END$$
 
-CREATE EVENT generateTimeSlots
+
+CREATE EVENT elephantdb.generateTimeSlots
 	ON SCHEDULE EVERY '1' day
-    STARTS '2020-05-12 18:23:00'
+	STARTS '2020-05-13 12:39:00'
 DO
+BEGIN
 	CALL genMinneapolisTimeSlots();
+--     CALL genMinneapolisArrivalsAndDepatures();
     CALL genAustinTimeSlots();
-    CALL genMinneapolisArrivalsAndDepatures();
-    CALL genAustinArrivalsAndDepatures();
+--     CALL genAustinArrivalsAndDepatures();
+END
