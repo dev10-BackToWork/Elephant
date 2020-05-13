@@ -23,6 +23,9 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -43,6 +46,8 @@ public class ServiceLayer {
     private final RolesRepository rolesRepo;
     private final TimeSlotRepository timeSlotRepo;
     private final UsersRepository usersRepo;
+
+    private BCrypt bcrypt = new BCrypt();
 
     public ServiceLayer(ArrivalRepository arrivalRepo, AttendanceRepository attendanceRepo,
             DepartureRepository departureRepo, LocationRepository locationRepo, RolesRepository rolesRepo,
@@ -272,9 +277,9 @@ public class ServiceLayer {
     // TimeSlot
     public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
         List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
-        List<TimeSlot> locationTimeSlots = new ArrayList();
-        
-        for(TimeSlot ts : allTimeSlots) {
+        List<TimeSlot> locationTimeSlots = new ArrayList<>();
+
+        for (TimeSlot ts : allTimeSlots) {
             if (ts.getLocation().getLocationId() == locationId)
                 locationTimeSlots.add(ts);
         }
@@ -318,7 +323,7 @@ public class ServiceLayer {
     public List<User> getUsers(int locationId) {
 
         List<User> users = usersRepo.findAll();
-        List<User> usersOfLocation = null;
+        List<User> usersOfLocation = new ArrayList<>();
 
         for (User u : users) {
             if (u.getLocation().getLocationId() == locationId) {
@@ -369,7 +374,7 @@ public class ServiceLayer {
         List<User> usersByLocationFlagged = new ArrayList<>();
 
         for (User user : usersByLocation) {
-            if(attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized == false) {
+            if(attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized() == false) {
                 usersByLocationFlagged.add(user);
             }
         }
@@ -393,9 +398,15 @@ public class ServiceLayer {
     }
 
     public User createUser(User user) {
-        user.setPasswords("password");
+        String password = "password";
+        
+        String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        user.setPasswords(encryptPass);
+        System.out.println("to database: " + password + " and " + encryptPass);
 
-        return usersRepo.save(user);
+        User dbUser = usersRepo.save(user);
+        System.out.println("from database: " + password + " and " + BCrypt.);
+        return usersRepo.save(user); 
     }
 
     public User editUser(User user) {
@@ -443,7 +454,7 @@ public class ServiceLayer {
 	}
 
 	public List<Departure> getAllDeparturesByLocationId(int id) {
-		return getAllDeparturesByLocationId(id)
+		return getAllDeparturesByLocationId(id);
 	}
 
     public User checkLogin(User user) {
