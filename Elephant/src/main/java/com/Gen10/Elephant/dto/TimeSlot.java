@@ -23,6 +23,9 @@ public class TimeSlot {
 	
 	@Column
 	private Time startTime;
+        
+        @Column
+        private boolean isTaken;
 	
 	@ManyToOne
 	@JoinColumn(name = "locationid")
@@ -43,6 +46,14 @@ public class TimeSlot {
 	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
+
+        public boolean getIsTaken() {
+            return isTaken;
+        }
+
+        public void setIsTaken(boolean isTaken) {
+            this.isTaken = isTaken;
+        }
 
 	public Location getLocation() {
 		return this.location;
