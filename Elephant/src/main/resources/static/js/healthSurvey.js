@@ -10,6 +10,7 @@ $("#q1Yes").on("click", function(){
   $("#screener-div").hide();
   $("#survey-div").show();
   $("#survey-bye").hide();
+  toggle();
 });
 
 //if user is NOT coming in to the office: 
@@ -20,9 +21,6 @@ $("#q1No").on("click", function(){
   //send response to database to note that user logged in but will not be coming to office today
 });
 
-var answerOne = false;
-var answerTwo = false;
-var answerThree = false;
 
     function toggle (){
             //$(function () {
@@ -42,38 +40,28 @@ var answerThree = false;
            console.log(answerThree);
             $('#q3Equals').html(answerThree);
         });
-     }
+     };
 
         
       function checkResponse() {
-         if ((answerOne == true) || (answerTwo == true) || (answerThree == true)) {
-              console.log("you're sick");
-          } else if ((answerOne == false) || (answerTwo == false) || (answerThree == false)) {
+        var answerOne = false;
+        var answerTwo = false;
+        var answerThree = false;
+         if ((answerOne === false) || (answerTwo === false) || (answerThree === false)) {
               console.log("approved");
+
+          } else if ((answerOne === true) || (answerTwo === true) || (answerThree === true)) {
+               console.log("not approved");
+               $("#survey-bye").show();
+               
           }
       }
-              // $('#questionDiv').show();
-              // console.log("YES!");
-           //} else {
-              // console.log("Q2 = FALSE");
-              // $('#questionDiv').hide();
-          // }
-        
-            //$('#q2Equals').html('Toggle: ' + $(this).prop('checked'));
-//            $('#q2Equals').html(answerTwo);
-            
-          
-//    $("#q2").trigger("change");
-
-   
-
-    
+             
 //$("#submit-survey-btn").on("click", function (e) {
 $("#surveySubmit").on("click", function (e) {
-   
-    e.preventDefault();
+    //e.preventDefault();
     checkResponse();
-});
+
     // var q1 = $(".survey").val();
 //    var q2
 //    var q3
@@ -81,32 +69,30 @@ $("#surveySubmit").on("click", function (e) {
 //   console.log("survey response: " + response);
 
 
+    $("#submitLoginButton").click(function (e) {
+        e.preventDefault();
+        var password = $("#inputPassword").val();
+        var email = $("#inputEmail").val();
 
+        $.ajax({
+            type: "POST",
+            //url: "http://localhost:8080/api/users/login",
+            headers: {
+                "email": email,
+                "password": password
+            },
+            success: function (response) {
+                console.log(response);
+                return false;
+            },
+            error: function (err) {
+                console.log(err);
+                return false;
+            }
+        });
 
-//    $("#submitLoginButton").click(function (e) {
-//        e.preventDefault();
-//        var password = $("#inputPassword").val();
-//        var email = $("#inputEmail").val();
-//
-//        $.ajax({
-//            type: "post",
-//            //url: "http://localhost:8080/api/users/login",
-//            headers: {
-//                "email": email,
-//                "password": password
-//            },
-//            success: function (response) {
-//                console.log(response);
-//                return false;
-//            },
-//            error: function (err) {
-//                console.log(err);
-//                return false;
-//            }
-//        });
-//
-//        return false;
-//    });
+        return false;
+    });
 
-
+});
 
