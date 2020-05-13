@@ -22,6 +22,7 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -208,25 +209,16 @@ public class ServiceLayer {
         
         Location updatedLocation = locationRepo.save(currentLocation);
         
-        editDailyTimeInterval(timeIncrement);
-        
         return updatedLocation;
     }
     
-    public void editDailyTimeInterval(int timeIncrement) {
-        int objectCount = 0;
-        List<Arrival> arrivals = null;
-        List<Departure> departures = null;
+    public Location editDailyTimeInterval(int locationId, Time startTime, Time endTime) {
+        Location currentLocation = locationRepo.findById(locationId).orElse(null);
         
-//  Start of time interval is 7:00 AM (7 hrs * 60 min/hr = 420 min)
-//        LocalDateTime dailyTimeIntervalBasis = LocalDateTime.of(localDate).plusMinutes(420);
+        currentLocation.setBeginningTime(startTime);
+        currentLocation.setEndTime(endTime);
         
-//  Total number of minutes from 7:00 AM to 7:00 PM (12 hr * 60 min/hr = 720 min)
-        objectCount = 720 / timeIncrement;
-        
-        for (int i = 0; i < objectCount; i++) {
-//            LocalDateTime newTimeSlot = 
-        }
+        return locationRepo.save(currentLocation);
     }
 
 //  **********
@@ -398,6 +390,16 @@ public class ServiceLayer {
 		if((dbUser != null) &&
                 (dbUser.getPasswords().equals(password)) && 
                 dbUser.getRole().getName().equals("ROLE_ADMIN")){
+            return dbUser;
+        }
+        return null;
+    }
+    
+	public User checkUser(String email, String password) {
+        User dbUser = usersRepo.findByEmail(email);
+		if((dbUser != null) &&
+                (dbUser.getPasswords().equals(password)) && 
+                (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_USER"))) {
             return dbUser;
         }
         return null;
