@@ -418,6 +418,14 @@ public class ServiceLayer {
         return attendanceRepo.save(attendance);
     }
 
+	public List<Arrival> getAllArrivalsByLocationId(int id) {
+        return getAllArrivalsByLocationId(id);
+	}
+
+	public List<Departure> getAllDeparturesByLocationId(int id) {
+		return getAllDeparturesByLocationId(id)
+	}
+
     public User checkLogin(User user) {
         User dbUser = usersRepo.findByEmail(user.getEmail());
         if ((dbUser != null) && (dbUser.getPasswords()).equals(user.getPasswords())) {
@@ -444,14 +452,4 @@ public class ServiceLayer {
         }
         return null;
     }
-
-	public List<Arrival> getAllArrivalsByLocationId(int id) {
-		return null;
-	}
-
-	public List<Departure> getAllDeparturesByLocationId(int id) {
-		return null;
-	}
-
-
 }
