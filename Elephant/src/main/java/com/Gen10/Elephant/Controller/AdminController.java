@@ -6,6 +6,8 @@ import java.util.List;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
+import java.sql.Time;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,6 +92,15 @@ public class AdminController {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
             return new ResponseEntity<Location>(service.editIncrement(id, num), HttpStatus.OK);
+        }
+        return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
+    }
+    
+    @PostMapping("/editDailyTimeInterval/{id}/{startTime}/{endTime}")
+    public ResponseEntity<Location> editDailyTimeInterval(@PathVariable int id, @PathVariable Time startTime, @PathVariable Time endTime, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null) {
+            return new ResponseEntity<Location>(service.editDailyTimeInterval(id, startTime, endTime), HttpStatus.OK);
         }
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
     }
