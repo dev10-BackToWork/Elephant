@@ -8,16 +8,15 @@
 
     <title>Elephant | Health Survey</title>
 
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/jpg" href="../images/gen10.jpg"/>
+    <link rel="shortcut icon" type="image/jpg" href="images/gen10.jpg"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
         rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../css/survey.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/survey.css">
 </head>
 
 <body>
@@ -25,50 +24,74 @@
         <!-- Navigation -->
         <nav class="navbar navbar-expand-sm navbar-light static-top">
             <div class="container">
-                <!-- <a class="navbar-brand" href="#">Logo</a> -->
                 <a href="index.html" class="navbar-brand">
                     <img class="logo" src="../images/logo.png" alt="Genesis10">
                 </a>
-                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="index.html">Dashboard
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="allEmployees.html">Employees</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Time</a>
-                        </li>
-                    </ul>
-                </div> -->
             </div>
         </nav>
 
     <!-- Page Content -->
     <div class="container">
-         <h2 class="center">Welcome back, Jane!</h2>
-         
-        <!-- <div class="row" id="screener">    -->
-        <div class="form-group">
+        
+        <div class="form-group" id="screener-div">
+            <h2 class="center">Welcome back, Jane!</h2>
             <p class="center">Are you coming in to the office today?</p>
-           
             <div class="row">    
                 <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
                 <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
             </div>
-            <div class="row submit" id="submit-screener">  
+<!--            <div class="row submit" id="submit-screener">  
                 <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
-            </div>
+            </div>-->
          </div>
+        
+        <div id="screener-bye">
+             <p class="center">Thanks, your response has been recorded.</p>
+        </div>
 
-        <div class="form-group">
-                <p class="center">1. Do I have symptoms of fever, cough, shortness of breath, sore throat, or diarrhea?</p>
+        <div class="form-group" id="survey-div">
+            <form id="survey">
+<!--                <div class="row" id="questionDiv">-->
+                    <div class="row">
+                        <div class="form-check">
+                            <label for="q1" class="form-check-label">Do you have symptoms of fever, cough, shortness of breath, sore throat, or diarrhea?</label>
+                        </div>
+                        <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
+                            data-on="Yes" data-off="No" data-style="android">
+                         <div id="q1Equals"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-check">
+                            <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                        </div>
+                        <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
+                            data-on="Yes" data-off="No" data-style="android">
+                         <div id="q2Equals"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-check">
+                            <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
+                        </div>
+                        <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
+                            data-on="Yes" data-off="No" data-style="android">
+                         <div id="q3Equals"></div>
+                    </div>
+
+<!--                </div>-->
+                <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
+                <button class="btn btn-primary" id="surveySubmit" type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <div id="survey-bye">
+             <p class="center">You have not yet been approved to come in to the office. HR has been notified and will follow up with you soon.</p>
+        </div>
+        
+        
+   
+<!--                <p class="center">1. Do I have symptoms of fever, cough, shortness of breath, sore throat, or diarrhea?</p>
                 <div class="row">    
                     <div class="col-6"><button name="yes" id="q2Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
                     <div class="col-6"><button name="no" id="q2No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
@@ -80,7 +103,7 @@
                     <div class="col-6"><button name="no" id="q4No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
                 </div>
 
-                <p class="center">3. Have I travelled internationally or domestically in the last 14 days?</p>
+                <p class="center">3. Have I traveled internationally or domestically in the last 14 days?</p>
                 <div class="row">  
                     <div class="col-6"><button name="yes" id="q4Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
                     <div class="col-6"><button name="no" id="q4No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
@@ -88,10 +111,10 @@
             
                 <div class="row submit" id="submit-survey">  
                 <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-survey-btn">Submit</button>
-                </div>
+                </div>-->
         </div>
 
-    </div>
+
     </main>
     <footer>
         <p>footer content placeholder</p>
@@ -109,7 +132,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
-    <script src="../js/healthSurvey.js"></script>
+    <script src="js/healthSurvey.js"></script>
 </body>
 
 </html>
