@@ -29,6 +29,9 @@ public class Attendance {
 	@ManyToOne
 	@JoinColumn(name = "userid")
 	private User user;
+        
+        @Column
+        private boolean isAuthorized;
 
 	public int getAttendanceId() {
 		return this.attendanceId;
@@ -65,5 +68,13 @@ public class Attendance {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+        public boolean isIsAuthorized() {
+            return isAuthorized;
+        }
+
+        public void setIsAuthorized(boolean isAuthorized) {
+            this.isAuthorized = isAuthorized;
+        }
 
 }

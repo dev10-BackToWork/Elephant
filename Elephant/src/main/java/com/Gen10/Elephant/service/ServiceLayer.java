@@ -28,6 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -95,18 +96,13 @@ public class ServiceLayer {
     }
 
     public Arrival reserveArrivalByTimeSlotId(User user, int id) {
-        List<Arrival> arrivals = findAllArrivals();
-        Arrival targetArrivalTimeSlot = null;
-
-        for (Arrival arrival : arrivals) {
-            if (arrival.getTimeSlot().getTimeSlotId() == id) {
-                targetArrivalTimeSlot = arrival;
-            }
-        }
-
-        targetArrivalTimeSlot.setUser(user);
-
-        return arrivalRepo.save(targetArrivalTimeSlot);
+        Arrival newArrival = new Arrival();
+        
+        newArrival.setArrivalDate((java.sql.Date) new Date());
+        newArrival.setTimeSlot(getTimeSlotById(id));
+        newArrival.setUser(user);
+        
+        return arrivalRepo.save(newArrival);
     }
 
     // **********
@@ -309,9 +305,20 @@ public class ServiceLayer {
     public void saveTimeSlot(TimeSlot timeSlot) {
         timeSlotRepo.save(timeSlot);
     }
-
-    // **********
-    // User(s)
+    
+    public TimeSlot getTimeSlotById(int TimeSlotId) {
+        TimeSlot timeSlot = timeSlotRepo.findById(TimeSlotId).orElse(null);
+        
+        if(timeSlot == null) {
+            System.out.println("The timeSlot object is null");
+            return timeSlot;
+        } else {
+            return timeSlot;
+        }
+    }
+    
+//  **********
+//  User(s)
 
     public List<User> getUsers(int locationId) {
 
