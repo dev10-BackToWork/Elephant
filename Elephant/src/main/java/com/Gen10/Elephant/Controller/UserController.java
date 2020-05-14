@@ -11,6 +11,7 @@ import com.Gen10.Elephant.dto.Departure;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
+import com.Gen10.Elephant.service.timeSlotReservedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -77,7 +78,11 @@ public class UserController {
     public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
-            return new ResponseEntity<Arrival>(service.reserveArrivalByTimeSlotId(user, id), HttpStatus.OK);
+            try {
+                return new ResponseEntity<Arrival>(service.reserveArrivalByTimeSlotId(user, id), HttpStatus.OK);
+            } catch(timeSlotReservedException e) {
+                return new ResponseEntity(e.getMessage(), HttpStatus.IM_USED);
+            }
         }
         return new ResponseEntity<Arrival>(new Arrival(), HttpStatus.UNAUTHORIZED);
     }
@@ -86,7 +91,11 @@ public class UserController {
     public ResponseEntity<Departure> reserveDeparture(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
-            return new ResponseEntity<Departure>(service.reserveDepartureByTimeSlotId(user, id), HttpStatus.OK);
+            try {
+                return new ResponseEntity<Departure>(service.reserveDepartureByTimeSlotId(user, id), HttpStatus.OK);
+            } catch (timeSlotReservedException e) {
+                return new ResponseEntity(e.getMessage(), HttpStatus.IM_USED);
+            }
         }
         return new ResponseEntity<Departure>(new Departure(), HttpStatus.UNAUTHORIZED);
     }   

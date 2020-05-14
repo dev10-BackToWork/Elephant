@@ -95,8 +95,13 @@ public class ServiceLayer {
         saveDeparture(departure);
     }
 
-    public Arrival reserveArrivalByTimeSlotId(User user, int id) {
+    public Arrival reserveArrivalByTimeSlotId(User user, int id) throws timeSlotReservedException {
         TimeSlot timeSlot = getTimeSlotById(id);
+        
+        if(timeSlot.getIsTaken()) {
+            throw new timeSlotReservedException("The time slot is no longer available. Please choose another time to plan your arrival.");
+        }
+        
         timeSlot.setIsTaken(true);
         timeSlotRepo.save(timeSlot);
         
@@ -161,8 +166,13 @@ public class ServiceLayer {
         departureRepo.save(departure);
     }
 
-    public Departure reserveDepartureByTimeSlotId(User user, int id) {
+    public Departure reserveDepartureByTimeSlotId(User user, int id) throws timeSlotReservedException {
         TimeSlot timeSlot = getTimeSlotById(id);
+        
+        if(timeSlot.getIsTaken()) {
+            throw new timeSlotReservedException("The time slot is no longer available. Please choose another time to plan your departure.");
+        }
+        
         timeSlot.setIsTaken(true);
         timeSlotRepo.save(timeSlot);
         
