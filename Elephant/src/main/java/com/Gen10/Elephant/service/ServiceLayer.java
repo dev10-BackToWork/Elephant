@@ -395,9 +395,9 @@ public class ServiceLayer {
     public User createUser(User user) {
         String password = "password";
         
-        String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
-        user.setPasswords(encryptPass);
-        System.out.println("to database: " + password + " and " + encryptPass);
+        // String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        user.setPasswords(password);
+        // System.out.println("to database: " + password + " and " + encryptPass);
 
         User dbUser = usersRepo.save(user);
         // System.out.println("from database: " + password + " and " + BCrypt.);
