@@ -18,6 +18,7 @@ CREATE TABLE location (
 
 CREATE TABLE timeSlot (
 	timeSlotId int primary key auto_increment,
+    timeSlotDate date not null,
     startTime time not null,
     isTaken boolean default false,
     locationId int,
@@ -31,7 +32,8 @@ CREATE TABLE `user` (
     firstName varchar(25) not null,
     lastName varchar(25) not null,
     email varchar(50) not null,
-    passwords varchar(15) not null,
+    defaultPW varchar(50) not null,
+    passwords varchar(125) not null,
     locationId int,
     roleId int,
     CONSTRAINT fk_user_location
@@ -87,12 +89,12 @@ INSERT INTO `role` (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
-INSERT INTO `user` (userId, firstName, lastName, email, passwords, locationId, roleId) VALUES 
-	(1, "default", "user", "user@user.com", "password", 1, 1),
-    (2, "Keely", "Brennan", "keely@keely.com", "password", 1, 2),
-    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", 1, 2),
-    (4, "Nate", "Wood", "nate@nate.com", "password", 1, 2),
-    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", 1, 2);
+INSERT INTO `user` (userId, firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
+	(1, "default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
+    (2, "Keely", "Brennan", "keely@keely.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (4, "Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2);
 
 DELIMITER $$
 CREATE PROCEDURE genMinneapolisTimeSlots()
@@ -122,7 +124,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (startTime, locationId) VALUES (y + INTERVAL increment * x MINUTE, 1);
+        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, 1);
         
         SET x = x + 1;
 	END LOOP;
@@ -156,66 +158,17 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (startTime, locationId) VALUES (y + INTERVAL increment * x MINUTE, 2);
+        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, 2);
         
         SET x = x + 1;
 	END LOOP;
 END$$
 
-DELIMITER $$
-CREATE PROCEDURE genMinneapolisArrivalsAndDepatures()
-BEGIN
-	DECLARE minTimeSlotId INT DEFAULT 0;
-    DECLARE maxTimeSlotId INT DEFAULT 0;
-    DECLARE x INT;
-    
-    SELECT MIN(timeSlotId) FROM timeSlot WHERE locationId = 1 INTO minTimeSlotId;
-    SELECT MAX(timeSlotId) FROM timeSlot WHERE locationId = 1 INTO maxTimeSlotId;
-    SET x = minTimeSlotId;
-    
-    loop_label: LOOP
-		IF x > maxTimeSlotId THEN
-			LEAVE loop_label;
-		END IF;
-        
-        INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-        INSERT INTO departure (departureDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-    
-		SET x = x + 1;
-	END LOOP;
-END$$
-
-DELIMITER $$
-CREATE PROCEDURE genAustinArrivalsAndDepatures()
-BEGIN
-	DECLARE minTimeSlotId INT DEFAULT 0;
-    DECLARE maxTimeSlotId INT DEFAULT 0;
-    DECLARE x INT;
-    
-    SELECT MIN(timeSlotId) FROM timeSlot WHERE locationId = 2 INTO minTimeSlotId;
-    SELECT MAX(timeSlotId) FROM timeSlot WHERE locationId = 2 INTO maxTimeSlotId;
-    SET x = minTimeSlotId;
-    
-    loop_label: LOOP
-		IF x > maxTimeSlotId THEN
-			LEAVE loop_label;
-		END IF;
-        
-        INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-        INSERT INTO departure (departureDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-    
-		SET x = x + 1;
-	END LOOP;
-END$$
-
-
 -- CREATE EVENT elephantdb.generateTimeSlots
 -- 	ON SCHEDULE EVERY '1' day
--- 	STARTS '2020-05-13 14:08:40'
+-- 	STARTS '2020-05-13 03:00:00'
 -- DO
 -- BEGIN
 	CALL genMinneapolisTimeSlots();
---     CALL genMinneapolisArrivalsAndDepatures();
     CALL genAustinTimeSlots();
---     CALL genAustinArrivalsAndDepatures();
 -- END
