@@ -34,6 +34,9 @@ public class User {
         @Column
 	private String email;
 	
+	@Column(name = "defaultpw")
+	private String defaultPW;
+
 	@Column 
 	private String passwords;
 	
@@ -102,4 +105,11 @@ public class User {
 		this.role = role;
 	}
 
+	public String getDefaultPW() {
+		return this.defaultPW;
+	}
+
+	public void setDefaultPW(String defaultPW) {
+		this.defaultPW = defaultPW;
+	}
 }
