@@ -29,7 +29,6 @@ var answerOne = false;
 var answerTwo = false;
 var answerThree = false;
 
-
 function toggle() {
     $('#q1').change(function () {
         answerOne = $(this).prop('checked');
@@ -48,12 +47,14 @@ function toggle() {
        // $('#q3Equals').html(answerThree);
     });
 }
-         
+    
+var password = "password";
+var email = "user@user.com";
+
 $("#surveySubmit").on("click", function (e) {
     e.preventDefault();
     $("#survey-container").hide();
-    //var password = 
-    //var email = 
+   
 
         if  (answerOne === true){
              isAuthorized = false;
@@ -80,13 +81,13 @@ $("#surveySubmit").on("click", function (e) {
         $.ajax({
             type: "POST",
             data: "",
-            url: "http://localhost:8080/api/users/login",
+            url: "http://localhost:8080/api/users/coming/1",
             contentType: "application/json;charset=UTF-8",
            //$("authorized").text("You're approved to come to the office. Next, select a time.");
-//            headers: {
-//                "email": email,
-//                "password": password
-//            },
+            headers: {
+                "email": email,
+                "password": password
+            },
     
             success: function (response) {
                 
@@ -104,3 +105,38 @@ $("#surveySubmit").on("click", function (e) {
         return false;
     });
 
+
+
+
+$("#surveySubmit").on("click", function (e) {
+    e.preventDefault();
+    $("#survey-container").hide();
+   
+
+         
+        $.ajax({
+            type: "POST",
+            data: "",
+            url: "http://localhost:8080/api/users/coming/1",
+            contentType: "application/json;charset=UTF-8",
+           //$("authorized").text("You're approved to come to the office. Next, select a time.");
+            headers: {
+                "email": email,
+                "password": password
+            },
+    
+            success: function (response) {
+                
+                console.log(response);
+                return false;
+            },
+            error: function (err) {
+                console.log(err);
+                 $("#screener-div").hide();
+                 $("#survey-bye").show();
+                return false;
+            }
+        });
+
+        return false;
+    });
