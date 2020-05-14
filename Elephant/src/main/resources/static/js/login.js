@@ -18,7 +18,7 @@ $(document).ready(function () {
                 if (response.role.roleId === 2) {
                     window.location.replace('/healthSurvey.html');
                 } else if (response.role.roleId === 1) {
-                    alert('admin - redirect to dashboard.html once added')
+                    
                     window.location.replace('/dashboard.html');
                 }
                 return false;
