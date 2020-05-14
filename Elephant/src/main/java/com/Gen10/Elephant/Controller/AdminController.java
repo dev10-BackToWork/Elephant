@@ -2,6 +2,7 @@ package com.Gen10.Elephant.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Departure;
@@ -126,8 +127,13 @@ public class AdminController {
     public ResponseEntity<User> createUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
-            User newUser = service.createUser(user);
-            return new ResponseEntity<User>(newUser, HttpStatus.OK);
+            try{
+                User newUser = service.createUser(user);
+                return new ResponseEntity<User>(newUser, HttpStatus.OK);
+            } catch (DataFormatException e) {
+                return new ResponseEntity(e.getMessage(), HttpStatus.NOT_MODIFIED);
+            }
+            
         }
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
     }
@@ -173,8 +179,7 @@ public class AdminController {
     public ResponseEntity<User> resetPassword(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password){
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
-            service.resetUserPassword(id);
-            return new ResponseEntity<User>(new User(), HttpStatus.OK);
+            return new ResponseEntity<User>(service.resetUserPassword(id), HttpStatus.OK);
         }
         return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
     }

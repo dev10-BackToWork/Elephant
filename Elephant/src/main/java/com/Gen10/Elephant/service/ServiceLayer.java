@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
 import com.Gen10.Elephant.dao.AttendanceRepository;
@@ -391,7 +392,10 @@ public class ServiceLayer {
         usersRepo.deleteById(userId);
     }
 
-    public User createUser(User user) {
+    public User createUser(User user) throws DataFormatException {
+        if (usersRepo.findByEmail(user.getEmail()) != null) {
+            throw new DataFormatException("An account already exists for that email");
+        }
         String password = generatePassword();
         user.setDefaultPW(password);
 
@@ -499,4 +503,15 @@ public class ServiceLayer {
         }
         return buffer.toString();
     }
+
+	public User resetUserPassword(int id) {
+        User existingUser = usersRepo.findById(id).orElse(null);
+		String password = generatePassword();
+        existingUser.setDefaultPW(password);
+
+        String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        existingUser.setPasswords(encryptPass);
+
+        return usersRepo.save(existingUser);
+	}
 }
