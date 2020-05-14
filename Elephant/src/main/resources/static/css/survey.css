@@ -36,32 +36,27 @@ button.survey {
 }
 
 .submit {
-    height: 6rem;
-    position: relative;
+    height: 3rem;
+    align-self: center;
+    margin: 1rem;
 }
-.submit-btn {
+/*.submit-btn {
   background-color: white;
   border: 3px solid rgb(228,112,31);
   color: black;
   width: 30%;
   margin: 1rem;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-}
+}*/
   
 .arrival-btns {
   margin: 0px 5px 10px 0px;
   padding: 0px;
 }
-
-button.time {
-  font-size: 1rem;
-  height: 5rem;
-}
-
 
 button.time {
   font-size: 1rem;

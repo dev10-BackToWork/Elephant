@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <title>Elephant | Home</title>
 </head>
@@ -23,64 +23,47 @@
         <!-- Navigation -->
         <nav class="navbar navbar-expand-sm navbar-light static-top">
             <div class="container">
-                <!-- <a class="navbar-brand" href="#">Logo</a> -->
-                <a href="index.html" class="navbar-brand">
-                    <img class="logo" src="../images/logo.png" alt="Genesis10">
+                <a href="/" class="navbar-brand">
+                    <img class="logo" src="images/logo.png" alt="Genesis10">
                 </a>
-                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Dashboard
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="allEmployees.html">Employees</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Time</a>
-                    </li>
-                </ul>
-            </div> -->
             </div>
         </nav>
         <!-- Page Content -->
-
         <div class="container">
             <div class="row">
-                <!-- <div class="col-sm-9 col-md-7 col-lg-5 mx-auto"> -->
-                <!-- <div> -->
-                <h1 class="heading">{Title placeholder / COVID-19 Back-To-Work Scheduling} </h1>
+                <h1 class="heading">{Title Placeholder/COVID-19 Back-To-Work Scheduling} </h1>
+            </div>
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card card-signin">
                     <div class="card-body">
                         <h5 class="card-title text-center">Sign In</h5>
-                        <form onsubmit="loginSubmit();" class="form-signin">
+                            <form onsubmit="loginSubmit();" class="form-signin">
                             <div class="form-label-group">
-                                <input type="email" id="inputEmail" class="form-control" required autofocus>
+                                <input type="email" id="inputEmail" class="form-control" required autofocus >
                                 <label for="inputEmail">Email address</label>
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" id="inputPassword" class="form-control" required>
+                                <input type="password" id="inputPassword" class="form-control" required >
                                 <label for="inputPassword">Password</label>
                             </div>
 
-                            <div class="custom-control custom-checkbox mb-3">
+<!--                            <div class="custom-control custom-checkbox mb-3">
                                 <input type="checkbox" class="custom-control-input" id="customCheck1">
                                 <label class="custom-control-label" for="customCheck1">Remember password</label>
-                            </div>
+                            </div>-->
+
                             <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
-                                type="submit">Sign
-                                In</button>
+                                type="submit">Sign In</button>
+                            <div class="row">
+                               <a class="nav-link" href="/resetPassword">Reset Password</a>
+                            </div>
                             <hr class="my-4">
                         </form>
                     </div>
-                </div>
+                </div> 
+                 <div class="alert alert-danger" id="loginErr" role="alert"></div>
             </div>
-        </div>
         </div>
 
     </main>
@@ -98,7 +81,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
 
-    <script src="/js/login.js"></script>
+    <script src="js/login.js"></script>
 </body>
 
 </html>
