@@ -429,9 +429,10 @@ public class ServiceLayer {
         if (attendanceRepo.findByUser(attendance.getUser()) != null) {
             Attendance existingAttendance = attendanceRepo.findByUser(attendance.getUser());
             existingAttendance.setIsAttending(attendance.getIsAttending());
-            attendanceRepo.save(existingAttendance);
+            return attendanceRepo.save(existingAttendance);
+        } else {
+            return attendanceRepo.save(attendance);
         }
-        return attendanceRepo.save(attendance);
     }
 
 	public List<Arrival> getAllArrivalsByLocationId(int id) {

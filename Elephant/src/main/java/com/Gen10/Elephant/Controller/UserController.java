@@ -64,7 +64,7 @@ public class UserController {
     }
 
     // Round 2
-    @PostMapping("/coming/{id}")
+    @PostMapping("/coming")
     public ResponseEntity<Attendance> markAttendance(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
