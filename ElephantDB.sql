@@ -31,7 +31,8 @@ CREATE TABLE `user` (
     firstName varchar(25) not null,
     lastName varchar(25) not null,
     email varchar(50) not null,
-    passwords varchar(15) not null,
+    defaultPW varchar(50) not null,
+    passwords varchar(125) not null,
     locationId int,
     roleId int,
     CONSTRAINT fk_user_location
@@ -87,12 +88,12 @@ INSERT INTO `role` (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
-INSERT INTO `user` (userId, firstName, lastName, email, passwords, locationId, roleId) VALUES 
-	(1, "default", "user", "user@user.com", "password", 1, 1),
-    (2, "Keely", "Brennan", "keely@keely.com", "password", 1, 2),
-    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", 1, 2),
-    (4, "Nate", "Wood", "nate@nate.com", "password", 1, 2),
-    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", 1, 2);
+INSERT INTO `user` (userId, firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
+	(1, "default", "user", "user@user.com", "password", "$password", 1, 1),
+    (2, "Keely", "Brennan", "keely@keely.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
+    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
+    (4, "Nate", "Wood", "nate@nate.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
+    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2);
 
 DELIMITER $$
 CREATE PROCEDURE genMinneapolisTimeSlots()

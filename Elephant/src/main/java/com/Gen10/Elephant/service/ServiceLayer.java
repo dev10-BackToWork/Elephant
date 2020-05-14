@@ -5,9 +5,12 @@
  */
 package com.Gen10.Elephant.service;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
 import com.Gen10.Elephant.dao.AttendanceRepository;
@@ -25,11 +28,6 @@ import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -97,22 +95,23 @@ public class ServiceLayer {
 
     public Arrival reserveArrivalByTimeSlotId(User user, int id) throws timeSlotReservedException {
         TimeSlot timeSlot = getTimeSlotById(id);
-        
-        if(timeSlot.getIsTaken()) {
-            throw new timeSlotReservedException("The time slot is no longer available. Please choose another time to plan your arrival.");
+
+        if (timeSlot.getIsTaken()) {
+            throw new timeSlotReservedException(
+                    "The time slot is no longer available. Please choose another time to plan your arrival.");
         }
-        
+
         timeSlot.setIsTaken(true);
         timeSlotRepo.save(timeSlot);
-        
+
         Arrival newArrival = new Arrival();
-        
+
         java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        
+
         newArrival.setArrivalDate(newDate);
         newArrival.setTimeSlot(getTimeSlotById(id));
         newArrival.setUser(getUserById(user.getUserId()));
-        
+
         return arrivalRepo.save(newArrival);
     }
 
@@ -168,22 +167,23 @@ public class ServiceLayer {
 
     public Departure reserveDepartureByTimeSlotId(User user, int id) throws timeSlotReservedException {
         TimeSlot timeSlot = getTimeSlotById(id);
-        
-        if(timeSlot.getIsTaken()) {
-            throw new timeSlotReservedException("The time slot is no longer available. Please choose another time to plan your departure.");
+
+        if (timeSlot.getIsTaken()) {
+            throw new timeSlotReservedException(
+                    "The time slot is no longer available. Please choose another time to plan your departure.");
         }
-        
+
         timeSlot.setIsTaken(true);
         timeSlotRepo.save(timeSlot);
-        
+
         Departure newDeparture = new Departure();
-        
+
         java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        
+
         newDeparture.setDepartureDate(newDate);
         newDeparture.setTimeSlot(getTimeSlotById(id));
         newDeparture.setUser(getUserById(user.getUserId()));
-        
+
         return departureRepo.save(newDeparture);
     }
 
@@ -234,16 +234,16 @@ public class ServiceLayer {
 
         return updatedLocation;
     }
-    
+
     public Location editDailyTimeInterval(int locationId, Time startTime, Time endTime) {
         Location currentLocation = locationRepo.findById(locationId).orElse(null);
-        
+
         currentLocation.setBeginningTime(startTime);
         currentLocation.setEndTime(endTime);
-        
+
         return locationRepo.save(currentLocation);
     }
-    
+
     // Role(s)
     public List<Role> getAllRoles() {
         return rolesRepo.findAll();
@@ -300,20 +300,20 @@ public class ServiceLayer {
     public void saveTimeSlot(TimeSlot timeSlot) {
         timeSlotRepo.save(timeSlot);
     }
-    
+
     public TimeSlot getTimeSlotById(int TimeSlotId) {
         TimeSlot timeSlot = timeSlotRepo.findById(TimeSlotId).orElse(null);
-        
-        if(timeSlot == null) {
+
+        if (timeSlot == null) {
             System.out.println("The timeSlot object is null");
             return timeSlot;
         } else {
             return timeSlot;
         }
     }
-    
-//  **********
-//  User(s)
+
+    // **********
+    // User(s)
 
     public List<User> getUsers(int locationId) {
 
@@ -354,7 +354,7 @@ public class ServiceLayer {
         List<User> usersByLocationNotAnswered = usersByLocation;
 
         for (User user : usersByLocation) {
-            if(attendanceRepo.findByUser(user) != null) {
+            if (attendanceRepo.findByUser(user) != null) {
                 usersByLocationNotAnswered.remove(user);
             }
         }
@@ -362,20 +362,19 @@ public class ServiceLayer {
         return usersByLocationNotAnswered;
     }
 
-    
-	public List<User> getFlaggedUsers(int id) {
-		Location location = locationRepo.findById(id).orElse(null);
+    public List<User> getFlaggedUsers(int id) {
+        Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationFlagged = new ArrayList<>();
 
         for (User user : usersByLocation) {
-            if(attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized() == false) {
+            if (attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized() == false) {
                 usersByLocationFlagged.add(user);
             }
         }
 
         return usersByLocationFlagged;
-	}
+    }
 
     public User getUserById(int userId) {
         User user = usersRepo.findById(userId).orElse(null);
@@ -393,15 +392,14 @@ public class ServiceLayer {
     }
 
     public User createUser(User user) {
-        String password = "password";
-        
-        // String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
-        user.setPasswords(password);
-        // System.out.println("to database: " + password + " and " + encryptPass);
+        String password = generatePassword();
+        user.setDefaultPW(password);
+
+        String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        user.setPasswords(encryptPass);
 
         User dbUser = usersRepo.save(user);
-        // System.out.println("from database: " + password + " and " + BCrypt.);
-        return usersRepo.save(user); 
+        return usersRepo.save(dbUser);
     }
 
     public User editUser(User user) {
@@ -411,7 +409,10 @@ public class ServiceLayer {
 
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-        existingUser.setPasswords(user.getPasswords());
+
+        String encryptedPW = BCrypt.hashpw(user.getPasswords(), BCrypt.gensalt(10));
+        existingUser.setPasswords(encryptedPW);
+
         existingUser.setEmail(user.getEmail());
         existingUser.setLocation(user.getLocation());
         existingUser.setRole(user.getRole());
@@ -427,7 +428,8 @@ public class ServiceLayer {
         // Changes only the user password, used by users without admin role
         User existingUser = getUserById(user.getUserId());
 
-        existingUser.setPasswords(user.getPasswords());
+        String encryptedPW = BCrypt.hashpw(user.getPasswords(), BCrypt.gensalt(10));
+        existingUser.setPasswords(encryptedPW);
 
         User editedUser = usersRepo.save(existingUser);
 
@@ -445,17 +447,17 @@ public class ServiceLayer {
         }
     }
 
-	public List<Arrival> getAllArrivalsByLocationId(int id) {
+    public List<Arrival> getAllArrivalsByLocationId(int id) {
         return getAllArrivalsByLocationId(id);
-	}
+    }
 
-	public List<Departure> getAllDeparturesByLocationId(int id) {
-		return getAllDeparturesByLocationId(id);
-	}
+    public List<Departure> getAllDeparturesByLocationId(int id) {
+        return getAllDeparturesByLocationId(id);
+    }
 
     public User checkLogin(User user) {
         User dbUser = usersRepo.findByEmail(user.getEmail());
-        if ((dbUser != null) && (dbUser.getPasswords()).equals(user.getPasswords())) {
+        if ((dbUser != null) && BCrypt.checkpw(user.getPasswords(), dbUser.getPasswords())) {
             return dbUser;
         }
         return null;
@@ -463,8 +465,9 @@ public class ServiceLayer {
 
     public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
-        if ((dbUser != null) && (dbUser.getPasswords().equals(password))
-                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {
+        if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
+                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {        
+        // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
             return dbUser;
         }
         return null;
@@ -472,11 +475,28 @@ public class ServiceLayer {
 
     public User checkUser(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
-        if ((dbUser != null) && (dbUser.getPasswords().equals(password))
+        if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
                 && (dbUser.getRole().getName().equals("ROLE_ADMIN")
                         || dbUser.getRole().getName().equals("ROLE_USER"))) {
             return dbUser;
         }
         return null;
+    }
+
+    private String generatePassword() {
+        int lcMin = 97, lcMax = 122, ucCapMin = 65, ucCapMax = 90;
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int letterInt;
+            if(random.nextInt(2) == 0) {
+                letterInt = lcMin + (int) (random.nextFloat() * (lcMax - lcMin + 1));
+            } else {
+                letterInt = ucCapMin + (int) (random.nextFloat() * (ucCapMax - ucCapMin + 1));
+            }
+            buffer.append((char) letterInt);
+        }
+        return buffer.toString();
     }
 }
