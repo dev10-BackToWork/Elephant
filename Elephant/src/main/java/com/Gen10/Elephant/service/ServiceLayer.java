@@ -273,9 +273,10 @@ public class ServiceLayer {
     public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
         List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
         List<TimeSlot> locationTimeSlots = new ArrayList<>();
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());        
 
         for (TimeSlot ts : allTimeSlots) {
-            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false)
+            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false && ts.getTimeSlotDate().toString().contains(currentDateSQL.toString()))
                 locationTimeSlots.add(ts);
         }
 

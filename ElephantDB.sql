@@ -18,6 +18,7 @@ CREATE TABLE location (
 
 CREATE TABLE timeSlot (
 	timeSlotId int primary key auto_increment,
+    timeSlotDate date not null,
     startTime time not null,
     isTaken boolean default false,
     locationId int,
@@ -122,7 +123,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (startTime, locationId) VALUES (y + INTERVAL increment * x MINUTE, 1);
+        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, 1);
         
         SET x = x + 1;
 	END LOOP;
@@ -156,66 +157,17 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (startTime, locationId) VALUES (y + INTERVAL increment * x MINUTE, 2);
+        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, 2);
         
         SET x = x + 1;
 	END LOOP;
 END$$
 
-DELIMITER $$
-CREATE PROCEDURE genMinneapolisArrivalsAndDepatures()
-BEGIN
-	DECLARE minTimeSlotId INT DEFAULT 0;
-    DECLARE maxTimeSlotId INT DEFAULT 0;
-    DECLARE x INT;
-    
-    SELECT MIN(timeSlotId) FROM timeSlot WHERE locationId = 1 INTO minTimeSlotId;
-    SELECT MAX(timeSlotId) FROM timeSlot WHERE locationId = 1 INTO maxTimeSlotId;
-    SET x = minTimeSlotId;
-    
-    loop_label: LOOP
-		IF x > maxTimeSlotId THEN
-			LEAVE loop_label;
-		END IF;
-        
-        INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-        INSERT INTO departure (departureDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-    
-		SET x = x + 1;
-	END LOOP;
-END$$
-
-DELIMITER $$
-CREATE PROCEDURE genAustinArrivalsAndDepatures()
-BEGIN
-	DECLARE minTimeSlotId INT DEFAULT 0;
-    DECLARE maxTimeSlotId INT DEFAULT 0;
-    DECLARE x INT;
-    
-    SELECT MIN(timeSlotId) FROM timeSlot WHERE locationId = 2 INTO minTimeSlotId;
-    SELECT MAX(timeSlotId) FROM timeSlot WHERE locationId = 2 INTO maxTimeSlotId;
-    SET x = minTimeSlotId;
-    
-    loop_label: LOOP
-		IF x > maxTimeSlotId THEN
-			LEAVE loop_label;
-		END IF;
-        
-        INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-        INSERT INTO departure (departureDate, timeSlotId, userId) VALUES (CURDATE(), x, 1);
-    
-		SET x = x + 1;
-	END LOOP;
-END$$
-
-
 -- CREATE EVENT elephantdb.generateTimeSlots
 -- 	ON SCHEDULE EVERY '1' day
--- 	STARTS '2020-05-13 14:08:40'
+-- 	STARTS '2020-05-13 03:00:00'
 -- DO
 -- BEGIN
 	CALL genMinneapolisTimeSlots();
---     CALL genMinneapolisArrivalsAndDepatures();
     CALL genAustinTimeSlots();
---     CALL genAustinArrivalsAndDepatures();
 -- END
