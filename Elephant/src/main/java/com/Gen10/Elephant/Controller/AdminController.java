@@ -38,7 +38,7 @@ public class AdminController {
         if(dbAdmin != null){
             return new ResponseEntity<User>(service.getUserById(id), HttpStatus.OK);
         }
-        return new ResponseEntity<User>(dbAdmin, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(dbAdmin, HttpStatus.UNAUTHORIZED);
     }
 
     //Returns all users with the location id
@@ -159,24 +159,24 @@ public class AdminController {
         }
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
     }
-
-    //Round 2
-    @DeleteMapping("/user/{id{")
-    public ResponseEntity<User> deleteUser(@PathVariable int id, @PathVariable int num, @RequestHeader("email") String email, @RequestHeader("password") String password) {
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null){
-            service.deleteUserById(id);
-            return new ResponseEntity<User>(new User(), HttpStatus.OK);
-        }
-        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
-    }
   
-    @PostMapping("/editDailyTimeInterval/{id}/{startTime}/{endTime}")
+    @PostMapping("/timeInterval/{id}/{startTime}/{endTime}")
     public ResponseEntity<Location> editDailyTimeInterval(@PathVariable int id, @PathVariable Time startTime, @PathVariable Time endTime, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null) {
             return new ResponseEntity<Location>(service.editDailyTimeInterval(id, startTime, endTime), HttpStatus.OK);
         }
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
+    }
+
+    //Round 2
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            service.deleteUserById(id);
+            return new ResponseEntity<User>(new User(), HttpStatus.OK);
+        }
+        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
     }
 }

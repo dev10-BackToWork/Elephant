@@ -64,6 +64,17 @@ public class UserController {
         return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);
     }
 
+    // //edts a user, restricted to password only
+    // @PostMapping("/editUser")
+    // public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+    //     try {
+    //         service.checkUser(email, password);
+    //         return new ResponseEntity<User>(service.editUserPassword(user), HttpStatus.OK);
+    //     } catch(AuthenticationException e) {
+    //         return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    //     }
+    // }
+
     // Round 2
     @PostMapping("/coming")
     public ResponseEntity<Attendance> markAttendance(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
