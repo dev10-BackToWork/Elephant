@@ -89,11 +89,11 @@ VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
 INSERT INTO `user` (userId, firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
-	(1, "default", "user", "user@user.com", "password", "$password", 1, 1),
-    (2, "Keely", "Brennan", "keely@keely.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
-    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
-    (4, "Nate", "Wood", "nate@nate.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2),
-    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$10$C9sl0mnt9zNKKp9gfwkWi.UBxlWNGIktBrlzXPhdPMZidmkt2cX/a", 1, 2);
+	(1, "default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
+    (2, "Keely", "Brennan", "keely@keely.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (4, "Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2);
 
 DELIMITER $$
 CREATE PROCEDURE genMinneapolisTimeSlots()

@@ -169,6 +169,16 @@ public class AdminController {
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
     }
 
+    @PostMapping("/resetPassword/{id}")
+    public ResponseEntity<User> resetPassword(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password){
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            service.resetUserPassword(id);
+            return new ResponseEntity<User>(new User(), HttpStatus.OK);
+        }
+        return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
+    }
+
     //Round 2
     @DeleteMapping("/user/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
