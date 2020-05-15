@@ -6,6 +6,8 @@ $(document).ready(function () {
     $("#survey-authorized").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
+    
+var user;   
    
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -21,6 +23,8 @@ $(document).ready(function () {
             },
             success: function (response) {
                 console.log(response);
+                user = response;
+                
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
                      $("#login").hide();
@@ -46,7 +50,8 @@ $(document).ready(function () {
         return false;
     });
 
-});
+console.log(user);
+
 
 function clearLogin() {
     $('#inputEmail').click(function (e) {
@@ -54,17 +59,23 @@ function clearLogin() {
         $('.form-control').val('');
     });
 };
-    
-    
-    
-
-
+  
+//var user = {
+//    email,
+//    defaultPW
+//};
 
 //need to change var values to login object once on the same page
-var password = "password";
-var email = "user@user.com";
-var locationId = 1;
-var userId = 1;
+//var password = "password";
+//var email = "user@user.com";
+//var locationId = 1;
+//var userId = 1;
+
+var user;
+
+//var locationId = user.location.locationId;
+//var userId = user.userId;
+//var firstName = user.firstName;
 
 //if user is NOT coming in to the office: 
 $("#q1No").on("click", function (e) {
@@ -73,16 +84,19 @@ $("#q1No").on("click", function (e) {
     $("#survey-bye").hide();
     $("#survey-authorized").hide();
     // $("#survey-container").hide();
-
+    console.log(user);
+    var email = user.email;
+    var password = user.defaultPW;
+    
     $.ajax({
         type: "POST",
         url: "http://localhost:8080/api/users/coming",
         data: JSON.stringify({
-            "userId": userId
-        },
-                {
-                    "isAttending": false
-                }),
+            "user": user
+            },
+            {
+                "isAttending": false
+            }),
         contentType: "application/json;charset=UTF-8",
         headers: {
             "email": email,
@@ -168,7 +182,7 @@ $("#surveySubmit").on("click", function (e) {
 
     if (isAuthorized === true) {
         console.log(isAuthorized);
-        loadItems();
+        loadArrivals();
     } else if (isAuthorized === false) {
         notAuthorized();
     }
@@ -177,19 +191,23 @@ $("#surveySubmit").on("click", function (e) {
 
 
 function notAuthorized() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/api/users/coming",
-        contentType: "application/json;charset=UTF-8",
-        data: JSON.stringify({
-            "userId": userId
-        },
-                {
-                    "isAttending": true
-                },
-                {
-                    "isAuthorized": false
-                }),
+        console.log(user);
+        var email = user.email;
+        var password = user.defaultPW;
+    
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/users/coming",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                "user": user
+            },
+                    {
+                        "isAttending": true
+                    },
+                    {
+                        "isAuthorized": false
+                    }),
 
         headers: {
             "email": email,
@@ -211,7 +229,14 @@ function notAuthorized() {
 
 
 
-function loadItems() {
+function loadArrivals() {
+    console.log(user);
+    var email = user.email;
+    var password = user.defaultPW;
+    var locationId = user.location.locationId;
+    var userId = user.userId;
+    console.log(user.location.locationId);
+    
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/api/users/times/" + locationId,
@@ -263,7 +288,93 @@ function loadItems() {
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
-                    data: JSON.stringify({"userId": 1}),
+                    data: JSON.stringify({"userId": userId}),
+                    contentType: "application/json;charset=UTF-8",
+
+                    headers: {
+                        "email": email,
+                        "password": password
+                    },
+
+                    success: function (response, status) {
+                        console.log(response);
+                        alert(response.timeSlot.startTime);
+                        $('#time-success').show();
+                        loadDepartures();
+                        
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        //$("#screener-div").hide();
+                        //$("#survey-bye").show();
+                        return false;
+                    }
+                });
+            });
+        }
+    });
+}
+
+
+function loadDepartures() {
+    $('#time-success').show();
+    $('#survey-authorized').show();
+    console.log(user);
+    var email = user.email;
+    var password = user.defaultPW;
+    var locationId = user.location.locationId;
+    var userId = user.userId;
+    
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/users/times/" + locationId,
+        headers: {
+            "email": email,
+            "password": password
+        },
+        success: function (response) {
+            console.log(response);
+            $("#arrival-btn-div").empty();
+            var arrivalDiv = $("#arrival-btn-div");
+            var i;
+            $.each(response, function (i, time) {
+                if (response[i].isTaken === false) {
+                    var startTime = response[i].startTime;
+                    var timeSlotId = response[i].timeSlotId;
+                    console.log(timeSlotId + " - " + startTime);
+
+                    var arrivalBtn = "<div class='col-3'>";
+                    arrivalBtn += "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
+                    arrivalBtn += "<p class='item'>" + startTime + "</p>";
+                    arrivalBtn += "</button>";
+                    arrivalBtn += "</div>";
+                    arrivalDiv.append(arrivalBtn);
+                };
+            });
+
+            $(function () {
+                $(".time").click(function () {
+                    console.log(this.id);
+                    var timeSlotId = parseInt(this.id);
+                    // var itemId = parseInt(input);
+                    console.log("Your time: " + timeSlotId);
+                    $("#timeSelected").val(timeSlotId);
+                });
+            });
+
+
+            $("#arrivalSubmit").on("click", function (e) {
+                e.preventDefault();
+                $('#survey-authorized').hide();
+                var timeSlotId = $("#timeSelected").val();
+                console.log(timeSlotId);
+                //var timeSlotId = parseInt(timeSlotId);
+                // var timeSlotId = parseInt(time);
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/departure/" + timeSlotId,
+                    data: JSON.stringify({"userId": userId}),
                     contentType: "application/json;charset=UTF-8",
 
                     headers: {
@@ -288,3 +399,5 @@ function loadItems() {
         }
     });
 }
+
+});
