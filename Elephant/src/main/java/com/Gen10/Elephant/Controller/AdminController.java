@@ -148,7 +148,7 @@ public class AdminController {
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("/capacity/{id}/{num")
+    @PostMapping("/capacity/{id}/{num}")
     public ResponseEntity<Location> editCapacity(@PathVariable int id, @PathVariable int num,  @RequestHeader("email") String email, @RequestHeader("password") String password){
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
@@ -190,7 +190,7 @@ public class AdminController {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
             service.deleteUserById(id);
-            return new ResponseEntity<User>(new User(), HttpStatus.OK);
+            return new ResponseEntity("The specified user was deleted.", HttpStatus.OK);
         }
         return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
     }
