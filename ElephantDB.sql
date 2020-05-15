@@ -94,7 +94,9 @@ INSERT INTO `user` (userId, firstName, lastName, email, defaultPW, passwords, lo
     (2, "Keely", "Brennan", "keely@keely.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     (3, "Ethan", "Bettenga", "ethan@ethan.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     (4, "Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
-    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2);
+    (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (6, "Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (7, "Katy", "Kimble", "katy@katy.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2);
 
 DELIMITER $$
 CREATE PROCEDURE genMinneapolisTimeSlots()
@@ -164,11 +166,18 @@ BEGIN
 	END LOOP;
 END$$
 
-CREATE EVENT elephantdb.generateTimeSlots
-	ON SCHEDULE EVERY '1' day
-	STARTS '2020-05-13 03:00:00'
-DO
-BEGIN
+-- CREATE EVENT elephantdb.generateTimeSlots
+-- 	ON SCHEDULE EVERY '1' day
+-- 	STARTS '2020-05-13 03:00:00'
+-- DO
+-- BEGIN
 	CALL genMinneapolisTimeSlots();
     CALL genAustinTimeSlots();
-END
+-- END
+
+-- For testing  http://localhost:8080/api/admin/flagged/{id} route
+INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
+	(1, "2020-05-12", 3, 0),
+    (1, "2020-05-12", 2, 1),
+    (1, "2020-05-12", 4, 1),
+    (1, "2020-05-12", 5, 0),
