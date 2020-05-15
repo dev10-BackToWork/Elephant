@@ -11,6 +11,7 @@ $(document).ready(function () {
     $("#employeeInfoDiv").hide();
     $("#healthSurveyDiv").hide();
     $("#scheduleArrivalDiv").hide();
+    $("#deleteEmployeeDiv").hide();
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -60,6 +61,9 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").show();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        
+        
     });
     
     $('#dashboardBtn').click(function (event) {
@@ -74,6 +78,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
     });
     
     $('#logoBtn').click(function (event) {
@@ -88,6 +93,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -102,6 +108,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -110,11 +117,12 @@ $(document).ready(function () {
     var contentRows = $('#contentRows');
     var password = $("#inputPassword").val();
     var email = $("#inputEmail").val();
+    var locationId = 1;
 
     $.ajax({
         type: "GET",
 //Need to change url so that it takes the admins location as the location id
-        url: "http://localhost:8080/api/admin/users/1",
+        url: "http://localhost:8080/api/admin/users/" + locationId,
         headers: {
             "email": email,
             "password": password
@@ -132,11 +140,41 @@ $(document).ready(function () {
                 row += '<td>' + email + '</td>';
                 row += '<td>' + location + '</td>';
                 row += '<td>' + surveyStatus + '</td>';
-                row += '<td><a class="btn btn-info" id="editAllEmployeeBtn">Edit</a></td>';
-                row += '<td><a class="btn btn-danger" href="#">Delete</a></td>';
+                row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
+                row += '<td><button class="deleteAllEmployeeBtn btn btn-danger">Delete</button></td>';
                 row += '</tr>';
                 contentRows.append(row);
             });
+            $('.editAllEmployeeBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").show();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+    });
+    
+      $('.deleteAllEmployeeBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").show();
+    });
+    
         },
         error: function() {
             $('#errorMessages')
@@ -161,6 +199,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
     });
     
     $('#addLocationBtn').click(function (event) {
@@ -175,6 +214,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
     });
     
     $('#logoutBtn').click(function (event) {
@@ -189,6 +229,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -203,6 +244,7 @@ $(document).ready(function () {
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -249,7 +291,22 @@ $(document).ready(function () {
     });
     });
     
-    $('#editAllEmployeeBtn').click(function (event) {
+    $('#submitEmployeeInfoBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+    });
+    
+    $('#deleteEmployeeInfoBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -258,10 +315,61 @@ $(document).ready(function () {
         $("#allEmployeesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
-        $("#employeeInfoDiv").show();
+        $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").show();
     });
+    
+    $('#createLocationSubmitBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#createAccountDiv").show();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+    });
+    
+    $('.deleteEmployeeBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+    });
+    
+    $('#cancelDeleteBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+    });
+    
+  
+    
+    
+    
 
 });
 
