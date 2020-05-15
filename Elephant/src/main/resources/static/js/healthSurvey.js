@@ -29,7 +29,7 @@ $("#q1No").on("click", function (e) {
             "userId": userId
         },
         
-        url: "http://localhost:8080/api/users/coming/" + userId,
+        url: "http://localhost:8080/api/users/coming",
         contentType: "application/json;charset=UTF-8",
         //$("authorized").text("You're approved to come to the office. Next, select a time.");
         headers: {
@@ -113,8 +113,14 @@ $("#surveySubmit").on("click", function (e) {
     e.preventDefault();
     $("#survey-container").hide();
     checkAuth();
-    console.log(isAuthorized);
-    loadItems();
+    
+    if(isAuthorized === true) {
+        console.log(isAuthorized);
+        loadItems();
+    } else if (isAuthroized === false) {
+        notAuthorized();
+    }
+    
 });
 //        if  (answerOne === true){
 //             isAuthorized = false;
@@ -137,6 +143,36 @@ $("#surveySubmit").on("click", function (e) {
 //             console.log(isAuthorized);
 //             isAuthorized = true;
 //         }
+
+function notAuthorized() {
+    
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/api/users/coming",
+        contentType: "application/json;charset=UTF-8",
+        data: {
+            "isAttending" : true,
+            "isAuthorized" : false,
+            "userId": userId
+        },
+        
+        headers: {
+            "email": email,
+            "password": password
+        },
+        success: function (response, status) {
+            console.log(response);
+           
+           
+        },
+        error: function (err) {
+            console.log(err);
+          
+        }
+    });
+}
+
+
 
 function loadItems() {
     $.ajax({
@@ -184,14 +220,17 @@ function loadItems() {
             
             e.preventDefault();
             $('#survey-authorized').hide();
-              var timeSlotId = $("#timeSelected").val(timeSlotId);
+              var timeSlotId = $("#timeSelected").val();
+             
+              //var timeSlotId = parseInt(timeSlotId);
+            // var timeSlotId = parseInt(time);
+            
+            console.log(timeSlotId);
               
         $.ajax({
             type: "POST",
              url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
-            data: {
-               "userId" : 1
-            },
+            data: JSON.stringify({  "userId" : 1}),
             contentType: "application/json;charset=UTF-8",
           
             headers: {
@@ -201,7 +240,7 @@ function loadItems() {
     
             success: function (response, status) {
                 console.log(response);
-                alert("success!");
+                alert(response.timeSlot.startTime);
                 $('#time-success').show(); 
                 //return false;
             },
