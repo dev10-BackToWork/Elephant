@@ -164,11 +164,11 @@ BEGIN
 	END LOOP;
 END$$
 
--- CREATE EVENT elephantdb.generateTimeSlots
--- 	ON SCHEDULE EVERY '1' day
--- 	STARTS '2020-05-13 03:00:00'
--- DO
--- BEGIN
+CREATE EVENT elephantdb.generateTimeSlots
+	ON SCHEDULE EVERY '1' day
+	STARTS '2020-05-13 03:00:00'
+DO
+BEGIN
 	CALL genMinneapolisTimeSlots();
     CALL genAustinTimeSlots();
--- END
+END
