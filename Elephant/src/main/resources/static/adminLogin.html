@@ -30,6 +30,18 @@
             </div>
         </nav>
         <!-- Page Content -->
+        
+        <!-- ********** Preparing Ajax calls Start -->
+        <button id="deleteUser2" type="button">deleteUser2</button>
+        <button id="changeMinnTime" type="button">changeMinnTime</button>
+        <button id="chaneAustinIncrement" type="button">chaneAustinIncrement</button>
+        <button id="chaneAustinCapacity" type="button">chaneAustinCapacity</button>
+        <button id="editUser4" type="button">editUser4</button>
+        <button id="generateNewlyCreatedUser" type="button">generateNewlyCreatedUser</button>
+        <button id="getAllLocations" type="button">getAllLocations</button>
+        <button id="getFlaggedUsers" type="button">getFlaggedUsers</button>
+        <!-- ********** Preparing Ajax calls End -->
+
         <!-- Admin Login Div -->
         <div class="container" id="adminLoginDiv">
             <div class="row">
@@ -104,7 +116,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12 text-center">
-                            <h2 class="center">Welcome back, Jane!</h2>
+                            <h2 class="center">Welcome back!</h2>
                         </div>
                     </div>
                     <div class="row">
@@ -135,13 +147,13 @@
                                             <td>John Doe</td>
                                             <td>johndoe@genesis.com</td>
                                             <td>Minneapolis</td>
-                                            <td><a class="btn btn-info" href="employeeInfo.html">Edit</a></td>
+                                            <td><a class="btn btn-info" href="#">Edit</a></td>
                                         </tr>
                                         <tr>
                                             <td>Jane Doe</td>
                                             <td>janedoe@genesis.com</td>
                                             <td>Minneapolis</td>
-                                            <td><a class="btn btn-info" href="employeeInfo.html">Edit</a></td>
+                                            <td><a class="btn btn-info" href="#">Edit</a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -302,7 +314,7 @@
                 </div>
                 <div class="row mt-4">
                   <div class="col">
-                    <button type="submit" class="btn btn-primary" id="createAcctBtn">
+                    <button class="btn btn-primary" id="createAcctBtn">
                       Create Account
                     </button>
                   </div>
@@ -338,7 +350,7 @@
                                 <label for="maxCapacity">Maximum Capacity: </label>
                                 <input type="number" min="0" name="locationName" id="locationName" class="form-control" placeholder="Max Capacity..."/>
                             </div>
-                                    <button type="submit" class="btn btn-primary ml-3">
+                                    <button class="btn btn-primary ml-3" id="createLocationSubmitBtn">
                                         Create Location
                                     </button>
                             </div>
@@ -393,10 +405,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <a class="btn btn-info" href="allEmployees.html">Submit</a>
+                            <a class="btn btn-info" id="submitEmployeeInfoBtn" style="color: white">Submit</a>
                         </div>
                         <div class="col-md-6">
-                            <a class="btn btn-danger" href="#">Delete</a>
+                            <a class="btn btn-danger" id="deleteEmployeeInfoBtn" style="color: white">Delete</a>
                         </div>
                     </div>
                 </div>
@@ -542,6 +554,55 @@
      </div>
     </div>
         
+        <!-- Delete User Div --> 
+        <div class="container" id="deleteEmployeeDiv">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h3 class="mt-5">Are you sure you want to delete this user?</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="firstname">First Name</label>
+                            <input type="text" name="firstname" id="firstname" class="form-control" value="John" style="text-align:center;" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" name="lastname" id="lastname" class="form-control" value="Doe" style="text-align:center;" readonly/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" class="form-control" value="johndoe@genesis.com" style="text-align:center;" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="password">Password</label>
+                            <input type="text" name="password" id="password" class="form-control" value="Password123" style="text-align:center;" readonly/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="location">Location</label>
+                            <input type="text" name="location" id="location" class="form-control" value="Minneapolis, MN" style="text-align:center;" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="role">Role</label>
+                            <input type="text" name="role" id="role" class="form-control" value="Branch Admin" style="text-align:center;" readonly/>
+                  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="deleteEmployeeBtn btn btn-danger" style="color: white">Delete</a>
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-info" id="cancelDeleteBtn" style="color: white">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
 
     </main>
     <footer>
@@ -557,6 +618,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
     <script src="js/adminLogin.js"></script>
 </body>

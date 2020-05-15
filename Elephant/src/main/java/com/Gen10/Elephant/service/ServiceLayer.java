@@ -140,6 +140,20 @@ public class ServiceLayer {
     public void takeAttendance(Attendance attendance) {
         attendanceRepo.save(attendance);
     }
+    
+    public List<Attendance> findAttendanceByCurrentDate() {
+        List<Attendance> allAttendance = attendanceRepo.findAll();
+        List<Attendance> currentAttendance = new ArrayList<>();
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
+        
+        for(Attendance attendance : allAttendance) {
+            if (attendance.getAttendanceDate().toString().contains(currentDateSQL.toString())) {
+                currentAttendance.add(attendance);
+            }
+        }
+        
+        return currentAttendance;
+    }
 
     // **********
     // Departure
@@ -351,9 +365,17 @@ public class ServiceLayer {
 
     // Edited Nate Wood 05/13/2020
     public List<User> getInactiveUsers(int id) {
+//        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
+//        List<User> currentInactiveUsers = new ArrayList<>();
+//        
+//        for(Attendance attendance : currentAttendance) {
+//            
+//        }
+        
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = usersByLocation;
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findByUser(user) != null) {
