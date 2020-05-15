@@ -117,10 +117,14 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(response);
                 if (response.role.roleId === 2) {
-                    window.location.replace('/healthSurvey.html');
+                     $("#screener-div").show();
+                     $("#login").hide();
+                    alert("success - user role");
+                   // window.location.replace('/healthSurvey.html');
                 } else if (response.role.roleId === 1) {
-
-                    window.location.replace('/dashboard.html');
+                    alert("success - admin role");
+                     $("#login").hide();
+                    //window.location.replace('/dashboard.html');
                 }
                 return false;
 
