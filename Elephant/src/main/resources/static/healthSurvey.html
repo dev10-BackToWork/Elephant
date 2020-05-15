@@ -30,6 +30,44 @@
             </div>
         </nav>
 
+             <div class="container" id="login">
+            <div class="row">
+                <h1 class="heading">{Title Placeholder/COVID-19 Back-To-Work Scheduling} </h1>
+            </div>
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Sign In</h5>
+                            <form onsubmit="loginSubmit();" class="form-signin">
+                            <div class="form-label-group">
+                                <input type="email" id="inputEmail" class="form-control" required autofocus >
+                                <label for="inputEmail">Email address</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassword" class="form-control" required >
+                                <label for="inputPassword">Password</label>
+                            </div>
+
+<!--                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Remember password</label>
+                            </div>-->
+
+                            <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
+                                type="submit">Sign In</button>
+                            <div class="row">
+                               <a class="nav-link" href="/resetPassword">Reset Password</a>
+                            </div>
+                            <hr class="my-4">
+                        </form>
+                    </div>
+                </div> 
+                 <div class="alert alert-danger" id="loginErr" role="alert"></div>
+            </div>
+        </div>
+        
+        
     <!-- Page Content -->
     <div class="container" id="healthSurveyDiv">
         <div id="survey-container">
@@ -157,6 +195,7 @@ crossorigin="anonymous"></script>
 crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
+<!--<script src="js/login.js"></script>-->
 <script src="js/healthSurvey.js"></script>
 </body>
 
