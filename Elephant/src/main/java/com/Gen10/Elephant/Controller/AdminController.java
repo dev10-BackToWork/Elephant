@@ -131,7 +131,7 @@ public class AdminController {
                 User newUser = service.createUser(user);
                 return new ResponseEntity<User>(newUser, HttpStatus.OK);
             } catch (DataFormatException e) {
-                return new ResponseEntity(e.getMessage(), HttpStatus.NOT_MODIFIED);
+                return new ResponseEntity(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
             }
             
         }
