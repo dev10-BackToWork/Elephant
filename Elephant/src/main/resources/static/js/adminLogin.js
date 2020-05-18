@@ -780,4 +780,167 @@ $("#surveySubmit").on("click", function (e) {
     // });
 
 
+    // // @GetMapping("/departures/{id}")
+    // // public ResponseEntity<List<Departure>> getDepartures
+    // $('#getDepartures').click(function (event) {
+
+    //     var locationId = 2;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/departures/' + locationId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for scheduled departures by locationId was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve scheduled departures by locationId.');
+    //         }
+    //     });
+    // });
+
+
+    // // @GetMapping("/arrivals/{id}")
+    // // public ResponseEntity<List<Arrival>> getArrivals
+    // $('#getArrivals').click(function (event) {
+
+    //     var locationId = 2;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for scheduled arrivals by locationId was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve scheduled arrivals by locationId.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @GetMapping("/occupants/{id}")
+    // // public ResponseEntity<List<User>> getOccupants
+    // $('#getOccupants').click(function (event) {
+
+    //     var locationId = 1;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/occupants/' + locationId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for occupants by locationId was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve occupants by locationId.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @GetMapping("/roles")
+    // // public ResponseEntity<List<Role>> getRoles
+    // $('#getRoles').click(function (event) {
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/roles/',
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for roles was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve roles.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @GetMapping("/users/{id}")
+    // // public ResponseEntity<List<User>> getUsers
+    // $('#getUsers').click(function (event) {
+
+    //     var locationId = 1;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/users/' + locationId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for users by locationId was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve users by locationId.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @GetMapping("/user/{id}")
+    // // public ResponseEntity<User> getUserById
+    // $('#getUser7').click(function (event) {
+
+    //     var userId = 7;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/user/' + userId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request for users by locationId was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve users by locationId.');
+    //         }
+    //     });
+
+    // });
+
+
     // // ********** Preparing Ajax calls End
