@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     $("#loginNav").show();
     $("#adminLoginDiv").show();
@@ -34,6 +33,110 @@ $(document).ready(function () {
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
                     $("#dashboardDiv").show();
+                    
+$("#noResErrorMessages").hide();
+        $("#authErrorMessages").hide();
+        
+        $('#noResponseRows').empty();
+        $('#authPendRows').empty();
+
+        var noResponseRows = $('#noResponseRows');
+        var authPendRows = $('#authPendRows');
+
+         var locationId = 1;
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td><button class="editNoResEmployeeBtn btn btn-info">Edit</button></td>';
+                row += '</tr>';
+                noResponseRows.append(row);
+            });
+            
+            $('.editNoResEmployeeBtn').click(function (event) {
+                $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").show();
+                $("#healthSurveyDiv").hide();
+                $("#scheduleArrivalDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+            });
+             },
+             error: function() {
+            $('#noResErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/flagged/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td><button class="editAuthBtn btn btn-info">Edit</button></td>';
+                row += '</tr>';
+                authPendRows.append(row);
+            });
+            
+            $('.editAuthBtn').click(function (event) {
+                $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").show();
+                $("#healthSurveyDiv").hide();
+                $("#scheduleArrivalDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+            });
+             },
+             error: function() {
+            $('#authErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+   
+    
                 }
  
             },
@@ -79,6 +182,122 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        
+        $("#noResErrorMessages").hide();
+        $("#authErrorMessages").hide();
+        
+        $('#noResponseRows').empty();
+        $('#authPendRows').empty();
+
+        var noResponseRows = $('#noResponseRows');
+        var authPendRows = $('#authPendRows');
+
+         var locationId = 1;
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td><button class="editNoResEmployeeBtn btn btn-info">Edit</button></td>';
+                row += '</tr>';
+                noResponseRows.append(row);
+            });
+            
+            $('.editNoResEmployeeBtn').click(function (event) {
+                $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").show();
+                $("#healthSurveyDiv").hide();
+                $("#scheduleArrivalDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+            });
+             },
+             error: function() {
+            $('#noResErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/flagged/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td><button class="editAuthBtn btn btn-info">Edit</button></td>';
+                row += '</tr>';
+                authPendRows.append(row);
+            });
+            
+            $('.editAuthBtn').click(function (event) {
+                $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").show();
+                $("#healthSurveyDiv").hide();
+                $("#scheduleArrivalDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+            });
+             },
+             error: function() {
+            $('#authErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+   
+         
+         
+         
+         
+         
+         
+         
+         
+     
+
+         
+    
+
     });
     
     $('#logoBtn').click(function (event) {
