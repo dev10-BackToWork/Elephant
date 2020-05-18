@@ -190,7 +190,7 @@ public class AdminController {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
             service.deleteUserById(id);
-            return new ResponseEntity<User>(new User(), HttpStatus.OK);
+            return new ResponseEntity(new User(), HttpStatus.OK);
         }
         return new ResponseEntity<User>(new User(), HttpStatus.UNAUTHORIZED);  
     }

@@ -423,7 +423,7 @@ public class ServiceLayer {
         existingUser.setRole(user.getRole());
 
         User editedUser = usersRepo.save(existingUser);
-
+        System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
     }
 
