@@ -1,5 +1,7 @@
 package com.Gen10.Elephant.dto;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -112,4 +114,22 @@ public class User {
 	public void setDefaultPW(String defaultPW) {
 		this.defaultPW = defaultPW;
 	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof User)) {
+			return false;
+		}
+		User user = (User) o;
+		return userId == user.userId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(defaultPW, user.defaultPW) && Objects.equals(passwords, user.passwords) && Objects.equals(location, user.location) && Objects.equals(role, user.role);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId, firstName, lastName, email, defaultPW, passwords, location, role);
+	}
+
 }
