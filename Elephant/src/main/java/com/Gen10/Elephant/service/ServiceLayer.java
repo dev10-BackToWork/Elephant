@@ -66,17 +66,18 @@ public class ServiceLayer {
     public List<Arrival> findAllArrivals() {
         return arrivalRepo.findAll();
     }
-    
+
     public List<Arrival> getAllArrivalsByLocationId(int id) {
         List<Arrival> arrivals = findAllArrivals();
         List<Arrival> currentArrivalsByLocation = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
-        
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+
         for (Arrival arrival : arrivals) {
-            if (arrival.getTimeSlot().getLocation().getLocationId() == id && arrival.getArrivalDate().toString().contains(currentDateSQL.toString()))
+            if (arrival.getTimeSlot().getLocation().getLocationId() == id
+                    && arrival.getArrivalDate().toString().contains(currentDateSQL.toString()))
                 currentArrivalsByLocation.add(arrival);
         }
-        
+
         return currentArrivalsByLocation;
     }
 
@@ -154,18 +155,18 @@ public class ServiceLayer {
     public void takeAttendance(Attendance attendance) {
         attendanceRepo.save(attendance);
     }
-    
+
     public List<Attendance> findAttendanceByCurrentDate() {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> currentAttendance = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
-        
-        for(Attendance attendance : allAttendance) {
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+
+        for (Attendance attendance : allAttendance) {
             if (attendance.getAttendanceDate().toString().contains(currentDateSQL.toString())) {
                 currentAttendance.add(attendance);
             }
         }
-        
+
         return currentAttendance;
     }
 
@@ -174,17 +175,18 @@ public class ServiceLayer {
     public List<Departure> findAllDepartures() {
         return departureRepo.findAll();
     }
-    
+
     public List<Departure> getAllDeparturesByLocationId(int id) {
         List<Departure> departures = findAllDepartures();
         List<Departure> currentDeparturesByLocation = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
-        
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+
         for (Departure departure : departures) {
-            if (departure.getTimeSlot().getLocation().getLocationId() == id && departure.getDepartureDate().toString().contains(currentDateSQL.toString()))
+            if (departure.getTimeSlot().getLocation().getLocationId() == id
+                    && departure.getDepartureDate().toString().contains(currentDateSQL.toString()))
                 currentDeparturesByLocation.add(departure);
         }
-        
+
         return currentDeparturesByLocation;
     }
 
@@ -315,10 +317,11 @@ public class ServiceLayer {
     public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
         List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
         List<TimeSlot> locationTimeSlots = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());        
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 
         for (TimeSlot ts : allTimeSlots) {
-            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false && ts.getTimeSlotDate().toString().contains(currentDateSQL.toString()))
+            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false
+                    && ts.getTimeSlotDate().toString().contains(currentDateSQL.toString()))
                 locationTimeSlots.add(ts);
         }
 
@@ -376,7 +379,7 @@ public class ServiceLayer {
         return usersRepo.findAllByLocation(location);
     }
 
-//    Edited Matthew Gerszewski 5/18/2020
+    // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
@@ -400,13 +403,14 @@ public class ServiceLayer {
         List<User> usersInAttendance = new ArrayList<>();
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
+        List<User> usersByLocationNotAnswered = usersByLocation;
         List<User> currentInactiveUsersByLocation = new ArrayList<>();
         User defaultUser = usersRepo.findByEmail("user@user.com");
-        
+
         for (Attendance attendance : currentAttendance) {
             usersInAttendance.add(attendance.getUser());
         }
-        
+
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
                 usersByLocationNotAnswered.remove(user);
@@ -414,26 +418,28 @@ public class ServiceLayer {
             if (!usersInAttendance.contains(user))
                 currentInactiveUsersByLocation.add(user);
         }
-        
-        if(currentInactiveUsersByLocation.contains(defaultUser))
+
+        if (currentInactiveUsersByLocation.contains(defaultUser))
             currentInactiveUsersByLocation.remove(defaultUser);
-        
+
         return currentInactiveUsersByLocation;
     }
 
     public List<User> getFlaggedUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
+        // List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationFlagged = new ArrayList<>();
-        for (User user : usersByLocation) {
-            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
-                usersByLocationFlagged.add(user);
+        // for (User user : usersByLocation) {
+        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
+        //         usersByLocationFlagged.add(user);
+        //     }
         List<Attendance> currentAttendance = findAttendanceByCurrentDate();
             
         for (Attendance attendance : currentAttendance) {
             if (attendance.getIsAuthorized() == false) {
-                    usersByLocationFlagged.add(attendance.getUser());
-                }
+                usersByLocationFlagged.add(attendance.getUser());
             }
+        }
 
         return usersByLocationFlagged;
     }
@@ -453,22 +459,22 @@ public class ServiceLayer {
         List<Attendance> allAttendance = findAllAttendance();
         List<Arrival> allArrivals = findAllArrivals();
         List<Departure> allDepartures = findAllDepartures();
-        
+
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == userId)
                 attendanceRepo.deleteById(attendance.getAttendanceId());
         }
-        
+
         for (Arrival arrival : allArrivals) {
             if (arrival.getUser().getUserId() == userId)
                 arrivalRepo.deleteById(arrival.getArrivalId());
         }
-        
+
         for (Departure departure : allDepartures) {
             if (departure.getUser().getUserId() == userId)
                 departureRepo.deleteById(departure.getDepartureId());
         }
-        
+
         usersRepo.deleteById(userId);
     }
 
@@ -522,10 +528,12 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        // Attendance todaysAttendance = attendanceRepo.findByUser(attendance.getUser()).stream()
-        //     .filter(a -> a.getAttendanceDate() == new java.sql.Date(Calendar.getInstance().getTime().getTime())).collect(Collectors.toList()).get(0);
+        // Attendance todaysAttendance =
+        // attendanceRepo.findByUser(attendance.getUser()).stream()
+        // .filter(a -> a.getAttendanceDate() == new
+        // java.sql.Date(Calendar.getInstance().getTime().getTime())).collect(Collectors.toList()).get(0);
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
-        
+
         if (todaysAttendance != null) {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
@@ -546,8 +554,8 @@ public class ServiceLayer {
     public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
         if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
-                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {        
-        // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
+                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {
+            // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
             return dbUser;
         }
         return null;
@@ -570,7 +578,7 @@ public class ServiceLayer {
         StringBuilder buffer = new StringBuilder(targetStringLength);
         for (int i = 0; i < targetStringLength; i++) {
             int letterInt;
-            if(random.nextInt(2) == 0) {
+            if (random.nextInt(2) == 0) {
                 letterInt = lcMin + (int) (random.nextFloat() * (lcMax - lcMin + 1));
             } else {
                 letterInt = ucCapMin + (int) (random.nextFloat() * (ucCapMax - ucCapMin + 1));
@@ -580,14 +588,14 @@ public class ServiceLayer {
         return buffer.toString();
     }
 
-	public User resetUserPassword(int id) {
+    public User resetUserPassword(int id) {
         User existingUser = usersRepo.findById(id).orElse(null);
-		String password = generatePassword();
+        String password = generatePassword();
         existingUser.setDefaultPW(password);
 
         String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
         existingUser.setPasswords(encryptPass);
 
         return usersRepo.save(existingUser);
-	}
+    }
 }
