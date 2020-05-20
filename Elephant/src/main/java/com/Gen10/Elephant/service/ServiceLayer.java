@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
@@ -407,6 +408,9 @@ public class ServiceLayer {
         }
         
         for (User user : usersByLocation) {
+            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
+                usersByLocationNotAnswered.remove(user);
+            }
             if (!usersInAttendance.contains(user))
                 currentInactiveUsersByLocation.add(user);
         }
@@ -420,6 +424,9 @@ public class ServiceLayer {
     public List<User> getFlaggedUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocationFlagged = new ArrayList<>();
+        for (User user : usersByLocation) {
+            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
+                usersByLocationFlagged.add(user);
         List<Attendance> currentAttendance = findAttendanceByCurrentDate();
             
         for (Attendance attendance : currentAttendance) {
@@ -515,11 +522,14 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        if (attendanceRepo.findByUser(attendance.getUser()) != null) {
-            Attendance existingAttendance = attendanceRepo.findByUser(attendance.getUser());
-            existingAttendance.setIsAttending(attendance.getIsAttending());
-            existingAttendance.setIsAuthorized(attendance.getIsAuthorized());
-            return attendanceRepo.save(existingAttendance);
+        // Attendance todaysAttendance = attendanceRepo.findByUser(attendance.getUser()).stream()
+        //     .filter(a -> a.getAttendanceDate() == new java.sql.Date(Calendar.getInstance().getTime().getTime())).collect(Collectors.toList()).get(0);
+        Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
+        
+        if (todaysAttendance != null) {
+            todaysAttendance.setIsAttending(attendance.getIsAttending());
+            todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
+            return attendanceRepo.save(todaysAttendance);
         } else {
             return attendanceRepo.save(attendance);
         }

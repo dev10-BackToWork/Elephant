@@ -53,7 +53,7 @@ public class AdminControllerTest {
     public void testAddGetUser() {
         User user =  new User("test@test.com", "password");
         user.setLocation(adminCon.getLocations(adminEmail, adminPW).getBody().get(0));
-        user.setRole(adminCon.getRoles(adminEmail, adminPW))
+        user.setRole(adminCon.getRoles(adminEmail, adminPW).getBody().get(1));
         User createdUser = adminCon.createUser(user, adminEmail, adminPW).getBody();
         User loggedIn = userCon.login("test@test.com", "password").getBody();
         

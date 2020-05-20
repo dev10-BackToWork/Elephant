@@ -89,11 +89,16 @@ public class UserControllerTest {
     }
     @Test
     public void testComingNotComing() {
+        User user = new User();
+        user.setUserId(1);
         Attendance attendance = new Attendance();
         attendance.setIsAttending(true);
         attendance.setAttendanceDate(LocalDate.now());
+        attendance.setUser(user);
+        attendance.setIsAuthorized(true);
         Attendance attendanceDB = userCon.markAttendance(attendance, userEmail, userPW).getBody();
         assertEquals(1, attendanceDB.getAttendanceId());
+        assertTrue(attendanceDB.getIsAuthorized());
 
         attendance.setIsAuthorized(false);
         attendanceDB = userCon.markAttendance(attendance, userEmail, userPW).getBody();
