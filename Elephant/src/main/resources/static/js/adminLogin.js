@@ -36,12 +36,18 @@ $(document).ready(function () {
                     
                     $("#noResErrorMessages").hide();
                     $("#authErrorMessages").hide();
+                    $("#arrivalErrorMessages").hide();
+                    $("#departureErrorMessages").hide();
 
                     $('#noResponseRows').empty();
                     $('#authPendRows').empty();
+                    $('#arrivalRows').empty();
+                    $('#departureRows').empty();
 
                     var noResponseRows = $('#noResponseRows');
                     var authPendRows = $('#authPendRows');
+                    var arrivalRows = $('#arrivalRows');
+                    var departureRows = $('#departureRows');
 
                      var locationId = 1;
 
@@ -134,6 +140,68 @@ $(document).ready(function () {
                             .text('An error has occurred.'));
                     }
                      });
+                     
+            $.ajax({
+                 type: 'GET',
+                     url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
+                     headers: {
+                         'email': 'user@user.com',
+                         'password': 'password'
+                     },
+                     success: function (data) {
+                         $.each(data, function(index, datum) {
+                        var name = datum.user.firstName + ' ' + datum.user.lastName;
+                        var location = datum.user.location.cityName;
+                        var arrival = datum.timeSlot.startTime;
+                        let str = arrival;
+                        str = str.substring(0, str.length - 3);
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + str + '</td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                         });
+                     },
+                     error: function() {
+                    $('#arrivalErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+            });
+        
+            $.ajax({
+                 type: 'GET',
+                     url: 'http://localhost:8080/api/admin/departures/' + locationId,
+                     headers: {
+                         'email': 'user@user.com',
+                         'password': 'password'
+                     },
+                     success: function (data) {
+                        $.each(data, function(index, datum) {
+                        var name = datum.user.firstName + ' ' + datum.user.lastName;
+                        var location = datum.user.location.cityName;
+                        var departure = datum.timeSlot.startTime;
+                        let str = departure;
+                        str = str.substring(0, str.length - 3);
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + str + '</td>';
+                        row += '</tr>';
+                        departureRows.append(row);
+                         });
+                     },
+                     error: function() {
+                    $('#departureErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+            });
 
 
 
@@ -185,14 +253,20 @@ $(document).ready(function () {
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
+        $("#arrivalErrorMessages").hide();
+        $("#departureErrorMessages").hide();
         
         $('#noResponseRows').empty();
         $('#authPendRows').empty();
+        $('#arrivalRows').empty();
+        $('#departureRows').empty();
 
         var noResponseRows = $('#noResponseRows');
         var authPendRows = $('#authPendRows');
+        var arrivalRows = $('#arrivalRows');
+        var departureRows = $('#departureRows');
 
-         var locationId = 1;
+        var locationId = 1;
 
          $.ajax({
              type: 'GET',
@@ -284,6 +358,67 @@ $(document).ready(function () {
         }
          });
 
+        $.ajax({
+         type: 'GET',
+             url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 $.each(data, function(index, datum) {
+                var name = datum.user.firstName + ' ' + datum.user.lastName;
+                var location = datum.user.location.cityName;
+                var arrival = datum.timeSlot.startTime;
+                let str = arrival;
+                str = str.substring(0, str.length - 3);
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td>' + str + '</td>';
+                row += '</tr>';
+                arrivalRows.append(row);
+                 });
+             },
+             error: function() {
+            $('#arrivalErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+        });
+        
+         $.ajax({
+         type: 'GET',
+             url: 'http://localhost:8080/api/admin/departures/' + locationId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                $.each(data, function(index, datum) {
+                var name = datum.user.firstName + ' ' + datum.user.lastName;
+                var location = datum.user.location.cityName;
+                var departure = datum.timeSlot.startTime;
+                let str = departure;
+                str = str.substring(0, str.length - 3);
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td>' + str + '</td>';
+                row += '</tr>';
+                departureRows.append(row);
+                 });
+             },
+             error: function() {
+            $('#departureErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+        });
 
     });
     

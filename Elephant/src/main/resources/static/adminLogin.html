@@ -179,35 +179,39 @@
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3 class="mt-5">Office Attendance</h3>
+                        <div class="col-md-12 text-center" id="arrivalTableDiv">
+                            <ul class="list-group" id="arrivalErrorMessages"></ul>
+                            <h3 class="mt-5">Arrivals</h3>
                             <div class="col text-center">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="arrivalTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Email</th>
                                             <th>Location</th>
                                             <th>Arrival</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="arrivalRows"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center" id="departureTableDiv">
+                            <ul class="list-group" id="departureErrorMessages"></ul>
+                            <h3 class="mt-5">Departures</h3>
+                            <div class="col text-center">
+                                <table class="table table-striped" id="departureTable" style='table-layout:fixed;'>
+                                    <thead>
+                                        <tr>
+                                            <th width="33%">Name</th>
+                                            <th>Location</th>
                                             <th>Departure</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Jake Doe</td>
-                                            <td>jakedoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td>9:00 AM</td>
-                                            <td>4:00 PM</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jill Doe</td>
-                                            <td>jilldoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td>9:15 AM</td>
-                                            <td>4:15 PM</td>
-                                        </tr>
-                                    </tbody>
+                                    <tbody id="departureRows"></tbody>
                                 </table>
                             </div>
                         </div>
