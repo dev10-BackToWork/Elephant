@@ -399,30 +399,42 @@ public class ServiceLayer {
     // Edited Nate Wood 05/13/2020
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-        List<User> usersInAttendance = new ArrayList<>();
+        // List<Attendance> currentAttendance = findAttendanceByCurrentDate();
+        // List<User> usersInAttendance = new ArrayList<>();
+        // Location location = locationRepo.findById(id).orElse(null);
+        // List<User> usersByLocation = getAllUsersByLocation(location);
+        // List<User> usersByLocationNotAnswered = usersByLocation;
+        // List<User> currentInactiveUsersByLocation = new ArrayList<>();
+        // User defaultUser = usersRepo.findByEmail("user@user.com");
+
+        // for (Attendance attendance : currentAttendance) {
+        //     usersInAttendance.add(attendance.getUser());
+        // }
+
+        // for (User user : usersByLocation) {
+        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
+        //         usersByLocationNotAnswered.remove(user);
+        //     }
+        //     if (!usersInAttendance.contains(user))
+        //         currentInactiveUsersByLocation.add(user);
+        // }
+
+        // if (currentInactiveUsersByLocation.contains(defaultUser))
+        //     currentInactiveUsersByLocation.remove(defaultUser);
+
+        // return currentInactiveUsersByLocation;
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = usersByLocation;
-        List<User> currentInactiveUsersByLocation = new ArrayList<>();
-        User defaultUser = usersRepo.findByEmail("user@user.com");
-
-        for (Attendance attendance : currentAttendance) {
-            usersInAttendance.add(attendance.getUser());
-        }
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
                 usersByLocationNotAnswered.remove(user);
             }
-            if (!usersInAttendance.contains(user))
-                currentInactiveUsersByLocation.add(user);
         }
 
-        if (currentInactiveUsersByLocation.contains(defaultUser))
-            currentInactiveUsersByLocation.remove(defaultUser);
-
-        return currentInactiveUsersByLocation;
+        return usersByLocationNotAnswered;
     }
 
     public List<User> getFlaggedUsers(int id) {
