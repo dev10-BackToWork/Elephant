@@ -495,7 +495,7 @@ public class ServiceLayer {
         existingUser.setRole(user.getRole());
 
         User editedUser = usersRepo.save(existingUser);
-
+        System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
     }
 
@@ -518,6 +518,7 @@ public class ServiceLayer {
         if (attendanceRepo.findByUser(attendance.getUser()) != null) {
             Attendance existingAttendance = attendanceRepo.findByUser(attendance.getUser());
             existingAttendance.setIsAttending(attendance.getIsAttending());
+            existingAttendance.setIsAuthorized(attendance.getIsAuthorized());
             return attendanceRepo.save(existingAttendance);
         } else {
             return attendanceRepo.save(attendance);
