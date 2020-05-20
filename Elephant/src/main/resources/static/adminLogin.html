@@ -39,7 +39,14 @@
         <button id="editUser4" type="button">editUser4</button>
         <button id="generateNewlyCreatedUser" type="button">generateNewlyCreatedUser</button>
         <button id="getAllLocations" type="button">getAllLocations</button>
-        <button id="getFlaggedUsers" type="button">getFlaggedUsers</button> -->
+        <button id="getFlaggedUsers" type="button">getFlaggedUsers</button>
+        <button id="getInactiveUsers" type="button">getInactiveUsers</button>
+        <button id="getDepartures" type="button">getDepartures</button>
+        <button id="getArrivals" type="button">getArrivals</button>
+        <button id="getOccupants" type="button">getOccupants</button>
+        <button id="getRoles" type="button">getRoles</button>
+        <button id="getUsers" type="button">getUsers</button>
+        <button id="getUser7" type="button">getUser7</button> -->
         <!-- ********** Preparing Ajax calls End -->
 
         <!-- Admin Login Div -->
@@ -129,11 +136,33 @@
                     </div>
                 </div>
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3 class="mt-5">Authorization Pending</h3>
+                         <div class="row">
+                            <div class="col-md-12 text-center" id="authPendTableDiv">
+                                <ul class="list-group" id="authErrorMessages"></ul>
+                                <h3 class="mt-5">Authorization Pending</h3>
+                                <div class="col text-center">
+                                    <table class="table table-striped" id="authPendTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Location</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="authPendRows"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                <div class="container">
+                     <div class="row">
+                        <div class="col-md-12 text-center" id="noResponseTableDiv">
+                            <ul class="list-group" id="noResErrorMessages"></ul>
+                            <h3 class="mt-5">No Response</h3>
                             <div class="col text-center">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="noResponseTable">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -142,24 +171,11 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>John Doe</td>
-                                            <td>johndoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td><a class="btn btn-info" href="#">Edit</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jane Doe</td>
-                                            <td>janedoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td><a class="btn btn-info" href="#">Edit</a></td>
-                                        </tr>
-                                    </tbody>
+                                    <tbody id="noResponseRows"></tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <div class="container">
                     <div class="row">
@@ -212,7 +228,6 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Location</th>
-                                        <th>Completed Survey?</th>
                                         <th></th>
                                         <th><button class="btn btn-primary" id="createEmployeeBtn">Create Employee</button></th>
                                     </tr>
@@ -243,7 +258,7 @@
                     <input
                       type="text"
                       name="firstName"
-                      id="firstName"
+                      id="firstNameAddUser"
                       class="form-control"
                     />
                   </div>
@@ -253,7 +268,7 @@
                     <input
                       type="text"
                       name="lastName"
-                      id="lastName"
+                      id="lastNameAddUser"
                       class="form-control"
                     />
                   </div>
@@ -264,7 +279,7 @@
                     <input
                       type="email"
                       name="email"
-                      id="email"
+                      id="emailAddUser"
                       class="form-control"
                     />
                   </div>
@@ -283,7 +298,7 @@
                     <input
                       type="text"
                       name="password"
-                      id="password"
+                      id="passwordAddUser"
                       class="form-control"
                       readonly
                       value="Password auto-generated. Available in account details page."
@@ -293,7 +308,7 @@
                 <div class="row my-2">
                   <div class="col">
                     <label for="location">Location</label>
-                    <select name="location" id="location" class="form-control">
+                    <select name="location" id="locationAddUser" class="form-control">
                       <option selected>--Select Location--</option>
                       <option value="location1">Location 1</option>
                       <option value="location2">Location 2</option>
@@ -302,7 +317,7 @@
 
                   <div class="col">
                     <label for="role">Role</label>
-                    <select name="role" id="role" class="form-control">
+                    <select name="role" id="roleAddUser" class="form-control">
                       <option selected>--Select Role--</option>
                       <option value="branchAdmin">Branch Administrator</option>
                       <option value="user">Branch Employee</option>
@@ -348,7 +363,7 @@
                             </div>
                             <div class="form-group mx-2">
                                 <label for="maxCapacity">Maximum Capacity: </label>
-                                <input type="number" min="0" name="locationName" id="locationName" class="form-control" placeholder="Max Capacity..."/>
+                                <input type="number" min="0" name="locationCap" id="locationCap" class="form-control" placeholder="Max Capacity..."/>
                             </div>
                                     <button class="btn btn-primary ml-3" id="createLocationSubmitBtn">
                                         Create Location
@@ -364,42 +379,49 @@
         <div class="container" id="employeeInfoDiv">
             <div class="row">
                 <div class="col-lg-12 text-center">
+                    <div class="col-md-12 text-center">
+                        <ul class="list-group" id="editErrorMessages"></ul>
+                    </div>
                     <h1 class="mt-5">Employee Information</h1>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="firstname">First Name</label>
-                            <input type="text" name="firstname" id="firstname" class="form-control" value="John" style="text-align:center;"/>
+                            <input type="text" name="firstname" id="edit-first-name" class="form-control" placeholder="First Name" style="text-align:center;"/>
                         </div>
                         <div class="col-md-6">
                             <label for="lastname">Last Name</label>
-                            <input type="text" name="lastname" id="lastname" class="form-control" value="Doe" style="text-align:center;"/>
+                            <input type="text" name="lastname" id="edit-last-name" class="form-control" placeholder="Last Name" style="text-align:center;"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="email">Email</label>
-                            <input type="text" name="email" id="email" class="form-control" value="johndoe@genesis.com" style="text-align:center;"/>
+                            <input type="text" name="email" id="edit-email" class="form-control" placeholder="Email" style="text-align:center;"/>
                         </div>
                         <div class="col-md-6">
                             <label for="password">Password</label>
-                            <input type="text" name="password" id="password" class="form-control" value="Password123" style="text-align:center;"/>
+                            <input type="text" name="password" id="edit-password" class="form-control" placeholder="Password" style="text-align:center;"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="location">Location</label>
-                            <select id="location" name="location" class="form-control" >
-                                <option value="NC">Charlotte, NC</option>
+                            <input type="text" name="location" id="edit-location" class="form-control" placeholder="Location" style="text-align:center;"/>
+<!--                            <label for="location">Location</label>
+                            <select id="edit-location" name="location" class="form-control" >-->
+<!--                                <option value="NC">Charlotte, NC</option>
                                 <option value="TX">Dallas, TX</option>
                                 <option value="WI">Milwaukee, WI</option>
-                                <option value="MN">Minneapolis, MN</option> 
+                                <option value="MN">Minneapolis, MN</option> -->
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="role">Role</label>
-                            <select id="role" name="role" class="form-control" >
-                                <option value="admin">Branch Admin</option>
-                                <option value="employee">Employee</option>
+                            <input type="text" name="role" id="edit-role" class="form-control" placeholder="Role" style="text-align:center;"/>
+<!--                            <label for="role">Role</label>
+                            <select id="edit-role" name="role" class="form-control" >-->
+<!--                                <option value="admin">Branch Admin</option>
+                                <option value="employee">Employee</option>-->
                             </select>
                         </div>
                     </div>
@@ -557,42 +579,46 @@
         <!-- Delete User Div --> 
         <div class="container" id="deleteEmployeeDiv">
             <div class="row">
+                <div class="col-md-12 text-center">
+                        <ul class="list-group" id="deleteErrorMessages"></ul>
+                    </div>
                 <div class="col-lg-12 text-center">
                     <h3 class="mt-5">Are you sure you want to delete this user?</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="firstname">First Name</label>
-                            <input type="text" name="firstname" id="firstname" class="form-control" value="John" style="text-align:center;" readonly/>
+                            <input type="text" name="firstName" id="delete-first-name" class="form-control" placeholder="First Name" style="text-align:center;" readonly/>
                         </div>
                         <div class="col-md-6">
                             <label for="lastname">Last Name</label>
-                            <input type="text" name="lastname" id="lastname" class="form-control" value="Doe" style="text-align:center;" readonly/>
+                            <input type="text" name="lastName" id="delete-last-name" class="form-control" placeholder="Last Name" style="text-align:center;" readonly/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="email">Email</label>
-                            <input type="text" name="email" id="email" class="form-control" value="johndoe@genesis.com" style="text-align:center;" readonly/>
+                            <input type="text" name="email" id="delete-email" class="form-control" placeholder="Email" style="text-align:center;" readonly/>
                         </div>
                         <div class="col-md-6">
                             <label for="password">Password</label>
-                            <input type="text" name="password" id="password" class="form-control" value="Password123" style="text-align:center;" readonly/>
+                            <input type="text" name="password" id="delete-password" class="form-control" placeholder="Password" style="text-align:center;" readonly/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="location">Location</label>
-                            <input type="text" name="location" id="location" class="form-control" value="Minneapolis, MN" style="text-align:center;" readonly/>
+                            <input type="text" name="location" id="delete-location" class="form-control" placeholder="Location" style="text-align:center;" readonly/>
                         </div>
                         <div class="col-md-6">
                             <label for="role">Role</label>
-                            <input type="text" name="role" id="role" class="form-control" value="Branch Admin" style="text-align:center;" readonly/>
+                            <input type="text" name="role" id="delete-role" class="form-control" placeholder="Role" style="text-align:center;" readonly/>
                   
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <a class="deleteEmployeeBtn btn btn-danger" style="color: white">Delete</a>
+                            <div id="delete-btn-submit"></div>
+                            <a  class="deleteEmployeeBtn btn btn-danger" style="color: white">Delete</a>
                         </div>
                         <div class="col-md-6">
                             <a class="btn btn-info" id="cancelDeleteBtn" style="color: white">Cancel</a>

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
@@ -64,6 +65,19 @@ public class ServiceLayer {
     // Arrival
     public List<Arrival> findAllArrivals() {
         return arrivalRepo.findAll();
+    }
+    
+    public List<Arrival> getAllArrivalsByLocationId(int id) {
+        List<Arrival> arrivals = findAllArrivals();
+        List<Arrival> currentArrivalsByLocation = new ArrayList<>();
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
+        
+        for (Arrival arrival : arrivals) {
+            if (arrival.getTimeSlot().getLocation().getLocationId() == id && arrival.getArrivalDate().toString().contains(currentDateSQL.toString()))
+                currentArrivalsByLocation.add(arrival);
+        }
+        
+        return currentArrivalsByLocation;
     }
 
     public Arrival getArrivalByArrivalId(int arrivalId) {
@@ -159,6 +173,19 @@ public class ServiceLayer {
     // Departure
     public List<Departure> findAllDepartures() {
         return departureRepo.findAll();
+    }
+    
+    public List<Departure> getAllDeparturesByLocationId(int id) {
+        List<Departure> departures = findAllDepartures();
+        List<Departure> currentDeparturesByLocation = new ArrayList<>();
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());    
+        
+        for (Departure departure : departures) {
+            if (departure.getTimeSlot().getLocation().getLocationId() == id && departure.getDepartureDate().toString().contains(currentDateSQL.toString()))
+                currentDeparturesByLocation.add(departure);
+        }
+        
+        return currentDeparturesByLocation;
     }
 
     public Departure getDepartureByDepatureId(int departureId) {
@@ -349,14 +376,17 @@ public class ServiceLayer {
         return usersRepo.findAllByLocation(location);
     }
 
+//    Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationInAttendance = new ArrayList<>();
+        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
 
         for (User users : usersByLocation) {
-            if (findAttendanceByUserId(users.getUserId()).getIsAttending()) {
-                usersByLocationInAttendance.add(users);
+            for (Attendance attendance : currentAttendance) {
+                if (attendance.getUser() == users && attendance.getIsAttending() && attendance.getIsAuthorized())
+                    usersByLocationInAttendance.add(users);
             }
         }
 
@@ -364,38 +394,46 @@ public class ServiceLayer {
     }
 
     // Edited Nate Wood 05/13/2020
+    // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
-//        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-//        List<User> currentInactiveUsers = new ArrayList<>();
-//        
-//        for(Attendance attendance : currentAttendance) {
-//            
-//        }
-        
+        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
+        List<User> usersInAttendance = new ArrayList<>();
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = usersByLocation;
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
-
+        List<User> currentInactiveUsersByLocation = new ArrayList<>();
+        User defaultUser = usersRepo.findByEmail("user@user.com");
+        
+        for (Attendance attendance : currentAttendance) {
+            usersInAttendance.add(attendance.getUser());
+        }
+        
         for (User user : usersByLocation) {
-            if (attendanceRepo.findByUser(user) != null) {
+            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
                 usersByLocationNotAnswered.remove(user);
             }
+            if (!usersInAttendance.contains(user))
+                currentInactiveUsersByLocation.add(user);
         }
-
-        return usersByLocationNotAnswered;
+        
+        if(currentInactiveUsersByLocation.contains(defaultUser))
+            currentInactiveUsersByLocation.remove(defaultUser);
+        
+        return currentInactiveUsersByLocation;
     }
 
     public List<User> getFlaggedUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
-        List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationFlagged = new ArrayList<>();
-
         for (User user : usersByLocation) {
-            if (attendanceRepo.findByUser(user) != null && attendanceRepo.findByUser(user).getIsAuthorized() == false) {
+            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
                 usersByLocationFlagged.add(user);
+        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
+            
+        for (Attendance attendance : currentAttendance) {
+            if (attendance.getIsAuthorized() == false) {
+                    usersByLocationFlagged.add(attendance.getUser());
+                }
             }
-        }
 
         return usersByLocationFlagged;
     }
@@ -412,6 +450,25 @@ public class ServiceLayer {
     }
 
     public void deleteUserById(int userId) {
+        List<Attendance> allAttendance = findAllAttendance();
+        List<Arrival> allArrivals = findAllArrivals();
+        List<Departure> allDepartures = findAllDepartures();
+        
+        for (Attendance attendance : allAttendance) {
+            if (attendance.getUser().getUserId() == userId)
+                attendanceRepo.deleteById(attendance.getAttendanceId());
+        }
+        
+        for (Arrival arrival : allArrivals) {
+            if (arrival.getUser().getUserId() == userId)
+                arrivalRepo.deleteById(arrival.getArrivalId());
+        }
+        
+        for (Departure departure : allDepartures) {
+            if (departure.getUser().getUserId() == userId)
+                departureRepo.deleteById(departure.getDepartureId());
+        }
+        
         usersRepo.deleteById(userId);
     }
 
@@ -445,7 +502,7 @@ public class ServiceLayer {
         existingUser.setRole(user.getRole());
 
         User editedUser = usersRepo.save(existingUser);
-
+        System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
     }
 
@@ -465,21 +522,17 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        if (attendanceRepo.findByUser(attendance.getUser()) != null) {
-            Attendance existingAttendance = attendanceRepo.findByUser(attendance.getUser());
-            existingAttendance.setIsAttending(attendance.getIsAttending());
-            return attendanceRepo.save(existingAttendance);
+        // Attendance todaysAttendance = attendanceRepo.findByUser(attendance.getUser()).stream()
+        //     .filter(a -> a.getAttendanceDate() == new java.sql.Date(Calendar.getInstance().getTime().getTime())).collect(Collectors.toList()).get(0);
+        Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
+        
+        if (todaysAttendance != null) {
+            todaysAttendance.setIsAttending(attendance.getIsAttending());
+            todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
+            return attendanceRepo.save(todaysAttendance);
         } else {
             return attendanceRepo.save(attendance);
         }
-    }
-
-    public List<Arrival> getAllArrivalsByLocationId(int id) {
-        return getAllArrivalsByLocationId(id);
-    }
-
-    public List<Departure> getAllDeparturesByLocationId(int id) {
-        return getAllDeparturesByLocationId(id);
     }
 
     public User checkLogin(User user) {
