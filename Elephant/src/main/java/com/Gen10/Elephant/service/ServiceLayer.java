@@ -425,7 +425,7 @@ public class ServiceLayer {
         // return currentInactiveUsersByLocation;
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = usersByLocation;
+        List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
         java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
 
         for (User user : usersByLocation) {
