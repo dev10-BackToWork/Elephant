@@ -96,7 +96,8 @@ INSERT INTO `user` (userId, firstName, lastName, email, defaultPW, passwords, lo
     (4, "Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     (5, "Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     (6, "Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
-    (7, "Katy", "Kimble", "katy@katy.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2);
+    (7, "Katy", "Kimble", "katy@katy.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
+    (8, "Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 2, 2);
 
 DELIMITER $$
 CREATE PROCEDURE genMinneapolisTimeSlots()
@@ -175,9 +176,29 @@ END$$
     CALL genAustinTimeSlots();
 -- END
 
--- For testing  http://localhost:8080/api/admin/flagged/{id} route
+-- For testing
 INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
 	(1, "2020-05-12", 3, 0),
     (1, "2020-05-12", 2, 1),
     (1, "2020-05-12", 4, 1),
     (1, "2020-05-12", 5, 0),
+    (1, "2020-05-18", 3, 0),
+    (1, "2020-05-18", 2, 1),
+    (1, "2020-05-18", 4, 0),
+    (1, "2020-05-18", 5, 1),
+    (1, "2020-05-18", 6, 1),
+    (1, "2020-05-18", 7, 1);
+    
+INSERT INTO departure (departureDate, timeSlotId, userId) VALUE
+	("2020-05-17", 102, 3),
+    ("2020-05-18", 3, 4),
+    ("2020-05-18", 150, 8),
+    ("2020-05-18", 100, 7),
+    ("2020-05-18", 95, 2);
+
+INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUE
+	("2020-05-17", 51, 3),
+    ("2020-05-18", 52, 4),
+    ("2020-05-18", 200, 8),
+    ("2020-05-18", 53, 7),
+    ("2020-05-18", 54, 2);
