@@ -48,7 +48,7 @@ public class UserController {
         User user = new User(email, password);
         User dbUser = service.checkLogin(user);
         if (dbUser != null) {
-            dbUser.setPasswords(password);
+            // dbUser.setPasswords(password);
             return new ResponseEntity<User>(dbUser, HttpStatus.OK);
         }
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
