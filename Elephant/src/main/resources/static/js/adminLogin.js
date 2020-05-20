@@ -1,4 +1,24 @@
 $(document).ready(function () {
+
+    var adminLocation;
+    var allLocations;
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/locations',
+        headers: {
+            'email': 'user@user.com',
+            'password': 'password'
+        },
+        success: function (data) {
+            allLocations = data;
+        },
+        error: function (http) {
+            console.log(http);
+            console.log('An error resulted when attempting to retrieve locations.');
+        }
+    });
+
     $("#loginNav").show();
     $("#adminLoginDiv").show();
     $("#loginErr").hide();
@@ -29,6 +49,7 @@ $(document).ready(function () {
                 if (response.role.roleId === 2) {
                     window.location.replace('/index.html');
                 } else if (response.role.roleId === 1) {
+                    adminLocation = response.location.locationId;
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -597,6 +618,32 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+
+        $('#locationAddUser').empty();
+
+        $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/api/admin/locations',
+                    headers: {
+                        'email': 'user@user.com',
+                        'password': 'password'
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        console.log('The request for locations was successful.');
+                        $.each(data, function(index, datum) {
+                            $('#locationAddUser')
+                                .append($("<option></option>")
+                                    .attr("value", index + 1)
+                                    .text(datum.cityName));
+                        });
+                    },
+                    error: function (http) {
+                        console.log(http);
+                        console.log('An error resulted when attempting to retrieve locations.');
+                    }
+                });
+
     });
     
     $('#addLocationBtn').click(function (event) {
@@ -650,11 +697,71 @@ $(document).ready(function () {
         var contentRows = $('#contentRows');
         var password = $("#inputPassword").val();
         var email = $("#inputEmail").val();
+        var locationId = $('#locationAddUser').val();
+
+        console.log(locationId);
+
+        var firstNameField = $('#firstNameAddUser').val();
+        var lastNameField = $('#lastNameAddUser').val();
+        var emailField = $('#emailAddUser').val();
+        var locationIdField = $('#locationAddUser').val();
+        var cityNameField = allLocations[locationId - 1].cityName;
+        var timeIncrementField = allLocations[locationId - 1].timeIncrement;
+        var maxOccupancyField = allLocations[locationId - 1].maxOccupancy;
+        var beginningTimeField = allLocations[locationId - 1].beginningTime;
+        var endTimeField = allLocations[locationId - 1].endTime;
+        var roleIdField = $('#roleAddUser').val();
+        var roleNameField;
+        
+        if(roleIdField == 1) {
+            roleNameField = "ROLE_ADMIN";
+        } else {
+            roleNameField = "ROLE_USER";
+        };
+
+        var userObj = {
+	        "firstName": firstNameField,
+	        "lastName": lastNameField,
+	        "email": emailField,
+            "location": {
+                "locationId": locationIdField,
+                "cityName": cityNameField,
+                "timeIncrement": timeIncrementField,
+                "maxOccupancy": maxOccupancyField,
+                "beginningTime": beginningTimeField,
+                "endTime": endTimeField
+        },
+            "role": {
+                "roleId": roleIdField,
+                "name": roleNameField
+            }
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/newUser',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(userObj),
+            success: function (data) {
+                console.log(data);
+                console.log('The request to generate ' + data.firstName + ' ' + data.lastName + ' was successful.');
+            },
+            error: function (http) {
+                console.log(http);
+                console.log('An error resulted when attempting to create a new user.');
+            }
+        });
+
+        setTimeout(function() {}, 500);
 
         $.ajax({
             type: "GET",
     //Need to change url so that it takes the admins location as the location id
-            url: "http://localhost:8080/api/admin/users/1",
+            url: "http://localhost:8080/api/admin/users/" + adminLocation,
             headers: {
                 "email": email,
                 "password": password
@@ -683,7 +790,25 @@ $(document).ready(function () {
             }
 
         });
+
     });
+
+    $('#cancelAcctBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        
+        $("#allEmployeeErr").hide();
+    })
     
     $('#submitEmployeeInfoBtn').click(function (event) {
         $("#loginNav").hide();
