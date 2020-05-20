@@ -29,10 +29,9 @@ var user;
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
                      $("#login").hide();
-                     alert("success - user role");
                    // window.location.replace('/healthSurvey.html');
                 } else if (response.role.roleId === 1) {
-                     alert("success - admin role");
+                    $("#screener-div").show();
                      $("#login").hide();
                     //window.location.replace('/dashboard.html');
                 }
@@ -41,7 +40,7 @@ var user;
             error: function (err) {
                 console.log(err);
                 $('#loginErr').show();
-                $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assitance.");
+                $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
                 clearLogin();
                 return false;
             }
@@ -86,7 +85,7 @@ $("#q1No").on("click", function (e) {
             "password": password
         },
         success: function (response, status) {
-            alert('success');
+            //alert('success');
             console.log(response);
             $("#screener-bye").show();
 
@@ -205,7 +204,7 @@ function notAuthorized() {
         }
     });
 }
-
+var startTime;
 
 
 function loadArrivals() {
@@ -224,45 +223,41 @@ function loadArrivals() {
             "password": password
         },
         success: function (response) {
-            console.log(response);
+            //console.log(response);
+            
             $("#arrival-btn-div").empty();
             var arrivalDiv = $("#arrival-btn-div");
             var i;
+            
             $.each(response, function (i, time) {
                 if (response[i].isTaken === false) {
                     var startTime = response[i].startTime;
-                    var timeSlotId = response[i].timeSlotId;
-                    console.log(timeSlotId + " - " + startTime);
 
+                    var timeSlotId = response[i].timeSlotId;
+                    //console.log(timeSlotId + " - " + startTime);
                     var arrivalBtn = "<div class='col-3'>";
                     arrivalBtn += "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
-                    arrivalBtn += "<p class='item'>" + startTime + "</p>";
+                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
                     arrivalBtn += "</button>";
                     arrivalBtn += "</div>";
                     arrivalDiv.append(arrivalBtn);
                 };
             });
 
-            $(function () {
-                $(".time").click(function () {
-                    console.log(this.id);
+                $(".time").on('click', function (e) {
                     var timeSlotId = parseInt(this.id);
-                    // var itemId = parseInt(input);
-                    console.log("Your time: " + timeSlotId);
+                    var time = $(this).find('.item').html(); 
+                    console.log("Your time: " + timeSlotId + " / " +time);
+                    $("#timeSelectedTime").val(time);
                     $("#timeSelected").val(timeSlotId);
                 });
-            });
-
 
             $("#arrivalSubmit").on("click", function (e) {
                 e.preventDefault();
                 $("#arrival-container").hide();
-                //$("#departure-container").hide();
-              
+
                 var timeSlotId = $("#timeSelected").val();
-                console.log(timeSlotId);
-                //var timeSlotId = parseInt(timeSlotId);
-                // var timeSlotId = parseInt(time);
+                //console.log(timeSlotId);
 
                 $.ajax({
                     type: "POST",
@@ -277,7 +272,7 @@ function loadArrivals() {
 
                     success: function (response, status) {
                         console.log(response);
-                        alert(response.timeSlot.startTime);
+                        //alert(response.timeSlot.startTime);
                         $('#arrival-success').show();
                         $('#arrival-success').text("Your arrival time today is: " + response.timeSlot.startTime);
                         loadDepartures();
@@ -315,7 +310,7 @@ function loadDepartures() {
             "password": password
         },
         success: function (response) {
-            console.log(response);
+            //console.log(response);
             $("#departure-btn-div").empty();
             var departureDiv = $("#departure-btn-div");
             var i;
@@ -323,7 +318,7 @@ function loadDepartures() {
                 if (response[i].isTaken === false) {
                     var startTime = response[i].startTime;
                     var timeSlotId = response[i].timeSlotId;
-                    console.log(timeSlotId + " - " + startTime);
+                    //console.log(timeSlotId + " / " + startTime);
                 
                     var departureBtn = "<div class='col-3'>";
                     departureBtn += "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
@@ -334,16 +329,15 @@ function loadDepartures() {
                 };
             });
 
-            $(function () {
-                $(".time").click(function () {
-                    console.log(this.id);
+                
+                $(".time").on('click', function (e) {
                     var timeSlotId = parseInt(this.id);
-                    // var itemId = parseInt(input);
-                    console.log("Your departure time: " + timeSlotId);
+                    var time = $(this).find('.item').html(); 
+                        console.log("Your time: " + timeSlotId + " / " +time);
+                    $("#departureTimeSelectedTime").val(time);
                     $("#departureTimeSelected").val(timeSlotId);
                 });
-            });
-
+                
             $("#departureSubmit").on("click", function (e) {
                 e.preventDefault();
                 //$("#arrival-container").hide();
@@ -364,7 +358,7 @@ function loadDepartures() {
 
                     success: function (response, status) {
                         console.log(response);
-                        alert(response.timeSlot.startTime);
+                        //alert(response.timeSlot.startTime);
                         //$('#time-success').show();
                         $('#departure-success').show();
                         $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
