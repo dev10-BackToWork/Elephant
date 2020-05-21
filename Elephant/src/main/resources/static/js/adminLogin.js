@@ -2,6 +2,9 @@ $(document).ready(function () {
 
     var adminLocation;
     var allLocations;
+    var adminId;
+    var adminEmail;
+    var adminPassword;
 
     $.ajax({
         type: 'GET',
@@ -33,6 +36,7 @@ $(document).ready(function () {
     $("#scheduleArrivalDiv").hide();
     $("#deleteEmployeeDiv").hide();
     $("#successfulDeleteDiv").hide();
+    $("#locationInfoDiv").hide();
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -52,6 +56,9 @@ $(document).ready(function () {
                     window.location.replace('/index.html');
                 } else if (response.role.roleId === 1) {
                     adminLocation = response.location.locationId;
+                    adminId = response.userId;
+                    adminEmail = response.email;
+                    adminPassword = response.defaultPW;
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -78,8 +85,8 @@ $(document).ready(function () {
                          type: 'GET',
                          url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
                          headers: {
-                             'email': 'user@user.com',
-                             'password': 'password'
+                             'email': adminEmail,
+                             'password': adminPassword
                          },
                          success: function (data) {
                              $.each(data, function (index, user) {
@@ -110,6 +117,7 @@ $(document).ready(function () {
                             $("#scheduleArrivalDiv").hide();
                             $("#deleteEmployeeDiv").hide();
                             $("#successfulDeleteDiv").hide();
+                            $("#locationInfoDiv").hide();
                         });
                          },
                          error: function() {
@@ -124,8 +132,8 @@ $(document).ready(function () {
                          type: 'GET',
                          url: 'http://localhost:8080/api/admin/flagged/' + locationId,
                          headers: {
-                             'email': 'user@user.com',
-                             'password': 'password'
+                             'email': adminEmail,
+                             'password': adminPassword
                          },
                          success: function (data) {
                              $.each(data, function (index, user) {
@@ -156,6 +164,7 @@ $(document).ready(function () {
                             $("#scheduleArrivalDiv").hide();
                             $("#deleteEmployeeDiv").hide();
                             $("#successfulDeleteDiv").hide();
+                            $("#locationInfoDiv").hide();
                         });
                          },
                          error: function() {
@@ -170,8 +179,8 @@ $(document).ready(function () {
                  type: 'GET',
                      url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
                      headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                      success: function (data) {
                          $.each(data, function(index, datum) {
@@ -201,8 +210,8 @@ $(document).ready(function () {
                  type: 'GET',
                      url: 'http://localhost:8080/api/admin/departures/' + locationId,
                      headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                      success: function (data) {
                         $.each(data, function(index, datum) {
@@ -259,6 +268,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         
     });
@@ -277,6 +287,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
@@ -299,8 +310,8 @@ $(document).ready(function () {
              type: 'GET',
              url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                 'email': adminEmail,
+                 'password': adminPassword
              },
              success: function (data) {
                  $.each(data, function (index, user) {
@@ -331,6 +342,7 @@ $(document).ready(function () {
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
                 $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
             });
              },
              error: function() {
@@ -345,8 +357,8 @@ $(document).ready(function () {
              type: 'GET',
              url: 'http://localhost:8080/api/admin/flagged/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
              },
              success: function (data) {
                  $.each(data, function (index, user) {
@@ -377,6 +389,7 @@ $(document).ready(function () {
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
                 $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
             });
              },
              error: function() {
@@ -391,8 +404,8 @@ $(document).ready(function () {
          type: 'GET',
              url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
              },
              success: function (data) {
                  $.each(data, function(index, datum) {
@@ -422,8 +435,8 @@ $(document).ready(function () {
          type: 'GET',
              url: 'http://localhost:8080/api/admin/departures/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                 'email': adminEmail,
+                 'password': adminPassword
              },
              success: function (data) {
                 $.each(data, function(index, datum) {
@@ -465,6 +478,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -481,6 +495,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -493,11 +508,10 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "GET",
-        //Need to change url so that it takes the admins location as the location id
                 url: "http://localhost:8080/api/admin/users/" + locationId,
                 headers: {
-                    "email": email,
-                    "password": password
+                    'email': adminEmail,
+                    'password': adminPassword
                 },
                 success: function (data, status) {
                     $.each(data, function (index, user) {
@@ -531,6 +545,7 @@ $(document).ready(function () {
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").show();
                 $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
                 var userId = 7;
 
@@ -538,8 +553,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#delete-first-name').val(data.firstName);
@@ -586,6 +601,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
 
         $('#locationAddUser').empty();
 
@@ -593,8 +609,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/locations',
                     headers: {
-                        'email': 'user@user.com',
-                        'password': 'password'
+                        'email': adminEmail,
+                         'password': adminPassword
                     },
                     success: function (data) {
                         console.log(data);
@@ -628,6 +644,51 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
+    });
+    
+    $('#locationBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").show();
+        
+        $("#editLocErrorMessages").hide();
+
+        var userId = adminId;
+
+        $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/user/' + userId,
+        headers: {
+             'email': adminEmail,
+             'password': adminPassword
+         },
+        success: function(data, status) {
+              $('#edit-city-name').val(data.location.cityName);
+              $('#edit-occupancy').val(data.location.maxOccupancy);
+              $('#edit-increment').val(data.location.timeIncrement);
+              $('#edit-beginning').val(data.location.beginningTime);
+              $('#edit-end').val(data.location.endTime);
+          },
+          error: function() {
+            $('#editLocErrorMessages')
+               .append($('<li>')
+               .attr({class: 'list-group-item list-group-item-danger'})
+               .text('An error has occurred.  Please try again later.'));
+          }
+        });
+
     });
     
     $('#logoutBtn').click(function (event) {
@@ -644,6 +705,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -660,6 +722,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -778,6 +841,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#allEmployeeErr").hide();
     })
@@ -860,6 +924,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#deleteEmployeeInfoBtn').click(function (event) {
@@ -876,6 +941,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").show();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#createLocationSubmitBtn').click(function (event) {
@@ -892,6 +958,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('.deleteEmployeeBtn').click(function (event) {
@@ -904,8 +971,8 @@ $(document).ready(function () {
              type: 'DELETE',
              url: 'http://localhost:8080/api/admin/user/' + userId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                 'email': adminEmail,
+                 'password': adminPassword
              },
              success: function (data) {
                  console.log(data);
@@ -923,6 +990,7 @@ $(document).ready(function () {
             $("#scheduleArrivalDiv").hide();
             $("#deleteEmployeeDiv").hide();
             $("#successfulDeleteDiv").hide();
+            $("#locationInfoDiv").hide();
 
             $("#allEmployeeErr").hide();
 
@@ -971,6 +1039,7 @@ $(document).ready(function () {
                     $("#scheduleArrivalDiv").hide();
                     $("#deleteEmployeeDiv").hide();
                     $("#successfulDeleteDiv").hide();
+                    $("#locationInfoDiv").hide();
 
                     var userId = 7;
 
@@ -978,8 +1047,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                        'email': adminEmail,
+                        'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#edit-first-name').val(data.firstName);
@@ -1011,6 +1080,7 @@ $(document).ready(function () {
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
                 $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
 
                 });
@@ -1029,6 +1099,7 @@ $(document).ready(function () {
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").show();
                 $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
                 var userId = 7;
 
@@ -1036,8 +1107,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#delete-first-name').val(data.firstName);
@@ -1096,6 +1167,7 @@ $(document).ready(function () {
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
 
 
@@ -1227,6 +1299,7 @@ $(document).ready(function () {
             $("#scheduleArrivalDiv").hide();
             $("#deleteEmployeeDiv").hide();
             $("#successfulDeleteDiv").show();
+            $("#locationInfoDiv").hide();
 
 //            $("#allEmployeeErr").hide();
 //
