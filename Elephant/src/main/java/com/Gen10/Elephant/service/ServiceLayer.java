@@ -438,17 +438,11 @@ public class ServiceLayer {
     }
 
     public List<User> getFlaggedUsers(int id) {
-        Location location = locationRepo.findById(id).orElse(null);
-        // List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationFlagged = new ArrayList<>();
-        // for (User user : usersByLocation) {
-        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
-        //         usersByLocationFlagged.add(user);
-        //     }
         List<Attendance> currentAttendance = findAttendanceByCurrentDate();
             
         for (Attendance attendance : currentAttendance) {
-            if (attendance.getIsAuthorized() == false) {
+            if (attendance.getIsAuthorized() == false && attendance.getUser().getLocation().getLocationId() == id) {
                 usersByLocationFlagged.add(attendance.getUser());
             }
         }
