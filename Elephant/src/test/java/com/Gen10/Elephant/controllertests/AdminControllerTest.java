@@ -1,8 +1,10 @@
 package com.Gen10.Elephant.controllertests;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
@@ -12,6 +14,8 @@ import com.Gen10.Elephant.Controller.UserController;
 import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Departure;
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
 import org.junit.After;
@@ -120,7 +124,25 @@ public class AdminControllerTest {
     } 
 
     @Test
-    public void getEditLocationCapacityInterval() {
-        
+    public void testGetEditLocationCapacityInterval() {
+        List<Location> locations = adminCon.getLocations(adminEmail, adminPW).getBody();
+        Location location = locations.get(0);
+        int currentCap = location.getMaxOccupancy();
+        int currentIncrement = location.getTimeIncrement();
+
+        adminCon.editCapacity(1, currentCap + 1, adminEmail, adminPW);
+        Location newLocation = adminCon.editIncrement(1, currentIncrement + 5, adminEmail, adminPW).getBody();
+        assertEquals(currentCap + 1, newLocation.getMaxOccupancy());
+        assertEquals(currentIncrement + 5, newLocation.getTimeIncrement());
+    }
+
+    @Test
+    public void testResetPassword() {
+        User user = adminCon.getUserById(2, adminEmail, adminPW).getBody();
+        adminCon.resetPassword(2, adminEmail, adminPW);
+        User newUser = adminCon.getUserById(2, adminEmail, adminPW).getBody();
+
+        assertNotEquals(user.getDefaultPW(), newUser.getDefaultPW());
+        assertNotEquals(user.getPasswords(), newUser.getPasswords());
     }
 }

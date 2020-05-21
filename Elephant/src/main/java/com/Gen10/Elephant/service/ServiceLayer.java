@@ -614,4 +614,11 @@ public class ServiceLayer {
 	public Location getLocationById(int id) {
 		return locationRepo.getByLocationId(id);
 	}
+
+	public Boolean checkPasswordChange(User user) {
+		if(BCrypt.checkpw(user.getDefaultPW(), user.getPasswords())) {
+            return false;
+        }
+        return true;
+	}
 }
