@@ -36,6 +36,9 @@ public class UserController {
     public ResponseEntity<List<TimeSlot>> getTimes(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
+            if(service.getLocationById(id).getMaxOccupancy() <= service.currentUsersInOffice(id).size()){
+                return new ResponseEntity("Your location is already at capacity", HttpStatus.IM_USED);
+            }
             return new ResponseEntity<List<TimeSlot>>(service.getOpenTimeSlotsByLocationId(id), HttpStatus.OK);
         }
         return new ResponseEntity<List<TimeSlot>>(new ArrayList<TimeSlot>(), HttpStatus.UNAUTHORIZED);
@@ -81,6 +84,9 @@ public class UserController {
     public ResponseEntity<Attendance> markAttendance(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
+            if(service.getLocationById(dbUser.getLocation().getLocationId()).getMaxOccupancy() <= service.currentUsersInOffice(dbUser.getLocation().getLocationId()).size()){
+                return new ResponseEntity("Your location is already at capacity", HttpStatus.IM_USED);
+            }
             return new ResponseEntity<Attendance>(service.markAttendance(attendance), HttpStatus.OK);
         }
         return new ResponseEntity<Attendance>(new Attendance(), HttpStatus.UNAUTHORIZED);
@@ -91,6 +97,9 @@ public class UserController {
         User dbUser = service.checkUser(email, password);
         if(dbUser != null){
             try {
+                if(service.getLocationById(user.getLocation().getLocationId()).getMaxOccupancy() <= service.currentUsersInOffice(user.getLocation().getLocationId()).size()){
+                    return new ResponseEntity("Your location is already at capacity", HttpStatus.IM_USED);
+                }
                 return new ResponseEntity<Arrival>(service.reserveArrivalByTimeSlotId(user, id), HttpStatus.OK);
             } catch(timeSlotReservedException e) {
                 return new ResponseEntity(e.getMessage(), HttpStatus.IM_USED);
