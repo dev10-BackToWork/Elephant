@@ -15,6 +15,7 @@ $(document).ready(function () {
         },
         success: function (data) {
             allLocations = data;
+            console.log(allLocations);
         },
         error: function (http) {
             console.log(http);
@@ -523,58 +524,12 @@ $(document).ready(function () {
                         row += '<td>' + name + '</td>';
                         row += '<td>' + email + '</td>';
                         row += '<td>' + location + '</td>';
-                        row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
+                        row += '<td><button onclick="editSelectedUser(' + id + ')" btn btn-info">Edit</button></td>';
                         row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
                         
                         row += '</tr>';
                         contentRows.append(row);
                     });
-                $('.editAllEmployeeBtn').click(function (event) {
-                    $("#loginNav").hide();
-                    $("#adminLoginDiv").hide();
-                    $("#loginErr").hide();
-                    $("#navBarDiv").show();
-                    $("#dashboardDiv").hide();
-                    $("#allEmployeesDiv").hide();
-                    $("#createAccountDiv").hide();
-                    $("#createLocationDiv").hide();
-                    $("#employeeInfoDiv").show();
-                    $("#healthSurveyDiv").hide();
-                    $("#scheduleArrivalDiv").hide();
-                    $("#deleteEmployeeDiv").hide();
-                    $("#successfulDeleteDiv").hide();
-                    $("#locationInfoDiv").hide();
-
-                    var userId = 7;
-
-                    $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/api/admin/user/' + userId,
-                    headers: {
-                         'email': adminEmail,
-                         'password': adminPassword
-                     },
-                    success: function(data, status) {
-                          $('#edit-first-name').val(data.firstName);
-                          $('#edit-last-name').val(data.lastName);
-                          $('#edit-email').val(data.email);
-                          $('#edit-password').val(data.passwords);
-                          $('#edit-location').val(data.location.cityName);
-                          $('#edit-role').val(data.role.name);
-                      },
-                      error: function() {
-                        $('#editErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.  Please try again later.'));
-                      }
-                    });
-
-
-
-
-
-                });
 
               $('.deleteAllEmployeeBtn').click(function (event) {
                 $("#loginNav").hide();
@@ -892,6 +847,70 @@ $(document).ready(function () {
     })
     
     $('#submitEmployeeInfoBtn').click(function (event) {
+        
+        var userIdField = $('#edit-userId').val();
+        var firstNameField = $('#edit-first-name').val();
+        var lastNameField = $('#edit-last-name').val();
+        var emailField = $('#edit-email').val();
+        // var defaultPWField = 'password';
+        var passwordsField = $('#edit-password').val();
+        var locationIdField = $('#edit-location').val();
+        var cityNameField = allLocations[locationIdField - 1].cityName;
+        var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
+        var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
+        var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
+        var endTimeField = allLocations[locationIdField - 1].endTime;
+        var roleNameField = $('#edit-role').val();
+        var roleIdField;
+
+        if(roleNameField == "ROLE_ADMIN") {
+            roleIdField = 1;
+        } else {
+            roleIdField = 2;
+        }
+        
+
+        var userObj = {
+            "userId": userIdField,
+	        "firstName": firstNameField,
+	        "lastName": lastNameField,
+	        "email": emailField,
+            // "defaultPW": defaultPWField,
+            "passwords": passwordsField,
+            "location": {
+                "locationId": locationIdField,
+                "cityName": cityNameField,
+                "timeIncrement": timeIncrementField,
+                "maxOccupancy": maxOccupancyField,
+                "beginningTime": beginningTimeField,
+                "endTime": endTimeField
+            },
+            "role": {
+                "roleId": roleIdField,
+                "name": roleNameField
+            }
+        }
+
+        console.log(userObj);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/editUser',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(userObj),
+            success: function (data) {
+                console.log(data);
+                console.log('The user information associated with ' + data.firstName + ' ' + data.lastName + ' was updated.');
+            },
+            error: function (http) {
+                console.log('An error resulted when attempting to edit the specified user.')
+            }
+        });
+        
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -1170,6 +1189,86 @@ $(document).ready(function () {
 
 
 });
+
+    function editSelectedUser(id) {
+        $("#loginNav").hide();
+                    $("#adminLoginDiv").hide();
+                    $("#loginErr").hide();
+                    $("#navBarDiv").show();
+                    $("#dashboardDiv").hide();
+                    $("#allEmployeesDiv").hide();
+                    $("#createAccountDiv").hide();
+                    $("#createLocationDiv").hide();
+                    $("#employeeInfoDiv").show();
+                    $("#healthSurveyDiv").hide();
+                    $("#scheduleArrivalDiv").hide();
+                    $("#deleteEmployeeDiv").hide();
+                    $("#successfulDeleteDiv").hide();
+
+                    var userId = id;
+
+                    $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/api/admin/user/' + userId,
+                    headers: {
+                         'email': 'user@user.com',
+                         'password': 'password'
+                     },
+                    success: function(data, status) {
+                          $('#edit-userId').val(id);
+                          $('#edit-first-name').val(data.firstName);
+                          $('#edit-last-name').val(data.lastName);
+                          $('#edit-email').val(data.email);
+                          $('#edit-password').val(data.passwords);
+                          $('#edit-role').val(data.role.name);
+
+                          populateEditLocationSelect(data.location.cityName);
+
+                      },
+                      error: function() {
+                        $('#editErrorMessages')
+                           .append($('<li>')
+                           .attr({class: 'list-group-item list-group-item-danger'})
+                           .text('An error has occurred.  Please try again later.'));
+                      }
+                    });
+                    
+    }
+
+    function populateEditLocationSelect(currentCityName) {
+
+        $('#edit-location').empty();
+
+        var currentCityIndex;
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/api/admin/locations',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password'
+            },
+            success: function (data) {
+                $.each(data, function(index, datum) {
+                    $('#edit-location')
+                        .append($("<option></option>")
+                            .attr("value", index + 1)
+                            .text(datum.cityName));
+
+                    if(datum.cityName == currentCityName) {
+                        currentCityIndex = index + 1;
+                    }
+                });
+
+                $('#edit-location').val(currentCityIndex);
+            },
+            error: function (http) {
+                console.log(http);
+                console.log('An error resulted when attempting to retrieve locations.');
+            }
+        });
+
+    }
 
 
 
