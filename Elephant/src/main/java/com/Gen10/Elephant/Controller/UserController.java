@@ -120,4 +120,13 @@ public class UserController {
         }
         return new ResponseEntity<Departure>(new Departure(), HttpStatus.UNAUTHORIZED);
     }   
+
+    @GetMapping("/checkChange/{id}")
+    public ResponseEntity<Boolean> checkPasswordChange(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbUser = service.checkUser(email, password);
+        if(dbUser != null){
+            return new ResponseEntity<Boolean>(service.checkPasswordChange(user), HttpStatus.OK);
+        }
+        return new ResponseEntity(new User(), HttpStatus.UNAUTHORIZED);
+    }
 }
