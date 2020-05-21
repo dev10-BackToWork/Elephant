@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
@@ -160,9 +159,9 @@ public class ServiceLayer {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> currentAttendance = new ArrayList<>();
         java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
+        LocalDate date = LocalDate.now();
         for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().toString().contains(currentDateSQL.toString())) {
+            if (attendance.getAttendanceDate().equals(LocalDate.now())) {
                 currentAttendance.add(attendance);
             }
         }
@@ -388,8 +387,9 @@ public class ServiceLayer {
 
         for (User users : usersByLocation) {
             for (Attendance attendance : currentAttendance) {
-                if (attendance.getUser() == users && attendance.getIsAttending() && attendance.getIsAuthorized())
+                if (attendance.getUser().equals(users) && attendance.getIsAttending() && attendance.getIsAuthorized()) {
                     usersByLocationInAttendance.add(users);
+                }
             }
         }
 
@@ -610,4 +610,8 @@ public class ServiceLayer {
 
         return usersRepo.save(existingUser);
     }
+
+	public Location getLocationById(int id) {
+		return locationRepo.getByLocationId(id);
+	}
 }
