@@ -811,6 +811,61 @@ $(document).ready(function () {
     })
     
     $('#submitEmployeeInfoBtn').click(function (event) {
+        
+        var userIdField = $('#edit-first-name').val();
+        var firstNameField = $('#edit-first-name').val();
+        var lastNameField = $('#edit-last-name').val();
+        var emailField = $('#edit-email').val();
+        var defaultPWField = 'password';
+        var passwordsField = $('#edit-password').val();
+        var locationIdField = 1;
+        var cityNameField = 'Minneapolis';
+        var timeIncrementField = 5;
+        var maxOccupancyField = 20;
+        var beginningTimeField = '07:00:00';
+        var endTimeField = '19:00:00';
+        var roleIdField = 2;
+        var roleNameField = 'ROLE_USER';
+
+        var userObj = {
+            "userId": userIdField,
+	        "firstName": firstNameField,
+	        "lastName": lastNameField,
+	        "email": emailField,
+            "defaultPW": defaultPWField,
+            "passwords": passwordsField,
+            "location": {
+                "locationId": locationIdField,
+                "cityName": cityNameField,
+                "timeIncrement": timeIncrementField,
+                "maxOccupancy": maxOccupancyField,
+                "beginningTime": beginningTimeField,
+                "endTime": endTimeField
+        },
+            "role": {
+                "roleId": roleIdField,
+                "name": roleNameField
+            }
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/editUser',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(userObj),
+            success: function (data) {
+                console.log(data);
+                console.log('The user information associated with ' + data.firstName + ' ' + data.lastName + ' was updated.');
+            },
+            error: function (http) {
+                console.log('An error resulted when attempting to edit the specified user.')
+            }
+        });
+        
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
