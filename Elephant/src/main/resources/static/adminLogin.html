@@ -141,13 +141,12 @@
                                 <ul class="list-group" id="authErrorMessages"></ul>
                                 <h3 class="mt-5">Authorization Pending</h3>
                                 <div class="col text-center">
-                                    <table class="table table-striped" id="authPendTable">
+                                    <table class="table table-striped" id="authPendTable" style='table-layout:fixed;'>
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Location</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="authPendRows"></tbody>
@@ -162,13 +161,12 @@
                             <ul class="list-group" id="noResErrorMessages"></ul>
                             <h3 class="mt-5">No Response</h3>
                             <div class="col text-center">
-                                <table class="table table-striped" id="noResponseTable">
+                                <table class="table table-striped" id="noResponseTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Location</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="noResponseRows"></tbody>
@@ -206,7 +204,7 @@
                                 <table class="table table-striped" id="departureTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
-                                            <th width="33%">Name</th>
+                                            <th>Name</th>
                                             <th>Location</th>
                                             <th>Departure</th>
                                         </tr>
@@ -659,11 +657,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label for="occupancy">Max Occupancy</label>
-                            <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" placeholder="Max Occupancy" style="text-align:center;"/>
+                            <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" style="text-align:center;" required/>
                         </div>
                         <div class="col-md-6">
                             <label for="increment">Time Increment</label>
-                            <input type="number" min="0" step="1" name="increment" id="edit-increment" class="form-control" placeholder="Time Increment" style="text-align:center;"/>
+                            <input type="number" min="0" step="1" name="increment" id="edit-increment" class="form-control" style="text-align:center;" required/>
                         </div>
                     </div>
                     <div class="row">
