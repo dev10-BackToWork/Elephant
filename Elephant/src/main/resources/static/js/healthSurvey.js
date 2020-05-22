@@ -8,10 +8,32 @@ $(document).ready(function () {
     $('#time-success').hide();
     $("#loginErr").hide();
     
-var user;   
-   
+var user;  
+
+    function checkPasswordChg() {
+        var password = $("#inputPassword").val();
+        var email = $("#inputEmail").val();
+       $.ajax({
+            type: "GET", 
+             url: "http://localhost:8080/api/users/checkChange",
+             headers: {
+                "email": email,
+                "password": password
+            },
+            success: function (response) {
+                console.log('checkpasswordchange' + response);
+            },
+             error: function (err) {
+                console.log(err);
+
+            }
+        })
+    };
+    
+    
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
+        checkPasswordChg();
         var password = $("#inputPassword").val();
         var email = $("#inputEmail").val();
 
@@ -206,13 +228,13 @@ function notAuthorized() {
 }
 var startTime;
 
-
 function loadArrivals() {
     console.log(user);
     var email = user.email;
     var password = user.defaultPW;
     var locationId = user.location.locationId;
     var userId = user.userId;
+    authorized();
    
     $.ajax({
         type: "GET",
@@ -227,21 +249,53 @@ function loadArrivals() {
             
             $("#arrival-btn-div").empty();
             var arrivalDiv = $("#arrival-btn-div");
+            var arrivalAccordianDiv = $("#arrival-accordion");
             var i;
-            
+            //var j;
+            var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
+            //console.log(hours.length);
+//            $.each(hours, function(j) {
+//                var hourCard = "<div class='.card time-card'>";
+//                hourCard += "<div class='card-header'id='heading'" +i+">";
+//                hourCard += "<h5 class='mb-0'>";
+//                hourCard += "<button class='btn' data-toggle='collapse' data-target='#collapse'"+i+"aria-expanded='true' aria-controls='collapse'"+i+"></button>";
+//                j++;
+//             });  
             $.each(response, function (i, time) {
                 if (response[i].isTaken === false) {
+                    //for each hours[i] with timeslots avaialble print an accordian tab and print time in heading. 
+                    //print the start time buttons in each  hours[i] accordian
                     var startTime = response[i].startTime;
-
+                    startTime = startTime.substring(0, 5).trim();
+                    var hour = startTime.substring(0, 2).trim();
+                    //console.log(startTime + " / " + hour);
+                    //console.log(hours[4]);
+                    //for (i = 0; i < hour.length; i++)
+                     
+                    //if (hour.localeCompare(hours[3])) {
+                    //    console.log(startTime); 
+                    
+                    //} else {
                     var timeSlotId = response[i].timeSlotId;
-                    //console.log(timeSlotId + " - " + startTime);
+//                    var arrivalBtn = "<div>";
                     var arrivalBtn = "<div class='col-3'>";
-                    arrivalBtn += "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
+                    arrivalBtn = "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
                     arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
                     arrivalBtn += "</button>";
                     arrivalBtn += "</div>";
                     arrivalDiv.append(arrivalBtn);
-                };
+//                    var timeSlotId = response[i].timeSlotId;
+//                    //console.log(timeSlotId + " - " + startTime);
+//                    var arrivalBtn = "<div>";
+////                  var arrivalBtn = "<div class='col-3'>";
+//                    var arrivalBtn = "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
+//                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
+//                    arrivalBtn += "</button>";
+//                    arrivalBtn += "</div>";
+//                    arrivalDiv.append(arrivalBtn);
+                }
+               // };
+               
             });
 
                 $(".time").on('click', function (e) {
@@ -317,18 +371,21 @@ function loadDepartures() {
             $.each(response, function (i, time) {
                 if (response[i].isTaken === false) {
                     var startTime = response[i].startTime;
+                    startTime = startTime.substring(0, 5).trim();
                     var timeSlotId = response[i].timeSlotId;
                     //console.log(timeSlotId + " / " + startTime);
                 
+//                    var departureBtn = "<div>";
                     var departureBtn = "<div class='col-3'>";
-                    departureBtn += "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
+//                    departureBtn += "<button class='btn-primary time' id='" + timeSlotId + "'>";
+                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
                     departureBtn += "<p class='item'>" + startTime + "</p>";
                     departureBtn += "</button>";
                     departureBtn += "</div>";
                     departureDiv.append(departureBtn);
-                };
-            });
-
+                };  
+ 
+                });
                 
                 $(".time").on('click', function (e) {
                     var timeSlotId = parseInt(this.id);
@@ -362,6 +419,7 @@ function loadDepartures() {
                         //$('#time-success').show();
                         $('#departure-success').show();
                         $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+                        
                     },
                     error: function (err) {
                         console.log(err);
@@ -372,4 +430,76 @@ function loadDepartures() {
         }
     });
     }
+    
+    //called after departure time POST to update attendance and authorization record to true: 
+    function authorized() {
+        //console.log(user);
+        var email = user.email;
+        var password = user.defaultPW;
+    
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/users/coming",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                "user": user
+                    },
+                    {
+                        "isAttending": true
+                    },
+                    {
+                        "isAuthorized": true
+                    }),
+
+        headers: {
+            "email": email,
+            "password": password
+        },
+        success: function (response) {
+            alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
+            console.log(response);
+        },
+        error: function (err) {
+            alert('error' + err);
+            console.log(err);
+
+        }
+    });
+}
+
+    function resetPassword(){
+              //console.log(user);
+        var email = user.email;
+        var password = user.defaultPW;
+    
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/users/coming",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                "user": user
+                    },
+                    {
+                        "isAttending": true
+                    },
+                    {
+                        "isAuthorized": true
+                    }),
+
+        headers: {
+            "email": email,
+            "password": password
+        },
+        success: function (response) {
+            alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
+            console.log(response);
+        },
+        error: function (err) {
+            alert('error' + err);
+            console.log(err);
+
+        }
+    });  
+    }
+   
 });
