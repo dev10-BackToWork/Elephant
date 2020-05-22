@@ -10,27 +10,8 @@ $(document).ready(function () {
     
 var user;  
 
-    function checkPasswordChg() {
-        var password = $("#inputPassword").val();
-        var email = $("#inputEmail").val();
-       $.ajax({
-            type: "GET", 
-             url: "http://localhost:8080/api/users/checkChange",
-             headers: {
-                "email": email,
-                "password": password
-            },
-            success: function (response) {
-                console.log('checkpasswordchange' + response);
-            },
-             error: function (err) {
-                console.log(err);
+    //$("#submitLoginButton").click(function (e) {
 
-            }
-        })
-    };
-    
-    
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
         checkPasswordChg();
@@ -70,6 +51,28 @@ var user;
         return false;
     });
 
+
+    function checkPasswordChg() {
+        var password = $("#inputPassword").val();
+        var email = $("#inputEmail").val();
+       $.ajax({
+            type: "GET", 
+             url: "http://localhost:8080/api/users/checkChange",
+             headers: {
+                "email": email,
+                "password": password
+            },
+            success: function (response) {
+                console.log('checkpasswordchange' + response);
+            },
+             error: function (err) {
+                console.log(err);
+
+            }
+        })
+    };
+    
+    
 function clearLogin() {
     $('#inputEmail').click(function (e) {
         $('#loginErr').hide();
@@ -113,7 +116,7 @@ $("#q1No").on("click", function (e) {
 
         },
         error: function (err) {
-            alert('error');
+            //alert('error');
             console.log(err);
         }
     });
@@ -204,7 +207,7 @@ function notAuthorized() {
             data: JSON.stringify({
                 "isAttending": true,
                 "isAuthorized": false,
-                "user": user
+                user: user
             }),
 
         headers: {
@@ -212,11 +215,9 @@ function notAuthorized() {
             "password": password
         },
         success: function (response, status) {
-            alert('success!');
             console.log(response);
         },
         error: function (err) {
-            alert('error');
             console.log(err);
 
         }
@@ -248,7 +249,7 @@ function loadArrivals() {
             //var arrivalAccordianDiv = $("#arrival-accordion");
             var i;
             //var j;
-            var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
+            //var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
             //console.log(hours.length);
 //            $.each(hours, function(j) {
 //                var hourCard = "<div class='.card time-card'>";
@@ -305,26 +306,25 @@ function loadArrivals() {
             $("#arrivalSubmit").on("click", function (e) {
                 e.preventDefault();
                 $("#arrival-container").hide();
-
+                
                 var timeSlotId = $("#timeSelected").val();
-                //console.log(timeSlotId);
-
+                console.log(timeSlotId);
+                console.log(user);
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
                     data: JSON.stringify({
-                        "user": user,
-                        "userId": userId
-                       
+                        user: user
+
                     }),
-                    contentType: "application/json;charset=UTF-8",
+                    //contentType: "application/json;charset=UTF-8",
 
                     headers: {
                         "email": email,
                         "password": password
                     },
 
-                    success: function (response, status) {
+                    success: function (response) {
                         console.log(response);
                         //alert(response.timeSlot.startTime);
                         $('#arrival-success').show();
@@ -443,18 +443,18 @@ function loadDepartures() {
             data: JSON.stringify({
                      "isAttending": true,
                      "isAuthorized": true,
-                     "user": user
+                     user: user
                 }),
         headers: {
             "email": email,
             "password": password
         },
         success: function (response) {
-            alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
+            //alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
             console.log(response);
         },
         error: function (err) {
-            alert('error' + err);
+            //alert('error' + err);
             console.log(err);
         }
     });
