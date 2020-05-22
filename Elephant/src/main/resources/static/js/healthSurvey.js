@@ -95,11 +95,11 @@ $("#q1No").on("click", function (e) {
     $.ajax({
         type: "POST",
         url: "http://localhost:8080/api/users/coming",
+        
         data: JSON.stringify({
-            "user": user
-            },
-            {
-                "isAttending": false
+            "user": user,
+            "isAttending": false
+            //"isAuthorized": true
             }),
         contentType: "application/json;charset=UTF-8",
         headers: {
@@ -202,14 +202,10 @@ function notAuthorized() {
             url: "http://localhost:8080/api/users/coming",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({
+                "isAttending": true,
+                "isAuthorized": false,
                 "user": user
-            },
-                    {
-                        "isAttending": true
-                    },
-                    {
-                        "isAuthorized": false
-                    }),
+            }),
 
         headers: {
             "email": email,
@@ -249,7 +245,7 @@ function loadArrivals() {
             
             $("#arrival-btn-div").empty();
             var arrivalDiv = $("#arrival-btn-div");
-            var arrivalAccordianDiv = $("#arrival-accordion");
+            //var arrivalAccordianDiv = $("#arrival-accordion");
             var i;
             //var j;
             var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
@@ -316,7 +312,11 @@ function loadArrivals() {
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
-                    data: JSON.stringify({"userId": userId}),
+                    data: JSON.stringify({
+                        "user": user,
+                        "userId": userId
+                       
+                    }),
                     contentType: "application/json;charset=UTF-8",
 
                     headers: {
@@ -346,7 +346,6 @@ function loadArrivals() {
 
 
 function loadDepartures() {
-   
     $("#arrival-container").hide();
     $("#departure-container").show();
     $("#arrival-success").show();
@@ -442,15 +441,10 @@ function loadDepartures() {
             url: "http://localhost:8080/api/users/coming",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({
-                "user": user
-                    },
-                    {
-                        "isAttending": true
-                    },
-                    {
-                        "isAuthorized": true
-                    }),
-
+                     "isAttending": true,
+                     "isAuthorized": true,
+                     "user": user
+                }),
         headers: {
             "email": email,
             "password": password
@@ -462,44 +456,9 @@ function loadDepartures() {
         error: function (err) {
             alert('error' + err);
             console.log(err);
-
         }
     });
 }
 
-    function resetPassword(){
-              //console.log(user);
-        var email = user.email;
-        var password = user.defaultPW;
-    
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify({
-                "user": user
-                    },
-                    {
-                        "isAttending": true
-                    },
-                    {
-                        "isAuthorized": true
-                    }),
-
-        headers: {
-            "email": email,
-            "password": password
-        },
-        success: function (response) {
-            alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
-            console.log(response);
-        },
-        error: function (err) {
-            alert('error' + err);
-            console.log(err);
-
-        }
-    });  
-    }
    
 });
