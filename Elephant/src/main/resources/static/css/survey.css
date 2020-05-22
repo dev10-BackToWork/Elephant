@@ -52,13 +52,44 @@ button.survey {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }*/
-.time {
+/*.time {
   margin: 0px 5px 5px 0px;
   padding: 0px;
     
-}
+}*/
 
 button.time {
-  font-size: 12px;
-  height: 2rem;
+  font-size: 15px;
+  height: 5rem;
+  width: 21vw;
+  margin: 3px;
 }
+
+/*#arrival-btn-div {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  .time {
+    flex: 0 0 auto;
+  }
+}
+
+#arrival-btn-div {
+  -webkit-overflow-scrolling: touch;
+}
+
+
+#departure-btn-div {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  .time {
+    flex: 0 0 auto;
+  }
+}
+
+#departure-btn-div {
+  -webkit-overflow-scrolling: touch;
+}*/
