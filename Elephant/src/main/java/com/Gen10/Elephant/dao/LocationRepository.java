@@ -8,4 +8,6 @@ import com.Gen10.Elephant.dto.Location;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Integer>{
 
+	Location getByLocationId(int id);
+
 }

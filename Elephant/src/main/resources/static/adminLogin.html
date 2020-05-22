@@ -108,7 +108,7 @@
                                 <a class="nav-link" id="employeesBtn">Employees</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Time</a>
+                                <a class="nav-link" id="locationBtn">Office</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="logoutBtn">Logout</a>
@@ -179,35 +179,39 @@
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3 class="mt-5">Office Attendance</h3>
+                        <div class="col-md-12 text-center" id="arrivalTableDiv">
+                            <ul class="list-group" id="arrivalErrorMessages"></ul>
+                            <h3 class="mt-5">Arrivals</h3>
                             <div class="col text-center">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="arrivalTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Email</th>
                                             <th>Location</th>
                                             <th>Arrival</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="arrivalRows"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center" id="departureTableDiv">
+                            <ul class="list-group" id="departureErrorMessages"></ul>
+                            <h3 class="mt-5">Departures</h3>
+                            <div class="col text-center">
+                                <table class="table table-striped" id="departureTable" style='table-layout:fixed;'>
+                                    <thead>
+                                        <tr>
+                                            <th width="33%">Name</th>
+                                            <th>Location</th>
                                             <th>Departure</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Jake Doe</td>
-                                            <td>jakedoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td>9:00 AM</td>
-                                            <td>4:00 PM</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jill Doe</td>
-                                            <td>jilldoe@genesis.com</td>
-                                            <td>Minneapolis</td>
-                                            <td>9:15 AM</td>
-                                            <td>4:15 PM</td>
-                                        </tr>
-                                    </tbody>
+                                    <tbody id="departureRows"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -220,7 +224,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center" id="employeeTableDiv">
                         <ul class="list-group" id="errorMessages"></ul>
-                        <h1 class="mt-5">All Employees</h1>
+                        <h3 class="mt-5">All Employees</h3>
                         <div class="col text-center">
                             <table class="table table-striped" id="employeeTable">
                                 <thead>
@@ -308,19 +312,16 @@
                 <div class="row my-2">
                   <div class="col">
                     <label for="location">Location</label>
-                    <select name="location" id="locationAddUser" class="form-control">
+                    <select name="location" id="locationAddUser" class="form-control" placeholder="--Select Location--">
                       <option selected>--Select Location--</option>
-                      <option value="location1">Location 1</option>
-                      <option value="location2">Location 2</option>
                     </select>
                   </div>
 
                   <div class="col">
                     <label for="role">Role</label>
                     <select name="role" id="roleAddUser" class="form-control">
-                      <option selected>--Select Role--</option>
-                      <option value="branchAdmin">Branch Administrator</option>
-                      <option value="user">Branch Employee</option>
+                      <option value="1">Branch Administrator</option>
+                      <option value="2">Branch Employee</option>
                     </select>
                   </div>
                 </div>
@@ -329,8 +330,12 @@
                 </div>
                 <div class="row mt-4">
                   <div class="col">
-                    <button class="btn btn-primary" id="createAcctBtn">
+                    <button class="btn btn-primary" id="createAcctBtn" type="button">
                       Create Account
+                    </button>
+                    <br />
+                    <button class="btn btn-primary mt-3" id="cancelAcctBtn" type="button">
+                        Cancel
                     </button>
                   </div>
                 </div>
@@ -383,6 +388,7 @@
                         <ul class="list-group" id="editErrorMessages"></ul>
                     </div>
                     <h1 class="mt-5">Employee Information</h1>
+                    <input type="hidden" id="edit-userId" />
                     <div class="row">
                         <div class="col-md-6">
                             <label for="firstname">First Name</label>
@@ -405,14 +411,11 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="location">Location</label>
-                            <input type="text" name="location" id="edit-location" class="form-control" placeholder="Location" style="text-align:center;"/>
-<!--                            <label for="location">Location</label>
-                            <select id="edit-location" name="location" class="form-control" >-->
-<!--                                <option value="NC">Charlotte, NC</option>
-                                <option value="TX">Dallas, TX</option>
-                                <option value="WI">Milwaukee, WI</option>
-                                <option value="MN">Minneapolis, MN</option> -->
+                            <!-- <label for="location">Location</label>
+                            <input type="text" name="location" id="edit-location" class="form-control" placeholder="Location" style="text-align:center;"/> -->
+                           <label for="location">Location</label>
+                            <select id="edit-location" name="location" class="form-control" >
+                               
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -622,6 +625,65 @@
                         </div>
                         <div class="col-md-6">
                             <a class="btn btn-info" id="cancelDeleteBtn" style="color: white">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Successful Delete Div -->
+        <div class="container" id="successfulDeleteDiv">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="card-body">
+                        <h5>The user has been successfully deleted.</h5> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Location Info Div -->   
+        <div class="container" id="locationInfoDiv">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="col-md-12 text-center">
+                        <ul class="list-group" id="editLocErrorMessages"></ul>
+                    </div>
+                    <h3 class="mt-5">Location Information</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="cityname">City</label>
+                            <input type="text" name="cityname" id="edit-city-name" class="form-control" placeholder="City" style="text-align:center;" readonly/>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="occupancy">Max Occupancy</label>
+                            <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" placeholder="Max Occupancy" style="text-align:center;"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="increment">Time Increment</label>
+                            <input type="number" min="0" step="1" name="increment" id="edit-increment" class="form-control" placeholder="Time Increment" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="beginning">Beginning Time</label>
+                            <input type="time" name="beginning" id="edit-beginning" class="form-control" placeholder="Beginning Time" style="text-align:center;"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="end">End Time</label>
+                            <input type="time" name="end" id="edit-end" class="form-control" placeholder="End Time" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Please note, any changes made to Beginning and End Times will take effect the following day.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="btn btn-info" id="submitLocationInfoBtn" style="color: white">Submit</a>
                         </div>
                     </div>
                 </div>

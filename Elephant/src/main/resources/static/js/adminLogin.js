@@ -1,4 +1,28 @@
 $(document).ready(function () {
+
+    var adminLocation;
+    var allLocations;
+    var adminId;
+    var adminEmail;
+    var adminPassword;
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/locations',
+        headers: {
+            'email': 'user@user.com',
+            'password': 'password'
+        },
+        success: function (data) {
+            allLocations = data;
+            console.log(allLocations);
+        },
+        error: function (http) {
+            console.log(http);
+            console.log('An error resulted when attempting to retrieve locations.');
+        }
+    });
+
     $("#loginNav").show();
     $("#adminLoginDiv").show();
     $("#loginErr").hide();
@@ -11,6 +35,8 @@ $(document).ready(function () {
     $("#healthSurveyDiv").hide();
     $("#scheduleArrivalDiv").hide();
     $("#deleteEmployeeDiv").hide();
+    $("#successfulDeleteDiv").hide();
+    $("#locationInfoDiv").hide();
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -29,6 +55,10 @@ $(document).ready(function () {
                 if (response.role.roleId === 2) {
                     window.location.replace('/index.html');
                 } else if (response.role.roleId === 1) {
+                    adminLocation = response.location.locationId;
+                    adminId = response.userId;
+                    adminEmail = response.email;
+                    adminPassword = response.defaultPW;
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -36,21 +66,27 @@ $(document).ready(function () {
                     
                     $("#noResErrorMessages").hide();
                     $("#authErrorMessages").hide();
+                    $("#arrivalErrorMessages").hide();
+                    $("#departureErrorMessages").hide();
 
                     $('#noResponseRows').empty();
                     $('#authPendRows').empty();
+                    $('#arrivalRows').empty();
+                    $('#departureRows').empty();
 
                     var noResponseRows = $('#noResponseRows');
                     var authPendRows = $('#authPendRows');
+                    var arrivalRows = $('#arrivalRows');
+                    var departureRows = $('#departureRows');
 
-                     var locationId = 1;
+                    var locationId = adminLocation;
 
                      $.ajax({
                          type: 'GET',
                          url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
                          headers: {
-                             'email': 'user@user.com',
-                             'password': 'password'
+                             'email': adminEmail,
+                             'password': adminPassword
                          },
                          success: function (data) {
                              $.each(data, function (index, user) {
@@ -80,6 +116,8 @@ $(document).ready(function () {
                             $("#healthSurveyDiv").hide();
                             $("#scheduleArrivalDiv").hide();
                             $("#deleteEmployeeDiv").hide();
+                            $("#successfulDeleteDiv").hide();
+                            $("#locationInfoDiv").hide();
                         });
                          },
                          error: function() {
@@ -94,8 +132,8 @@ $(document).ready(function () {
                          type: 'GET',
                          url: 'http://localhost:8080/api/admin/flagged/' + locationId,
                          headers: {
-                             'email': 'user@user.com',
-                             'password': 'password'
+                             'email': adminEmail,
+                             'password': adminPassword
                          },
                          success: function (data) {
                              $.each(data, function (index, user) {
@@ -125,6 +163,8 @@ $(document).ready(function () {
                             $("#healthSurveyDiv").hide();
                             $("#scheduleArrivalDiv").hide();
                             $("#deleteEmployeeDiv").hide();
+                            $("#successfulDeleteDiv").hide();
+                            $("#locationInfoDiv").hide();
                         });
                          },
                          error: function() {
@@ -134,6 +174,68 @@ $(document).ready(function () {
                             .text('An error has occurred.'));
                     }
                      });
+                     
+            $.ajax({
+                 type: 'GET',
+                     url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
+                     headers: {
+                         'email': adminEmail,
+                         'password': adminPassword
+                     },
+                     success: function (data) {
+                         $.each(data, function(index, datum) {
+                        var name = datum.user.firstName + ' ' + datum.user.lastName;
+                        var location = datum.user.location.cityName;
+                        var arrival = datum.timeSlot.startTime;
+                        let str = arrival;
+                        str = str.substring(0, str.length - 3);
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + str + '</td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                         });
+                     },
+                     error: function() {
+                    $('#arrivalErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+            });
+        
+            $.ajax({
+                 type: 'GET',
+                     url: 'http://localhost:8080/api/admin/departures/' + locationId,
+                     headers: {
+                         'email': adminEmail,
+                         'password': adminPassword
+                     },
+                     success: function (data) {
+                        $.each(data, function(index, datum) {
+                        var name = datum.user.firstName + ' ' + datum.user.lastName;
+                        var location = datum.user.location.cityName;
+                        var departure = datum.timeSlot.startTime;
+                        let str = departure;
+                        str = str.substring(0, str.length - 3);
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + str + '</td>';
+                        row += '</tr>';
+                        departureRows.append(row);
+                         });
+                     },
+                     error: function() {
+                    $('#departureErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+            });
 
 
 
@@ -165,6 +267,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").show();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         
     });
@@ -182,24 +286,32 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
+        $("#arrivalErrorMessages").hide();
+        $("#departureErrorMessages").hide();
         
         $('#noResponseRows').empty();
         $('#authPendRows').empty();
+        $('#arrivalRows').empty();
+        $('#departureRows').empty();
 
         var noResponseRows = $('#noResponseRows');
         var authPendRows = $('#authPendRows');
+        var arrivalRows = $('#arrivalRows');
+        var departureRows = $('#departureRows');
 
-         var locationId = 1;
+        var locationId = adminLocation;
 
          $.ajax({
              type: 'GET',
              url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                 'email': adminEmail,
+                 'password': adminPassword
              },
              success: function (data) {
                  $.each(data, function (index, user) {
@@ -229,6 +341,8 @@ $(document).ready(function () {
                 $("#healthSurveyDiv").hide();
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
+                $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
             });
              },
              error: function() {
@@ -243,8 +357,8 @@ $(document).ready(function () {
              type: 'GET',
              url: 'http://localhost:8080/api/admin/flagged/' + locationId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
              },
              success: function (data) {
                  $.each(data, function (index, user) {
@@ -274,6 +388,8 @@ $(document).ready(function () {
                 $("#healthSurveyDiv").hide();
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
+                $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
             });
              },
              error: function() {
@@ -284,6 +400,67 @@ $(document).ready(function () {
         }
          });
 
+        $.ajax({
+         type: 'GET',
+             url: 'http://localhost:8080/api/admin/arrivals/' + locationId,
+             headers: {
+                'email': adminEmail,
+                'password': adminPassword
+             },
+             success: function (data) {
+                 $.each(data, function(index, datum) {
+                var name = datum.user.firstName + ' ' + datum.user.lastName;
+                var location = datum.user.location.cityName;
+                var arrival = datum.timeSlot.startTime;
+                let str = arrival;
+                str = str.substring(0, str.length - 3);
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td>' + str + '</td>';
+                row += '</tr>';
+                arrivalRows.append(row);
+                 });
+             },
+             error: function() {
+            $('#arrivalErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+        });
+        
+         $.ajax({
+         type: 'GET',
+             url: 'http://localhost:8080/api/admin/departures/' + locationId,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function (data) {
+                $.each(data, function(index, datum) {
+                var name = datum.user.firstName + ' ' + datum.user.lastName;
+                var location = datum.user.location.cityName;
+                var departure = datum.timeSlot.startTime;
+                let str = departure;
+                str = str.substring(0, str.length - 3);
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '<td>' + str + '</td>';
+                row += '</tr>';
+                departureRows.append(row);
+                 });
+             },
+             error: function() {
+            $('#departureErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+        });
 
     });
     
@@ -300,6 +477,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -315,6 +494,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -323,15 +504,14 @@ $(document).ready(function () {
             var contentRows = $('#contentRows');
             var password = $("#inputPassword").val();
             var email = $("#inputEmail").val();
-            var locationId = 1;
+            var locationId = adminLocation;
 
             $.ajax({
                 type: "GET",
-        //Need to change url so that it takes the admins location as the location id
                 url: "http://localhost:8080/api/admin/users/" + locationId,
                 headers: {
-                    "email": email,
-                    "password": password
+                    'email': adminEmail,
+                    'password': adminPassword
                 },
                 success: function (data, status) {
                     $.each(data, function (index, user) {
@@ -344,56 +524,12 @@ $(document).ready(function () {
                         row += '<td>' + name + '</td>';
                         row += '<td>' + email + '</td>';
                         row += '<td>' + location + '</td>';
-                        row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
+                        row += '<td><button onclick="editSelectedUser(' + id + ')" btn btn-info">Edit</button></td>';
                         row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
                         
                         row += '</tr>';
                         contentRows.append(row);
                     });
-                $('.editAllEmployeeBtn').click(function (event) {
-                    $("#loginNav").hide();
-                    $("#adminLoginDiv").hide();
-                    $("#loginErr").hide();
-                    $("#navBarDiv").show();
-                    $("#dashboardDiv").hide();
-                    $("#allEmployeesDiv").hide();
-                    $("#createAccountDiv").hide();
-                    $("#createLocationDiv").hide();
-                    $("#employeeInfoDiv").show();
-                    $("#healthSurveyDiv").hide();
-                    $("#scheduleArrivalDiv").hide();
-                    $("#deleteEmployeeDiv").hide();
-
-                    var userId = 7;
-
-                    $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/api/admin/user/' + userId,
-                    headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
-                     },
-                    success: function(data, status) {
-                          $('#edit-first-name').val(data.firstName);
-                          $('#edit-last-name').val(data.lastName);
-                          $('#edit-email').val(data.email);
-                          $('#edit-password').val(data.passwords);
-                          $('#edit-location').val(data.location.cityName);
-                          $('#edit-role').val(data.role.name);
-                      },
-                      error: function() {
-                        $('#editErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.  Please try again later.'));
-                      }
-                    });
-
-
-
-
-
-                });
 
               $('.deleteAllEmployeeBtn').click(function (event) {
                 $("#loginNav").hide();
@@ -408,6 +544,8 @@ $(document).ready(function () {
                 $("#healthSurveyDiv").hide();
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").show();
+                $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
                 var userId = 7;
 
@@ -415,8 +553,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#delete-first-name').val(data.firstName);
@@ -462,6 +600,34 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
+
+        $('#locationAddUser').empty();
+
+        $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/api/admin/locations',
+                    headers: {
+                        'email': adminEmail,
+                         'password': adminPassword
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        console.log('The request for locations was successful.');
+                        $.each(data, function(index, datum) {
+                            $('#locationAddUser')
+                                .append($("<option></option>")
+                                    .attr("value", index + 1)
+                                    .text(datum.cityName));
+                        });
+                    },
+                    error: function (http) {
+                        console.log(http);
+                        console.log('An error resulted when attempting to retrieve locations.');
+                    }
+                });
+
     });
     
     $('#addLocationBtn').click(function (event) {
@@ -477,6 +643,52 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
+    });
+    
+    $('#locationBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").show();
+        
+        $("#editLocErrorMessages").hide();
+
+        var userId = adminId;
+
+        $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/user/' + userId,
+        headers: {
+             'email': adminEmail,
+             'password': adminPassword
+         },
+        success: function(data, status) {
+              $('#edit-city-name').val(data.location.cityName);
+              $('#edit-occupancy').val(data.location.maxOccupancy);
+              $('#edit-increment').val(data.location.timeIncrement);
+              $('#edit-beginning').val(data.location.beginningTime);
+              $('#edit-end').val(data.location.endTime);
+          },
+          error: function() {
+            $('#editLocErrorMessages')
+               .append($('<li>')
+               .attr({class: 'list-group-item list-group-item-danger'})
+               .text('An error has occurred.  Please try again later.'));
+          }
+        });
+
     });
     
     $('#logoutBtn').click(function (event) {
@@ -492,6 +704,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -507,6 +721,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -515,11 +731,71 @@ $(document).ready(function () {
         var contentRows = $('#contentRows');
         var password = $("#inputPassword").val();
         var email = $("#inputEmail").val();
+        var locationId = $('#locationAddUser').val();
+
+        console.log(locationId);
+
+        var firstNameField = $('#firstNameAddUser').val();
+        var lastNameField = $('#lastNameAddUser').val();
+        var emailField = $('#emailAddUser').val();
+        var locationIdField = $('#locationAddUser').val();
+        var cityNameField = allLocations[locationId - 1].cityName;
+        var timeIncrementField = allLocations[locationId - 1].timeIncrement;
+        var maxOccupancyField = allLocations[locationId - 1].maxOccupancy;
+        var beginningTimeField = allLocations[locationId - 1].beginningTime;
+        var endTimeField = allLocations[locationId - 1].endTime;
+        var roleIdField = $('#roleAddUser').val();
+        var roleNameField;
+        
+        if(roleIdField == 1) {
+            roleNameField = "ROLE_ADMIN";
+        } else {
+            roleNameField = "ROLE_USER";
+        };
+
+        var userObj = {
+	        "firstName": firstNameField,
+	        "lastName": lastNameField,
+	        "email": emailField,
+            "location": {
+                "locationId": locationIdField,
+                "cityName": cityNameField,
+                "timeIncrement": timeIncrementField,
+                "maxOccupancy": maxOccupancyField,
+                "beginningTime": beginningTimeField,
+                "endTime": endTimeField
+        },
+            "role": {
+                "roleId": roleIdField,
+                "name": roleNameField
+            }
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/newUser',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(userObj),
+            success: function (data) {
+                console.log(data);
+                console.log('The request to generate ' + data.firstName + ' ' + data.lastName + ' was successful.');
+            },
+            error: function (http) {
+                console.log(http);
+                console.log('An error resulted when attempting to create a new user.');
+            }
+        });
+
+        setTimeout(function() {}, 500);
 
         $.ajax({
             type: "GET",
     //Need to change url so that it takes the admins location as the location id
-            url: "http://localhost:8080/api/admin/users/1",
+            url: "http://localhost:8080/api/admin/users/" + adminLocation,
             headers: {
                 "email": email,
                 "password": password
@@ -548,9 +824,10 @@ $(document).ready(function () {
             }
 
         });
+
     });
-    
-    $('#submitEmployeeInfoBtn').click(function (event) {
+
+    $('#cancelAcctBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -563,6 +840,91 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
+        
+        $("#allEmployeeErr").hide();
+    })
+    
+    $('#submitEmployeeInfoBtn').click(function (event) {
+        
+        var userIdField = $('#edit-userId').val();
+        var firstNameField = $('#edit-first-name').val();
+        var lastNameField = $('#edit-last-name').val();
+        var emailField = $('#edit-email').val();
+        // var defaultPWField = 'password';
+        var passwordsField = $('#edit-password').val();
+        var locationIdField = $('#edit-location').val();
+        var cityNameField = allLocations[locationIdField - 1].cityName;
+        var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
+        var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
+        var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
+        var endTimeField = allLocations[locationIdField - 1].endTime;
+        var roleNameField = $('#edit-role').val();
+        var roleIdField;
+
+        if(roleNameField == "ROLE_ADMIN") {
+            roleIdField = 1;
+        } else {
+            roleIdField = 2;
+        }
+        
+
+        var userObj = {
+            "userId": userIdField,
+	        "firstName": firstNameField,
+	        "lastName": lastNameField,
+	        "email": emailField,
+            // "defaultPW": defaultPWField,
+            "passwords": passwordsField,
+            "location": {
+                "locationId": locationIdField,
+                "cityName": cityNameField,
+                "timeIncrement": timeIncrementField,
+                "maxOccupancy": maxOccupancyField,
+                "beginningTime": beginningTimeField,
+                "endTime": endTimeField
+            },
+            "role": {
+                "roleId": roleIdField,
+                "name": roleNameField
+            }
+        }
+
+        console.log(userObj);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/editUser',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(userObj),
+            success: function (data) {
+                console.log(data);
+                console.log('The user information associated with ' + data.firstName + ' ' + data.lastName + ' was updated.');
+            },
+            error: function (http) {
+                console.log('An error resulted when attempting to edit the specified user.')
+            }
+        });
+        
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#scheduleArrivalDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#deleteEmployeeInfoBtn').click(function (event) {
@@ -578,6 +940,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").show();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('#createLocationSubmitBtn').click(function (event) {
@@ -593,6 +957,8 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
     
     $('.deleteEmployeeBtn').click(function (event) {
@@ -605,8 +971,8 @@ $(document).ready(function () {
              type: 'DELETE',
              url: 'http://localhost:8080/api/admin/user/' + userId,
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                 'email': adminEmail,
+                 'password': adminPassword
              },
              success: function (data) {
                  console.log(data);
@@ -623,6 +989,8 @@ $(document).ready(function () {
             $("#healthSurveyDiv").hide();
             $("#scheduleArrivalDiv").hide();
             $("#deleteEmployeeDiv").hide();
+            $("#successfulDeleteDiv").hide();
+            $("#locationInfoDiv").hide();
 
             $("#allEmployeeErr").hide();
 
@@ -631,7 +999,7 @@ $(document).ready(function () {
             var contentRows = $('#contentRows');
             var password = $("#inputPassword").val();
             var email = $("#inputEmail").val();
-            var locationId = 1;
+            var locationId = adminLocation;
 
             $.ajax({
                 type: "GET",
@@ -670,6 +1038,8 @@ $(document).ready(function () {
                     $("#healthSurveyDiv").hide();
                     $("#scheduleArrivalDiv").hide();
                     $("#deleteEmployeeDiv").hide();
+                    $("#successfulDeleteDiv").hide();
+                    $("#locationInfoDiv").hide();
 
                     var userId = 7;
 
@@ -677,8 +1047,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                        'email': adminEmail,
+                        'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#edit-first-name').val(data.firstName);
@@ -709,6 +1079,8 @@ $(document).ready(function () {
                 $("#healthSurveyDiv").hide();
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").hide();
+                $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
 
                 });
@@ -726,6 +1098,8 @@ $(document).ready(function () {
                 $("#healthSurveyDiv").hide();
                 $("#scheduleArrivalDiv").hide();
                 $("#deleteEmployeeDiv").show();
+                $("#successfulDeleteDiv").hide();
+                $("#locationInfoDiv").hide();
 
                 var userId = 7;
 
@@ -733,8 +1107,8 @@ $(document).ready(function () {
                     type: 'GET',
                     url: 'http://localhost:8080/api/admin/user/' + userId,
                     headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
+                         'email': adminEmail,
+                         'password': adminPassword
                      },
                     success: function(data, status) {
                           $('#delete-first-name').val(data.firstName);
@@ -792,9 +1166,292 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#locationInfoDiv").hide();
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
+
+    function editSelectedUser(id) {
+        $("#loginNav").hide();
+                    $("#adminLoginDiv").hide();
+                    $("#loginErr").hide();
+                    $("#navBarDiv").show();
+                    $("#dashboardDiv").hide();
+                    $("#allEmployeesDiv").hide();
+                    $("#createAccountDiv").hide();
+                    $("#createLocationDiv").hide();
+                    $("#employeeInfoDiv").show();
+                    $("#healthSurveyDiv").hide();
+                    $("#scheduleArrivalDiv").hide();
+                    $("#deleteEmployeeDiv").hide();
+                    $("#successfulDeleteDiv").hide();
+
+                    var userId = id;
+
+                    $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/api/admin/user/' + userId,
+                    headers: {
+                         'email': 'user@user.com',
+                         'password': 'password'
+                     },
+                    success: function(data, status) {
+                          $('#edit-userId').val(id);
+                          $('#edit-first-name').val(data.firstName);
+                          $('#edit-last-name').val(data.lastName);
+                          $('#edit-email').val(data.email);
+                          $('#edit-password').val(data.passwords);
+                          $('#edit-role').val(data.role.name);
+
+                          populateEditLocationSelect(data.location.cityName);
+
+                      },
+                      error: function() {
+                        $('#editErrorMessages')
+                           .append($('<li>')
+                           .attr({class: 'list-group-item list-group-item-danger'})
+                           .text('An error has occurred.  Please try again later.'));
+                      }
+                    });
+                    
+    }
+
+    function populateEditLocationSelect(currentCityName) {
+
+        $('#edit-location').empty();
+
+        var currentCityIndex;
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/api/admin/locations',
+            headers: {
+                'email': 'user@user.com',
+                'password': 'password'
+            },
+            success: function (data) {
+                $.each(data, function(index, datum) {
+                    $('#edit-location')
+                        .append($("<option></option>")
+                            .attr("value", index + 1)
+                            .text(datum.cityName));
+
+                    if(datum.cityName == currentCityName) {
+                        currentCityIndex = index + 1;
+                    }
+                });
+
+                $('#edit-location').val(currentCityIndex);
+            },
+            error: function (http) {
+                console.log(http);
+                console.log('An error resulted when attempting to retrieve locations.');
+            }
+        });
+
+    }
+
+
+
+    function deleteUser(userId) {  
+        let isDelete = confirm("This user will be permanently deleted.");
+        
+    if (isDelete === true) {
+        $.ajax({
+             type: 'DELETE',
+             url: 'http://localhost:8080/api/admin/user/' + userId,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 console.log(data);
+                 
+            $("#loginNav").hide();
+            $("#adminLoginDiv").hide();
+            $("#loginErr").hide();
+            $("#navBarDiv").show();
+            $("#dashboardDiv").hide();
+            $("#allEmployeesDiv").hide();
+            $("#createAccountDiv").hide();
+            $("#createLocationDiv").hide();
+            $("#employeeInfoDiv").hide();
+            $("#healthSurveyDiv").hide();
+            $("#scheduleArrivalDiv").hide();
+            $("#deleteEmployeeDiv").hide();
+            $("#successfulDeleteDiv").show();
+            $("#locationInfoDiv").hide();
+
+//            $("#allEmployeeErr").hide();
+//
+//            $('#contentRows').empty();
+//
+//            var contentRows = $('#contentRows');
+//            var password = $("#inputPassword").val();
+//            var email = $("#inputEmail").val();
+//            var locationId = adminLocation;
+//
+//            $.ajax({
+//                type: "GET",
+//        //Need to change url so that it takes the admins location as the location id
+//                url: "http://localhost:8080/api/admin/users/" + locationId,
+//                headers: {
+//                    "email": email,
+//                    "password": password
+//                },
+//                success: function (data, status) {
+//                    $.each(data, function (index, user) {
+//                        var name = user.firstName + ' ' + user.lastName;
+//                        var email = user.email;
+//                        var location = user.location.cityName;
+//                        var id = user.userId;
+//
+//                        var row = '<tr>';
+//                        row += '<td>' + name + '</td>';
+//                        row += '<td>' + email + '</td>';
+//                        row += '<td>' + location + '</td>';
+//                        row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
+//                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
+//                        row += '</tr>';
+//                        contentRows.append(row);
+//                    });
+//                $('.editAllEmployeeBtn').click(function (event) {
+//                    $("#loginNav").hide();
+//                    $("#adminLoginDiv").hide();
+//                    $("#loginErr").hide();
+//                    $("#navBarDiv").show();
+//                    $("#dashboardDiv").hide();
+//                    $("#allEmployeesDiv").hide();
+//                    $("#createAccountDiv").hide();
+//                    $("#createLocationDiv").hide();
+//                    $("#employeeInfoDiv").show();
+//                    $("#healthSurveyDiv").hide();
+//                    $("#scheduleArrivalDiv").hide();
+//                    $("#deleteEmployeeDiv").hide();
+//
+//                    var userId = 7;
+//
+//                    $.ajax({
+//                    type: 'GET',
+//                    url: 'http://localhost:8080/api/admin/user/' + userId,
+//                    headers: {
+//                         'email': 'user@user.com',
+//                         'password': 'password'
+//                     },
+//                    success: function(data, status) {
+//                          $('#edit-first-name').val(data.firstName);
+//                          $('#edit-last-name').val(data.lastName);
+//                          $('#edit-email').val(data.email);
+//                          $('#edit-password').val(data.passwords);
+//                          $('#edit-location').val(data.location.cityName);
+//                          $('#edit-role').val(data.role.name);
+//                      },
+//                      error: function() {
+//                        $('#editErrorMessages')
+//                           .append($('<li>')
+//                           .attr({class: 'list-group-item list-group-item-danger'})
+//                           .text('An error has occurred.  Please try again later.'));
+//                      }
+//                    });
+//
+//
+//                 $("#loginNav").hide();
+//                $("#adminLoginDiv").hide();
+//                $("#loginErr").hide();
+//                $("#navBarDiv").show();
+//                $("#dashboardDiv").hide();
+//                $("#allEmployeesDiv").show();
+//                $("#createAccountDiv").hide();
+//                $("#createLocationDiv").hide();
+//                $("#employeeInfoDiv").hide();
+//                $("#healthSurveyDiv").hide();
+//                $("#scheduleArrivalDiv").hide();
+//                $("#deleteEmployeeDiv").hide();
+//
+//
+//                });
+//
+//              $('.deleteAllEmployeeBtn').click(function (event) {
+//                $("#loginNav").hide();
+//                $("#adminLoginDiv").hide();
+//                $("#loginErr").hide();
+//                $("#navBarDiv").show();
+//                $("#dashboardDiv").hide();
+//                $("#allEmployeesDiv").hide();
+//                $("#createAccountDiv").hide();
+//                $("#createLocationDiv").hide();
+//                $("#employeeInfoDiv").hide();
+//                $("#healthSurveyDiv").hide();
+//                $("#scheduleArrivalDiv").hide();
+//                $("#deleteEmployeeDiv").show();
+//
+//                var userId = 7;
+//
+//                    $.ajax({
+//                    type: 'GET',
+//                    url: 'http://localhost:8080/api/admin/user/' + userId,
+//                    headers: {
+//                         'email': 'user@user.com',
+//                         'password': 'password'
+//                     },
+//                    success: function(data, status) {
+//                          $('#delete-first-name').val(data.firstName);
+//                          $('#delete-last-name').val(data.lastName);
+//                          $('#delete-email').val(data.email);
+//                          $('#delete-password').val(data.passwords);
+//                          $('#delete-location').val(data.location.cityName);
+//                          $('#delete-role').val(data.role.name);
+//                      },
+//                      error: function() {
+//                        $('#deleteErrorMessages')
+//                           .append($('<li>')
+//                           .attr({class: 'list-group-item list-group-item-danger'})
+//                           .text('An error has occurred.'));
+//                      }
+//                    });
+//
+//
+//            });
+//
+//                },
+//                error: function() {
+//                    $('#errorMessages')
+//                        .append($('<li>')
+//                        .attr({class: 'list-group-item list-group-item-danger'})
+//                        .text('An error has occurred.'));
+//                }
+//
+//            });     
+
+                     },
+                     error: function() {
+                        $('#deleteErrorMessages')
+                           .append($('<li>')
+                           .attr({class: 'list-group-item list-group-item-danger'})
+                           .text('An error has occurred.'));
+                      }
+                 });
+             }
+}
 
 function clearLogin() {
     $('#inputEmail').click(function (e) {
@@ -910,184 +1567,7 @@ $("#surveySubmit").on("click", function (e) {
     });
  
     
-    function deleteUser(userId) {  
-        let isDelete = confirm("This user will be permanently deleted.");
-        
-    if (isDelete == true) {
-        $.ajax({
-             type: 'DELETE',
-             url: 'http://localhost:8080/api/admin/user/' + userId,
-             headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
-             },
-             success: function (data) {
-                 console.log(data);
-                 
-            $("#loginNav").hide();
-            $("#adminLoginDiv").hide();
-            $("#loginErr").hide();
-            $("#navBarDiv").show();
-            $("#dashboardDiv").hide();
-            $("#allEmployeesDiv").show();
-            $("#createAccountDiv").hide();
-            $("#createLocationDiv").hide();
-            $("#employeeInfoDiv").hide();
-            $("#healthSurveyDiv").hide();
-            $("#scheduleArrivalDiv").hide();
-            $("#deleteEmployeeDiv").hide();
 
-            $("#allEmployeeErr").hide();
-
-            $('#contentRows').empty();
-
-            var contentRows = $('#contentRows');
-            var password = $("#inputPassword").val();
-            var email = $("#inputEmail").val();
-            var locationId = 1;
-
-            $.ajax({
-                type: "GET",
-        //Need to change url so that it takes the admins location as the location id
-                url: "http://localhost:8080/api/admin/users/" + locationId,
-                headers: {
-                    "email": email,
-                    "password": password
-                },
-                success: function (data, status) {
-                    $.each(data, function (index, user) {
-                        var name = user.firstName + ' ' + user.lastName;
-                        var email = user.email;
-                        var location = user.location.cityName;
-                        var id = user.userId;
-
-                        var row = '<tr>';
-                        row += '<td>' + name + '</td>';
-                        row += '<td>' + email + '</td>';
-                        row += '<td>' + location + '</td>';
-                        row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
-                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
-                        row += '</tr>';
-                        contentRows.append(row);
-                    });
-                $('.editAllEmployeeBtn').click(function (event) {
-                    $("#loginNav").hide();
-                    $("#adminLoginDiv").hide();
-                    $("#loginErr").hide();
-                    $("#navBarDiv").show();
-                    $("#dashboardDiv").hide();
-                    $("#allEmployeesDiv").hide();
-                    $("#createAccountDiv").hide();
-                    $("#createLocationDiv").hide();
-                    $("#employeeInfoDiv").show();
-                    $("#healthSurveyDiv").hide();
-                    $("#scheduleArrivalDiv").hide();
-                    $("#deleteEmployeeDiv").hide();
-
-                    var userId = 7;
-
-                    $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/api/admin/user/' + userId,
-                    headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
-                     },
-                    success: function(data, status) {
-                          $('#edit-first-name').val(data.firstName);
-                          $('#edit-last-name').val(data.lastName);
-                          $('#edit-email').val(data.email);
-                          $('#edit-password').val(data.passwords);
-                          $('#edit-location').val(data.location.cityName);
-                          $('#edit-role').val(data.role.name);
-                      },
-                      error: function() {
-                        $('#editErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.  Please try again later.'));
-                      }
-                    });
-
-
-                 $("#loginNav").hide();
-                $("#adminLoginDiv").hide();
-                $("#loginErr").hide();
-                $("#navBarDiv").show();
-                $("#dashboardDiv").hide();
-                $("#allEmployeesDiv").show();
-                $("#createAccountDiv").hide();
-                $("#createLocationDiv").hide();
-                $("#employeeInfoDiv").hide();
-                $("#healthSurveyDiv").hide();
-                $("#scheduleArrivalDiv").hide();
-                $("#deleteEmployeeDiv").hide();
-
-
-                });
-
-              $('.deleteAllEmployeeBtn').click(function (event) {
-                $("#loginNav").hide();
-                $("#adminLoginDiv").hide();
-                $("#loginErr").hide();
-                $("#navBarDiv").show();
-                $("#dashboardDiv").hide();
-                $("#allEmployeesDiv").hide();
-                $("#createAccountDiv").hide();
-                $("#createLocationDiv").hide();
-                $("#employeeInfoDiv").hide();
-                $("#healthSurveyDiv").hide();
-                $("#scheduleArrivalDiv").hide();
-                $("#deleteEmployeeDiv").show();
-
-                var userId = 7;
-
-                    $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/api/admin/user/' + userId,
-                    headers: {
-                         'email': 'user@user.com',
-                         'password': 'password'
-                     },
-                    success: function(data, status) {
-                          $('#delete-first-name').val(data.firstName);
-                          $('#delete-last-name').val(data.lastName);
-                          $('#delete-email').val(data.email);
-                          $('#delete-password').val(data.passwords);
-                          $('#delete-location').val(data.location.cityName);
-                          $('#delete-role').val(data.role.name);
-                      },
-                      error: function() {
-                        $('#deleteErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.'));
-                      }
-                    });
-
-
-            });
-
-                },
-                error: function() {
-                    $('#errorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
-
-            });     
-
-                     },
-                     error: function() {
-                        $('#deleteErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.'));
-                      }
-                 });
-             }
-}
 
 
     // // ********** Preparing Ajax calls Start
