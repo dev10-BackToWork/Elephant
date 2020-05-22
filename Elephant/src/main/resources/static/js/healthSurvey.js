@@ -312,13 +312,10 @@ function loadArrivals() {
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
-                    data: JSON.stringify({
-                        "user": user,
-                        "userId": userId
-                       
-                    }),
                     contentType: "application/json;charset=UTF-8",
-
+                    data: JSON.stringify(
+                        user                       
+                    ),
                     headers: {
                         "email": email,
                         "password": password
