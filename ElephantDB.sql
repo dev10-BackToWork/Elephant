@@ -9,7 +9,7 @@ CREATE TABLE `role` (
 
 CREATE TABLE location (
 	locationId int primary key auto_increment,
-    cityName varchar(25) not null,
+    cityName varchar(50) not null,
     timeIncrement int not null,
     maxOccupancy int not null,
     beginningTime time not null,
@@ -82,18 +82,24 @@ CREATE TABLE attendance (
 );
 
 INSERT INTO location (cityName, timeIncrement, maxOccupancy, beginningTime, endTime) VALUES 
-	("Minneapolis", 5, 20, "07:00:00", "19:00:00"),
-	("Austin", 7, 15, "06:00:00", "18:00:00"),
-    ("Dallas", 5, 20, "07:00:00", "19:00:00"),
-    ("Des Moines", 5, 20, "07:00:00", "19:00:00"),
-    ("Georgia", 5, 20, "07:00:00", "19:00:00"),
-    ("Kansas", 5, 20, "07:00:00", "19:00:00"),
-    ("Michigan", 5, 20, "07:00:00", "19:00:00"),
-    ("Milwaukee", 5, 20, "07:00:00", "19:00:00"),
-    ("New York", 5, 20, "07:00:00", "19:00:00"),
-    ("North Carolina", 5, 20, "07:00:00", "19:00:00"),
-    ("Ohio", 5, 20, "07:00:00", "19:00:00"),
-    ("Toronto", 5, 20, "07:00:00", "19:00:00");
+	("Minneapolis", 15, 20, "07:00:00", "19:00:00"),
+	("Austin", 15, 15, "07:00:00", "19:00:00"),
+    ("Dallas", 15, 20, "07:00:00", "19:00:00"),
+    ("Des Moines", 15, 20, "07:00:00", "19:00:00"),
+    ("Georgia", 15, 20, "07:00:00", "19:00:00"),
+    ("Kansas", 15, 20, "07:00:00", "19:00:00"),
+    ("Michigan", 15, 20, "07:00:00", "19:00:00"),
+    ("Milwaukee", 15, 20, "07:00:00", "19:00:00"),
+    ("New York", 15, 20, "07:00:00", "19:00:00"),
+    ("North Carolina", 15, 20, "07:00:00", "19:00:00"),
+    ("Ohio", 15, 20, "07:00:00", "19:00:00"),
+    ("Atlanta Delivery Center", 15, 20, "07:00:00", "19:00:00"),
+    ("Charlotte Delivery Center", 15, 20, "07:00:00", "19:00:00"),
+    ("Kansas City Delivery Center", 15, 20, "07:00:00", "19:00:00"),
+    ("Orlando Delivery Center", 15, 20, "07:00:00", "19:00:00"),
+    ("Plano Delivery Center", 15, 20, "07:00:00", "19:00:00"),
+    ("Troy Delivery Center", 15, 20, "07:00:00", "19:00:00");
+--     ("Toronto", 15, 20, "07:00:00", "19:00:00");
 
 INSERT INTO `role` (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
@@ -262,7 +268,19 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Katlin","Potochnik","KPotochnik@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,2),
 	("Matthew","Fleshman","MFleshman@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,2),
 	("Rod","Mullins","RMullins@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,2),
-	("Caron","Katz","Ckatz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,1),
+-- 	("Caron","Katz","Ckatz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,1),
+-- 	("Shindy","Pagba","SPagba@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Christina","Steer","CSteer@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Frank","Miceli","FMiceli@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Janelle","Lynch","JLynch@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Susan","Avery","SAvery@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Terry","Huegel","THuegel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Jason","Sullivan","JSullivan@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Soaham","Joshi","SJoshi@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Mitch","Fass ","MFass@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,1),
+-- 	("Avi","Alashaian","AAlashaian@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Dave","Fradin","DFradin@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
+-- 	("Gilbert","Nettleton","GNettleton@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",,2),
     ("Keely", "Brennan", "keely@keely.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     ("Ethan", "Bettenga", "ethan@ethan.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
     ("Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 2),
@@ -424,30 +442,3 @@ END$$
     CALL genDallasTimeSlots();
     Call genDesMoinesTimeSlots();
 -- END
-
--- For testing
-INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
-	(1, "2020-05-12", 3, 0),
-    (1, "2020-05-12", 2, 1),
-    (1, "2020-05-12", 4, 1),
-    (1, "2020-05-12", 5, 0),
-    (1, "2020-05-18", 3, 0),
-    (1, "2020-05-18", 2, 1),
-    (1, "2020-05-18", 4, 0),
-    (1, "2020-05-18", 5, 1),
-    (1, "2020-05-18", 6, 1),
-    (1, "2020-05-18", 7, 1);
-    
-INSERT INTO departure (departureDate, timeSlotId, userId) VALUE
-	("2020-05-17", 102, 3),
-    ("2020-05-18", 3, 4),
-    ("2020-05-18", 150, 8),
-    ("2020-05-18", 100, 7),
-    ("2020-05-18", 95, 2);
-
-INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUE
-	("2020-05-17", 51, 3),
-    ("2020-05-18", 52, 4),
-    ("2020-05-18", 200, 8),
-    ("2020-05-18", 53, 7),
-    ("2020-05-18", 54, 2);
