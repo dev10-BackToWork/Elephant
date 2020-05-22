@@ -168,7 +168,6 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Location</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="noResponseRows"></tbody>
@@ -245,7 +244,7 @@
         
         <!-- Create Account Div -->
         <div class="container" id="createAccountDiv">
-       
+          <ul class="list-group" id="createAccountErrorMessages"></ul>
           <h1 class="heading">Create Account</h1>
 
       <div class="row">
@@ -419,12 +418,12 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="role">Role</label>
-                            <input type="text" name="role" id="edit-role" class="form-control" placeholder="Role" style="text-align:center;"/>
-<!--                            <label for="role">Role</label>
-                            <select id="edit-role" name="role" class="form-control" >-->
-<!--                                <option value="admin">Branch Admin</option>
-                                <option value="employee">Employee</option>-->
+                            <!-- <label for="role">Role</label>
+                            <input type="text" name="role" id="edit-role" class="form-control" placeholder="Role" style="text-align:center;"/> -->
+                           <label for="role">Role</label>
+                            <select id="edit-role" name="role" class="form-control" >
+                               <option value="admin">Branch Admin</option>
+                                <option value="employee">Employee</option>
                             </select>
                         </div>
                     </div>
