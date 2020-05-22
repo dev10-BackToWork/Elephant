@@ -1,5 +1,7 @@
 package com.Gen10.Elephant.dto;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -32,6 +34,22 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof Role)) {
+			return false;
+		}
+		Role role = (Role) o;
+		return roleId == role.roleId && Objects.equals(name, role.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(roleId, name);
 	}
 
 }

@@ -87,6 +87,7 @@ public class UserControllerTest {
         user.setPasswords("password");
         userCon.editUser(user, userEmail, "newPassword");
     }
+    
     @Test
     public void testComingNotComing() {
         User user = new User();

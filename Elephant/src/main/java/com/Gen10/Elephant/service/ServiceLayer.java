@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.ArrivalRepository;
@@ -160,9 +159,9 @@ public class ServiceLayer {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> currentAttendance = new ArrayList<>();
         java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
+        LocalDate date = LocalDate.now();
         for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().toString().contains(currentDateSQL.toString())) {
+            if (attendance.getAttendanceDate().equals(LocalDate.now())) {
                 currentAttendance.add(attendance);
             }
         }
@@ -388,8 +387,9 @@ public class ServiceLayer {
 
         for (User users : usersByLocation) {
             for (Attendance attendance : currentAttendance) {
-                if (attendance.getUser() == users && attendance.getIsAttending() && attendance.getIsAuthorized())
+                if (attendance.getUser().equals(users) && attendance.getIsAttending() && attendance.getIsAuthorized()) {
                     usersByLocationInAttendance.add(users);
+                }
             }
         }
 
@@ -399,44 +399,50 @@ public class ServiceLayer {
     // Edited Nate Wood 05/13/2020
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-        List<User> usersInAttendance = new ArrayList<>();
+        // List<Attendance> currentAttendance = findAttendanceByCurrentDate();
+        // List<User> usersInAttendance = new ArrayList<>();
+        // Location location = locationRepo.findById(id).orElse(null);
+        // List<User> usersByLocation = getAllUsersByLocation(location);
+        // List<User> usersByLocationNotAnswered = usersByLocation;
+        // List<User> currentInactiveUsersByLocation = new ArrayList<>();
+        // User defaultUser = usersRepo.findByEmail("user@user.com");
+
+        // for (Attendance attendance : currentAttendance) {
+        //     usersInAttendance.add(attendance.getUser());
+        // }
+
+        // for (User user : usersByLocation) {
+        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
+        //         usersByLocationNotAnswered.remove(user);
+        //     }
+        //     if (!usersInAttendance.contains(user))
+        //         currentInactiveUsersByLocation.add(user);
+        // }
+
+        // if (currentInactiveUsersByLocation.contains(defaultUser))
+        //     currentInactiveUsersByLocation.remove(defaultUser);
+
+        // return currentInactiveUsersByLocation;
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = usersByLocation;
-        List<User> currentInactiveUsersByLocation = new ArrayList<>();
-        User defaultUser = usersRepo.findByEmail("user@user.com");
-
-        for (Attendance attendance : currentAttendance) {
-            usersInAttendance.add(attendance.getUser());
-        }
+        List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
                 usersByLocationNotAnswered.remove(user);
             }
-            if (!usersInAttendance.contains(user))
-                currentInactiveUsersByLocation.add(user);
         }
 
-        if (currentInactiveUsersByLocation.contains(defaultUser))
-            currentInactiveUsersByLocation.remove(defaultUser);
-
-        return currentInactiveUsersByLocation;
+        return usersByLocationNotAnswered;
     }
 
     public List<User> getFlaggedUsers(int id) {
-        Location location = locationRepo.findById(id).orElse(null);
-        // List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationFlagged = new ArrayList<>();
-        // for (User user : usersByLocation) {
-        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null && attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()).getIsAuthorized() == false) {
-        //         usersByLocationFlagged.add(user);
-        //     }
         List<Attendance> currentAttendance = findAttendanceByCurrentDate();
             
         for (Attendance attendance : currentAttendance) {
-            if (attendance.getIsAuthorized() == false) {
+            if (attendance.getIsAuthorized() == false && attendance.getUser().getLocation().getLocationId() == id) {
                 usersByLocationFlagged.add(attendance.getUser());
             }
         }
@@ -598,4 +604,15 @@ public class ServiceLayer {
 
         return usersRepo.save(existingUser);
     }
+
+	public Location getLocationById(int id) {
+		return locationRepo.getByLocationId(id);
+	}
+
+	public Boolean checkPasswordChange(User user) {
+		if(BCrypt.checkpw(user.getDefaultPW(), user.getPasswords())) {
+            return false;
+        }
+        return true;
+	}
 }

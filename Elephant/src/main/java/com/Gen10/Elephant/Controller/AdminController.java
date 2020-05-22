@@ -133,7 +133,6 @@ public class AdminController {
             } catch (DataFormatException e) {
                 return new ResponseEntity(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
             }
-            
         }
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
     }
