@@ -1473,7 +1473,7 @@ $(document).ready(function () {
                                 $('#editLocErrorMessages')
                                     .append($('<li>')
                                     .attr({class: 'list-group-item list-group-item-success'})
-                                    .text('The location has been successfully updated.'));
+                                    .text('The office has been successfully updated.'));
                                 $("#editLocErrorMessages").show();
 
                                     },
@@ -1495,20 +1495,6 @@ $(document).ready(function () {
             });
         }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });
 
