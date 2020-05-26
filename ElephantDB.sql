@@ -432,6 +432,22 @@ BEGIN
 	END LOOP;
 END$$
 
+DELIMITER $$
+CREATE PROCEDURE removeOldData()
+BEGIN
+	DELETE FROM arrival
+    WHERE arrivalDate < CURDATE() - INTERVAL 90 DAY;
+    
+    DELETE FROM departure
+    WHERE departureDate < CURDATE() - INTERVAL 90 DAY;
+    
+    DELETE FROM timeslot
+    WHERE timeSlotDate < CURDATE() - INTERVAL 90 DAY;
+    
+    DELETE FROM attendance
+    WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
+END$$
+
 -- CREATE EVENT elephantdb.generateTimeSlots
 -- 	ON SCHEDULE EVERY '1' day
 -- 	STARTS '2020-05-13 03:00:00'
@@ -440,5 +456,25 @@ END$$
 	CALL genMinneapolisTimeSlots();
     CALL genAustinTimeSlots();
     CALL genDallasTimeSlots();
-    Call genDesMoinesTimeSlots();
+    CALL genDesMoinesTimeSlots();
 -- END
+
+INSERT INTO timeslot (timeSlotDate, startTime, isTaken, locationId) VALUES
+	("2020-1-2", "07:00:00", 0, 1),
+    ("2020-1-2", "07:15:00", 0, 1),
+    ("2020-1-2", "18:00:00", 0, 1),
+    ("2020-1-2", "18:15:00", 0, 1);
+
+INSERT INTO arrival (arrivalDate, timeSlotId, userId) VALUES
+	("2020-1-2", 197, 30),
+    ("2020-1-2", 198, 30),
+    ("2020-5-26", 3, 40);
+    
+INSERT INTO departure (departureDate, timeSlotId, userId) VALUES
+	("2020-1-2", 199, 30),
+    ("2020-1-2", 200, 30),
+    ("2020-5-26", 5, 40);
+
+SET SQL_SAFE_UPDATES = 0;
+	CALL removeOldData();
+SET SQL_SAFE_UPDATES = 1;
