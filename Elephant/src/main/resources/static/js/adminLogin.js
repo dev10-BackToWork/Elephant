@@ -5,6 +5,7 @@ $(document).ready(function () {
     var adminId;
     var adminEmail;
     var adminPassword;
+    var user;
 
     $.ajax({
         type: 'GET',
@@ -33,10 +34,21 @@ $(document).ready(function () {
     $("#createLocationDiv").hide();
     $("#employeeInfoDiv").hide();
     $("#healthSurveyDiv").hide();
-    $("#scheduleArrivalDiv").hide();
+    $("#arrival-success").hide();
+    $("#departure-success").hide();
+    $("#arrival-container").hide();
+    $("#departure-container").hide();
+    $("#screener-div").hide();
+    $("#survey-div").hide();
+    $("#screener-bye").hide();
+    $("#survey-bye").hide();
     $("#deleteEmployeeDiv").hide();
     $("#successfulDeleteDiv").hide();
     $("#locationInfoDiv").hide();
+    $('#time-success').hide();
+    $("#loginErr").hide();
+    
+    
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -59,6 +71,7 @@ $(document).ready(function () {
                     adminId = response.userId;
                     adminEmail = response.email;
                     adminPassword = response.defaultPW;
+                    user = response;
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -231,11 +244,19 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").show();
-        $("#scheduleArrivalDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        $("#screener-div").show();
+        $("#survey-div").hide();
+        $("#screener-bye").hide();
+        $("#survey-bye").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
-        
+        $('#time-success').hide();
+        $("#loginErr").hide();  
         
     });
     
@@ -250,10 +271,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
@@ -407,10 +429,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -424,10 +447,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -530,10 +554,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
 
         $('#locationAddUser').empty();
 
@@ -561,7 +586,7 @@ $(document).ready(function () {
                 });
 
     });
-    
+
     // $('#addLocationBtn').click(function (event) {
     //     $("#loginNav").hide();
     //     $("#adminLoginDiv").hide();
@@ -590,10 +615,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").show();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
         
         $("#editLocErrorMessages").hide();
 
@@ -634,10 +660,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -802,10 +829,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
         
         $("#allEmployeeErr").hide();
     })
@@ -913,7 +941,6 @@ $(document).ready(function () {
                     // $("#createLocationDiv").hide();
                     // $("#employeeInfoDiv").hide();
                     // $("#healthSurveyDiv").hide();
-                    // $("#scheduleArrivalDiv").hide();
                     // $("#deleteEmployeeDiv").hide();
                     // $("#successfulDeleteDiv").hide();
                     // $("#locationInfoDiv").hide();
@@ -956,10 +983,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
     });
     
 
@@ -1356,10 +1384,11 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
     });
 
     $('#submitLocationInfoBtn').click(function (event) {
@@ -1496,6 +1525,371 @@ $(document).ready(function () {
         }
     });
 
+    //================ SURVEY ==========================//
+var user;
+
+//if user is NOT coming in to the office: 
+$("#q1No").on("click", function (e) {
+    e.preventDefault();
+    $("#screener-div").hide();
+    $("#survey-bye").hide();
+    $("#arrival-container").hide();
+    $("#departure-container").hide();
+   
+    console.log(user);
+    
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/api/users/coming",
+        
+        data: JSON.stringify({
+            "user": user,
+            "isAttending": false
+            //"isAuthorized": true
+            }),
+        contentType: "application/json;charset=UTF-8",
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword
+        },
+        success: function (response, status) {
+            //alert('success');
+            console.log(response);
+            $("#screener-bye").show();
+
+        },
+        error: function (err) {
+            //alert('error');
+            console.log(err);
+        }
+    });
+});
+
+
+//if user is coming in to the office, show health survey questions:
+$("#q1Yes").on("click", function () {
+    $("#screener-div").hide();
+    $("#survey-div").show();
+    $("#survey-bye").hide();
+    $("#arrival-container").hide();
+    $("#departure-container").hide();
+    toggle();
+});
+
+var isAuthorized = true;
+var answerOne = false;
+var answerTwo = false;
+var answerThree = false;
+
+function toggle() {
+    $('#q1').change(function () {
+        answerOne = $(this).prop('checked');
+        console.log("Q1: " + answerOne);
+    });
+
+    $('#q2').change(function () {
+        answerTwo = $(this).prop('checked');
+        console.log("Q2: " + answerTwo);
+    });
+    $('#q3').change(function () {
+        answerThree = $(this).prop('checked');
+        console.log("Q3: " + answerThree);
+    });
+}
+
+function checkAuth() {
+    if (answerOne === true) {
+        isAuthorized = false;
+        $("#survey-bye").show();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        console.log(isAuthorized);
+    } else if (answerTwo === true) {
+        isAuthorized = false;
+        $("#survey-bye").show();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        console.log(isAuthorized);
+    } else if (answerThree === true) {
+        isAuthorized = false;
+        $("#survey-bye").show();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        console.log(isAuthorized);
+    } else {
+        $("#survey-bye").hide();
+        $("#arrival-container").show();
+        $("#departure-container").hide();
+        console.log(isAuthorized);
+        isAuthorized = true;
+    }
+};
+
+
+$("#surveySubmit").on("click", function (e) {
+    e.preventDefault();
+    $("#survey-container").hide();
+    checkAuth();
+    if (isAuthorized === true) {
+        console.log(isAuthorized);
+        loadArrivals();
+    } else if (isAuthorized === false) {
+        notAuthorized();
+    }
+});
+
+function notAuthorized() {
+        console.log(user);
+    
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/users/coming",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                "isAttending": true,
+                "isAuthorized": false,
+                user: user
+            }),
+
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword
+        },
+        success: function (response, status) {
+            console.log(response);
+        },
+        error: function (err) {
+            console.log(err);
+
+        }
+    });
+}
+var startTime;
+
+function loadArrivals() {
+    console.log(user);
+    authorized();
+   
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/users/times/" + adminLocation,
+
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword
+        },
+        success: function (response) {
+            //console.log(response);
+            
+            $("#arrival-btn-div").empty();
+            var arrivalDiv = $("#arrival-btn-div");
+            //var arrivalAccordianDiv = $("#arrival-accordion");
+            var i;
+            //var j;
+            //var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
+            //console.log(hours.length);
+//            $.each(hours, function(j) {
+//                var hourCard = "<div class='.card time-card'>";
+//                hourCard += "<div class='card-header'id='heading'" +i+">";
+//                hourCard += "<h5 class='mb-0'>";
+//                hourCard += "<button class='btn' data-toggle='collapse' data-target='#collapse'"+i+"aria-expanded='true' aria-controls='collapse'"+i+"></button>";
+//                j++;
+//             });  
+            $.each(response, function (i, time) {
+                if (response[i].isTaken === false) {
+                    //for each hours[i] with timeslots avaialble print an accordian tab and print time in heading. 
+                    //print the start time buttons in each  hours[i] accordian
+                    var startTime = response[i].startTime;
+                    startTime = startTime.substring(0, 5).trim();
+                    var hour = startTime.substring(0, 2).trim();
+                    //console.log(startTime + " / " + hour);
+                    //console.log(hours[4]);
+                    //for (i = 0; i < hour.length; i++)
+                     
+                    //if (hour.localeCompare(hours[3])) {
+                    //    console.log(startTime); 
+                    
+                    //} else {
+                    var timeSlotId = response[i].timeSlotId;
+//                    var arrivalBtn = "<div>";
+                    var arrivalBtn = "<div class='col-3'>";
+                    arrivalBtn = "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
+                    arrivalBtn += "</button>";
+                    arrivalBtn += "</div>";
+                    arrivalDiv.append(arrivalBtn);
+//                    var timeSlotId = response[i].timeSlotId;
+//                    //console.log(timeSlotId + " - " + startTime);
+//                    var arrivalBtn = "<div>";
+////                  var arrivalBtn = "<div class='col-3'>";
+//                    var arrivalBtn = "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
+//                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
+//                    arrivalBtn += "</button>";
+//                    arrivalBtn += "</div>";
+//                    arrivalDiv.append(arrivalBtn);
+                }
+               // };
+               
+            });
+
+                $(".time").on('click', function (e) {
+                    var timeSlotId = parseInt(this.id);
+                    var time = $(this).find('.item').html(); 
+                    console.log("Your time: " + timeSlotId + " / " +time);
+                    $("#timeSelectedTime").val(time);
+                    $("#timeSelected").val(timeSlotId);
+                });
+
+            $("#arrivalSubmit").on("click", function (e) {
+                e.preventDefault();
+                $("#arrival-container").hide();
+                
+                var timeSlotId = $("#timeSelected").val();
+                console.log(timeSlotId);
+                console.log(user);
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify(
+                        user                       
+                    ),
+                    headers: {
+                        "email": adminEmail,
+                        "password": adminPassword
+                    },
+
+                    success: function (response) {
+                        console.log(response);
+                        //alert(response.timeSlot.startTime);
+                        $('#arrival-success').show();
+                        $('#arrival-success').text("Your arrival time today is: " + response.timeSlot.startTime);
+                        loadDepartures();
+                        
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        //$("#screener-div").hide();
+                        //$("#survey-bye").show();
+                        return false;
+                    }
+                });
+            });
+        }
+    });
+}
+
+
+function loadDepartures() {
+    $("#arrival-container").hide();
+    $("#departure-container").show();
+    $("#arrival-success").show();
+    console.log(user);
+    
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/users/times/" + adminLocation,
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword
+        },
+        success: function (response) {
+            //console.log(response);
+            $("#departure-btn-div").empty();
+            var departureDiv = $("#departure-btn-div");
+            var i;
+            $.each(response, function (i, time) {
+                if (response[i].isTaken === false) {
+                    var startTime = response[i].startTime;
+                    startTime = startTime.substring(0, 5).trim();
+                    var timeSlotId = response[i].timeSlotId;
+                    //console.log(timeSlotId + " / " + startTime);
+                
+//                    var departureBtn = "<div>";
+                    var departureBtn = "<div class='col-3'>";
+//                    departureBtn += "<button class='btn-primary time' id='" + timeSlotId + "'>";
+                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+                    departureBtn += "<p class='item'>" + startTime + "</p>";
+                    departureBtn += "</button>";
+                    departureBtn += "</div>";
+                    departureDiv.append(departureBtn);
+                };  
+ 
+                });
+                
+                $(".time").on('click', function (e) {
+                    var timeSlotId = parseInt(this.id);
+                    var time = $(this).find('.item').html(); 
+                        console.log("Your time: " + timeSlotId + " / " +time);
+                    $("#departureTimeSelectedTime").val(time);
+                    $("#departureTimeSelected").val(timeSlotId);
+                });
+                
+            $("#departureSubmit").on("click", function (e) {
+                e.preventDefault();
+                //$("#arrival-container").hide();
+                $("#departure-container").hide();
+                var timeSlotId = $("#departureTimeSelected").val();
+                console.log(timeSlotId);
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/departure/" + timeSlotId,
+                    data: JSON.stringify({"userId": adminId}),
+                    contentType: "application/json;charset=UTF-8",
+
+                    headers: {
+                        "email": adminEmail,
+                        "password": adminPassword
+                    },
+
+                    success: function (response, status) {
+                        console.log(response);
+                        //alert(response.timeSlot.startTime);
+                        //$('#time-success').show();
+                        $('#departure-success').show();
+                        $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+                        
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        return false;
+                    }
+                });
+            });
+        }
+    });
+    }
+    
+    //called after departure time POST to update attendance and authorization record to true: 
+    function authorized() {
+        //console.log(user);
+    
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/users/coming",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                     "isAttending": true,
+                     "isAuthorized": true,
+                     user: user
+                }),
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword
+        },
+        success: function (response) {
+            //alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
+            console.log(response);
+        },
+        error: function (err) {
+            //alert('error' + err);
+            console.log(err);
+        }
+    });
+}
+
+
 });
 
     function editSelectedUser(id) {
@@ -1509,7 +1903,6 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").show();
         $("#healthSurveyDiv").hide();
-        $("#scheduleArrivalDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
 
@@ -1641,7 +2034,6 @@ $(document).ready(function () {
             $("#createLocationDiv").hide();
             $("#employeeInfoDiv").hide();
             $("#healthSurveyDiv").hide();
-            $("#scheduleArrivalDiv").hide();
             $("#deleteEmployeeDiv").hide();
             $("#successfulDeleteDiv").show();
             $("#locationInfoDiv").hide();
@@ -1805,111 +2197,14 @@ function clearLogin() {
     });
 };
 
-$(document).ready(function () {
-  $("#screener-div").show();
-  $("#survey-div").hide();
-  $("#screener-bye").hide();
-  $("#survey-bye").hide();
-  $("#survey-authorized").hide();
-});
-
-//if user is coming in to the office, show health survey questions:
-$("#q1Yes").on("click", function(){
-  $("#screener-div").hide();
-  $("#survey-div").show();
-  $("#survey-bye").hide();
-  $("#survey-authorized").hide();
-  toggle();
-});
-
-//if user is NOT coming in to the office: 
-$("#q1No").on("click", function(){
-  $("#screener-div").hide();
-  $("#screener-bye").show();
-  $("#survey-bye").hide();
-  $("#survey-authorized").hide();
-  //send response to database to note that user logged in but will not be coming to office today
-});
-
-var isAuthorized = true;
-var answerOne = false;
-var answerTwo = false;
-var answerThree = false;
 
 
-function toggle() {
-    $('#q1').change(function () {
-        answerOne = $(this).prop('checked');
-        console.log("Q1: " + answerOne);
-       // $('#q1Equals').html(answerOne);
-    });
 
-    $('#q2').change(function () {
-        answerTwo = $(this).prop('checked');
-        console.log("Q2: " + answerTwo);
-        //$('#q2Equals').html(answerTwo);
-    });
-    $('#q3').change(function () {
-        answerThree = $(this).prop('checked');
-        console.log("Q3: " + answerThree);
-       // $('#q3Equals').html(answerThree);
-    });
-}
-         
-$("#surveySubmit").on("click", function (e) {
-    e.preventDefault();
-    $("#survey-container").hide();
-    //var password = 
-    //var email = 
 
-        if  (answerOne === true){
-             isAuthorized = false;
-              $("#survey-bye").show();
-              $("#survey-authorized").hide();
-              console.log(isAuthorized);
-         } else if (answerTwo === true){
-             isAuthorized = false;
-              $("#survey-bye").show();
-              $("#survey-authorized").hide();
-             console.log(isAuthorized);
-         } else if (answerThree === true) {
-             isAuthorized = false;
-              $("#survey-bye").show();
-              $("#survey-authorized").hide();
-             console.log(isAuthorized);
-         } else {
-             $("#survey-bye").hide();
-             $("#survey-authorized").show();
-             console.log(isAuthorized);
-             isAuthorized = true;
-         }
-         
-        $.ajax({
-            type: "POST",
-            data: "",
-            url: "http://localhost:8080/api/users/login",
-            contentType: "application/json;charset=UTF-8",
-           //$("authorized").text("You're approved to come to the office. Next, select a time.");
-//            headers: {
-//                "email": email,
-//                "password": password
-//            },
-    
-            success: function (response) {
-                
-                console.log(response);
-                return false;
-            },
-            error: function (err) {
-                console.log(err);
-                 $("#screener-div").hide();
-                 $("#survey-bye").show();
-                return false;
-            }
-        });
 
-        return false;
-    });
+
+
+
  
     
 
