@@ -5,6 +5,7 @@
  */
 package com.Gen10.Elephant.service;
 
+import java.sql.SQLDataException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -408,25 +410,26 @@ public class ServiceLayer {
         // User defaultUser = usersRepo.findByEmail("user@user.com");
 
         // for (Attendance attendance : currentAttendance) {
-        //     usersInAttendance.add(attendance.getUser());
+        // usersInAttendance.add(attendance.getUser());
         // }
 
         // for (User user : usersByLocation) {
-        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
-        //         usersByLocationNotAnswered.remove(user);
-        //     }
-        //     if (!usersInAttendance.contains(user))
-        //         currentInactiveUsersByLocation.add(user);
+        // if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) !=
+        // null) {
+        // usersByLocationNotAnswered.remove(user);
+        // }
+        // if (!usersInAttendance.contains(user))
+        // currentInactiveUsersByLocation.add(user);
         // }
 
         // if (currentInactiveUsersByLocation.contains(defaultUser))
-        //     currentInactiveUsersByLocation.remove(defaultUser);
+        // currentInactiveUsersByLocation.remove(defaultUser);
 
         // return currentInactiveUsersByLocation;
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());     
+        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
@@ -440,9 +443,10 @@ public class ServiceLayer {
     public List<User> getFlaggedUsers(int id) {
         List<User> usersByLocationFlagged = new ArrayList<>();
         List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-            
+
         for (Attendance attendance : currentAttendance) {
-            if (attendance.getIsAuthorized() == false && attendance.getUser().getLocation().getLocationId() == id) {
+            if (attendance.getIsAuthorized() == false && attendance.getIsAttending() == true
+                    && attendance.getUser().getLocation().getLocationId() == id) {
                 usersByLocationFlagged.add(attendance.getUser());
             }
         }
@@ -605,14 +609,31 @@ public class ServiceLayer {
         return usersRepo.save(existingUser);
     }
 
-	public Location getLocationById(int id) {
-		return locationRepo.getByLocationId(id);
-	}
+    public Location getLocationById(int id) {
+        return locationRepo.getByLocationId(id);
+    }
 
-	public Boolean checkPasswordChange(User user) {
-		if(BCrypt.checkpw(user.getDefaultPW(), user.getPasswords())) {
+    public Boolean checkPasswordChange(User user) {
+        if (BCrypt.checkpw(user.getDefaultPW(), user.getPasswords())) {
             return false;
         }
         return true;
-	}
+    }
+
+    public Boolean generateAllPasswords(){
+        try {
+            for (User user : usersRepo.findAll()) {
+                String password = generatePassword();
+                user.setDefaultPW(password);
+
+                String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
+                user.setPasswords(encryptPass);
+                User dbUser = usersRepo.save(user);
+            }
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

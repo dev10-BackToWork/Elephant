@@ -32,6 +32,7 @@ public class UserController {
     @Autowired
     ServiceLayer service;
 
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @GetMapping("/times/{id}")
     public ResponseEntity<List<TimeSlot>> getTimes(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
@@ -45,8 +46,8 @@ public class UserController {
     }
 
     //checks username(email) and password against system, returns user stored in database if correct, null if incorrect
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/login")
-    @CrossOrigin(origins= "http://localhost:8000")
     public ResponseEntity<User> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
         User user = new User(email, password);
         User dbUser = service.checkLogin(user);
@@ -58,6 +59,7 @@ public class UserController {
     }
 
     //edts a user, restricted to password only
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
@@ -80,6 +82,7 @@ public class UserController {
     // }
 
     // Round 2
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/coming")
     public ResponseEntity<Attendance> markAttendance(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
@@ -92,6 +95,7 @@ public class UserController {
         return new ResponseEntity<Attendance>(new Attendance(), HttpStatus.UNAUTHORIZED);
     }
 
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/arrival/{id}")
     public ResponseEntity<Arrival> reserveArrival(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
@@ -108,6 +112,7 @@ public class UserController {
         return new ResponseEntity<Arrival>(new Arrival(), HttpStatus.UNAUTHORIZED);
     }
     
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/departure/{id}")
     public ResponseEntity<Departure> reserveDeparture(@RequestBody User user, @PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
@@ -121,6 +126,7 @@ public class UserController {
         return new ResponseEntity<Departure>(new Departure(), HttpStatus.UNAUTHORIZED);
     }   
 
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @GetMapping("/checkChange/{id}")
     public ResponseEntity<Boolean> checkPasswordChange(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbUser = service.checkUser(email, password);
