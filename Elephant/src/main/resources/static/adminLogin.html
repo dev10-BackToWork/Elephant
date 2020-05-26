@@ -385,7 +385,7 @@
                     <div class="col-md-12 text-center">
                         <ul class="list-group" id="editErrorMessages"></ul>
                     </div>
-                    <h1 class="mt-5">Employee Information</h1>
+                    <h3 class="mt-5">Employee Information</h3>
                     <input type="hidden" id="edit-userId" />
                     <div class="row">
                         <div class="col-md-6">
@@ -439,142 +439,176 @@
         </div>
         
         <!-- Health Survey Div -->  
-        <div class="container" id="healthSurveyDiv">
+    <!-- Survey Content -->
+    <div class="container" id="healthSurveyDiv">
         <div id="survey-container">
 
-        <div class="form-group" id="screener-div">
-<!--            <h2 class="center">Welcome back, Jane!</h2>-->
-            <p class="center">Are you coming in to the office today?</p>
-            <div class="row">    
-                <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
-                <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
+            <div class="form-group" id="screener-div">
+    <!--            <h2 class="center">Welcome back, Jane!</h2>-->
+                <p class="center">Are you coming in to the office today?</p>
+
+                <div class="row">    
+                    <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
+                    <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
+                </div>
+    <!--            <div class="row submit" id="submit-screener">  
+                    <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
+                </div>-->
+             </div>
+
+            <div id="screener-bye">
+                 <p class="center">Thanks, your response has been recorded.</p>
             </div>
-<!--            <div class="row submit" id="submit-screener">  
-                <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
-            </div>-->
-         </div>
-        
-        <div id="screener-bye">
-             <p class="center">Thanks, your response has been recorded.</p>
-        </div>
 
-        <div class="form-group" id="survey-div">
-            <form id="survey">
-<!--                <div class="row" id="questionDiv">-->
-                    <div class="row">
-                        <div class="col-11">
-                            <div class="form-check">
-                            <label for="q1" class="form-check-label">Do you have symptoms of fever, cough, shortness of breath, sore throat, or diarrhea?</label>
+            <div class="form-group" id="survey-div">
+                <form id="survey">
+    <!--                <div class="row" id="questionDiv">-->
+                        <div class="row">
+                            <div class="col-11">
+                                <h5>Please take your temperature immediately prior to answering the following questions.</h5>
                             </div>
-                        </div>
-                        
-                        <div class="col-1">
-                        <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-                        </div>
-<!--                         <div id="q1Equals"></div>-->
-                    </div>
-
-                    <div class="row">
-                         <div class="col-11">
-                            <div class="form-check">
-                            <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                            <div class="col-11">
+                                <div class="form-check">
+                                <label for="q1" class="form-check-label">Do you have symptoms of fever (100.4 degrees), cough, shortness of breath, sore throat, or diarrhea?</label>
+                                </div>
                             </div>
-                         </div>
-                         
-                        <div class="col-1">
-                        <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-                        </div>
-<!--                         <div id="q2Equals"></div>-->
-                    </div>
 
-                    <div class="row">
-                         <div class="col-11">
-                            <div class="form-check">
-                                <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
+                            <div class="col-1">
+                            <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
+                                data-on="Yes" data-off="No" data-style="android">
                             </div>
-                         </div>
-                        
-                         <div class="col-1">
-                        <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-<!--                         <div id="q3Equals"></div>-->
-                         </div>
-                    </div>
+    <!--                         <div id="q1Equals"></div>-->
+                        </div>
 
-<!--                </div>-->
-                <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
-                <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
-                
-              
-            </form>
-        </div>
+                        <div class="row">
+                             <div class="col-11">
+                                <div class="form-check">
+                                <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                                </div>
+                             </div>
+
+                            <div class="col-1">
+                            <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
+                                data-on="Yes" data-off="No" data-style="android">
+                            </div>
+    <!--                         <div id="q2Equals"></div>-->
+                        </div>
+
+                        <div class="row">
+                             <div class="col-11">
+                                <div class="form-check">
+                                    <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
+                                </div>
+                             </div>
+
+                             <div class="col-1">
+                            <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
+                                data-on="Yes" data-off="No" data-style="android">
+    <!--                         <div id="q3Equals"></div>-->
+                             </div>
+                        </div>
+
+    <!--                </div>-->
+                    <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
+                    <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
+                </form>
+            </div>
             
        </div>
+        
         <div id="survey-bye">
              <p class="center">You have not yet been approved to come in to the office. HR has been notified and will follow up with you soon.</p>
         </div>
-        <div id="survey-authorized">
-             <p class="center">You are authorized to come in to the office today.</p>
-        </div>
-        
-   
-<!--                <p class="center">1. Do I have symptoms of fever, cough, shortness of breath, sore throat, or diarrhea?</p>
-                <div class="row">    
-                    <div class="col-6"><button name="yes" id="q2Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
-                    <div class="col-6"><button name="no" id="q2No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
+    </div> 
+
+    <!-- Select Arrival/Departure Time Content -->
+    <div class="container">
+        <div class="row" id="arrival-success"></div>
+        <div class="row" id="departure-success"></div>
+    </div>
+
+    <div class="container" id="arrival-container">
+        <p class="center">You are authorized to come in to the office today.</p>
+        <hr>
+        <p class="center">Please select from the available arrival times:</p>
+            <div class="row overflow-auto" id="arrival-btn-div">
+<!--                <div class="col-12"> </div>-->
+            </div>
+<!--        <div id="arrival-accordion">
+
+            <div class="card time-card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">7 AM</button>
+                    </h5>
                 </div>
 
-                <p class="center">2. Have I had close contact in the last 14 days with an individual diagnosed with COVID-19?</p>
-                <div class="row">    
-                    <div class="col-6"><button name="yes" id="q3Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
-                    <div class="col-6"><button name="no" id="q4No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
-                </div>
-
-                <p class="center">3. Have I traveled internationally or domestically in the last 14 days?</p>
-                <div class="row">  
-                    <div class="col-6"><button name="yes" id="q4Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
-                    <div class="col-6"><button name="no" id="q4No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
-                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" id="arrival-btn-div">
+                            <div class="col-12"></div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
             
-                <div class="row submit" id="submit-survey">  
-                <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-survey-btn">Submit</button>
-                </div>-->
-        
-    </div>
-        
-        <!-- Schedule Arrival Div --> 
-        <div class="container" id="scheduleArrivalDiv">
-         <h2 class="center">Please select from the available arrival times:</h2>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">8 AM</button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" id="arrival-btn-div">
+                            <div class="col-12"></div>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="col-12">
-        <div class="row" id="arrival-btn-div">
-<!--    <div class="form-group">
-        <div class="row arrival-btns">    
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="7:00">7:00 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="7:15">7:15 AM</button></div>
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="7:30">7:30 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="7:45">7:45 AM</button></div>
-        </div>
-       <div class="row arrival-btns">    
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="8:00">8:00 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="8:15">8:15 AM</button></div>
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="8:30">8:30 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="8:45">8:45 AM</button></div>
-        </div>
-        <div class="row arrival-btns">    
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="9:00">9:00 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="9:15">9:15 AM</button></div>
-            <div class="col-3"><button class="btn-primary btn-lg btn-block time" value="9:30">9:30 AM</button></div>
-            <div class="col-3"><button class="btn btn-primary btn-lg btn-block time" value="9:45">9:45 AM</button></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">9 AM </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" id="arrival-btn-div">
+                            <div class="col-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>-->
-        </div>
+            
+            <div class="form-group">
+                <label class="col-md-3 control-label"> Arrival Time Selected: </label>
+                <span id="timeSelected" readonly></span>
+                <input id="timeSelectedTime" class="form-control" readonly></input>
+                <br>
+                <button type="button" id="arrivalSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
+             </div>
     </div>
-
-    <div class="row submit" id="submit-arrival">  
-        <button type="button" class="btn-primary btn-lg submit-btn btn-block time survey" id="submit-survey-btn">Submit</button>
-     </div>
+    
+    
+    <div class="container" id="departure-container">
+            <p class='center' id='departureTime'> </p>
+            <p class="center">Please select from the available departure times:</p>
+            
+            
+            <div class="row overflow-auto" id="departure-btn-div">
+                <div class="col-12"> </div>
+            </div>
+        
+            <div class="form-group">
+                <label class="col-md-3 control-label"> Departure Time Selected: </label>
+                <span id="departureTimeSelected" readonly></span>
+                <input id="departureTimeSelectedTime" class="form-control" readonly required></input>
+                <button type="button" id="departureSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
+             </div>
     </div>
         
         <!-- Delete User Div --> 
