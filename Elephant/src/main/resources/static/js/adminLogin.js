@@ -586,24 +586,23 @@ $(document).ready(function () {
                 });
 
     });
-    
-    $('#addLocationBtn').click(function (event) {
-        $("#loginNav").hide();
-        $("#adminLoginDiv").hide();
-        $("#loginErr").hide();
-        $("#navBarDiv").show();
-        $("#dashboardDiv").hide();
-        $("#allEmployeesDiv").hide();
-        $("#createAccountDiv").hide();
-        $("#createLocationDiv").show();
-        $("#employeeInfoDiv").hide();
-        $("#healthSurveyDiv").hide();
-        $("#deleteEmployeeDiv").hide();
-        $("#successfulDeleteDiv").hide();
-        $("#locationInfoDiv").hide();
-        $("#arrival-success").hide();
-        $("#departure-success").hide();
-    });
+
+    // $('#addLocationBtn').click(function (event) {
+    //     $("#loginNav").hide();
+    //     $("#adminLoginDiv").hide();
+    //     $("#loginErr").hide();
+    //     $("#navBarDiv").show();
+    //     $("#dashboardDiv").hide();
+    //     $("#allEmployeesDiv").hide();
+    //     $("#createAccountDiv").hide();
+    //     $("#createLocationDiv").show();
+    //     $("#employeeInfoDiv").hide();
+    //     $("#healthSurveyDiv").hide();
+    //     $("#scheduleArrivalDiv").hide();
+    //     $("#deleteEmployeeDiv").hide();
+    //     $("#successfulDeleteDiv").hide();
+    //     $("#locationInfoDiv").hide();
+    // });
     
     $('#locationBtn').click(function (event) {
         $("#loginNav").hide();
@@ -956,23 +955,22 @@ $(document).ready(function () {
         
     });
     
-    $('#deleteEmployeeInfoBtn').click(function (event) {
-        $("#loginNav").hide();
-        $("#adminLoginDiv").hide();
-        $("#loginErr").hide();
-        $("#navBarDiv").show();
-        $("#dashboardDiv").hide();
-        $("#allEmployeesDiv").hide();
-        $("#createAccountDiv").hide();
-        $("#createLocationDiv").hide();
-        $("#employeeInfoDiv").hide();
-        $("#healthSurveyDiv").hide();
-        $("#deleteEmployeeDiv").show();
-        $("#successfulDeleteDiv").hide();
-        $("#locationInfoDiv").hide();
-        $("#arrival-success").hide();
-        $("#departure-success").hide();
-    });
+    // $('#deleteEmployeeInfoBtn').click(function (event) {
+    //     $("#loginNav").hide();
+    //     $("#adminLoginDiv").hide();
+    //     $("#loginErr").hide();
+    //     $("#navBarDiv").show();
+    //     $("#dashboardDiv").hide();
+    //     $("#allEmployeesDiv").hide();
+    //     $("#createAccountDiv").hide();
+    //     $("#createLocationDiv").hide();
+    //     $("#employeeInfoDiv").hide();
+    //     $("#healthSurveyDiv").hide();
+    //     $("#scheduleArrivalDiv").hide();
+    //     $("#deleteEmployeeDiv").show();
+    //     $("#successfulDeleteDiv").hide();
+    //     $("#locationInfoDiv").hide();
+    // });
     
     $('#createLocationSubmitBtn').click(function (event) {
         $("#loginNav").hide();
