@@ -271,11 +271,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
-        $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
@@ -429,6 +433,10 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
@@ -447,6 +455,10 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
@@ -615,6 +627,10 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").show();
@@ -660,6 +676,10 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
