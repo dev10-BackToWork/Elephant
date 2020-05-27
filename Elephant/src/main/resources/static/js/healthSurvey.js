@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $("#resetPassword").hide();
     $("#screener-div").hide();
     $("#survey-div").hide();
     $("#screener-bye").hide();
@@ -9,18 +10,15 @@ $(document).ready(function () {
     $("#loginErr").hide();
     
 var user;  
-
-    $("#reset-password-btn").click(function (e) {
-        e.preventDefault();
-        //function checkPasswordChg();
-        alert('reset pwrd');
-    });
+var email;
+var password;
+var userId;
+    
     
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
-        //checkPasswordChg();
-        var password = $("#inputPassword").val();
-        var email = $("#inputEmail").val();
+        password = $("#inputPassword").val();
+        email = $("#inputEmail").val();
 
         $.ajax({
             type: "post",
@@ -30,18 +28,34 @@ var user;
                 "password": password
             },
             success: function (response) {
-                var user = response;
+                user = response;
+                userId = user.userId;
+                console.log(userId);
                 
                 $.ajax({
                     type: "GET",
+                    //url: "http://localhost:8080/api/users/checkChange/"+ userId,
                     url: "http://localhost:8080/api/users/checkChange",
+                    data: JSON.stringify(userId),
                     headers: {
                         "email": email,
                         "password": password
+                        //user : user
                     },
                     success: function (response) {
-                        console.log(response + 'check password success');
-
+                        if (response === 'true') {
+                            console.log(response + 'success, password has been changed');
+                            if (response.role.roleId === 2) {
+                                $("#screener-div").show();
+                                $("#login").hide();
+                            } else if (response.role.roleId === 1) {
+                                $("#screener-div").show();
+                                $("#login").hide();
+                                //window.location.replace('/dashboard.html');
+                            }
+                        } else if (response === 'false') {
+                            resetPassword();
+                        }
                     },
                     error: function (err) {
                         console.log(err);
@@ -49,8 +63,7 @@ var user;
                 });
                 
                 console.log(response);
-                user = response;
-                
+
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
                      $("#login").hide();
@@ -72,39 +85,107 @@ var user;
         return false;
     });
 
-   
-//    function checkPasswordChg() {
-//        var password = password;
-//        var email = email;
-//        
-//        $.ajax({
-//        type: "GET",
-//        url: "http://localhost:8080/api/users/checkChange",
-//        headers: {
-//            "email": email,
-//            "password": password
-//        },
-//        success: function (response) {
-//            console.log(response);
-//            
-//           
-//        },
-//        error: function (err) {
-//            console.log(err);
-//        }
-//        });
-//    };
+    // RESET PASSWORD FUNCTIONALITY 
+    $("#reset-password-btn").click(function (e) {
+        e.preventDefault();
+        resetPassword();
+        //function checkPasswordChg();
+    });
+     
+    function resetPassword() {
+        $("#login").hide();
+        $("#passwordSuccess").hide();
+        $("#resetPassword").show();
+        $("#resetPasswordErr").hide();
+
+
+        $("#submit-reset-btn").on("click", function (e) {
+            e.preventDefault();
+
+            //var password = $("#inputPassword").val();
+            //var email = $("#inputEmail").val();
+            //var userId = 164;
+            //var password = 'password';
+
+            //first, check login 
+            $("#submitLoginButton").click(function (e) {
+                e.preventDefault();
+                password = $("#resetPassword").val();
+                email = $("#resetEmail").val();
+
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8080/api/users/login",
+                    headers: {
+                        "email": email,
+                        "password": password
+                    },
+                    success: function (response) {
+                        user = response;
+                        console.log(response);
+
+                        //on login success, update password 
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:8080/api/users/editUser",
+                            contentType: "application/json;charset=UTF-8",
+
+                            headers: {
+                                "email": email,
+                                "password": password
+                            },
+                            data: JSON.stringify({
+                                "userId": userId,
+                                "password": password
+                            }),
+
+                            success: function (response, status) {
+                                console.log(response);
+                                $("#passwordSuccess").show();
+                            },
+                            error: function (err) {
+                                console.log(err);
+                                $("#resetPasswordErr").show();
+
+                            }
+                        });
+
+//                if (response.role.roleId === 2) {
+//                     $("#screener-div").show();
+//                     $("#login").hide();
+//                } else if (response.role.roleId === 1) {
+//                    $("#screener-div").show();
+//                    $("#login").hide();
+//                    //window.location.replace('/dashboard.html');
+//                }
+                        return false;
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        $('#loginErr').show();
+                        $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+                        clearLogin();
+                        return false;
+                    }
+                });
+                return false;
+            });
+
+
+        });
+    };
     
-    
-function clearLogin() {
-    $('#inputEmail').click(function (e) {
+ 
+
+    function clearLogin() {
+        $('#inputEmail').click(function (e) {
         $('#loginErr').hide();
         $('.form-control').val('');
-    });
-};
+        });
+    };
 
 //================ SURVEY ==========================//
-var user;
+//var user;
 
 //if user is NOT coming in to the office: 
 $("#q1No").on("click", function (e) {
@@ -266,56 +347,25 @@ function loadArrivals() {
         },
         success: function (response) {
             //console.log(response);
-            
             $("#arrival-btn-div").empty();
             var arrivalDiv = $("#arrival-btn-div");
-            //var arrivalAccordianDiv = $("#arrival-accordion");
             var i;
-            //var j;
-            //var hours = ['05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'];
-            //console.log(hours.length);
-//            $.each(hours, function(j) {
-//                var hourCard = "<div class='.card time-card'>";
-//                hourCard += "<div class='card-header'id='heading'" +i+">";
-//                hourCard += "<h5 class='mb-0'>";
-//                hourCard += "<button class='btn' data-toggle='collapse' data-target='#collapse'"+i+"aria-expanded='true' aria-controls='collapse'"+i+"></button>";
-//                j++;
-//             });  
+ 
             $.each(response, function (i, time) {
                 if (response[i].isTaken === false) {
-                    //for each hours[i] with timeslots avaialble print an accordian tab and print time in heading. 
-                    //print the start time buttons in each  hours[i] accordian
                     var startTime = response[i].startTime;
                     startTime = startTime.substring(0, 5).trim();
                     var hour = startTime.substring(0, 2).trim();
-                    //console.log(startTime + " / " + hour);
-                    //console.log(hours[4]);
-                    //for (i = 0; i < hour.length; i++)
-                     
-                    //if (hour.localeCompare(hours[3])) {
-                    //    console.log(startTime); 
-                    
-                    //} else {
+
                     var timeSlotId = response[i].timeSlotId;
-//                    var arrivalBtn = "<div>";
+//                   
                     var arrivalBtn = "<div class='col-3'>";
                     arrivalBtn = "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
                     arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
                     arrivalBtn += "</button>";
                     arrivalBtn += "</div>";
                     arrivalDiv.append(arrivalBtn);
-//                    var timeSlotId = response[i].timeSlotId;
-//                    //console.log(timeSlotId + " - " + startTime);
-//                    var arrivalBtn = "<div>";
-////                  var arrivalBtn = "<div class='col-3'>";
-//                    var arrivalBtn = "<button class='btn-primary btn-lg btn-block time' id='" + timeSlotId + "'>";
-//                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
-//                    arrivalBtn += "</button>";
-//                    arrivalBtn += "</div>";
-//                    arrivalDiv.append(arrivalBtn);
                 }
-               // };
-               
             });
 
                 $(".time").on('click', function (e) {
@@ -453,7 +503,7 @@ function loadDepartures() {
     
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
-        //console.log(user);
+        console.log(user);
         var email = user.email;
         var password = user.defaultPW;
     
@@ -480,6 +530,5 @@ function loadDepartures() {
         }
     });
 }
-
-   
+ 
 });
