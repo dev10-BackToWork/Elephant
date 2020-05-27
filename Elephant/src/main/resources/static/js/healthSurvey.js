@@ -10,11 +10,15 @@ $(document).ready(function () {
     
 var user;  
 
-    //$("#submitLoginButton").click(function (e) {
-
+    $("#reset-password-btn").click(function (e) {
+        e.preventDefault();
+        //function checkPasswordChg();
+        alert('reset pwrd');
+    });
+    
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
-        checkPasswordChg();
+        //checkPasswordChg();
         var password = $("#inputPassword").val();
         var email = $("#inputEmail").val();
 
@@ -26,13 +30,30 @@ var user;
                 "password": password
             },
             success: function (response) {
+                var user = response;
+                
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:8080/api/users/checkChange",
+                    headers: {
+                        "email": email,
+                        "password": password
+                    },
+                    success: function (response) {
+                        console.log(response + 'check password success');
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+                
                 console.log(response);
                 user = response;
                 
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
                      $("#login").hide();
-                   // window.location.replace('/healthSurvey.html');
                 } else if (response.role.roleId === 1) {
                     $("#screener-div").show();
                      $("#login").hide();
@@ -51,26 +72,28 @@ var user;
         return false;
     });
 
-
-    function checkPasswordChg() {
-        var password = $("#inputPassword").val();
-        var email = $("#inputEmail").val();
-       $.ajax({
-            type: "GET", 
-             url: "http://localhost:8080/api/users/checkChange",
-             headers: {
-                "email": email,
-                "password": password
-            },
-            success: function (response) {
-                console.log('checkpasswordchange' + response);
-            },
-             error: function (err) {
-                console.log(err);
-
-            }
-        })
-    };
+   
+//    function checkPasswordChg() {
+//        var password = password;
+//        var email = email;
+//        
+//        $.ajax({
+//        type: "GET",
+//        url: "http://localhost:8080/api/users/checkChange",
+//        headers: {
+//            "email": email,
+//            "password": password
+//        },
+//        success: function (response) {
+//            console.log(response);
+//            
+//           
+//        },
+//        error: function (err) {
+//            console.log(err);
+//        }
+//        });
+//    };
     
     
 function clearLogin() {
@@ -141,16 +164,16 @@ var answerThree = false;
 function toggle() {
     $('#q1').change(function () {
         answerOne = $(this).prop('checked');
-        console.log("Q1: " + answerOne);
+        //console.log("Q1: " + answerOne);
     });
 
     $('#q2').change(function () {
         answerTwo = $(this).prop('checked');
-        console.log("Q2: " + answerTwo);
+        //console.log("Q2: " + answerTwo);
     });
     $('#q3').change(function () {
         answerThree = $(this).prop('checked');
-        console.log("Q3: " + answerThree);
+        //console.log("Q3: " + answerThree);
     });
 }
 
@@ -160,24 +183,24 @@ function checkAuth() {
         $("#survey-bye").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
-        console.log(isAuthorized);
+        //console.log(isAuthorized);
     } else if (answerTwo === true) {
         isAuthorized = false;
         $("#survey-bye").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
-        console.log(isAuthorized);
+        //console.log(isAuthorized);
     } else if (answerThree === true) {
         isAuthorized = false;
         $("#survey-bye").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
-        console.log(isAuthorized);
+        //console.log(isAuthorized);
     } else {
         $("#survey-bye").hide();
         $("#arrival-container").show();
         $("#departure-container").hide();
-        console.log(isAuthorized);
+        //console.log(isAuthorized);
         isAuthorized = true;
     }
 };
@@ -230,7 +253,7 @@ function loadArrivals() {
     var email = user.email;
     var password = user.defaultPW;
     var locationId = user.location.locationId;
-    var userId = user.userId;
+    //var userId = user.userId;
     authorized();
    
     $.ajax({
