@@ -504,7 +504,7 @@ public class ServiceLayer {
 
         User dbUser = usersRepo.save(user);
         if (dbUser != null){
-            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", dbUser.getEmail(), "Account Created", 
+            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Account Created", 
             "Hi " + dbUser.getFirstName() + ", \n\n\tA new account has been created for you with the username: " + dbUser.getEmail() + "\nYour password is: " + dbUser.getDefaultPW());
         }
         return usersRepo.save(dbUser);
@@ -556,12 +556,12 @@ public class ServiceLayer {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
             if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
-                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood.comp@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
+                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
             }
             return attendanceRepo.save(todaysAttendance);
         } else {
             if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
-                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood.comp@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
+                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
             }
             return attendanceRepo.save(attendance);
         }
@@ -621,7 +621,7 @@ public class ServiceLayer {
         existingUser.setPasswords(encryptPass);
         User savedUser = usersRepo.save(existingUser);
         if (savedUser != null){
-            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", savedUser.getEmail(), "Reset Password", 
+            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Reset Password", 
             "Hi " + savedUser.getFirstName() + ", \n\n\tWe recieved a password reset request from your branch manager for your account.\nYour new password is: " + savedUser.getDefaultPW());
         }
         
