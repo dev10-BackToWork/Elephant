@@ -7,23 +7,6 @@ $(document).ready(function () {
     var adminPassword;
     var user;
 
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8080/api/admin/locations',
-        headers: {
-            'email': 'user@user.com',
-            'password': 'password'
-        },
-        success: function (data) {
-            allLocations = data;
-            console.log(allLocations);
-        },
-        error: function (http) {
-            console.log(http);
-            console.log('An error resulted when attempting to retrieve locations.');
-        }
-    });
-
     $("#loginNav").show();
     $("#adminLoginDiv").show();
     $("#loginErr").hide();
@@ -72,6 +55,25 @@ $(document).ready(function () {
                     adminEmail = response.email;
                     adminPassword = response.defaultPW;
                     user = response;
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8080/api/admin/locations',
+                        headers: {
+                                 'email': adminEmail,
+                                 'password': adminPassword
+                             },
+                        success: function (data) {
+                            allLocations = data;
+                            console.log(allLocations);
+                        },
+                        error: function (http) {
+                            console.log(http);
+                            console.log('An error resulted when attempting to retrieve locations.');
+                        }
+                    });
+    
+    
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -767,8 +769,8 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'http://localhost:8080/api/admin/newUser',
                 headers: {
-                    'email': 'user@user.com',
-                    'password': 'password',
+                    'email': adminEmail,
+                    'password': adminPassword,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(userObj),
@@ -942,8 +944,8 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'http://localhost:8080/api/admin/editUser',
                 headers: {
-                    'email': 'user@user.com',
-                    'password': 'password',
+                    'email': adminEmail,
+                    'password': adminPassword,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(userObj),
