@@ -32,6 +32,7 @@ $(document).ready(function () {
     $('#time-success').hide();
     $("#loginErr").hide();
     $("#resetPasswordAdmin").hide();
+    $("#edit-hashed-password").hide();
     
 
     $("#submitLoginButton").click(function (e) {
@@ -979,6 +980,34 @@ $(document).ready(function () {
             });
         }
         
+    });
+
+    $("#reset-password-button").click(function (e) {
+
+        var userIdField = $('#edit-userId').val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/api/admin/resetPassword/' + userIdField,
+            headers: {
+                'email': adminEmail,
+                'password': adminPassword
+            },
+            success: function (data) {
+                console.log(data);
+                $('#editErrorMessages').append($('<li>')
+                .attr({class: 'list-group-item list-group-item-success' })
+                .text('The user password was updated.'));
+
+                setTimeout(function() {
+                    $('#editErrorMessages').empty();
+                    $('#employeesBtn').click();
+                }, 2000);
+            },
+            error: function (http) {
+                console.log('An error resulted when attempting to reset the user password.');
+            }
+        });
     });
     
     // $('#deleteEmployeeInfoBtn').click(function (event) {
