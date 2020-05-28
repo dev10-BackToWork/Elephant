@@ -8,12 +8,11 @@ $(document).ready(function () {
     $("#departure-container").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
-    
-var user;  
+     
 var email;
 var password;
 var userId;
-    
+var user;  
     
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -25,7 +24,8 @@ var userId;
             url: "http://localhost:8080/api/users/login",
             headers: {
                 "email": email,
-                "password": password
+                "password": password,
+                "content-type": "application/json"
             },
             success: function (response) {
                 user = response;
@@ -33,43 +33,42 @@ var userId;
                 console.log(userId);
                 
                 $.ajax({
-                    type: "GET",
-                    //url: "http://localhost:8080/api/users/checkChange/"+ userId,
-                    url: "http://localhost:8080/api/users/checkChange",
-                    data: JSON.stringify(userId),
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/checkChange/"+ userId,
+                    //url: "http://localhost:8080/api/users/checkChange",
+                    data: JSON.stringify(user),
+
                     headers: {
                         "email": email,
-                        "password": password
-                        //user : user
+                        "password": password,
+                        "content-type": "application/json"
                     },
                     success: function (response) {
-                        if (response === 'true') {
-                            console.log(response + 'success, password has been changed');
-                            if (response.role.roleId === 2) {
-                                $("#screener-div").show();
-                                $("#login").hide();
-                            } else if (response.role.roleId === 1) {
-                                $("#screener-div").show();
-                                $("#login").hide();
-                                //window.location.replace('/dashboard.html');
-                            }
-                        } else if (response === 'false') {
+                        //console.log(response);
+                        if (response === true) {
+                            console.log('changed password is '+ response + ' success, password has been changed');
+                        } else if (response === false) {
+                            console.log('changed password is '+ response + ' please change password');
                             resetPassword();
+                            $("#screener-div").hide();
                         }
                     },
                     error: function (err) {
+                        //$("#resetPassword").show();
+                        $("#resetPasswordErr").show();
                         console.log(err);
                     }
                 });
                 
-                console.log(response);
-
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
                      $("#login").hide();
+                     $("#resetPassword").hide();
                 } else if (response.role.roleId === 1) {
                     $("#screener-div").show();
                      $("#login").hide();
+                     $("#resetPassword").hide();
+                    
                     //window.location.replace('/dashboard.html');
                 }
                 return false;
@@ -94,24 +93,20 @@ var userId;
      
     function resetPassword() {
         $("#login").hide();
+        $("#screener-div").hide();
         $("#passwordSuccess").hide();
-        $("#resetPassword").show();
         $("#resetPasswordErr").hide();
+        $("#resetPassword").show();
 
-
-        $("#submit-reset-btn").on("click", function (e) {
+        //on submit, first check login for login success
+        $("#submit-reset-btn").click(function (e) {
             e.preventDefault();
-
-            //var password = $("#inputPassword").val();
-            //var email = $("#inputEmail").val();
-            //var userId = 164;
-            //var password = 'password';
-
-            //first, check login 
-            $("#submitLoginButton").click(function (e) {
-                e.preventDefault();
-                password = $("#resetPassword").val();
+            
+           // $("#submitLoginButton").click(function (e) {
+              //  e.preventDefault();
                 email = $("#resetEmail").val();
+                password = $("#resetPasswordInput").val();
+                console.log(password);
 
                 $.ajax({
                     type: "post",
@@ -120,28 +115,29 @@ var userId;
                         "email": email,
                         "password": password
                     },
+                    
                     success: function (response) {
                         user = response;
-                        console.log(response);
-
+                        console.log(user);
+                            var newPassword = $("#newPassword").val();
+                            user.passwords = newPassword;
+                            console.log(newPassword);
+                
                         //on login success, update password 
                         $.ajax({
                             type: "POST",
                             url: "http://localhost:8080/api/users/editUser",
-                            contentType: "application/json;charset=UTF-8",
-
+                            data: JSON.stringify(user),
                             headers: {
                                 "email": email,
-                                "password": password
+                                "password": password,
+                                "content-type": "application/json"
                             },
-                            data: JSON.stringify({
-                                "userId": userId,
-                                "password": password
-                            }),
-
                             success: function (response, status) {
                                 console.log(response);
-                                $("#passwordSuccess").show();
+                                $("#passwordSuccess").show('success');
+                                $("#resetPassword").hide();
+                                $("#screener-div").show();
                             },
                             error: function (err) {
                                 console.log(err);
@@ -158,7 +154,7 @@ var userId;
 //                    $("#login").hide();
 //                    //window.location.replace('/dashboard.html');
 //                }
-                        return false;
+                        //return false;
                     },
                     error: function (err) {
                         console.log(err);
@@ -170,10 +166,8 @@ var userId;
                 });
                 return false;
             });
-
-
-        });
-    };
+        };
+   
     
  
 
@@ -185,7 +179,6 @@ var userId;
     };
 
 //================ SURVEY ==========================//
-//var user;
 
 //if user is NOT coming in to the office: 
 $("#q1No").on("click", function (e) {
@@ -196,22 +189,23 @@ $("#q1No").on("click", function (e) {
     $("#departure-container").hide();
    
     console.log(user);
-    var email = user.email;
-    var password = user.defaultPW;
+    email = user.email;
+    password = user.passwords;
     
     $.ajax({
         type: "POST",
         url: "http://localhost:8080/api/users/coming",
         
         data: JSON.stringify({
-            "user": user,
+            user: user,
             "isAttending": false
             //"isAuthorized": true
             }),
-        contentType: "application/json;charset=UTF-8",
+//        contentType: "application/json;charset=UTF-8",
         headers: {
             "email": email,
-            "password": password
+            "password": password,
+            "content-type": "application/json"
         },
         success: function (response, status) {
             //alert('success');
@@ -301,13 +295,14 @@ $("#surveySubmit").on("click", function (e) {
 
 function notAuthorized() {
         console.log(user);
-        var email = user.email;
-        var password = user.defaultPW;
+        email = user.email;
+        //password = user.defaultPW;
+        password = user.passwords;
     
         $.ajax({
             type: "POST",
             url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
+//            contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({
                 "isAttending": true,
                 "isAuthorized": false,
@@ -316,7 +311,8 @@ function notAuthorized() {
 
         headers: {
             "email": email,
-            "password": password
+            "password": password,
+            "content-type": "application/json"
         },
         success: function (response, status) {
             console.log(response);
@@ -331,9 +327,10 @@ var startTime;
 
 function loadArrivals() {
     console.log(user);
-    var email = user.email;
-    var password = user.defaultPW;
-    var locationId = user.location.locationId;
+    email = user.email;
+    password = user.passwords;
+    console.log(password);
+    locationId = user.location.locationId;
     //var userId = user.userId;
     authorized();
    
@@ -421,10 +418,10 @@ function loadDepartures() {
     $("#departure-container").show();
     $("#arrival-success").show();
     console.log(user);
-    var email = user.email;
-    var password = user.defaultPW;
-    var locationId = user.location.locationId;
-    var userId = user.userId;
+    email = user.email;
+    password = user.passwords;
+    locationId = user.location.locationId;
+    userId = user.userId;
     
     $.ajax({
         type: "GET",
@@ -445,9 +442,7 @@ function loadDepartures() {
                     var timeSlotId = response[i].timeSlotId;
                     //console.log(timeSlotId + " / " + startTime);
                 
-//                    var departureBtn = "<div>";
                     var departureBtn = "<div class='col-3'>";
-//                    departureBtn += "<button class='btn-primary time' id='" + timeSlotId + "'>";
                     departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
                     departureBtn += "<p class='item'>" + startTime + "</p>";
                     departureBtn += "</button>";
@@ -504,8 +499,8 @@ function loadDepartures() {
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
         console.log(user);
-        var email = user.email;
-        var password = user.defaultPW;
+        email = user.email;
+        password = user.passwords;
     
         $.ajax({
             type: "POST",
