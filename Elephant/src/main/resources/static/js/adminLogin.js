@@ -19,6 +19,7 @@ $(document).ready(function () {
     $("#healthSurveyDiv").hide();
     $("#arrival-success").hide();
     $("#departure-success").hide();
+    $("#overall-success").hide();
     $("#arrival-container").hide();
     $("#departure-container").hide();
     $("#screener-div").hide();
@@ -248,6 +249,7 @@ $(document).ready(function () {
         $("#healthSurveyDiv").show();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#screener-div").show();
@@ -275,10 +277,10 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
@@ -437,13 +439,13 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -459,13 +461,13 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -573,6 +575,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
 
         $('#locationAddUser').empty();
 
@@ -631,13 +634,13 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").show();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#editLocErrorMessages").hide();
 
@@ -680,13 +683,13 @@ $(document).ready(function () {
         $("#healthSurveyDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -856,6 +859,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         
         $("#allEmployeeErr").hide();
     })
@@ -1010,6 +1014,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
     });
     
 
@@ -1411,6 +1416,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
     });
 
     $('#submitLocationInfoBtn').click(function (event) {
@@ -1871,6 +1877,8 @@ function loadDepartures() {
                         //$('#time-success').show();
                         $('#departure-success').show();
                         $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+                        $('#overall-success').show();
+                        $('#overall-success').text("Thanks, your response has been recorded.");
                         
                     },
                     error: function (err) {

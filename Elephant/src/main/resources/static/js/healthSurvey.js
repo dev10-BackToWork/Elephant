@@ -504,6 +504,8 @@ function loadDepartures() {
                         //$('#time-success').show();
                         $('#departure-success').show();
                         $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+                        $('#overall-success').show();
+                        $('#overall-success').text("Thanks, your response has been recorded.");
                         
                     },
                     error: function (err) {
