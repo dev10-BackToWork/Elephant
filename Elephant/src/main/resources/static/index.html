@@ -71,19 +71,25 @@
                     <div class="card-body">
                         <h5 class="card-title text-center">Reset Password</h5>
                             <form onsubmit="resetPassword();" class="form-signin">
+<!--                            <form class="form-signin">-->
                             <div class="form-label-group">
                                 <input type="email" id="resetEmail" class="form-control" required autofocus >
                                 <label for="resetEmail">Email address</label>
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" id="resetPassword" class="form-control" required >
-                                <label for="resetPassword">Existing Password</label>
+                                <input type="password" id="resetPasswordInput" class="form-control" required >
+                                <label for="resetPasswordInput">Existing password</label>
                             </div>
                                 
                            <div class="form-label-group">
                                 <input type="password" id="newPassword" class="form-control" required >
-                                <label for="newPassword">New Password</label>
+                                <label for="newPassword">New password</label>
+                            </div>
+                            
+                           <div class="form-label-group">
+                                <input type="password" id="newPasswordConfirm" class="form-control" required >
+                                <label for="newPasswordConfirm">Enter new password again</label>
                             </div>
                                 
                             <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"
@@ -126,7 +132,7 @@
                     <div class="row">
                         <div class="col-11">
                             <div class="form-check">
-                            <label for="q1" class="form-check-label">Please take your temperature immediately prior to answering the following questions.<br>Do you have symptoms of fever (100.4 +), cough, shortness of breath, sore throat, or diarrhea?</label>
+                            <label for="q1" class="form-check-label">Please take your temperature immediately prior to answering the following question.<br>Do you have symptoms of fever (100.4+), cough, shortness of breath, sore throat, or diarrhea?</label>
                             </div>
                         </div>
                         
