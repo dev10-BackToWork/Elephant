@@ -1,14 +1,10 @@
-DROP DATABASE IF EXISTS elephantDB;
-CREATE DATABASE elephantDB;
-USE elephantDB;
-
-CREATE TABLE `role` (
-	roleId int primary key,
-	roleName varchar(10) not null
+CREATE TABLE `Role` (
+	RoleId int primary key,
+	RoleName varchar(10) not null
 );
 
-CREATE TABLE location (
-	locationId int primary key auto_increment,
+CREATE TABLE Location (
+	LocationId int primary key auto_increment,
     cityName varchar(50) not null,
     timeIncrement int not null,
     maxOccupancy int not null,
@@ -16,72 +12,72 @@ CREATE TABLE location (
     endTime time not null
 );
 
-CREATE TABLE timeSlot (
-	timeSlotId int primary key auto_increment,
-    timeSlotDate date not null,
+CREATE TABLE TimeSlot (
+	TimeSlotId int primary key auto_increment,
+    TimeSlotDate date not null,
     startTime time not null,
     isTaken boolean default false,
-    locationId int,
-    CONSTRAINT fk_timeSlot_location
-		FOREIGN KEY (locationId)
-        REFERENCES location(locationId)
+    LocationId int,
+    CONSTRAINT fk_TimeSlot_Location
+		FOREIGN KEY (LocationId)
+        REFERENCES Location(LocationId)
 );
 
-CREATE TABLE `user` (
-	userId int primary key auto_increment,
+CREATE TABLE `User` (
+	UserId int primary key auto_increment,
     firstName varchar(25) not null,
     lastName varchar(25) not null,
     email varchar(50) not null,
     defaultPW varchar(50) not null,
     passwords varchar(125) not null,
-    locationId int,
-    roleId int,
-    CONSTRAINT fk_user_location
-		FOREIGN KEY (locationId)
-        REFERENCES location(locationId),
-	CONSTRAINT fk_user_role
-		FOREIGN KEY (roleId)
-        REFERENCES role(roleId)
+    LocationId int,
+    RoleId int,
+    CONSTRAINT fk_User_Location
+		FOREIGN KEY (LocationId)
+        REFERENCES Location(LocationId),
+	CONSTRAINT fk_User_Role
+		FOREIGN KEY (RoleId)
+        REFERENCES Role(RoleId)
 );
         
-CREATE TABLE arrival (
-	arrivalId int primary key auto_increment,
-    arrivalDate date not null,
-    timeSlotId int,
-    userId int,
-    CONSTRAINT fk_arrival_timeSlot
-		FOREIGN KEY (timeSlotId)
-        REFERENCES timeSlot(timeSlotId),
-	CONSTRAINT fk_arrival_user
-		FOREIGN KEY (userId)
-        REFERENCES user(userId)
+CREATE TABLE Arrival (
+	ArrivalId int primary key auto_increment,
+    ArrivalDate date not null,
+    TimeSlotId int,
+    UserId int,
+    CONSTRAINT fk_Arrival_TimeSlot
+		FOREIGN KEY (TimeSlotId)
+        REFERENCES TimeSlot(TimeSlotId),
+	CONSTRAINT fk_Arrival_User
+		FOREIGN KEY (UserId)
+        REFERENCES User(UserId)
 );
 	
-CREATE TABLE departure (
-	departureId int primary key auto_increment,
-    departureDate date not null,
-    timeSlotId int,
-    userId int,
-    CONSTRAINT fk_departure_timeSlot
-		FOREIGN KEY (timeSlotId)
-        REFERENCES timeSlot(timeSlotId),
-	CONSTRAINT fk_departure_user
-		FOREIGN KEY (userId)
-        REFERENCES user(userId)
+CREATE TABLE Departure (
+	DepartureId int primary key auto_increment,
+    DepartureDate date not null,
+    TimeSlotId int,
+    UserId int,
+    CONSTRAINT fk_Departure_TimeSlot
+		FOREIGN KEY (TimeSlotId)
+        REFERENCES TimeSlot(TimeSlotId),
+	CONSTRAINT fk_Departure_User
+		FOREIGN KEY (UserId)
+        REFERENCES User(UserId)
 );
 
-CREATE TABLE attendance (
-	attendanceId int primary key auto_increment,
+CREATE TABLE Attendance (
+	AttendanceId int primary key auto_increment,
     isAttending boolean default false,
-    attendanceDate date not null,
-    userId int,
+    AttendanceDate date not null,
+    UserId int,
     isAuthorized boolean default false,
-    CONSTRAINT fk_attendance_user
-		FOREIGN KEY (userId)
-        REFERENCES user(userId)
+    CONSTRAINT fk_Attendance_User
+		FOREIGN KEY (UserId)
+        REFERENCES User(UserId)
 );
 
-INSERT INTO location (cityName, timeIncrement, maxOccupancy, beginningTime, endTime) VALUES 
+INSERT INTO Location (cityName, timeIncrement, maxOccupancy, beginningTime, endTime) VALUES 
 	("GA, Norcross", 15, 20, "07:00:00", "19:00:00"),
 	("KS, Lenexa", 15, 20, "07:00:00", "19:00:00"),
     ("KS, Lenexa (Kansas Delivery Center)", 15, 20, "07:00:00", "19:00:00"),
@@ -97,11 +93,11 @@ INSERT INTO location (cityName, timeIncrement, maxOccupancy, beginningTime, endT
     ("TX, Dallas (Plano Delivery Center)", 15, 20, "07:00:00", "19:00:00"),
     ("WI, Milwaukee", 15, 20, "07:00:00", "19:00:00");
 
-INSERT INTO `role` (roleId, roleName)
+INSERT INTO `Role` (RoleId, RoleName)
 VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
-INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
+INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, LocationId, RoleId) VALUES 
 	("default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
 	("Agnes","Atem","agnesatem2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Padmavathi","Vadrevu","vpadma0881@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
@@ -471,12 +467,12 @@ BEGIN
     
     SET locId = 1;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -485,7 +481,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -507,12 +503,12 @@ BEGIN
     
     SET locId = 2;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -521,7 +517,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -543,12 +539,12 @@ BEGIN
     
     SET locId = 3;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -557,7 +553,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -579,12 +575,12 @@ BEGIN
     
     SET locId = 4;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -593,7 +589,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -615,12 +611,12 @@ BEGIN
     
     SET locId = 5;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -629,7 +625,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -651,12 +647,12 @@ BEGIN
     
     SET locId = 6;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -665,7 +661,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -687,12 +683,12 @@ BEGIN
     
     SET locId = 7;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -701,7 +697,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -723,12 +719,12 @@ BEGIN
     
     SET locId = 8;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -737,7 +733,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -759,12 +755,12 @@ BEGIN
     
     SET locId = 9;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -773,7 +769,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -795,12 +791,12 @@ BEGIN
     
     SET locId = 10;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -809,7 +805,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -831,12 +827,12 @@ BEGIN
     
     SET locId = 11;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -845,7 +841,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -867,12 +863,12 @@ BEGIN
     
     SET locId = 12;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -881,7 +877,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -903,12 +899,12 @@ BEGIN
     
     SET locId = 13;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -917,7 +913,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -939,12 +935,12 @@ BEGIN
     
     SET locId = 14;
     SET x = 0;
-    SET y = (SELECT beginningTime FROM location WHERE locationId = locId);
-    SET increment = (SELECT timeIncrement FROM location WHERE locationId = locId);
-    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM location WHERE locationId = locId);
-    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM location WHERE locationId = locId);
-    SET endTimeHours = (SELECT HOUR(endTime) FROM location WHERE locationId = locId);
-    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM location WHERE locationId = locId);
+    SET y = (SELECT beginningTime FROM Location WHERE LocationId = locId);
+    SET increment = (SELECT timeIncrement FROM Location WHERE LocationId = locId);
+    SET beginningTimeHours = (SELECT HOUR(beginningTime) FROM Location WHERE LocationId = locId);
+    SET beginningTimeMinutes = (SELECT MINUTE(beginningTime) FROM Location WHERE LocationId = locId);
+    SET endTimeHours = (SELECT HOUR(endTime) FROM Location WHERE LocationId = locId);
+    SET endTimeMinutes = (SELECT MINUTE(endTime) FROM Location WHERE LocationId = locId);
     Set intervalMinutes = (endTimeHours * 60 + endTimeMinutes) - (beginningTimeHours * 60 + beginningTimeMinutes);
 	SET loopNumber = intervalMinutes / increment;
     
@@ -953,7 +949,7 @@ BEGIN
 			LEAVE loop_label;
 		END IF;
         
-        INSERT INTO timeslot (timeSlotDate, startTime, locationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
+        INSERT INTO TimeSlot (TimeSlotDate, startTime, LocationId) VALUES (CURDATE(), y + INTERVAL increment * x MINUTE, locId);
         
         SET x = x + 1;
 	END LOOP;
@@ -964,26 +960,26 @@ CREATE PROCEDURE removeOldData()
 BEGIN
 	SET SQL_SAFE_UPDATES = 0;
 
-	DELETE FROM arrival
-    WHERE arrivalDate < CURDATE() - INTERVAL 90 DAY;
+	DELETE FROM Arrival
+    WHERE ArrivalDate < CURDATE() - INTERVAL 90 DAY;
     
-    DELETE FROM departure
-    WHERE departureDate < CURDATE() - INTERVAL 90 DAY;
+    DELETE FROM Departure
+    WHERE DepartureDate < CURDATE() - INTERVAL 90 DAY;
     
-    DELETE FROM timeslot
-    WHERE timeSlotDate < CURDATE() - INTERVAL 90 DAY;
+    DELETE FROM TimeSlot
+    WHERE TimeSlotDate < CURDATE() - INTERVAL 90 DAY;
     
-    DELETE FROM attendance
-    WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
+    DELETE FROM Attendance
+    WHERE AttendanceDate < CURDATE() - INTERVAL 90 DAY;
     
     SET SQL_SAFE_UPDATES = 1;
 END$$
 
--- CREATE EVENT elephantdb.generateTimeSlots
--- 	ON SCHEDULE EVERY '1' day
--- 	STARTS '2020-05-27 15:26:15'
--- DO
--- BEGIN
+CREATE EVENT g10heathy_mysql1.generateTimeSlots
+ON SCHEDULE EVERY '1' day
+STARTS '2020-05-27 15:26:15'
+DO
+BEGIN
 	CALL genLoc1TimeSlots();
     CALL genLoc2TimeSlots();
     CALL genLoc3TimeSlots();
@@ -1000,4 +996,4 @@ END$$
     CALL genLoc14TimeSlots();
     
     CALL removeOldData();
--- END
+END

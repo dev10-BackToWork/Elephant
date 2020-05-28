@@ -70,20 +70,26 @@
                 <div class="card card-signin">
                     <div class="card-body">
                         <h5 class="card-title text-center">Reset Password</h5>
-                            <form onsubmit="resetPassword();" class="form-signin">
+                            <form onsubmit="resetPassword();" class="form-signin" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
+<!--                            <form class="form-signin">-->
                             <div class="form-label-group">
                                 <input type="email" id="resetEmail" class="form-control" required autofocus >
                                 <label for="resetEmail">Email address</label>
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" id="resetPassword" class="form-control" required >
-                                <label for="resetPassword">Existing Password</label>
+                                <input type="password" id="resetPasswordInput" class="form-control" required >
+                                <label for="resetPasswordInput">Existing password</label>
                             </div>
                                 
                            <div class="form-label-group">
-                                <input type="password" id="newPassword" class="form-control" required >
-                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" class="form-control" name=up required >
+                                <label for="newPassword">New password</label>
+                            </div>
+                            
+                           <div class="form-label-group">
+                                <input type="password" id="newPasswordConfirm" name=up2 class="form-control" required >
+                                <label for="newPasswordConfirm">Confirm new password</label>
                             </div>
                                 
                             <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"
@@ -102,15 +108,33 @@
     <!-- Survey Content -->
     <div class="container" id="healthSurveyDiv">
         <div id="survey-container">
+            
+            
 
-        <div class="form-group" id="screener-div">
-<!--            <h2 class="center">Welcome back, Jane!</h2>-->
-            <p class="center">Are you coming in to the office today?</p>
+            <div class="form-group" id="screener-div" >
+                <div class="row" style="margin-bottom: 0px; margin-top: 20px">   
+                <p><a onclick="showGuidelines()" class="guideline-link" style="font-size: 1.2em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a></p>
+            </div>
+    <!--            <h2 class="center">Welcome back, Jane!</h2>-->
+                <p class="center" style="margin-top: 0px">Are you coming in to the office today?</p>
+
             
             <div class="row">    
                 <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
                 <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
             </div>
+             <div class="row">   
+                  <p></p>
+             </div>
+             <div id="guidelinesDiv" style="display: none">
+                  <div class="row">   
+<!--                  <embed src="images/guidelines.pdf" type="application/pdf" width="100%" height="600px" />-->
+                      <img class="guidelines" src="images/guidelines1.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
+                  </div>
+                  <div class="row">   
+                      <img class="guidelines" src="images/guidelines2.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
+                  </div>   
+             </div>
 <!--            <div class="row submit" id="submit-screener">  
                 <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
             </div>-->
@@ -126,7 +150,7 @@
                     <div class="row">
                         <div class="col-11">
                             <div class="form-check">
-                            <label for="q1" class="form-check-label">Please take your temperature immediately prior to answering the following questions.<br>Do you have symptoms of fever (100.4 +), cough, shortness of breath, sore throat, or diarrhea?</label>
+                            <label for="q1" class="form-check-label">Please take your temperature immediately prior to answering the following question.<br>Do you have symptoms of fever (100.4+), cough, shortness of breath, sore throat, or diarrhea?</label>
                             </div>
                         </div>
                         
@@ -183,6 +207,7 @@
     <div class="container">
         <div class="row" id="arrival-success"></div>
         <div class="row" id="departure-success"></div>
+        <div class="row" id="overall-success" style="font-size: 1.2em"></div>
     </div>
 
     <div class="container" id="arrival-container">

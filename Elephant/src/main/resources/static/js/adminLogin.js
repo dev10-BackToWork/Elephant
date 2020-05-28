@@ -7,23 +7,6 @@ $(document).ready(function () {
     var adminPassword;
     var user;
 
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8080/api/admin/locations',
-        headers: {
-            'email': 'user@user.com',
-            'password': 'password'
-        },
-        success: function (data) {
-            allLocations = data;
-            console.log(allLocations);
-        },
-        error: function (http) {
-            console.log(http);
-            console.log('An error resulted when attempting to retrieve locations.');
-        }
-    });
-
     $("#loginNav").show();
     $("#adminLoginDiv").show();
     $("#loginErr").hide();
@@ -36,6 +19,7 @@ $(document).ready(function () {
     $("#healthSurveyDiv").hide();
     $("#arrival-success").hide();
     $("#departure-success").hide();
+    $("#overall-success").hide();
     $("#arrival-container").hide();
     $("#departure-container").hide();
     $("#screener-div").hide();
@@ -47,7 +31,7 @@ $(document).ready(function () {
     $("#locationInfoDiv").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
-    
+    $("#resetPasswordAdmin").hide();
     
 
     $("#submitLoginButton").click(function (e) {
@@ -72,6 +56,25 @@ $(document).ready(function () {
                     adminEmail = response.email;
                     adminPassword = response.defaultPW;
                     user = response;
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8080/api/admin/locations',
+                        headers: {
+                                 'email': adminEmail,
+                                 'password': adminPassword
+                             },
+                        success: function (data) {
+                            allLocations = data;
+                            console.log(allLocations);
+                        },
+                        error: function (http) {
+                            console.log(http);
+                            console.log('An error resulted when attempting to retrieve locations.');
+                        }
+                    });
+    
+    
                     $("#adminLoginDiv").hide();
                     $("#loginNav").hide();
                     $("#navBarDiv").show();
@@ -246,6 +249,7 @@ $(document).ready(function () {
         $("#healthSurveyDiv").show();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         $("#screener-div").show();
@@ -271,11 +275,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#overall-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        $("#arrival-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
-        $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
@@ -429,11 +437,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#overall-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
     });
     
     $('#employeesBtn').click(function (event) {
@@ -447,11 +459,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#overall-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#allEmployeeErr").hide();
 
@@ -559,6 +575,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
 
         $('#locationAddUser').empty();
 
@@ -615,11 +632,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#overall-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").show();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
         
         $("#editLocErrorMessages").hide();
 
@@ -660,11 +681,15 @@ $(document).ready(function () {
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
+        $("#arrival-success").hide();
+        $("#departure-success").hide();
+        $("#overall-success").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
-        $("#departure-success").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -747,8 +772,8 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'http://localhost:8080/api/admin/newUser',
                 headers: {
-                    'email': 'user@user.com',
-                    'password': 'password',
+                    'email': adminEmail,
+                    'password': adminPassword,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(userObj),
@@ -834,6 +859,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
         
         $("#allEmployeeErr").hide();
     })
@@ -922,8 +948,8 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'http://localhost:8080/api/admin/editUser',
                 headers: {
-                    'email': 'user@user.com',
-                    'password': 'password',
+                    'email': adminEmail,
+                    'password': adminPassword,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(userObj),
@@ -988,6 +1014,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
     });
     
 
@@ -1389,6 +1416,7 @@ $(document).ready(function () {
         $("#locationInfoDiv").hide();
         $("#arrival-success").hide();
         $("#departure-success").hide();
+        $("#overall-success").hide();
     });
 
     $('#submitLocationInfoBtn').click(function (event) {
@@ -1849,6 +1877,8 @@ function loadDepartures() {
                         //$('#time-success').show();
                         $('#departure-success').show();
                         $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+                        $('#overall-success').show();
+                        $('#overall-success').text("Thanks, your response has been recorded.");
                         
                     },
                     error: function (err) {
@@ -2196,6 +2226,15 @@ function clearLogin() {
         $('.form-control').val('');
     });
 };
+
+function showGuidelines() {
+    var x = document.getElementById("guidelinesDiv");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
 
 
 

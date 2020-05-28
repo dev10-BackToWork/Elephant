@@ -52,7 +52,7 @@
         <!-- Admin Login Div -->
         <div class="container" id="adminLoginDiv">
             <div class="row">
-                <h1 class="heading">{Title Placeholder/COVID-19 Back-To-Work Scheduling} </h1>
+                <h1 class="heading">Gen10 Health App</h1>
             </div>
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card card-signin">
@@ -69,15 +69,10 @@
                                 <label for="inputPassword">Password</label>
                             </div>
 
-<!--                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                <label class="custom-control-label" for="customCheck1">Remember password</label>
-                            </div>-->
-
                             <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
                                 type="submit">Sign In</button>
                             <div class="row">
-                               <a class="nav-link" href="/resetPassword">Reset Password</a>
+                               <button class="btn" id="reset-password-btn">Change Password</button>
                             </div>
                             <hr class="my-4">
                         </form>
@@ -87,6 +82,48 @@
             </div>
         </div>
         
+        <div class="container" id="resetPasswordAdmin">
+            <div class="row">
+                <h1 class="heading">Gen10 Health App</h1>
+            </div>
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Reset Password</h5>
+                            <form onsubmit="resetPassword();" class="form-signin" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
+<!--                            <form class="form-signin">-->
+                            <div class="form-label-group">
+                                <input type="email" id="resetEmail" class="form-control" required autofocus >
+                                <label for="resetEmail">Email address</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="resetPasswordInput" class="form-control" required >
+                                <label for="resetPasswordInput">Existing password</label>
+                            </div>
+                                
+                           <div class="form-label-group">
+                                <input type="password" id="newPassword" class="form-control" name=up required >
+                                <label for="newPassword">New password</label>
+                            </div>
+                            
+                           <div class="form-label-group">
+                                <input type="password" id="newPasswordConfirm" name=up2 class="form-control" required >
+                                <label for="newPasswordConfirm">Confirm new password</label>
+                            </div>
+                                
+                            <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"
+                                type="submit">Submit</button>
+                            <hr class="my-4">
+                        </form>
+                    </div>
+                </div> 
+                 <div class="alert alert-danger" id="resetPasswordErr" role="alert"></div>
+                 <div class="alert alert-success" id="passwordSuccess" role="success"></div>
+                 
+            </div>
+        </div> 
+
         <!-- Nav Bar Div -->
         <nav class="navbar navbar-expand-sm navbar-light static-top" id="navBarDiv">
                 <div class="container">
@@ -222,7 +259,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center" id="employeeTableDiv">
                         <ul class="list-group" id="errorMessages"></ul>
-                        <h3 class="mt-5">All Employees</h3>
+                        <h3 class="mt-5">Employees</h3>
                         <div class="col text-center">
                             <table class="table table-striped" id="employeeTable">
                                 <thead>
@@ -319,7 +356,7 @@
                     <label for="role">Role</label>
                     <select name="role" id="roleAddUser" class="form-control">
                       <option value="1">Branch Administrator</option>
-                      <option value="2">Branch Employee</option>
+                      <option value="2" selected>Branch Employee</option>
                     </select>
                   </div>
                 </div>
@@ -442,15 +479,36 @@
     <!-- Survey Content -->
     <div class="container" id="healthSurveyDiv">
         <div id="survey-container">
+            <div class="row" style="margin-bottom: 0px; margin-top: 20px">   
+                <p><a onclick="showGuidelines()" class="guideline-link nav-link" style="font-size: 1.2em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a></p>
+            </div>
 
-            <div class="form-group" id="screener-div">
+            <div class="form-group" id="screener-div" >
     <!--            <h2 class="center">Welcome back, Jane!</h2>-->
-                <p class="center">Are you coming in to the office today?</p>
+                <p class="center" style="margin-top: 0px">Are you coming in to the office today?</p>
 
                 <div class="row">    
                     <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
                     <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
                 </div>
+                <div class="row">   
+                    <p></p>
+                </div>
+                 
+                <div id="guidelinesDiv" style="display: none">
+                    <div class="row">   
+<!--                    <embed src="images/guidelines.pdf" type="application/pdf" width="100%" height="600px" />-->
+                        <img class="guidelines" src="images/guidelines1.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
+                    </div>
+                    <div class="row">   
+                        <img class="guidelines" src="images/guidelines2.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
+                    </div>   
+                </div>
+                
+                
+                
+                
+                
     <!--            <div class="row submit" id="submit-screener">  
                     <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
                 </div>-->
@@ -517,7 +575,8 @@
        </div>
         
         <div id="survey-bye">
-             <p class="center">You have not yet been approved to come in to the office. HR has been notified and will follow up with you soon.</p>
+             <p class="center">You have not yet been approved to come in to the office. <br>
+                 Please contact HR for authorization permission.</p>
         </div>
     </div> 
 
@@ -525,6 +584,7 @@
     <div class="container">
         <div class="row" id="arrival-success"></div>
         <div class="row" id="departure-success"></div>
+        <div class="row" id="overall-success" style="font-size: 1.2em"></div>
     </div>
 
     <div class="container" id="arrival-container">
@@ -681,7 +741,7 @@
                     <div class="col-md-12 text-center">
                         <ul class="list-group" id="editLocErrorMessages"></ul>
                     </div>
-                    <h3 class="mt-5">Location Information</h3>
+                    <h3 class="mt-5">Office Information</h3>
                     <div class="row">
                         <div class="col-md-12">
                             <label for="cityname">City</label>
@@ -710,7 +770,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <p>Please note, any changes made to Beginning and End Times will take effect the following day.</p>
+                            <p>Please note, any changes made to Time Increment, Beginning Time, or End Time will take effect the following day.</p>
                         </div>
                     </div>
                     <div class="row">
@@ -726,7 +786,7 @@
 
     </main>
     <footer>
-        <p>footer content placeholder</p>
+       
     </footer>
 
     <!-- Bootstrap core JavaScript -->
