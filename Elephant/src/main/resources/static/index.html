@@ -70,7 +70,7 @@
                 <div class="card card-signin">
                     <div class="card-body">
                         <h5 class="card-title text-center">Reset Password</h5>
-                            <form onsubmit="resetPassword();" class="form-signin">
+                            <form onsubmit="resetPassword();" class="form-signin" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
 <!--                            <form class="form-signin">-->
                             <div class="form-label-group">
                                 <input type="email" id="resetEmail" class="form-control" required autofocus >
@@ -83,13 +83,13 @@
                             </div>
                                 
                            <div class="form-label-group">
-                                <input type="password" id="newPassword" class="form-control" required >
+                                <input type="password" id="newPassword" class="form-control" name=up required >
                                 <label for="newPassword">New password</label>
                             </div>
                             
                            <div class="form-label-group">
-                                <input type="password" id="newPasswordConfirm" class="form-control" required >
-                                <label for="newPasswordConfirm">Enter new password again</label>
+                                <input type="password" id="newPasswordConfirm" name=up2 class="form-control" required >
+                                <label for="newPasswordConfirm">Confirm new password</label>
                             </div>
                                 
                             <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"

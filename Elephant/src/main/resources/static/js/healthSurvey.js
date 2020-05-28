@@ -106,6 +106,20 @@ var user;
               //  e.preventDefault();
                 email = $("#resetEmail").val();
                 password = $("#resetPasswordInput").val();
+                        
+                if (email.length === 0) {
+                    $('#resetPasswordErr').show();
+                    $('#resetPasswordErr').text("Please enter your email address.");
+                }
+                if (password.length === 0) {
+                   $('#resetPasswordErr').show();
+                   $('#resetPasswordErr').text("Please enter your password. If you do not know your password, please contact your branch administrator for further assistance.");
+                }
+                        //$("#messages").text("You must select an item");
+                        //resetMessagesStatus();
+                        //$("#messages").addClass("warning");
+    
+    
                 console.log(password);
 
                 $.ajax({
@@ -123,6 +137,11 @@ var user;
                             user.passwords = newPassword;
                             console.log(newPassword);
                 
+                            if (newPassword.length === 0) {
+                            $('#resetPasswordErr').show();
+                            $('#resetPasswordErr').text("Please enter a new password.");
+                            }
+
                         //on login success, update password 
                         $.ajax({
                             type: "POST",
@@ -142,7 +161,8 @@ var user;
                             error: function (err) {
                                 console.log(err);
                                 $("#resetPasswordErr").show();
-
+                                $('#loginErr').show();
+                                $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
                             }
                         });
 

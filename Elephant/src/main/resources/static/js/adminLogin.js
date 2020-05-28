@@ -47,7 +47,7 @@ $(document).ready(function () {
     $("#locationInfoDiv").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
-    
+    $("#resetPasswordAdmin").hide();
     
 
     $("#submitLoginButton").click(function (e) {
