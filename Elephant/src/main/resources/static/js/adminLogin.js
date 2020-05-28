@@ -2217,6 +2217,15 @@ function clearLogin() {
     });
 };
 
+function showGuidelines() {
+    var x = document.getElementById("guidelinesDiv");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
 
 
 
