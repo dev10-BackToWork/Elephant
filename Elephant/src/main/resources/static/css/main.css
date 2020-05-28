@@ -84,7 +84,6 @@ nav.navbar {
 
 .guideline-link:hover {
     font-weight: bold;
-    color: red;
 }
 
 /*  add media queries for toggled mobile nav 
