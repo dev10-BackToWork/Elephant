@@ -485,10 +485,13 @@
     <!-- Survey Content -->
     <div class="container" id="healthSurveyDiv">
         <div id="survey-container">
+            <div class="row" style="margin-bottom: 0px; margin-top: 20px">   
+                <p><a onclick="showGuidelines()" class="guideline-link nav-link" style="font-size: 1.2em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a></p>
+            </div>
 
-            <div class="form-group" id="screener-div">
+            <div class="form-group" id="screener-div" >
     <!--            <h2 class="center">Welcome back, Jane!</h2>-->
-                <p class="center">Are you coming in to the office today?</p>
+                <p class="center" style="margin-top: 0px">Are you coming in to the office today?</p>
 
                 <div class="row">    
                     <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
@@ -497,9 +500,7 @@
                 <div class="row">   
                     <p></p>
                 </div>
-                 <div class="row">   
-                    <a onclick="showGuidelines()" class="nav-link" style="font-size: 1.1em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a>
-                </div>
+                 
                 <div id="guidelinesDiv" style="display: none">
                     <div class="row">   
 <!--                    <embed src="images/guidelines.pdf" type="application/pdf" width="100%" height="600px" />-->
@@ -580,7 +581,8 @@
        </div>
         
         <div id="survey-bye">
-             <p class="center">You have not yet been approved to come in to the office. Please follow-up with HR for further steps.</p>
+             <p class="center">You have not yet been approved to come in to the office. <br>
+                 Please contact HR for authorization permission.</p>
         </div>
     </div> 
 
@@ -588,6 +590,7 @@
     <div class="container">
         <div class="row" id="arrival-success"></div>
         <div class="row" id="departure-success"></div>
+        <div class="row" id="overall-success" style="font-size: 1.2em"></div>
     </div>
 
     <div class="container" id="arrival-container">

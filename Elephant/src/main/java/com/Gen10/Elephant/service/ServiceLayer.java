@@ -29,6 +29,7 @@ import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,9 @@ public class ServiceLayer {
     private final RolesRepository rolesRepo;
     private final TimeSlotRepository timeSlotRepo;
     private final UsersRepository usersRepo;
+
+    @Autowired
+    private Mailer mailer;
 
     private BCrypt bcrypt = new BCrypt();
 
@@ -499,6 +503,10 @@ public class ServiceLayer {
         user.setPasswords(encryptPass);
 
         User dbUser = usersRepo.save(user);
+        if (dbUser != null){
+            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", dbUser.getEmail(), "Account Created", 
+            "Hi " + dbUser.getFirstName() + ", \n\n\tA new account has been created for you with the username: " + dbUser.getEmail() + "\nYour password is: " + dbUser.getDefaultPW());
+        }
         return usersRepo.save(dbUser);
     }
 
@@ -547,8 +555,14 @@ public class ServiceLayer {
         if (todaysAttendance != null) {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
+            if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
+                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood.comp@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
+            }
             return attendanceRepo.save(todaysAttendance);
         } else {
+            if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
+                Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood.comp@gmail.com", "Authorization", attendance.getUser().getEmail() + "has selected 'no' for one of the authorization questions");
+            }
             return attendanceRepo.save(attendance);
         }
     }
@@ -605,7 +619,12 @@ public class ServiceLayer {
 
         String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
         existingUser.setPasswords(encryptPass);
-
+        User savedUser = usersRepo.save(existingUser);
+        if (savedUser != null){
+            Mailer.send("noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", savedUser.getEmail(), "Reset Password", 
+            "Hi " + savedUser.getFirstName() + ", \n\n\tWe recieved a password reset request from your branch manager for your account.\nYour new password is: " + savedUser.getDefaultPW());
+        }
+        
         return usersRepo.save(existingUser);
     }
 
