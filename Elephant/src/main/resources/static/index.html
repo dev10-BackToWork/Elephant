@@ -147,19 +147,22 @@
         <div class="form-group" id="survey-div">
             <form id="survey">
 <!--                <div class="row" id="questionDiv">-->
-                    <div class="row">
-                        <div class="col-11">
-                            <div class="form-check">
-                            <label for="q1" class="form-check-label">Please take your temperature immediately prior to answering the following question.<br>Do you have symptoms of fever (100.4+), cough, shortness of breath, sore throat, or diarrhea?</label>
+                        <div class="row">
+                            <div class="col-11">
+                                <h5>Please take your temperature immediately prior to answering the following questions.</h5>
                             </div>
+                            <div class="col-11">
+                                <div class="form-check">
+                                <label for="q1" class="form-check-label">Do you have symptoms of fever (100.4 degrees), cough, shortness of breath, sore throat, or diarrhea?</label>
+                                </div>
+                            </div>
+
+                            <div class="col-1">
+                            <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
+                                data-on="Yes" data-off="No" data-style="android">
+                            </div>
+    <!--                         <div id="q1Equals"></div>-->
                         </div>
-                        
-                        <div class="col-1">
-                        <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-                        </div>
-<!--                         <div id="q1Equals"></div>-->
-                    </div>
 
                     <div class="row">
                          <div class="col-11">
@@ -296,7 +299,7 @@
     
     </main>
 <footer>
-    <p>footer content placeholder</p>
+
 </footer>
 
 <!-- Bootstrap core JavaScript -->
