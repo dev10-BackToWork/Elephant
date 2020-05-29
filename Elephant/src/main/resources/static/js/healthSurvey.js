@@ -14,6 +14,7 @@ var password;
 var userId;
 var user;  
     
+    
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
         password = $("#inputPassword").val();
@@ -35,7 +36,6 @@ var user;
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/checkChange/"+ userId,
-                    //url: "http://localhost:8080/api/users/checkChange",
                     data: JSON.stringify(user),
 
                     headers: {
@@ -54,7 +54,6 @@ var user;
                         }
                     },
                     error: function (err) {
-                        //$("#resetPassword").show();
                         $("#resetPasswordErr").show();
                         console.log(err);
                     }
@@ -88,7 +87,7 @@ var user;
     $("#reset-password-btn").click(function (e) {
         e.preventDefault();
         resetPassword();
-        //function checkPasswordChg();
+        
     });
      
     function resetPassword() {
@@ -118,8 +117,7 @@ var user;
                         //$("#messages").text("You must select an item");
                         //resetMessagesStatus();
                         //$("#messages").addClass("warning");
-    
-    
+
                 console.log(password);
 
                 $.ajax({
@@ -187,9 +185,6 @@ var user;
                 return false;
             });
         };
-   
-    
- 
 
     function clearLogin() {
         $('#inputEmail').click(function (e) {

@@ -1,29 +1,4 @@
 $(document).ready(function () {
-
-    var adminLocation;
-    var allLocations;
-    var adminId;
-    var adminEmail;
-    var adminPassword;
-    var user;
-
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8080/api/admin/locations',
-        headers: {
-            'email': 'user@user.com',
-            'password': 'password'
-        },
-        success: function (data) {
-            allLocations = data;
-            console.log(allLocations);
-        },
-        error: function (http) {
-            console.log(http);
-            console.log('An error resulted when attempting to retrieve locations.');
-        }
-    });
-
     $("#loginNav").show();
     $("#adminLoginDiv").show();
     $("#loginErr").hide();
@@ -49,50 +24,123 @@ $(document).ready(function () {
     $("#loginErr").hide();
     $("#resetPasswordAdmin").hide();
     
+    var adminLocation;
+    var allLocations;
+    var adminId;
+    var adminEmail;
+    var adminPassword;
+    var user;
+    
+    var email;
+    var password;
+    var locationId;
+    var userId;
+
+//    $.ajax({
+//        type: 'GET',
+//        url: 'http://localhost:8080/api/admin/locations',
+//        headers: {
+//            'email': email,
+//            'password': password
+//        },
+//        success: function (data) {
+//            allLocations = data;
+//            console.log(allLocations);
+//        },
+//        error: function (http) {
+//            console.log(http);
+//            console.log('An error resulted when attempting to retrieve locations.');
+//        }
+//    });
+
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
-        var password = $("#inputPassword").val();
-        var email = $("#inputEmail").val();
+        password = $("#inputPassword").val();
+        email = $("#inputEmail").val();
 
         $.ajax({
             type: "post",
             url: "http://localhost:8080/api/users/login",
             headers: {
                 "email": email,
-                "password": password
+                "password": password,
+                "content-type": "application/json"
             },
             success: function (response) {
+                user = response;
+                userId = user.userId;
+                adminLocation = user.location.locationId;
+                locationId = user.location.locationId;
                 console.log(response);
+                
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/checkChange/"+ userId,
+                    data: JSON.stringify(user),
+
+                    headers: {
+                        "email": email,
+                        "password": password,
+                        "content-type": "application/json"
+                    },
+                    success: function (response) {
+                        //console.log(response);
+                        if (response === true) {
+                            console.log('changed password is '+ response + ' success, password has been changed');
+                            adminLocation = response.location.locationId;
+                            adminId = response.userId;
+                            adminEmail = response.email;
+                            adminPassword = response.passwords;
+                            user = response;
+                    
+                    var noResponseRows = $('#noResponseRows');
+                    var authPendRows = $('#authPendRows');
+                    var arrivalRows = $('#arrivalRows');
+                    var departureRows = $('#departureRows');
+                    
+                        } else if (response === false) {
+                            console.log('changed password is '+ response + ' please change password');
+                            resetPassword();   
+                        }
+                    },
+                    error: function (err) {
+                        $("#resetPasswordErr").show();
+                        console.log(err);
+                    }
+                });
+
                 if (response.role.roleId === 2) {
                     window.location.replace('/index.html');
                 } else if (response.role.roleId === 1) {
                     adminLocation = response.location.locationId;
                     adminId = response.userId;
                     adminEmail = response.email;
-                    adminPassword = response.defaultPW;
+                    adminPassword = response.passwords;
                     user = response;
-                    $("#adminLoginDiv").hide();
-                    $("#loginNav").hide();
-                    $("#navBarDiv").show();
-                    $("#dashboardDiv").show();
                     
-                    $("#noResErrorMessages").hide();
-                    $("#authErrorMessages").hide();
-                    $("#arrivalErrorMessages").hide();
-                    $("#departureErrorMessages").hide();
-
-                    $('#noResponseRows').empty();
-                    $('#authPendRows').empty();
-                    $('#arrivalRows').empty();
-                    $('#departureRows').empty();
-
                     var noResponseRows = $('#noResponseRows');
                     var authPendRows = $('#authPendRows');
                     var arrivalRows = $('#arrivalRows');
                     var departureRows = $('#departureRows');
 
-                    var locationId = adminLocation;
+                    //var locationId = adminLocation;
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8080/api/admin/locations',
+                        headers: {
+                            'email': email,
+                            'password': password
+                        },
+                        success: function (data) {
+                            allLocations = data;
+                            console.log(allLocations);
+                        },
+                        error: function (http) {
+                            console.log(http);
+                            console.log('An error resulted when attempting to retrieve locations.');
+                        }
+                    });
 
                      $.ajax({
                          type: 'GET',
@@ -207,32 +255,138 @@ $(document).ready(function () {
                         row += '</tr>';
                         departureRows.append(row);
                          });
-                     },
-                     error: function() {
-                    $('#departureErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
-            });
-
-
-
-                            }
-
                         },
-                        error: function (err) {
-                            console.log(err);
-                            $('#loginErr').show();
-                            $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
-                            clearLogin();
-                            return false;
+                        error: function () {
+                            $('#departureErrorMessages')
+                                    .append($('<li>')
+                                            .attr({class: 'list-group-item list-group-item-danger'})
+                                            .text('An error has occurred.'));
                         }
-
                     });
-                    return false;
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                $('#loginErr').show();
+                $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
+                clearLogin();
+                return false;
+            }
+        });
+        return false;
     });
     
+   //RESET PASSWORD FUNCTIONALITY 
+    $("#reset-password-btn").click(function (e) {
+        e.preventDefault();
+        resetPassword();
+    });
+
+    function resetPassword() {
+        $("#loginNav").show();
+        $("#adminLoginDiv").hide();
+        $("#passwordSuccess").hide();
+        $("#resetPasswordErr").hide();
+        $("#resetPasswordAdmin").show();
+        $("#adminLoginDiv").hide();
+        
+        $("#navBarDiv").hide();
+        $("#dashboardDiv").hide();
+
+        $("#noResErrorMessages").hide();
+        $("#authErrorMessages").hide();
+        $("#arrivalErrorMessages").hide();
+        $("#departureErrorMessages").hide();
+
+        $('#noResponseRows').empty();
+        $('#authPendRows').empty();
+        $('#arrivalRows').empty();
+        $('#departureRows').empty();
+
+
+        //on submit, first check login for login success
+        $("#submit-reset-btn").click(function (e) {
+            e.preventDefault();
+                email = $("#resetEmail").val();
+                password = $("#resetPasswordInput").val();
+                        
+                if (email.length === 0) {
+                    $('#resetPasswordErr').show();
+                    $('#resetPasswordErr').text("Please enter your email address.");
+                }
+                if (password.length === 0) {
+                   $('#resetPasswordErr').show();
+                   $('#resetPasswordErr').text("Please enter your password. If you do not know your password, please contact your branch administrator for further assistance.");
+                }
+
+                console.log(password);
+
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8080/api/users/login",
+                    headers: {
+                        "email": email,
+                        "password": password
+                    },
+                    
+                    success: function (response) {
+                        user = response;
+                        console.log(user);
+                            var newPassword = $("#newPassword").val();
+                          //user.passwords = newPassword;
+                          //console.log(newPassword);
+                
+                            if (newPassword.length === 0) {
+                            $('#resetPasswordErr').show();
+                            $('#resetPasswordErr').text("Please enter a new password.");
+                            
+                            } else {
+                                user.passwords = newPassword;
+                            console.log(newPassword);
+                            }
+
+                        //on login success, update password 
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:8080/api/users/editUser",
+                            data: JSON.stringify(user),
+                            headers: {
+                                "email": email,
+                                "password": password,
+                                "content-type": "application/json"
+                            },
+                            success: function (response, status) {
+                                console.log(response);
+                                $("#passwordSuccess").show('success');
+                                $("#resetPasswordAdmin").hide();
+                                $("#adminLoginDiv").hide();
+                               
+                                $("#loginNav").hide();
+                                $("#navBarDiv").show();
+                                $("#dashboardDiv").show();
+
+                                
+                            },
+                            error: function (err) {
+                                console.log(err);
+                                $("#resetPasswordErr").show();
+                                $('#loginErr').show();
+                                $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+                            }
+                        }); 
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        $('#loginErr').show();
+                        $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+                        clearLogin();
+                        return false;
+                    }
+                });
+                return false;
+            });
+        };
+
     $('#takeSurveyBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
@@ -298,6 +452,8 @@ $(document).ready(function () {
 
         var locationId = adminLocation;
 
+        
+        
          $.ajax({
              type: 'GET',
              url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
