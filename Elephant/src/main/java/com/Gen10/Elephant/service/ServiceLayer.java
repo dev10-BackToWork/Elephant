@@ -28,6 +28,7 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
+import java.sql.Date;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -169,6 +170,21 @@ public class ServiceLayer {
         }
 
         return currentAttendance;
+    }
+    
+    public List<Attendance> generateAttendanceReport(int id, String date) {
+        List<Attendance> allAttendance = attendanceRepo.findAll();
+        List<Attendance> attendanceReport = new ArrayList<>();
+        Date specifiedDate = Date.valueOf(date);
+        
+        System.out.println("CP1: " + specifiedDate);
+        
+        for (Attendance attendance : allAttendance) {
+            if (attendance.getAttendanceDate().toString().equals(specifiedDate.toString()) && attendance.getUser().getLocation().getLocationId() == id)
+                attendanceReport.add(attendance);
+        }
+        
+        return attendanceReport;
     }
 
     // **********

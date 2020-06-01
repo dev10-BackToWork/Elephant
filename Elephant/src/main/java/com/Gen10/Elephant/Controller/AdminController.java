@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dto.Arrival;
+import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Departure;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
@@ -222,5 +223,16 @@ public class AdminController {
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<Boolean>(false, HttpStatus.FORBIDDEN);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/attendanceReport/{id}/{date}")
+    public ResponseEntity<List<Attendance>> attendanceReport(@PathVariable int id, @PathVariable String date, @RequestHeader("email") String email, @RequestHeader("password") String password) {       
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<Attendance>>(service.generateAttendanceReport(id, date), HttpStatus.OK);
+        }
+        String message = "There was an error while generating the attendance report.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }

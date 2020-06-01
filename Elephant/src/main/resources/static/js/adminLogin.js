@@ -2734,4 +2734,34 @@ function showGuidelines() {
     // });
 
 
+
+    // @GetMapping("/attendanceReport/{id}/{date}")
+    // public ResponseEntity<List<Attendance>> attendanceReport
+    
+    // Note that the below prepared ajax call depends on the presence of a few attendance objects existing in the database. The adminLocation should be the active admin's/branch managers locationId.
+    $('#getAttendance5-29-2020').click(function(event) {
+
+        adminLocationId = 5;
+        specifiedDate = "2020-06-01";
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
+            headers: {
+                'email': 'twyborny@genesis10.com',
+                'password': 'password'
+            },
+            success: function (data) {
+                console.log(data);
+                console.log('The request for the attendance report was successful.');
+            },
+            error: function (http) {
+                console.log(http);
+                console.log('An error resulted when attempting to retrieve the attendance report.');
+            }
+        });
+
+    });
+
+
     // // ********** Preparing Ajax calls End
