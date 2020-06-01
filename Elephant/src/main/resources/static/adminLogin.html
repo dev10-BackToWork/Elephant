@@ -218,37 +218,16 @@
                     <div class="row">
                         <div class="col-md-12 text-center" id="arrivalTableDiv">
                             <ul class="list-group" id="arrivalErrorMessages"></ul>
-                            <h3 class="mt-5">Arrivals</h3>
+                            <h3 class="mt-5">Today's Attendance</h3>
                             <div class="col text-center">
                                 <table class="table table-striped" id="arrivalTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Location</th>
-                                            <th>Arrival</th>
                                         </tr>
                                     </thead>
                                     <tbody id="arrivalRows"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center" id="departureTableDiv">
-                            <ul class="list-group" id="departureErrorMessages"></ul>
-                            <h3 class="mt-5">Departures</h3>
-                            <div class="col text-center">
-                                <table class="table table-striped" id="departureTable" style='table-layout:fixed;'>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Location</th>
-                                            <th>Departure</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="departureRows"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -590,93 +569,7 @@
 
     <!-- Select Arrival/Departure Time Content -->
     <div class="container">
-        <div class="row" id="arrival-success"></div>
-        <div class="row" id="departure-success"></div>
         <div class="row" id="overall-success" style="font-size: 1.2em"></div>
-    </div>
-
-    <div class="container" id="arrival-container">
-        <p class="center">You are authorized to come in to the office today.</p>
-        <hr>
-        <p class="center">Please select from the available arrival times:</p>
-            <div class="row overflow-auto" id="arrival-btn-div">
-<!--                <div class="col-12"> </div>-->
-            </div>
-<!--        <div id="arrival-accordion">
-
-            <div class="card time-card">
-                <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                        <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">7 AM</button>
-                    </h5>
-                </div>
-
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="row" id="arrival-btn-div">
-                            <div class="col-12"></div>
-                        </div>
-                    </div>
-                </div>   
-            </div>
-            
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">8 AM</button>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="row" id="arrival-btn-div">
-                            <div class="col-12"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">
-                        <button class="btn collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">9 AM </button>
-                    </h5>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="row" id="arrival-btn-div">
-                            <div class="col-12"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-            
-            <div class="form-group">
-                <label class="col-md-3 control-label"> Arrival Time Selected: </label>
-                <span id="timeSelected" readonly></span>
-                <input id="timeSelectedTime" class="form-control" readonly></input>
-                <br>
-                <button type="button" id="arrivalSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
-             </div>
-    </div>
-    
-    
-    <div class="container" id="departure-container">
-            <p class='center' id='departureTime'> </p>
-            <p class="center">Please select from the available departure times:</p>
-            
-            
-            <div class="row overflow-auto" id="departure-btn-div">
-                <div class="col-12"> </div>
-            </div>
-        
-            <div class="form-group">
-                <label class="col-md-3 control-label"> Departure Time Selected: </label>
-                <span id="departureTimeSelected" readonly></span>
-                <input id="departureTimeSelectedTime" class="form-control" readonly required></input>
-                <button type="button" id="departureSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
-             </div>
     </div>
         
         <!-- Delete User Div --> 
