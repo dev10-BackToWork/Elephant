@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import lombok.Data;
 
 @Entity
-@Data
+//@Data
 public class Location {
 
 	@Id
@@ -23,16 +23,7 @@ public class Location {
 	private String cityName;
 
 	@Column
-	private int timeIncrement;
-
-	@Column
 	private int maxOccupancy;
-
-	@Column
-	private Time beginningTime;
-
-	@Column
-	private Time endTime;
 
 	public int getLocationId() {
 		return this.locationId;
@@ -50,14 +41,6 @@ public class Location {
 		this.cityName = cityName;
 	}
 
-	public int getTimeIncrement() {
-		return this.timeIncrement;
-	}
-
-	public void setTimeIncrement(int timeIncrement) {
-		this.timeIncrement = timeIncrement;
-	}
-
 	public int getMaxOccupancy() {
 		return this.maxOccupancy;
 	}
@@ -66,36 +49,37 @@ public class Location {
 		this.maxOccupancy = maxOccupancy;
 	}
 
-	public Time getBeginningTime() {
-		return this.beginningTime;
-	}
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 83 * hash + this.locationId;
+            hash = 83 * hash + Objects.hashCode(this.cityName);
+            hash = 83 * hash + this.maxOccupancy;
+            return hash;
+        }
 
-	public void setBeginningTime(Time beginningTime) {
-		this.beginningTime = beginningTime;
-	}
-
-	public Time getEndTime() {
-		return this.endTime;
-	}
-
-	public void setEndTime(Time endTime) {
-		this.endTime = endTime;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof Location)) {
-			return false;
-		}
-		Location location = (Location) o;
-		return locationId == location.locationId && Objects.equals(cityName, location.cityName) && timeIncrement == location.timeIncrement && maxOccupancy == location.maxOccupancy && Objects.equals(beginningTime, location.beginningTime) && Objects.equals(endTime, location.endTime);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(locationId, cityName, timeIncrement, maxOccupancy, beginningTime, endTime);
-	}
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Location other = (Location) obj;
+            if (this.locationId != other.locationId) {
+                return false;
+            }
+            if (this.maxOccupancy != other.maxOccupancy) {
+                return false;
+            }
+            if (!Objects.equals(this.cityName, other.cityName)) {
+                return false;
+            }
+            return true;
+        }
 
 }

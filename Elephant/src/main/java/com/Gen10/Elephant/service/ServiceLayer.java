@@ -301,6 +301,24 @@ public class ServiceLayer {
         System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
     }
+    
+    public User deactivateSpecifiedUser(int id) {
+        User existingUser = getUserById(id);
+        
+        existingUser.setIsActive(false);
+        
+        User deactivatedUser = usersRepo.save(existingUser);
+        return deactivatedUser;        
+    }
+    
+    public User reactivateSpecifiedUser(int id) {
+        User existingUser = getUserById(id);
+        
+        existingUser.setIsActive(true);
+        
+        User activatedUser = usersRepo.save(existingUser);
+        return activatedUser;
+    }
 
     public User editUserPassword(User user) {
         // Due to auto-incrementing of users in database, the specific user object needs

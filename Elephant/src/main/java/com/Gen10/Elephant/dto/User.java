@@ -49,6 +49,9 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name = "roleid")
 	private Role role;
+        
+        @Column
+        private boolean isActive;
 	
 
 	public int getUserId() {
@@ -115,6 +118,14 @@ public class User {
 		this.defaultPW = defaultPW;
 	}
 
+        public boolean isIsActive() {
+            return isActive;
+        }
+
+        public void setIsActive(boolean isActive) {
+            this.isActive = isActive;
+        }
+        
 
 	@Override
 	public boolean equals(Object o) {
