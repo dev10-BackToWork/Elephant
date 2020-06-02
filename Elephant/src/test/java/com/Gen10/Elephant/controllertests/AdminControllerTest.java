@@ -121,19 +121,6 @@ public class AdminControllerTest {
         att.setUser(user);
         userCon.markAttendance(att, adminEmail, adminPW);
         assertEquals(1, adminCon.getFlagged(1, adminEmail, adminPW).getBody().size());
-    } 
-
-    @Test
-    public void testGetEditLocationCapacityInterval() {
-        List<Location> locations = adminCon.getLocations(adminEmail, adminPW).getBody();
-        Location location = locations.get(0);
-        int currentCap = location.getMaxOccupancy();
-        int currentIncrement = location.getTimeIncrement();
-
-        adminCon.editCapacity(1, currentCap + 1, adminEmail, adminPW);
-        Location newLocation = adminCon.editIncrement(1, currentIncrement + 5, adminEmail, adminPW).getBody();
-        assertEquals(currentCap + 1, newLocation.getMaxOccupancy());
-        assertEquals(currentIncrement + 5, newLocation.getTimeIncrement());
     }
 
     @Test

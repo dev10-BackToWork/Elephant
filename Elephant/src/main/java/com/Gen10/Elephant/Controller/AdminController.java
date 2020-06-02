@@ -171,26 +171,6 @@ public class AdminController {
         }
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
     }
-    
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @PostMapping("/timeIncrement/{id}/{num}")
-    public ResponseEntity<Location> editIncrement(@PathVariable int id, @PathVariable int num, @RequestHeader("email") String email, @RequestHeader("password") String password){
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null){
-            return new ResponseEntity<Location>(service.editIncrement(id, num), HttpStatus.OK);
-        }
-        return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
-    }
-  
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @PostMapping("/timeInterval/{id}/{startTime}/{endTime}")
-    public ResponseEntity<Location> editDailyTimeInterval(@PathVariable int id, @PathVariable Time startTime, @PathVariable Time endTime, @RequestHeader("email") String email, @RequestHeader("password") String password) {
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null) {
-            return new ResponseEntity<Location>(service.editDailyTimeInterval(id, startTime, endTime), HttpStatus.OK);
-        }
-        return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
-    }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/resetPassword/{id}")
@@ -233,6 +213,28 @@ public class AdminController {
             return new ResponseEntity<List<Attendance>>(service.generateAttendanceReport(id, date), HttpStatus.OK);
         }
         String message = "There was an error while generating the attendance report.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/deactivateUser/{id}")
+    public ResponseEntity<User> deactivateUser(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<User>(service.deactivateSpecifiedUser(id), HttpStatus.OK);
+        }
+        String message = "There was an error while updating the user's active status to inactive.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/reactivateUser/{id}")
+    public ResponseEntity<User> reactivateUser(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<User>(service.reactivateSpecifiedUser(id), HttpStatus.OK);
+        }
+        String message = "There was an error while updating the user's active status to active.";
         return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }

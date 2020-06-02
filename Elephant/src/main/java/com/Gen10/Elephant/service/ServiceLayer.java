@@ -286,25 +286,6 @@ public class ServiceLayer {
         return editedLocation;
     }
 
-    public Location editIncrement(int locationId, int timeIncrement) {
-        Location currentLocation = locationRepo.findById(locationId).orElse(null);
-
-        currentLocation.setTimeIncrement(timeIncrement);
-
-        Location updatedLocation = locationRepo.save(currentLocation);
-
-        return updatedLocation;
-    }
-
-    public Location editDailyTimeInterval(int locationId, Time startTime, Time endTime) {
-        Location currentLocation = locationRepo.findById(locationId).orElse(null);
-
-        currentLocation.setBeginningTime(startTime);
-        currentLocation.setEndTime(endTime);
-
-        return locationRepo.save(currentLocation);
-    }
-
     // Role(s)
     public List<Role> getAllRoles() {
         return rolesRepo.findAll();
@@ -536,6 +517,24 @@ public class ServiceLayer {
         User editedUser = usersRepo.save(existingUser);
         System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
+    }
+    
+    public User deactivateSpecifiedUser(int id) {
+        User existingUser = getUserById(id);
+        
+        existingUser.setIsActive(false);
+        
+        User deactivatedUser = usersRepo.save(existingUser);
+        return deactivatedUser;        
+    }
+    
+    public User reactivateSpecifiedUser(int id) {
+        User existingUser = getUserById(id);
+        
+        existingUser.setIsActive(true);
+        
+        User activatedUser = usersRepo.save(existingUser);
+        return activatedUser;
     }
 
     public User editUserPassword(User user) {
