@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Attendance;
-import com.Gen10.Elephant.dto.Departure;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
-import java.sql.Time;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,28 +76,6 @@ public class AdminController {
         }
         return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);
     }
-
-    //  Round 2
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @GetMapping("/arrivals/{id}")
-    public ResponseEntity<List<Arrival>> getArrivals(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password){
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null){
-            return new ResponseEntity<List<Arrival>>(service.getAllArrivalsByLocationId(id), HttpStatus.OK);
-        }
-        return new ResponseEntity<List<Arrival>>(new ArrayList<Arrival>(), HttpStatus.UNAUTHORIZED);
-    }
-    
-    //  Round 2
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @GetMapping("/departures/{id}")
-    public ResponseEntity<List<Departure>> getDepartures(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password){
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null){
-            return new ResponseEntity<List<Departure>>(service.getAllDeparturesByLocationId(id), HttpStatus.OK);
-        }
-        return new ResponseEntity<List<Departure>>(new ArrayList<Departure>(), HttpStatus.UNAUTHORIZED);
-    }
     
     // Round 2 edited
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
@@ -168,26 +142,6 @@ public class AdminController {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
             return new ResponseEntity<Location>(service.editCapacity(id, num), HttpStatus.OK);
-        }
-        return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
-    }
-    
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @PostMapping("/timeIncrement/{id}/{num}")
-    public ResponseEntity<Location> editIncrement(@PathVariable int id, @PathVariable int num, @RequestHeader("email") String email, @RequestHeader("password") String password){
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null){
-            return new ResponseEntity<Location>(service.editIncrement(id, num), HttpStatus.OK);
-        }
-        return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
-    }
-  
-    @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    @PostMapping("/timeInterval/{id}/{startTime}/{endTime}")
-    public ResponseEntity<Location> editDailyTimeInterval(@PathVariable int id, @PathVariable Time startTime, @PathVariable Time endTime, @RequestHeader("email") String email, @RequestHeader("password") String password) {
-        User dbAdmin = service.checkAdmin(email, password);
-        if(dbAdmin != null) {
-            return new ResponseEntity<Location>(service.editDailyTimeInterval(id, startTime, endTime), HttpStatus.OK);
         }
         return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
     }

@@ -5,32 +5,23 @@
  */
 package com.Gen10.Elephant.service;
 
-import java.sql.SQLDataException;
-import java.sql.Time;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.zip.DataFormatException;
 
-import com.Gen10.Elephant.dao.ArrivalRepository;
 import com.Gen10.Elephant.dao.AttendanceRepository;
-import com.Gen10.Elephant.dao.DepartureRepository;
 import com.Gen10.Elephant.dao.LocationRepository;
 import com.Gen10.Elephant.dao.RolesRepository;
-import com.Gen10.Elephant.dao.TimeSlotRepository;
 import com.Gen10.Elephant.dao.UsersRepository;
-import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Attendance;
-import com.Gen10.Elephant.dto.Departure;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
-import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
-import java.sql.Date;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -41,97 +32,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceLayer {
 
-    private final ArrivalRepository arrivalRepo;
-    private final AttendanceRepository attendanceRepo;
-    private final DepartureRepository departureRepo;
-    private final LocationRepository locationRepo;
-    private final RolesRepository rolesRepo;
-    private final TimeSlotRepository timeSlotRepo;
-    private final UsersRepository usersRepo;
+    @Autowired
+    private AttendanceRepository attendanceRepo;
 
-    private BCrypt bcrypt = new BCrypt();
+    @Autowired
+    private LocationRepository locationRepo;
 
-    public ServiceLayer(ArrivalRepository arrivalRepo, AttendanceRepository attendanceRepo,
-            DepartureRepository departureRepo, LocationRepository locationRepo, RolesRepository rolesRepo,
-            TimeSlotRepository timeSlotRepo, UsersRepository usersRepo) {
-        this.arrivalRepo = arrivalRepo;
-        this.attendanceRepo = attendanceRepo;
-        this.departureRepo = departureRepo;
-        this.locationRepo = locationRepo;
-        this.rolesRepo = rolesRepo;
-        this.timeSlotRepo = timeSlotRepo;
-        this.usersRepo = usersRepo;
-    }
+    @Autowired
+    private RolesRepository rolesRepo;
 
-    // **********
-    // Arrival
-    public List<Arrival> findAllArrivals() {
-        return arrivalRepo.findAll();
-    }
+    @Autowired
+    private UsersRepository usersRepo;
 
-    public List<Arrival> getAllArrivalsByLocationId(int id) {
-        List<Arrival> arrivals = findAllArrivals();
-        List<Arrival> currentArrivalsByLocation = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
-        for (Arrival arrival : arrivals) {
-            if (arrival.getTimeSlot().getLocation().getLocationId() == id
-                    && arrival.getArrivalDate().toString().contains(currentDateSQL.toString()))
-                currentArrivalsByLocation.add(arrival);
-        }
-
-        return currentArrivalsByLocation;
-    }
-
-    public Arrival getArrivalByArrivalId(int arrivalId) {
-        Arrival arrival = arrivalRepo.findById(arrivalId).orElse(null);
-
-        if (arrival == null) {
-            System.out.println("The arrival object is null");
-            return arrival;
-        } else {
-            return arrival;
-        }
-    }
-
-    public void deleteArrivalById(int arrivalId) {
-        arrivalRepo.deleteById(arrivalId);
-    }
-
-    // public void deleteArrivalByUserId(){
-    //
+    // public ServiceLayer( AttendanceRepository attendanceRepo, LocationRepository locationRepo, 
+    //                         RolesRepository rolesRepo, UsersRepository usersRepo) {
+    //     this.attendanceRepo = attendanceRepo;
+    //     this.locationRepo = locationRepo;
+    //     this.rolesRepo = rolesRepo;
+    //     this.usersRepo = usersRepo;
     // }
-
-    public void saveArrival(Arrival arrival) {
-        arrivalRepo.save(arrival);
-    }
-
-    public void saveArrivalAndDeparture(Arrival arrival, Departure departure) {
-        saveArrival(arrival);
-        saveDeparture(departure);
-    }
-
-    public Arrival reserveArrivalByTimeSlotId(User user, int id) throws timeSlotReservedException {
-        TimeSlot timeSlot = getTimeSlotById(id);
-
-        if (timeSlot.getIsTaken()) {
-            throw new timeSlotReservedException(
-                    "The time slot is no longer available. Please choose another time to plan your arrival.");
-        }
-
-        timeSlot.setIsTaken(true);
-        timeSlotRepo.save(timeSlot);
-
-        Arrival newArrival = new Arrival();
-
-        java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
-        newArrival.setArrivalDate(newDate);
-        newArrival.setTimeSlot(getTimeSlotById(id));
-        newArrival.setUser(getUserById(user.getUserId()));
-
-        return arrivalRepo.save(newArrival);
-    }
 
     // **********
     // Attendance
@@ -161,8 +80,6 @@ public class ServiceLayer {
     public List<Attendance> findAttendanceByCurrentDate() {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> currentAttendance = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        LocalDate date = LocalDate.now();
         for (Attendance attendance : allAttendance) {
             if (attendance.getAttendanceDate().equals(LocalDate.now())) {
                 currentAttendance.add(attendance);
@@ -185,67 +102,6 @@ public class ServiceLayer {
         }
         
         return attendanceReport;
-    }
-
-    // **********
-    // Departure
-    public List<Departure> findAllDepartures() {
-        return departureRepo.findAll();
-    }
-
-    public List<Departure> getAllDeparturesByLocationId(int id) {
-        List<Departure> departures = findAllDepartures();
-        List<Departure> currentDeparturesByLocation = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
-        for (Departure departure : departures) {
-            if (departure.getTimeSlot().getLocation().getLocationId() == id
-                    && departure.getDepartureDate().toString().contains(currentDateSQL.toString()))
-                currentDeparturesByLocation.add(departure);
-        }
-
-        return currentDeparturesByLocation;
-    }
-
-    public Departure getDepartureByDepatureId(int departureId) {
-        Departure departure = departureRepo.findById(departureId).orElse(null);
-
-        if (departure == null) {
-            System.out.println("The departure object is null");
-            return departure;
-        } else {
-            return departure;
-        }
-    }
-
-    public void deleteDepartureById(int departureId) {
-        departureRepo.deleteById(departureId);
-    }
-
-    public void saveDeparture(Departure departure) {
-        departureRepo.save(departure);
-    }
-
-    public Departure reserveDepartureByTimeSlotId(User user, int id) throws timeSlotReservedException {
-        TimeSlot timeSlot = getTimeSlotById(id);
-
-        if (timeSlot.getIsTaken()) {
-            throw new timeSlotReservedException(
-                    "The time slot is no longer available. Please choose another time to plan your departure.");
-        }
-
-        timeSlot.setIsTaken(true);
-        timeSlotRepo.save(timeSlot);
-
-        Departure newDeparture = new Departure();
-
-        java.sql.Date newDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
-        newDeparture.setDepartureDate(newDate);
-        newDeparture.setTimeSlot(getTimeSlotById(id));
-        newDeparture.setUser(getUserById(user.getUserId()));
-
-        return departureRepo.save(newDeparture);
     }
 
     // **********
@@ -286,25 +142,6 @@ public class ServiceLayer {
         return editedLocation;
     }
 
-    public Location editIncrement(int locationId, int timeIncrement) {
-        Location currentLocation = locationRepo.findById(locationId).orElse(null);
-
-        currentLocation.setTimeIncrement(timeIncrement);
-
-        Location updatedLocation = locationRepo.save(currentLocation);
-
-        return updatedLocation;
-    }
-
-    public Location editDailyTimeInterval(int locationId, Time startTime, Time endTime) {
-        Location currentLocation = locationRepo.findById(locationId).orElse(null);
-
-        currentLocation.setBeginningTime(startTime);
-        currentLocation.setEndTime(endTime);
-
-        return locationRepo.save(currentLocation);
-    }
-
     // Role(s)
     public List<Role> getAllRoles() {
         return rolesRepo.findAll();
@@ -328,52 +165,6 @@ public class ServiceLayer {
     // public void saveRole(Role role) {
     // roleRepo.save(role);
     // }
-
-    // **********
-    // TimeSlot
-    public List<TimeSlot> getOpenTimeSlotsByLocationId(int locationId) {
-        List<TimeSlot> allTimeSlots = timeSlotRepo.findAll();
-        List<TimeSlot> locationTimeSlots = new ArrayList<>();
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-
-        for (TimeSlot ts : allTimeSlots) {
-            if (ts.getLocation().getLocationId() == locationId && ts.getIsTaken() == false
-                    && ts.getTimeSlotDate().toString().contains(currentDateSQL.toString()))
-                locationTimeSlots.add(ts);
-        }
-
-        return locationTimeSlots;
-    }
-
-    public TimeSlot findTimeSlotByLocation(int timeSlotId) {
-        TimeSlot timeSlot = timeSlotRepo.findById(timeSlotId).orElse(null);
-
-        if (timeSlot == null) {
-            System.out.println("The timeSlot object is null");
-            return timeSlot;
-        } else {
-            return timeSlot;
-        }
-    }
-
-    public void deleteTimeSlotById(int timeSlotId) {
-        timeSlotRepo.deleteById(timeSlotId);
-    }
-
-    public void saveTimeSlot(TimeSlot timeSlot) {
-        timeSlotRepo.save(timeSlot);
-    }
-
-    public TimeSlot getTimeSlotById(int TimeSlotId) {
-        TimeSlot timeSlot = timeSlotRepo.findById(TimeSlotId).orElse(null);
-
-        if (timeSlot == null) {
-            System.out.println("The timeSlot object is null");
-            return timeSlot;
-        } else {
-            return timeSlot;
-        }
-    }
 
     // **********
     // User(s)
@@ -417,35 +208,9 @@ public class ServiceLayer {
     // Edited Nate Wood 05/13/2020
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
-        // List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-        // List<User> usersInAttendance = new ArrayList<>();
-        // Location location = locationRepo.findById(id).orElse(null);
-        // List<User> usersByLocation = getAllUsersByLocation(location);
-        // List<User> usersByLocationNotAnswered = usersByLocation;
-        // List<User> currentInactiveUsersByLocation = new ArrayList<>();
-        // User defaultUser = usersRepo.findByEmail("user@user.com");
-
-        // for (Attendance attendance : currentAttendance) {
-        // usersInAttendance.add(attendance.getUser());
-        // }
-
-        // for (User user : usersByLocation) {
-        // if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) !=
-        // null) {
-        // usersByLocationNotAnswered.remove(user);
-        // }
-        // if (!usersInAttendance.contains(user))
-        // currentInactiveUsersByLocation.add(user);
-        // }
-
-        // if (currentInactiveUsersByLocation.contains(defaultUser))
-        // currentInactiveUsersByLocation.remove(defaultUser);
-
-        // return currentInactiveUsersByLocation;
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
-        java.sql.Date currentDateSQL = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
@@ -483,22 +248,10 @@ public class ServiceLayer {
 
     public void deleteUserById(int userId) {
         List<Attendance> allAttendance = findAllAttendance();
-        List<Arrival> allArrivals = findAllArrivals();
-        List<Departure> allDepartures = findAllDepartures();
 
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == userId)
                 attendanceRepo.deleteById(attendance.getAttendanceId());
-        }
-
-        for (Arrival arrival : allArrivals) {
-            if (arrival.getUser().getUserId() == userId)
-                arrivalRepo.deleteById(arrival.getArrivalId());
-        }
-
-        for (Departure departure : allDepartures) {
-            if (departure.getUser().getUserId() == userId)
-                departureRepo.deleteById(departure.getDepartureId());
         }
 
         usersRepo.deleteById(userId);
@@ -508,13 +261,24 @@ public class ServiceLayer {
         if (usersRepo.findByEmail(user.getEmail()) != null) {
             throw new DataFormatException("An account already exists for that email");
         }
+
         String password = generatePassword();
         user.setDefaultPW(password);
-
         String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
         user.setPasswords(encryptPass);
 
         User dbUser = usersRepo.save(user);
+
+        if (dbUser != null){
+            Mailer.send(
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood@dev-10.com", "Account Created", 
+                "<p>Hello " + dbUser.getFirstName() + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>" + dbUser.getEmail() + "</strong></span>" + 
+                "<br/> &emsp; Your temporary password is: <strong>" + dbUser.getDefaultPW() + 
+                "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>" + 
+                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+            );
+        }
+
         return usersRepo.save(dbUser);
     }
 
@@ -554,11 +318,28 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        // Attendance todaysAttendance =
-        // attendanceRepo.findByUser(attendance.getUser()).stream()
-        // .filter(a -> a.getAttendanceDate() == new
-        // java.sql.Date(Calendar.getInstance().getTime().getTime())).collect(Collectors.toList()).get(0);
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
+        
+        if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
+            Mailer.send(
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
+                "Authorization for " + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName(),
+                "<p>" + attendance.getUser().getEmail() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
+                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+            );
+        }
+
+        Location location = attendance.getUser().getLocation();
+        List<User> usersInOffice = currentUsersInOffice(location.getLocationId());
+        if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
+            Mailer.send(
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
+                "Max Capacity Warning",
+                "<p> More people than currently recommended by your max capacity of <strong>" + location.getMaxOccupancy() + "</strong> are currently signed up to come in today." +
+                "<br/> Please take any necessary actions to ensure the safety of the employees at your location.</p>" +
+                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+            );
+        }
 
         if (todaysAttendance != null) {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
@@ -621,8 +402,18 @@ public class ServiceLayer {
 
         String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
         existingUser.setPasswords(encryptPass);
+        User savedUser = usersRepo.save(existingUser);
+        
+        if (savedUser != null){
+            Mailer.send(
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Reset Password for " + existingUser.getEmail(), 
+                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request from your branch manager for your account." + 
+                "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>" +
+                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+            );
+        }
 
-        return usersRepo.save(existingUser);
+        return savedUser;
     }
 
     public Location getLocationById(int id) {
@@ -644,7 +435,7 @@ public class ServiceLayer {
 
                 String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
                 user.setPasswords(encryptPass);
-                User dbUser = usersRepo.save(user);
+                usersRepo.save(user);
             }
             return true;
 
