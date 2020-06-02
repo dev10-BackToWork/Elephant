@@ -11,6 +11,11 @@ package com.Gen10.Elephant.service;
  */
 public class timeSlotReservedException extends Exception {
     
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public timeSlotReservedException(String message) {
         super(message);
     }
