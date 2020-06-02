@@ -239,10 +239,26 @@
         
         <!-- All Employees Div -->
         <div class="container" id="allEmployeesDiv">
+            <div class="container" id="employeesOptions">
+                <div class="row" style="margin-top: 15px">
+                    <div class="col-md-4">
+                    </div>
+                     <div class="col-md-4"">
+                        <select name="option" id="employeeOption" class="form-control">
+                             <option value="1">Active Employees</option>
+                             <option value="2">Inactive Employees</option>
+                        </select>
+                    </div> 
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" id="submitEmployeeOption">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="activeEmployees">
                 <div class="row">
                     <div class="col-md-12 text-center" id="employeeTableDiv">
                         <ul class="list-group" id="errorMessages"></ul>
-                        <h3 class="mt-5">Employees</h3>
+                        <h3 class="mt-5">Active Employees</h3>
                         <div class="col text-center">
                             <table class="table table-striped" id="employeeTable">
                                 <thead>
@@ -259,6 +275,28 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="container" id="inactiveEmployees">
+                <div class="row">
+                    <div class="col-md-12 text-center" id="inactiveEmployeeTableDiv">
+                        <ul class="list-group" id="inactiveErrorMessages"></ul>
+                        <h3 class="mt-5">Inactive Employees</h3>
+                        <div class="col text-center">
+                            <table class="table table-striped" id="inactiveEmployeeTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Location</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inactiveRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Create Account Div -->
@@ -646,34 +684,23 @@
                     </div>
                     <h3 class="mt-5">Office Information</h3>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 15px">
                             <label for="cityname">City</label>
                             <input type="text" name="cityname" id="edit-city-name" class="form-control" placeholder="City" style="text-align:center;" readonly/>
                         </div> 
+                        <div class="col-md-3">
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 15px">
                             <label for="occupancy">Max Occupancy</label>
                             <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" style="text-align:center;" required/>
                         </div>
-                        <div class="col-md-6">
-                            <label for="increment">Time Increment</label>
-                            <input type="number" min="0" step="1" name="increment" id="edit-increment" class="form-control" style="text-align:center;" required/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="beginning">Beginning Time</label>
-                            <input type="time" name="beginning" id="edit-beginning" class="form-control" placeholder="Beginning Time" style="text-align:center;"/>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="end">End Time</label>
-                            <input type="time" name="end" id="edit-end" class="form-control" placeholder="End Time" style="text-align:center;"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p>Please note, any changes made to Time Increment, Beginning Time, or End Time will take effect the following day.</p>
+                        <div class="col-md-3">
                         </div>
                     </div>
                     <div class="row">
