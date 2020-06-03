@@ -210,7 +210,7 @@ public class ServiceLayer {
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation();
+        List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation(location);
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
