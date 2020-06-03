@@ -185,7 +185,7 @@ public class ServiceLayer {
 
     public List<User> getAllUsersByLocation(Location location) {
         return usersRepo.findAllByLocation(location);
-    }
+    }e
 
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
@@ -210,7 +210,7 @@ public class ServiceLayer {
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
+        List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation();
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
@@ -219,6 +219,10 @@ public class ServiceLayer {
         }
 
         return usersByLocationNotAnswered;
+    }
+
+    private List<User> getAllActiveUsersByLocation(Location location) {
+        return null;
     }
 
     public List<User> getFlaggedUsers(int id) {
