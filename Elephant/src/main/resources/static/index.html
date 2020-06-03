@@ -1,225 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Elephant | Health Survey</title>
+        <title>Elephant | Health Survey</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/jpg" href="images/gen10.jpg"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
-        rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/survey.css">
-</head>
+        <link rel="shortcut icon" type="image/jpg" href="images/gen10.jpg"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+              rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/survey.css">
+    </head>
 
-<body>
-    <main>
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-sm navbar-light static-top">
-            <div class="container">
-                <a href="#" class="navbar-brand">
-                    <img class="logo" src="../images/logo.png" alt="Genesis10">
-                </a>
-            </div>
-        </nav>
+    <body>
+        <main>
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-sm navbar-light static-top">
+                <div class="container">
+                    <a href="#" class="navbar-brand">
+                        <img class="logo" src="../images/logo.png" alt="Genesis10">
+                    </a>
+                </div>
+            </nav>
 
-        <div class="container" id="login">
-            <div class="row">
-                <h1 class="heading">Gen10 Health App</h1>
-            </div>
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card card-signin">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Sign In</h5>
+            <div class="container" id="login">
+                <div class="row">
+                    <h1 class="heading">Gen10 Health App</h1>
+                </div>
+                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Sign In</h5>
                             <form onsubmit="loginSubmit();" class="form-signin">
-                            <div class="form-label-group">
-                                <input type="email" id="inputEmail" class="form-control" required autofocus >
-                                <label for="inputEmail">Email address</label>
-                            </div>
+                                <div class="form-label-group">
+                                    <input type="email" id="inputEmail" class="form-control" required autofocus >
+                                    <label for="inputEmail">Email address</label>
+                                </div>
 
-                            <div class="form-label-group">
-                                <input type="password" id="inputPassword" class="form-control" required >
-                                <label for="inputPassword">Password</label>
-                            </div>
+                                <div class="form-label-group">
+                                    <input type="password" id="inputPassword" class="form-control" required >
+                                    <label for="inputPassword">Password</label>
+                                </div>
 
-                            <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
-                                type="submit">Sign In</button>
-                            <div class="row">
-                               <button class="btn" id="reset-password-btn">Change Password</button>
-                            </div>
-                            <hr class="my-4">
-                        </form>
-                    </div>
-                </div> 
-                 <div class="alert alert-danger" id="loginErr" role="alert"></div>
+                                <button id="submitLoginButton" class="btn btn-lg btn-primary btn-block text-uppercase"
+                                        type="submit">Sign In</button>
+                                <div class="row">
+                                    <button class="btn" id="reset-password-btn">Change Password</button>
+                                </div>
+                                <hr class="my-4">
+                            </form>
+                        </div>
+                    </div> 
+                    <div class="alert alert-danger" id="loginErr" role="alert"></div>
+                </div>
             </div>
-        </div>
-        
-        <div class="container" id="resetPassword">
-            <div class="row">
-                <h1 class="heading">Gen10 Health App</h1>
-            </div>
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card card-signin">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Reset Password</h5>
+
+            <div class="container" id="resetPassword">
+                <div class="row">
+                    <h1 class="heading">Gen10 Health App</h1>
+                </div>
+                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Reset Password</h5>
                             <form onsubmit="resetPassword();" class="form-signin" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
-<!--                            <form class="form-signin">-->
-                            <div class="form-label-group">
-                                <input type="email" id="resetEmail" class="form-control" required autofocus >
-                                <label for="resetEmail">Email address</label>
-                            </div>
+                                <!--                            <form class="form-signin">-->
+                                <div class="form-label-group">
+                                    <input type="email" id="resetEmail" class="form-control" required autofocus >
+                                    <label for="resetEmail">Email address</label>
+                                </div>
 
-                            <div class="form-label-group">
-                                <input type="password" id="resetPasswordInput" class="form-control" required >
-                                <label for="resetPasswordInput">Existing password</label>
+                                <div class="form-label-group">
+                                    <input type="password" id="resetPasswordInput" class="form-control" required >
+                                    <label for="resetPasswordInput">Existing password</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input type="password" id="newPassword" class="form-control" name=up required >
+                                    <label for="newPassword">New password</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input type="password" id="newPasswordConfirm" name=up2 class="form-control" required >
+                                    <label for="newPasswordConfirm">Confirm new password</label>
+                                </div>
+
+                                <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"
+                                        type="submit">Submit</button>
+                                <hr class="my-4">
+                            </form>
+                        </div>
+                    </div> 
+                    <div class="alert alert-danger" id="resetPasswordErr" role="alert"></div>
+                    <div class="alert alert-success" id="passwordSuccess" role="success"></div>
+
+                </div>
+            </div>
+
+
+            <!-- Survey Content -->
+            <div class="container" id="healthSurveyDiv">
+                <div id="survey-container">
+
+                    <div class="form-group" id="screener-div" >
+                        <div class="row" style="margin-bottom: 0px; margin-top: 20px">   
+                            <p><a onclick="showGuidelines()" class="guideline-link" style="font-size: 1.2em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a></p>
+                        </div>
+                        <!--            <h2 class="center">Welcome back, Jane!</h2>-->
+                        <p class="center" style="margin-top: 0px">Are you coming in to the office today?</p>
+
+                        <div class="row">    
+                            <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
+                            <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
+                        </div>
+                        
+                        <div id="guidelinesDiv" style="display: none">
+                            <div class="row">   
+                                <!--                  <embed src="images/guidelines.pdf" type="application/pdf" width="100%" height="600px" />-->
+                                <img class="guidelines" src="images/guidelines1.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
                             </div>
-                                
-                           <div class="form-label-group">
-                                <input type="password" id="newPassword" class="form-control" name=up required >
-                                <label for="newPassword">New password</label>
-                            </div>
-                            
-                           <div class="form-label-group">
-                                <input type="password" id="newPasswordConfirm" name=up2 class="form-control" required >
-                                <label for="newPasswordConfirm">Confirm new password</label>
-                            </div>
-                                
-                            <button id="submit-reset-btn" class="btn btn-lg btn-primary btn-block text-uppercase"
-                                type="submit">Submit</button>
-                            <hr class="my-4">
-                        </form>
+                            <div class="row">   
+                                <img class="guidelines" src="images/guidelines2.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
+                            </div>   
+                        </div>
                     </div>
-                </div> 
-                 <div class="alert alert-danger" id="resetPasswordErr" role="alert"></div>
-                 <div class="alert alert-success" id="passwordSuccess" role="success"></div>
-                 
-            </div>
-        </div>
-        
-        
-    <!-- Survey Content -->
-    <div class="container" id="healthSurveyDiv">
-        <div id="survey-container">
-            
-            
+                        <!--            <div class="row submit" id="submit-screener">  
+                                        <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
+                                    </div>-->
+                    
+                    <div id="screener-bye">
+                        <p class="center">Thanks, your response has been recorded.</p>
+                    </div>
 
-            <div class="form-group" id="screener-div" >
-                <div class="row" style="margin-bottom: 0px; margin-top: 20px">   
-                <p><a onclick="showGuidelines()" class="guideline-link" style="font-size: 1.2em; padding-left: 0">Please click here to display the Coronavirus (COVID-19) Response Guidelines</a></p>
-            </div>
-    <!--            <h2 class="center">Welcome back, Jane!</h2>-->
-                <p class="center" style="margin-top: 0px">Are you coming in to the office today?</p>
-
-            
-            <div class="row">    
-                <div class="col-6"><button name="yes" id="q1Yes" class="btn-primary btn-lg btn-block survey" value="true">Yes</button></div>
-                <div class="col-6"><button name="no" id="q1No" class="btn btn-primary btn-lg btn-block survey" value="false">No</button></div>
-            </div>
-             <div class="row">   
-                  <p></p>
-             </div>
-             <div id="guidelinesDiv" style="display: none">
-                  <div class="row">   
-<!--                  <embed src="images/guidelines.pdf" type="application/pdf" width="100%" height="600px" />-->
-                      <img class="guidelines" src="images/guidelines1.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
-                  </div>
-                  <div class="row">   
-                      <img class="guidelines" src="images/guidelines2.jpg" alt="Coronavirus Response Guidelines" width="100%" style="margin-left: auto; margin-right: auto">
-                  </div>   
-             </div>
-<!--            <div class="row submit" id="submit-screener">  
-                <button type="button" class="btn-primary btn-lg submit-btn survey" id="submit-screener-btn">Next</button>
-            </div>-->
-         </div>
-        
-        <div id="screener-bye">
-             <p class="center">Thanks, your response has been recorded.</p>
-        </div>
-
-        <div class="form-group" id="survey-div">
-            <form id="survey">
-<!--                <div class="row" id="questionDiv">-->
-                        <div class="row">
-                            <div class="col-11">
-                                <h5>Please take your temperature immediately prior to answering the following questions.</h5>
-                            </div>
-                            <div class="col-11">
-                                <div class="form-check">
-                                <label for="q1" class="form-check-label">Do you have symptoms of fever (100.4 degrees), cough, shortness of breath, sore throat, or diarrhea?</label>
+                    <div class="form-group" id="survey-div">
+                        <form id="survey">
+                            <!--                <div class="row" id="questionDiv">-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Please take your temperature immediately prior to answering the following questions.</h5>
                                 </div>
                             </div>
 
-                            <div class="col-1">
-                            <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
-                                data-on="Yes" data-off="No" data-style="android">
-                            </div>
-    <!--                         <div id="q1Equals"></div>-->
-                        </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q1" class="form-check-label">Do you have symptoms of fever (100.4 degrees), cough, shortness of breath, sore throat, or diarrhea?</label>
+                                    </div>
+                                </div>
 
-                    <div class="row">
-                         <div class="col-11">
-                            <div class="form-check">
-                            <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                                <div class="col-1">
+                                    <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>    
+                            </div>  
+
+
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>              
                             </div>
-                         </div>
-                         
-                        <div class="col-1">
-                        <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-                        </div>
-<!--                         <div id="q2Equals"></div>-->
+
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>
+                            </div>
+
+                            <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
+                        </form>
                     </div>
 
-                    <div class="row">
-                         <div class="col-11">
-                            <div class="form-check">
-                                <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
-                            </div>
-                         </div>
-                        
-                         <div class="col-1">
-                        <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
-                            data-on="Yes" data-off="No" data-style="android">
-<!--                         <div id="q3Equals"></div>-->
-                         </div>
-                    </div>
+                </div>
 
-<!--                </div>-->
-                <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
-                <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
-            </form>
-        </div>
-            
-       </div>
-        
-        <div id="survey-bye">
-             <p class="center">You have not yet been approved to come in to the office. <br>
-                 Please contact HR for authorization permission.</p>
-        </div>
-        </div> 
+                <div id="survey-authorized">
+                    <p class="center">You are authorized to come in to the office today.</p>
+                </div>
+
+                <div id="survey-not-authorized">
+                    <p class="center">You have not yet been approved to come in to the office. <br>
+                        Please contact HR for authorization permission.</p>
+                </div>
+
+            </div> 
 
     <!-- Select Arrival/Departure Time Content -->
-    <div class="container">
+<!--    <div class="container">
         <div class="row" id="arrival-success"></div>
         <div class="row" id="departure-success"></div>
         <div class="row" id="overall-success" style="font-size: 1.2em"></div>
-    </div>
+    </div>-->
 
-    <div class="container" id="arrival-container">
+    
+<!--    <div class="container" id="arrival-container">
         <p class="center">You are authorized to come in to the office today.</p>
         <hr>
         <p class="center">Please select from the available arrival times:</p>
             <div class="row overflow-auto" id="arrival-btn-div">
-<!--                <div class="col-12"> </div>-->
-            </div>
+                <div class="col-12"> </div>
+            </div>-->
 <!--        <div id="arrival-accordion">
 
             <div class="card time-card">
@@ -270,32 +270,32 @@
             </div>
         </div>-->
             
-            <div class="form-group">
+<!--            <div class="form-group">
                 <label class="col-md-3 control-label"> Arrival Time Selected: </label>
                 <span id="timeSelected" readonly></span>
                 <input id="timeSelectedTime" class="form-control" readonly></input>
                 <br>
                 <button type="button" id="arrivalSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
              </div>
-        </div>
+        </div>-->
     
     
-        <div class="container" id="departure-container">
+<!--        <div class="container" id="departure-container">
             <p class='center' id='departureTime'> </p>
             <p class="center">Please select from the available departure times:</p>
             
             
             <div class="row overflow-auto" id="departure-btn-div">
                 <div class="col-12"> </div>
-            </div>
+            </div>-->
         
-            <div class="form-group">
+<!--            <div class="form-group">
                 <label class="col-md-3 control-label"> Departure Time Selected: </label>
                 <span id="departureTimeSelected" readonly></span>
                 <input id="departureTimeSelectedTime" class="form-control" readonly required></input>
                 <button type="button" id="departureSubmit" class="btn btn-lg btn-primary submit text-uppercase">Submit</button>
-             </div>
-        </div>
+             </div>-->
+       
     
     </main>
 <footer>

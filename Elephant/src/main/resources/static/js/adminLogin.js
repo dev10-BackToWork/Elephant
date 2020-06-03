@@ -29,7 +29,8 @@ $(document).ready(function () {
     $("#loginErr").hide();
     $("#resetPasswordAdmin").hide();
     $("#edit-hashed-password").hide();
-    
+    $("#noAttendees").hide();
+     $("#isAttendingTable").hide();
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -99,7 +100,7 @@ $(document).ready(function () {
                              'password': adminPassword
                          },
                          success: function (data) {
-                             $.each(data, function (index, user) {
+                            $.each(data, function (index, user) {
                             var name = user.firstName + ' ' + user.lastName;
                             var email = user.email;
                             var location = user.location.cityName;
@@ -353,6 +354,108 @@ $(document).ready(function () {
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
+        
+                
+        $("#noResErrorMessages").hide();
+        $("#authErrorMessages").hide();
+        $("#arrivalErrorMessages").hide();
+        
+        $('#noResponseRows').empty();
+        $('#authPendRows').empty();
+        $('#arrivalRows').empty();
+
+        var noResponseRows = $('#noResponseRows');
+        var authPendRows = $('#authPendRows');
+        var arrivalRows = $('#arrivalRows');
+
+        var locationId = adminLocation;
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '</tr>';
+                noResponseRows.append(row);
+            });
+            
+             },
+             error: function() {
+            $('#noResErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/flagged/' + locationId,
+             headers: {
+                'email': adminEmail,
+                'password': adminPassword
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                var name = user.firstName + ' ' + user.lastName;
+                var email = user.email;
+                var location = user.location.cityName;
+
+                var row = '<tr>';
+                row += '<td>' + name + '</td>';
+                row += '<td>' + email + '</td>';
+                row += '<td>' + location + '</td>';
+                row += '</tr>';
+                authPendRows.append(row);
+            });
+            
+             },
+             error: function() {
+            $('#authErrorMessages')
+                .append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger'})
+                .text('An error has occurred.'));
+        }
+         });
+
+            $.ajax({
+                 type: 'GET',
+                     url: 'http://localhost:8080/api/admin/occupants/' + locationId,
+                     headers: {
+                         'email': adminEmail,
+                         'password': adminPassword
+                     },
+                     success: function (data) {
+                         $.each(data, function(index, datum) {
+                        var name = datum.firstName + ' ' + datum.lastName;
+                        var location = datum.location.cityName;
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                         });
+                     },
+                     error: function() {
+                    $('#arrivalErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+            });
     });
     
     $('#employeesBtn').click(function (event) {
@@ -371,11 +474,14 @@ $(document).ready(function () {
         $("#successfulDeleteDiv").hide();
         $("#locationInfoDiv").hide();
         
-        $("#allEmployeeErr").hide();
+        $("#errorMessages").hide();
+        $("#inactiveErrorMessages").hide();
 
         $('#contentRows').empty();
+        $('#inactiveRows').empty();
 
             var contentRows = $('#contentRows');
+            var inactiveRows = $('#inactiveRows');
             var password = $("#inputPassword").val();
             var email = $("#inputEmail").val();
             var locationId = adminLocation;
@@ -399,7 +505,7 @@ $(document).ready(function () {
                         row += '<td>' + email + '</td>';
                         row += '<td>' + location + '</td>';
                         row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
-                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
+                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
                         
                         row += '</tr>';
                         contentRows.append(row);
@@ -452,6 +558,39 @@ $(document).ready(function () {
                 },
                 error: function() {
                     $('#errorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+
+            });
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/users/" + locationId,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data, status) {
+                    $.each(data, function (index, user) {
+                        var inactiveName = user.firstName + ' ' + user.lastName;
+                        var inactiveEmail = user.email;
+                        var inactiveLocation = user.location.cityName;
+                        var inactiveId = user.userId;
+
+                        var row = '<tr>';
+                        row += '<td>' + inactiveName + '</td>';
+                        row += '<td>' + inactiveEmail + '</td>';
+                        row += '<td>' + inactiveLocation + '</td>';
+                        row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+                        
+                        row += '</tr>';
+                        inactiveRows.append(row);
+                    });
+
+                },
+                error: function() {
+                    $('#inactiveErrorMessages')
                         .append($('<li>')
                         .attr({class: 'list-group-item list-group-item-danger'})
                         .text('An error has occurred.'));
@@ -1334,9 +1473,6 @@ $(document).ready(function () {
     $('#submitLocationInfoBtn').click(function (event) {
         
         var occupancy = $('#edit-occupancy').val();
-        var increment = $('#edit-increment').val();
-        var begin = $('#edit-beginning').val();
-        var end = $('#edit-end').val();
         
         if (occupancy < 0) {
             $("#editLocErrorMessages").empty();
@@ -1359,50 +1495,7 @@ $(document).ready(function () {
                     .attr({class: 'list-group-item list-group-item-danger'})
                     .text('Max Occupancy must be a whole number.'));
             $("#editLocErrorMessages").show();
-        } else if (increment < 0) {
-            $("#editLocErrorMessages").empty();
-            $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-danger'})
-                    .text('Time Increment cannot be a negative number.'));
-            $("#editLocErrorMessages").show();
-        } else if (increment === "") {
-            $("#editLocErrorMessages").empty();
-            $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-danger'})
-                    .text('Time Increment must have a value.'));
-            $("#editLocErrorMessages").show();
-        } else if (increment.includes(".")) {
-            $("#editLocErrorMessages").empty();
-            $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-danger'})
-                    .text('Time Increment must be a whole number.'));
-            $("#editLocErrorMessages").show();
-        } else if (begin === "") {
-            $("#editLocErrorMessages").empty();
-            $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-danger'})
-                    .text('Beginning Time must be a valid time.'));
-            $("#editLocErrorMessages").show();
-        } else if (end === "") {
-            $("#editLocErrorMessages").empty();
-            $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-danger'})
-                    .text('End Time must be a valid time.'));
-            $("#editLocErrorMessages").show();
         } else {
-            let beginString = begin;
-            if (beginString.length === 5) {
-                beginString = beginString.concat(":00");
-            }
-            let endString = end;
-            if (endString.length === 5) {
-                endString = endString.concat(":00");
-            }
 
             $.ajax({
             type: 'POST',
@@ -1415,47 +1508,13 @@ $(document).ready(function () {
                 console.log(data);
                 console.log('Location capacity was updated');
                 
-                $.ajax({
-                    type: 'POST',
-                    url: "http://localhost:8080/api/admin/timeIncrement/" + adminLocation + "/" + increment,
-                    headers: {
-                        'email': adminEmail,
-                        'password': adminPassword
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        console.log('Location Increment was updated');
-                        
-                        $.ajax({
-                            type: 'POST',
-                            url: "http://localhost:8080/api/admin/timeInterval/" + adminLocation + "/" + beginString + '/' + endString,
-                            headers: {
-                                'email': adminEmail,
-                                'password': adminPassword
-                            },
-                            success: function (data) {
-                                console.log(data);
-                                console.log('Location Interval was updated');
+                $("#editLocErrorMessages").empty();
 
-                                $("#editLocErrorMessages").empty();
-
-                                $('#editLocErrorMessages')
-                                    .append($('<li>')
-                                    .attr({class: 'list-group-item list-group-item-success'})
-                                    .text('The office has been successfully updated.'));
-                                $("#editLocErrorMessages").show();
-
-                                    },
-                                    error: function (http) {
-                                        console.log('An error resulted when attempting to edit the location interval.')
-                                    }
-                        });
-
-                    },
-                    error: function (http) {
-                         console.log('An error resulted when attempting to edit the location increment.')
-                    }
-                });
+                $('#editLocErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-success'})
+                    .text('The office has been successfully updated.'));
+                $("#editLocErrorMessages").show();
 
             },
             error: function (http) {
@@ -2437,33 +2496,162 @@ function showGuidelines() {
 
 
 
-    // @GetMapping("/attendanceReport/{id}/{date}")
-    // public ResponseEntity<List<Attendance>> attendanceReport
+    //  // @GetMapping("/attendanceReport/{id}/{date}")
+    //  // public ResponseEntity<List<Attendance>> attendanceReport
     
+        $(".date-btn").on('click', function (e) {
+            //var timeSlotId = parseInt(this.id);
+            var specifiedDate = $(this).find('.date-btn').html(); 
+            
+            console.log(specifiedDate);
+            //$("#attendanceDate").val(date);
+            //$("#attendanceDate").val(timeSlotId);
+        });
+                
+                
+                
     // Note that the below prepared ajax call depends on the presence of a few attendance objects existing in the database. The adminLocation should be the active admin's/branch managers locationId.
-    $('#getAttendance5-29-2020').click(function(event) {
+     $('#report-date-btn').click(function(event) {
+         $("#noAttendees").hide();
+         var adminLocationId = 5;
+         specifiedDate = "2020-06-02";
 
-        adminLocationId = 5;
-        specifiedDate = "2020-06-01";
+        
+        //$('#authPendRows').empty();
+        //$('#arrivalRows').empty();
 
+        var isAttendingRows = $('#isAttendingRows');
+        $('#isAttendingRows').empty();
+        
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
-            headers: {
+             url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
+             headers: {
                 'email': 'twyborny@genesis10.com',
                 'password': 'password'
-            },
-            success: function (data) {
-                console.log(data);
-                console.log('The request for the attendance report was successful.');
-            },
-            error: function (http) {
-                console.log(http);
-                console.log('An error resulted when attempting to retrieve the attendance report.');
-            }
-        });
+             },
+             
 
-    });
+//            var departureDiv = $("#departure-btn-div");
+//            var i;
+//            $.each(response, function (i, time) {
+//                if (response[i].isTaken === false) {
+//                    var startTime = response[i].startTime;
+//                    startTime = startTime.substring(0, 5).trim();
+//                    var timeSlotId = response[i].timeSlotId;
+//                    //console.log(timeSlotId + " / " + startTime);
+//                
+//                    var departureBtn = "<div class='col-3'>";
+//                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+//                    departureBtn += "<p class='item'>" + startTime + "</p>";
+//                    departureBtn += "</button>";
+//                    departureBtn += "</div>";
+//                    departureDiv.append(departureBtn);
+//                };  
+// 
+//                });
+
+
+            success: function (response) {
+                $("#isAttendingTable").show();
+                $("#noAttendees").hide();
+
+                console.log(response);
+                if (response.length === 0) {
+                    console.log("There are no attendance records on the date selected.");
+                    $("#isAttendingTable").hide();
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                }
+                
+                var isAttendingRows = $("#isAttendingRows");
+                
+                $.each(response, function (i, user) {
+                    var userName = user.user.firstName + ' ' + user.user.lastName;
+                    var userEmail = user.user.email;
+                    var userLocation = user.user.location.cityName;
+                    var row = '<tr>';
+                
+                
+                if (response[i].isAttending === true) {
+                    row = '<tr>';
+                    row += '<td>' + userName + '</td>';
+                    row += '<td>' + userEmail + '</td>';
+                    row += '<td>' + userLocation + '</td>';
+                    row += '<td>' +''+ '</td>';
+                    row += '</tr>';
+                    isAttendingRows.append(row);
+                }
+                if (row.length === 0) {
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                    //isAttendingRows.append("There are no attendance records for the date selected");
+                }
+                
+                console.log('The request for the attendance report was successful.');
+                });
+                
+
+            },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve the attendance report.');
+            }
+         });
+
+     });
+
+
+    // // @PostMapping("/deactivateUser/{id}")
+    // // public ResponseEntity<User> deactivateUser
+
+    // $('#makeUser349Inactive').click(function(event) {
+
+    //     var userId = 349;
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/api/admin/deactivateUser/' + userId,
+    //         headers: {
+    //             'email': 'twyborny@genesis10.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request to make the user inactive was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to make the user inactive.');
+    //         }
+    //     });
+    // });
+
+
+    // // @PostMapping("/reactivateUser/{id}")
+    // // public ResponseEntity<User> reactivateUser
+
+    // $('#makeUser349Active').click(function(event) {
+
+    //     var userId = 349;
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/api/admin/reactivateUser/' + userId,
+    //         headers: {
+    //             'email': 'twyborny@genesis10.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request to reactive the user was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to reactivate the user.');
+    //         }
+    //     });
+    // });
 
 
     // // ********** Preparing Ajax calls End
