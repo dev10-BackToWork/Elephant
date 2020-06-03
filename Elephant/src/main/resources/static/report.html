@@ -34,26 +34,25 @@
             <!-- Report Div -->   
             <div class="container" id="reportDiv">
                 <h3>Contact Tracing Report</h3>
-                
+
+                <div class="row">
+                    <ul class="list-group" id="reportErrorMessages"></ul>
+                </div>
+
                 <div class="row">
                     <div class="col-12">
-                        <ul class="list-group" id="reportErrorMessages"></ul>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12">
                             <h5>View dates an employee was in the office:</h5>
-<!--                            <select name="report-attendance-names">-->
-<div class="row"><input type="text" id="myInput" onkeyup="filterUser()" placeholder="Search for names.."><button class="btn btn-primary" id="submit-report-btn">Submit</button></div>
-
-
-                                <ul id="myUL">
-                                    <li><a href="#">Keely Brennan</a></li>
-                                    <li><a href="#">Nate Wood</a></li>
-                                    <li><a href="#">Matthew</a></li>
-                                    <li><a href="#">Brianna</a></li>
+                            <!--  <select name="report-attendance-names">-->
+                            <div class="row">
+                                <span><input id="myInput" type="text" placeholder="Search.."><button class="btn btn-primary" id="submit-report-btn">Submit</button></div>
+                                <ul id="myList">
+                                    <li>Keely Brennan</li>
+                                    <li>Nate Wood</li>
+                                    <li>Matt</li>
+                                    <li>Brianna</li>
                                 </ul>
+                             </div>
+                    </div>
 <!--                                <option>John Smith</option>
                                 <option>Jane Smith</option>
                                 <option>Joe Smith</option>

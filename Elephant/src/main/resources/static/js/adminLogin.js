@@ -2530,26 +2530,6 @@ function showGuidelines() {
                 'email': 'twyborny@genesis10.com',
                 'password': 'password'
              },
-             
-
-//            var departureDiv = $("#departure-btn-div");
-//            var i;
-//            $.each(response, function (i, time) {
-//                if (response[i].isTaken === false) {
-//                    var startTime = response[i].startTime;
-//                    startTime = startTime.substring(0, 5).trim();
-//                    var timeSlotId = response[i].timeSlotId;
-//                    //console.log(timeSlotId + " / " + startTime);
-//                
-//                    var departureBtn = "<div class='col-3'>";
-//                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
-//                    departureBtn += "<p class='item'>" + startTime + "</p>";
-//                    departureBtn += "</button>";
-//                    departureBtn += "</div>";
-//                    departureDiv.append(departureBtn);
-//                };  
-// 
-//                });
 
 
             success: function (response) {
