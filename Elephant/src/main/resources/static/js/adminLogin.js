@@ -2575,5 +2575,31 @@ function showGuidelines() {
     //     });
     // });
 
+    
+    // // @GetMapping("/datesPresent/{id}")
+    // // public ResponseEntity<List<LocalDate>> datesPresent    
+
+    // $('#retrieveUser348AttendanceLast30Days').click(function(event) {
+
+    //     var userId = 348;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
+    //         headers: {
+    //             'email': 'twyborny@genesis10.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve user ' + userId + ' attendance within the last 30 days.');
+    //         }
+    //     });
+    // });
+
 
     // // ********** Preparing Ajax calls End
