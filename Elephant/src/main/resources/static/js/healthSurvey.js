@@ -3,7 +3,8 @@ $(document).ready(function () {
     $("#screener-div").hide();
     $("#survey-div").hide();
     $("#screener-bye").hide();
-    $("#survey-bye").hide();
+    $("#survey-not-authorized").hide();
+    $("#survey-authorized").hide();
     $("#arrival-container").hide();
     $("#departure-container").hide();
     $('#time-success').hide();
@@ -204,9 +205,10 @@ var user;
 $("#q1No").on("click", function (e) {
     e.preventDefault();
     $("#screener-div").hide();
-    $("#survey-bye").hide();
-    $("#arrival-container").hide();
-    $("#departure-container").hide();
+    $("#survey-not-authorized").hide();
+    $("#survey-authorized").hide();
+//    $("#arrival-container").hide();
+//    $("#departure-container").hide();
    
     console.log(user);
     email = user.email;
@@ -245,9 +247,10 @@ $("#q1No").on("click", function (e) {
 $("#q1Yes").on("click", function () {
     $("#screener-div").hide();
     $("#survey-div").show();
-    $("#survey-bye").hide();
-    $("#arrival-container").hide();
-    $("#departure-container").hide();
+    $("#survey-not-authorized").hide();
+    $("#survey-authorized").hide();
+//    $("#arrival-container").hide();
+//    $("#departure-container").hide();
     toggle();
 });
 
@@ -275,24 +278,24 @@ function toggle() {
 function checkAuth() {
     if (answerOne === true) {
         isAuthorized = false;
-        $("#survey-bye").show();
+        //$("#survey-not-authorized").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         //console.log(isAuthorized);
     } else if (answerTwo === true) {
         isAuthorized = false;
-        $("#survey-bye").show();
+        //$("#survey-not-authorized").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         //console.log(isAuthorized);
     } else if (answerThree === true) {
         isAuthorized = false;
-        $("#survey-bye").show();
+        //$("#survey-not-authorized").show();
         $("#arrival-container").hide();
         $("#departure-container").hide();
         //console.log(isAuthorized);
     } else {
-        $("#survey-bye").hide();
+        $("#survey-not-authorized").hide();
         $("#arrival-container").show();
         $("#departure-container").hide();
         //console.log(isAuthorized);
@@ -307,7 +310,8 @@ $("#surveySubmit").on("click", function (e) {
     checkAuth();
     if (isAuthorized === true) {
         console.log(isAuthorized);
-        loadArrivals();
+        authorized();
+        //loadArrivals();
     } else if (isAuthorized === false) {
         notAuthorized();
     }
@@ -335,6 +339,7 @@ function notAuthorized() {
             "content-type": "application/json"
         },
         success: function (response, status) {
+            $("#survey-not-authorized").show();
             console.log(response);
         },
         error: function (err) {
@@ -343,181 +348,7 @@ function notAuthorized() {
         }
     });
 }
-var startTime;
 
-function loadArrivals() {
-    console.log(user);
-    email = user.email;
-    password = user.passwords;
-    console.log(password);
-    locationId = user.location.locationId;
-    //var userId = user.userId;
-    authorized();
-   
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/users/times/" + locationId,
-
-        headers: {
-            "email": email,
-            "password": password
-        },
-        success: function (response) {
-            //console.log(response);
-            $("#arrival-btn-div").empty();
-            var arrivalDiv = $("#arrival-btn-div");
-            var i;
- 
-            $.each(response, function (i, time) {
-                if (response[i].isTaken === false) {
-                    var startTime = response[i].startTime;
-                    startTime = startTime.substring(0, 5).trim();
-                    var hour = startTime.substring(0, 2).trim();
-
-                    var timeSlotId = response[i].timeSlotId;
-//                   
-                    var arrivalBtn = "<div class='col-3'>";
-                    arrivalBtn = "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
-                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
-                    arrivalBtn += "</button>";
-                    arrivalBtn += "</div>";
-                    arrivalDiv.append(arrivalBtn);
-                }
-            });
-
-                $(".time").on('click', function (e) {
-                    var timeSlotId = parseInt(this.id);
-                    var time = $(this).find('.item').html(); 
-                    console.log("Your time: " + timeSlotId + " / " +time);
-                    $("#timeSelectedTime").val(time);
-                    $("#timeSelected").val(timeSlotId);
-                });
-
-            $("#arrivalSubmit").on("click", function (e) {
-                e.preventDefault();
-                $("#arrival-container").hide();
-                
-                var timeSlotId = $("#timeSelected").val();
-                console.log(timeSlotId);
-                console.log(user);
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
-                    contentType: "application/json;charset=UTF-8",
-                    data: JSON.stringify(
-                        user                       
-                    ),
-                    headers: {
-                        "email": email,
-                        "password": password
-                    },
-
-                    success: function (response) {
-                        console.log(response);
-                        //alert(response.timeSlot.startTime);
-                        $('#arrival-success').show();
-                        $('#arrival-success').text("Your arrival time today is: " + response.timeSlot.startTime);
-                        loadDepartures();
-                        
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        //$("#screener-div").hide();
-                        //$("#survey-bye").show();
-                        return false;
-                    }
-                });
-            });
-        }
-    });
-}
-
-
-function loadDepartures() {
-    $("#arrival-container").hide();
-    $("#departure-container").show();
-    $("#arrival-success").show();
-    console.log(user);
-    email = user.email;
-    password = user.passwords;
-    locationId = user.location.locationId;
-    userId = user.userId;
-    
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/users/times/" + locationId,
-        headers: {
-            "email": email,
-            "password": password
-        },
-        success: function (response) {
-            //console.log(response);
-            $("#departure-btn-div").empty();
-            var departureDiv = $("#departure-btn-div");
-            var i;
-            $.each(response, function (i, time) {
-                if (response[i].isTaken === false) {
-                    var startTime = response[i].startTime;
-                    startTime = startTime.substring(0, 5).trim();
-                    var timeSlotId = response[i].timeSlotId;
-                    //console.log(timeSlotId + " / " + startTime);
-                
-                    var departureBtn = "<div class='col-3'>";
-                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
-                    departureBtn += "<p class='item'>" + startTime + "</p>";
-                    departureBtn += "</button>";
-                    departureBtn += "</div>";
-                    departureDiv.append(departureBtn);
-                };  
- 
-                });
-                
-                $(".time").on('click', function (e) {
-                    var timeSlotId = parseInt(this.id);
-                    var time = $(this).find('.item').html(); 
-                        console.log("Your time: " + timeSlotId + " / " +time);
-                    $("#departureTimeSelectedTime").val(time);
-                    $("#departureTimeSelected").val(timeSlotId);
-                });
-                
-            $("#departureSubmit").on("click", function (e) {
-                e.preventDefault();
-                //$("#arrival-container").hide();
-                $("#departure-container").hide();
-                var timeSlotId = $("#departureTimeSelected").val();
-                console.log(timeSlotId);
-
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost:8080/api/users/departure/" + timeSlotId,
-                    data: JSON.stringify({"userId": userId}),
-                    contentType: "application/json;charset=UTF-8",
-
-                    headers: {
-                        "email": email,
-                        "password": password
-                    },
-
-                    success: function (response, status) {
-                        console.log(response);
-                        //alert(response.timeSlot.startTime);
-                        //$('#time-success').show();
-                        $('#departure-success').show();
-                        $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
-                        $('#overall-success').show();
-                        $('#overall-success').text("Thanks, your response has been recorded.");
-                        
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        return false;
-                    }
-                });
-            });
-        }
-    });
-    }
-    
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
         console.log(user);
@@ -527,7 +358,7 @@ function loadDepartures() {
         $.ajax({
             type: "POST",
             url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
+
             data: JSON.stringify({
                      "isAttending": true,
                      "isAuthorized": true,
@@ -535,10 +366,12 @@ function loadDepartures() {
                 }),
         headers: {
             "email": email,
-            "password": password
+            "password": password,
+            "content-type": "application/json"
         },
         success: function (response) {
             //alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
+             $("#survey-authorized").show();
             console.log(response);
         },
         error: function (err) {
@@ -550,6 +383,27 @@ function loadDepartures() {
  
 });
 
+function filterUser() {
+  
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName('li');
+
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+};
+
+
+
 function showGuidelines() {
     var x = document.getElementById("guidelinesDiv");
     if (x.style.display === "none") {
@@ -557,4 +411,182 @@ function showGuidelines() {
     } else {
         x.style.display = "none";
     }
-}
+};
+
+
+
+//var startTime;
+
+//function loadArrivals() {
+//    console.log(user);
+//    email = user.email;
+//    password = user.passwords;
+//    console.log(password);
+//    locationId = user.location.locationId;
+//    //var userId = user.userId;
+//    authorized();
+//   
+//    $.ajax({
+//        type: "GET",
+//        url: "http://localhost:8080/api/users/times/" + locationId,
+//
+//        headers: {
+//            "email": email,
+//            "password": password
+//        },
+//        success: function (response) {
+//            //console.log(response);
+//            $("#arrival-btn-div").empty();
+//            var arrivalDiv = $("#arrival-btn-div");
+//            var i;
+// 
+//            $.each(response, function (i, time) {
+//                if (response[i].isTaken === false) {
+//                    var startTime = response[i].startTime;
+//                    startTime = startTime.substring(0, 5).trim();
+//                    var hour = startTime.substring(0, 2).trim();
+//
+//                    var timeSlotId = response[i].timeSlotId;
+////                   
+//                    var arrivalBtn = "<div class='col-3'>";
+//                    arrivalBtn = "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+//                    arrivalBtn += "<p class='item' id=p' "+timeSlotId+"'>" + startTime + "</p>";
+//                    arrivalBtn += "</button>";
+//                    arrivalBtn += "</div>";
+//                    arrivalDiv.append(arrivalBtn);
+//                }
+//            });
+//
+//                $(".time").on('click', function (e) {
+//                    var timeSlotId = parseInt(this.id);
+//                    var time = $(this).find('.item').html(); 
+//                    console.log("Your time: " + timeSlotId + " / " +time);
+//                    $("#timeSelectedTime").val(time);
+//                    $("#timeSelected").val(timeSlotId);
+//                });
+//
+//            $("#arrivalSubmit").on("click", function (e) {
+//                e.preventDefault();
+//                $("#arrival-container").hide();
+//                
+//                var timeSlotId = $("#timeSelected").val();
+//                console.log(timeSlotId);
+//                console.log(user);
+//                $.ajax({
+//                    type: "POST",
+//                    url: "http://localhost:8080/api/users/arrival/" + timeSlotId,
+//                    contentType: "application/json;charset=UTF-8",
+//                    data: JSON.stringify(
+//                        user                       
+//                    ),
+//                    headers: {
+//                        "email": email,
+//                        "password": password
+//                    },
+//
+//                    success: function (response) {
+//                        console.log(response);
+//                        //alert(response.timeSlot.startTime);
+//                        $('#arrival-success').show();
+//                        $('#arrival-success').text("Your arrival time today is: " + response.timeSlot.startTime);
+//                        loadDepartures();
+//                        
+//                    },
+//                    error: function (err) {
+//                        console.log(err);
+//                        //$("#screener-div").hide();
+//                        //$("#survey-bye").show();
+//                        return false;
+//                    }
+//                });
+//            });
+//        }
+//    });
+//}
+
+
+//function loadDepartures() {
+//    $("#arrival-container").hide();
+//    $("#departure-container").show();
+//    $("#arrival-success").show();
+//    console.log(user);
+//    email = user.email;
+//    password = user.passwords;
+//    locationId = user.location.locationId;
+//    userId = user.userId;
+//    
+//    $.ajax({
+//        type: "GET",
+//        url: "http://localhost:8080/api/users/times/" + locationId,
+//        headers: {
+//            "email": email,
+//            "password": password
+//        },
+//        success: function (response) {
+//            //console.log(response);
+//            $("#departure-btn-div").empty();
+//            var departureDiv = $("#departure-btn-div");
+//            var i;
+//            $.each(response, function (i, time) {
+//                if (response[i].isTaken === false) {
+//                    var startTime = response[i].startTime;
+//                    startTime = startTime.substring(0, 5).trim();
+//                    var timeSlotId = response[i].timeSlotId;
+//                    //console.log(timeSlotId + " / " + startTime);
+//                
+//                    var departureBtn = "<div class='col-3'>";
+//                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+//                    departureBtn += "<p class='item'>" + startTime + "</p>";
+//                    departureBtn += "</button>";
+//                    departureBtn += "</div>";
+//                    departureDiv.append(departureBtn);
+//                };  
+// 
+//                });
+//                
+//                $(".time").on('click', function (e) {
+//                    var timeSlotId = parseInt(this.id);
+//                    var time = $(this).find('.item').html(); 
+//                        console.log("Your time: " + timeSlotId + " / " +time);
+//                    $("#departureTimeSelectedTime").val(time);
+//                    $("#departureTimeSelected").val(timeSlotId);
+//                });
+//                
+//            $("#departureSubmit").on("click", function (e) {
+//                e.preventDefault();
+//                //$("#arrival-container").hide();
+//                $("#departure-container").hide();
+//                var timeSlotId = $("#departureTimeSelected").val();
+//                console.log(timeSlotId);
+//
+//                $.ajax({
+//                    type: "POST",
+//                    url: "http://localhost:8080/api/users/departure/" + timeSlotId,
+//                    data: JSON.stringify({"userId": userId}),
+//                    contentType: "application/json;charset=UTF-8",
+//
+//                    headers: {
+//                        "email": email,
+//                        "password": password
+//                    },
+//
+//                    success: function (response, status) {
+//                        console.log(response);
+//                        //alert(response.timeSlot.startTime);
+//                        //$('#time-success').show();
+//                        $('#departure-success').show();
+//                        $('#departure-success').text("Your departure time today is: " + response.timeSlot.startTime);
+//                        $('#overall-success').show();
+//                        $('#overall-success').text("Thanks, your response has been recorded.");
+//                        
+//                    },
+//                    error: function (err) {
+//                        console.log(err);
+//                        return false;
+//                    }
+//                });
+//            });
+//        }
+//    });
+//    }
+    
