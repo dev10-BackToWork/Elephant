@@ -324,7 +324,7 @@ public class ServiceLayer {
             Mailer.send(
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
                 "Authorization for " + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName(),
-                "<p>" + attendance.getUser().getEmail() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
+                "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
                 "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
             );
         }
@@ -407,7 +407,7 @@ public class ServiceLayer {
         if (savedUser != null){
             Mailer.send(
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Reset Password for " + existingUser.getEmail(), 
-                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request from your branch manager for your account." + 
+                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request for your account from your branch manager." + 
                 "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>" +
                 "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
             );
