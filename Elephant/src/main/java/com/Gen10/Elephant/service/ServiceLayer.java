@@ -89,6 +89,27 @@ public class ServiceLayer {
         return currentAttendance;
     }
     
+    public List<LocalDate> retrieveDatesPresent(int id) {
+        List<Attendance> allAttendance = attendanceRepo.findAll();
+        List<LocalDate> usersAttendanceDates = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        LocalDate thirtyDaysAgo = today.minusDays(30);
+        
+        for (Attendance attendance : allAttendance) {
+            if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
+                usersAttendanceDates.add(attendance.getAttendanceDate());
+            }
+        }
+        
+        for (LocalDate attendanceDate : usersAttendanceDates) {
+            if (attendanceDate.isBefore(thirtyDaysAgo)) {
+                usersAttendanceDates.remove(attendanceDate);
+            }
+        }
+        
+        return usersAttendanceDates;
+    }
+    
     public List<Attendance> generateAttendanceReport(int id, String date) {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> attendanceReport = new ArrayList<>();
@@ -210,7 +231,7 @@ public class ServiceLayer {
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = getAllUsersByLocation(location);
+        List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation(location);
 
         for (User user : usersByLocation) {
             if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
@@ -219,6 +240,10 @@ public class ServiceLayer {
         }
 
         return usersByLocationNotAnswered;
+    }
+
+    private List<User> getAllActiveUsersByLocation(Location location) {
+        return null;
     }
 
     public List<User> getFlaggedUsers(int id) {
@@ -342,7 +367,7 @@ public class ServiceLayer {
             Mailer.send(
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
                 "Authorization for " + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName(),
-                "<p>" + attendance.getUser().getEmail() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
+                "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
                 "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
             );
         }
@@ -425,7 +450,7 @@ public class ServiceLayer {
         if (savedUser != null){
             Mailer.send(
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Reset Password for " + existingUser.getEmail(), 
-                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request from your branch manager for your account." + 
+                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request for your account from your branch manager." + 
                 "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>" +
                 "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
             );

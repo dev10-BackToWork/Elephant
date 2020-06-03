@@ -11,11 +11,8 @@ import java.util.List;
 
 import com.Gen10.Elephant.Controller.AdminController;
 import com.Gen10.Elephant.Controller.UserController;
-import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Attendance;
-import com.Gen10.Elephant.dto.Departure;
 import com.Gen10.Elephant.dto.Location;
-import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
 import org.junit.After;
@@ -84,25 +81,6 @@ public class AdminControllerTest {
         userCon.markAttendance(att, adminEmail, adminPW);
         List<User> occupants = adminCon.getOccupants(1, adminEmail, adminPW).getBody();
         assertTrue(occupants.size() > 0);
-    }
-
-    @Test
-    public void testGetArrivalsDepartures() {
-        Arrival arrival = new Arrival();
-        Departure departure = new Departure();
-        User user = adminCon.getUserById(2, adminEmail, adminPW).getBody();
-        arrival.setArrivalDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-        arrival.setUser(user);
-        arrival.setTimeSlot(userCon.getTimes(1, adminEmail, adminPW).getBody().get(0));
-        Arrival reservedArrival = userCon.reserveArrival(user, 1, adminEmail, adminPW).getBody();
-
-        departure.setDepartureDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-        departure.setUser(user);
-        departure.setTimeSlot(userCon.getTimes(1, adminEmail, adminPW).getBody().get(1));
-        Departure reservedDeparture = userCon.reserveDeparture(user, 2, adminEmail, adminPW).getBody();
-
-        assertEquals(1, adminCon.getArrivals(1, adminEmail, adminPW).getBody().size());
-        assertEquals(1, adminCon.getDepartures(1, adminEmail, adminPW).getBody().size());
     }
 
     //Relies on test user from testAddGetUser()

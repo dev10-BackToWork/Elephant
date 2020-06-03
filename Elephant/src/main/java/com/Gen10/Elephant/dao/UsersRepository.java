@@ -3,6 +3,7 @@ package com.Gen10.Elephant.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.Gen10.Elephant.dto.Location;
@@ -15,4 +16,7 @@ public interface UsersRepository extends JpaRepository<User, Integer>{
 
 	
 	List<User> findAllByLocation(Location location);
+
+	@Query(value = "SELECT * FROM `User` u WHERE u.isActive = 1 and u.location = 1?", nativeQuery = true)
+	List<User> findAllActiveByLocation(location location);
 }
