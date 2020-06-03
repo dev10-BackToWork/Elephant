@@ -90,20 +90,12 @@ public class ServiceLayer {
     }
     
     public List<LocalDate> retrieveDatesPresent(int id) {
-        List<Attendance> allAttendance = attendanceRepo.findAll();
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceWithinLast30Days();
         List<LocalDate> usersAttendanceDates = new ArrayList<>();
-        LocalDate today = LocalDate.now();
-        LocalDate thirtyDaysAgo = today.minusDays(30);
         
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
                 usersAttendanceDates.add(attendance.getAttendanceDate());
-            }
-        }
-        
-        for (LocalDate attendanceDate : usersAttendanceDates) {
-            if (attendanceDate.isBefore(thirtyDaysAgo)) {
-                usersAttendanceDates.remove(attendanceDate);
             }
         }
         
