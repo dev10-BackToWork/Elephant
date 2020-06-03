@@ -9,6 +9,7 @@ import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -209,6 +210,17 @@ public class AdminController {
             return new ResponseEntity<User>(service.reactivateSpecifiedUser(id), HttpStatus.OK);
         }
         String message = "There was an error while updating the user's active status to active.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/datesPresent/{id}")
+    public ResponseEntity<List<LocalDate>> datesPresent(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<LocalDate>>(service.retrieveDatesPresent(id), HttpStatus.OK);
+        }
+        String message = "There was an error while retrieving the dates the user was in the office.";
         return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }

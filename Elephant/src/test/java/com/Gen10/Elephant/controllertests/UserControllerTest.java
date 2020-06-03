@@ -8,10 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.Gen10.Elephant.Controller.UserController;
-import com.Gen10.Elephant.dto.Arrival;
 import com.Gen10.Elephant.dto.Attendance;
-import com.Gen10.Elephant.dto.Departure;
-import com.Gen10.Elephant.dto.TimeSlot;
 import com.Gen10.Elephant.dto.User;
 
 import org.junit.After;
@@ -67,12 +64,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetTimes() {
-        List<TimeSlot> slots = userCon.getTimes(1, userEmail, userPW).getBody();
-        assertTrue(slots.size() > 0);
-    }
-
-    @Test
     public void testChangePW() {
         User user = new User("user@user.com", "newPassword");
         user.setUserId(2);
@@ -104,35 +95,5 @@ public class UserControllerTest {
         attendance.setIsAuthorized(false);
         attendanceDB = userCon.markAttendance(attendance, userEmail, userPW).getBody();
         assertFalse(attendanceDB.getIsAuthorized());
-    }
-
-    //Database must be re-made after each run test to function properly
-    @Test
-    public void testArrivalDuplicateArrival() {
-        User user = new User(userEmail, userPW);
-        user.setUserId(2);
-
-        Arrival arrival = userCon.reserveArrival(user, 1, userEmail, userPW).getBody();
-        assertTrue(arrival.getTimeSlot().getTimeSlotId() == 1);
-        assertTrue(arrival.getArrivalId() == 1);
-        assertTrue(arrival.getUser().getUserId() == 2);
-
-        HttpStatus status = userCon.reserveArrival(user, 1, userEmail, userPW).getStatusCode();
-        assertEquals(HttpStatus.IM_USED, status);
-    }
-
-    //Database must be re-made after each run test to function properly
-    @Test
-    public void testDepartureDuplicateDeparture() {
-        User user = new User(userEmail, userPW);
-        user.setUserId(2);
-
-        Departure departure = userCon.reserveDeparture(user, 2, userEmail, userPW).getBody();
-        assertTrue(departure.getDepartureId() == 1);
-        assertTrue(departure.getTimeSlot().getTimeSlotId() == 2);
-        assertTrue(departure.getUser().getUserId() == 2);
-
-        HttpStatus status = userCon.reserveDeparture(user, 2, userEmail, userPW).getStatusCode();
-        assertEquals(HttpStatus.IM_USED, status);
     }
 }

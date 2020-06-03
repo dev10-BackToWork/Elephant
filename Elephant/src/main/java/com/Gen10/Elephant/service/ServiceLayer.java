@@ -89,6 +89,27 @@ public class ServiceLayer {
         return currentAttendance;
     }
     
+    public List<LocalDate> retrieveDatesPresent(int id) {
+        List<Attendance> allAttendance = attendanceRepo.findAll();
+        List<LocalDate> usersAttendanceDates = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        LocalDate thirtyDaysAgo = today.minusDays(30);
+        
+        for (Attendance attendance : allAttendance) {
+            if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
+                usersAttendanceDates.add(attendance.getAttendanceDate());
+            }
+        }
+        
+        for (LocalDate attendanceDate : usersAttendanceDates) {
+            if (attendanceDate.isBefore(thirtyDaysAgo)) {
+                usersAttendanceDates.remove(attendanceDate);
+            }
+        }
+        
+        return usersAttendanceDates;
+    }
+    
     public List<Attendance> generateAttendanceReport(int id, String date) {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> attendanceReport = new ArrayList<>();
