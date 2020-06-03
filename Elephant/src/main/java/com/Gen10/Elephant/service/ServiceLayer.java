@@ -185,7 +185,7 @@ public class ServiceLayer {
 
     public List<User> getAllUsersByLocation(Location location) {
         return usersRepo.findAllByLocation(location);
-    }e
+    }
 
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
