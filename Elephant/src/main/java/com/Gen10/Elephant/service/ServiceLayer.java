@@ -225,11 +225,11 @@ public class ServiceLayer {
         List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation(location);
 
-        for (User user : usersByLocation) {
-            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
-                usersByLocationNotAnswered.remove(user);
-            }
-        }
+        // for (User user : usersByLocation) {
+        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
+        //         usersByLocationNotAnswered.remove(user);
+        //     }
+        // }
 
         return usersByLocationNotAnswered;
     }
