@@ -288,7 +288,7 @@ public class ServiceLayer {
 
         if (dbUser != null){
             Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood@dev-10.com",
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com",
                 "Account Created", 
                 "<p>Hello " + dbUser.getFirstName() + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>" + dbUser.getEmail() + "</strong></span>" + 
                 "<br/> &emsp; Your temporary password is: <strong>" + dbUser.getDefaultPW() + 
