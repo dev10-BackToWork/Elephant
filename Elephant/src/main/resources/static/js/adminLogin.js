@@ -555,6 +555,7 @@ $(document).ready(function () {
 //
 //            });
 
+
                 },
                 error: function() {
                     $('#errorMessages')
@@ -2389,6 +2390,8 @@ function showGuidelines() {
 
     // // @GetMapping("/occupants/{id}")
     // // public ResponseEntity<List<User>> getOccupants
+     
+    
     // $('#getOccupants').click(function (event) {
 
     //     var locationId = 1;
@@ -2443,7 +2446,180 @@ function showGuidelines() {
 
     // // @GetMapping("/users/{id}")
     // // public ResponseEntity<List<User>> getUsers
-    // $('#getUsers').click(function (event) {
+  
+        var locationId = 5;
+    
+        $('#getUsers').click(function (event) {
+            getUsersByLocation(locationId);
+        });
+        
+        //function loadReportPage(locationId){
+            
+        function getUsersByLocation(locationId) {
+            $("#myList").empty();
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/users/" + locationId,
+                headers: {
+                    'email': 'twyborny@genesis10.com',
+                    'password': 'password'
+                    //'email': adminEmail,
+                    //'password': adminPassword
+                },
+                success: function (data, status) {
+                    console.log(data);
+                    var myList = $("#myList");
+                    $.each(data, function (index, user) {
+                          var name = user.firstName + ' ' + user.lastName;
+                          var id = user.userId;
+                          var nameLi = "<li class='report-name' id="+id+">"+name;
+                          nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">Select</button>';
+                          nameLi += "</li>";
+                          myList.append(nameLi); 
+                    });
+
+                },
+                error: function() {
+                    $('#errorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+
+            });
+        };
+
+ var specifiedDate;
+ 
+        function getAttendance (userId){
+            
+            $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
+             headers: {
+                 'email': 'twyborny@genesis10.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 console.log(data);
+                 console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
+                 $("#attendance-message").empty();
+                 $('#report-attendance-dates').empty();
+                 $("#isAttendingTable").hide();
+                 $("#isAttendingRow").empty();
+                  
+                 var attendanceDateDiv = $('#report-attendance-dates');
+                 if (data.length === 0) {
+                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days")
+                        console.log('this user does not have any attendance records!');
+                    }
+                 else if (data.length > 0) {
+                     $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates:"); 
+                 }
+                 $.each(data, function (i) {
+                    
+                    date = data[i];
+                    
+                    console.log(date);
+                    var dateBtn = '<button onclick="getEmployeesByDate(' + date + ')" class="date-btn" id='+i+'>'+date+'';
+                    //var dateBtn = '<button class="date-btn" id='+i+'>'+date+'';
+                    dateBtn += "</button>";
+                    attendanceDateDiv.append(dateBtn);
+
+                });
+            },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve user ' + userId + ' attendance within the last 30 days.');
+             }
+         });
+     }
+
+//        $(".date-btn").on('click', function (e) {
+//            //var timeSlotId = parseInt(this.id);
+//            var specifiedDate = $(this).getDate();
+//            console.log(specifiedDate);
+//        });
+                
+                
+     function getEmployeesByDate(){
+         
+         date = specifiedDate;     
+    // Note that the below prepared ajax call depends on the presence of a few attendance objects existing in the database. The adminLocation should be the active admin's/branch managers locationId.
+     //$('#report-date-btn').click(function(event) {
+         $("#noAttendees").hide();
+         var adminLocationId = 5;
+         var year = "2020";
+         var month = "06";
+         var day = "01";
+         specifiedDate = year +'-'+month+'-'+day;
+         console.log(specifiedDate);
+         //specifiedDate = "2020-06-03";
+
+        $('#isAttendingRows').empty();
+        
+        $.ajax({
+            type: 'GET',
+             url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
+             headers: {
+                'email': 'twyborny@genesis10.com',
+                'password': 'password'
+             },
+
+            success: function (response) {
+                $("#isAttendingTable").show();
+                $("#noAttendees").hide();
+
+                console.log(response);
+                if (response.length === 0) {
+                    //$("#attendance-message").html("There are no attendance records on the date selected.");
+                    console.log("There are no attendance records on the date selected.");
+                    $("#isAttendingTable").hide();
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                }
+                
+                var isAttendingRows = $("#isAttendingRows");
+                
+                $.each(response, function (i, user) {
+                    var userName = user.user.firstName + ' ' + user.user.lastName;
+                    var userEmail = user.user.email;
+                    var userLocation = user.user.location.cityName;
+                    var row = '<tr>';
+                
+                
+                if (response[i].isAttending === true) {
+                    row = '<tr>';
+                    row += '<td>' + userName + '</td>';
+                    row += '<td>' + userEmail + '</td>';
+                    row += '<td>' + userLocation + '</td>';
+                    row += '<td>' +''+ '</td>';
+                    row += '</tr>';
+                    isAttendingRows.append(row);
+                }
+                if (row.length === 0) {
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                    //isAttendingRows.append("There are no attendance records for the date selected");
+                }
+                
+                console.log('The request for the attendance report was successful.');
+                });
+                
+            },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve the attendance report.');
+            }
+         });
+     
+    // });
+ };
+
+    
+        
+        
+
 
     //     var locationId = 1;
 
@@ -2493,95 +2669,8 @@ function showGuidelines() {
     //     });
 
     // });
-
-
-
-    //  // @GetMapping("/attendanceReport/{id}/{date}")
-    //  // public ResponseEntity<List<Attendance>> attendanceReport
-    
-        $(".date-btn").on('click', function (e) {
-            //var timeSlotId = parseInt(this.id);
-            var specifiedDate = $(this).find('.date-btn').html(); 
-            
-            console.log(specifiedDate);
-            //$("#attendanceDate").val(date);
-            //$("#attendanceDate").val(timeSlotId);
-        });
-                
-                
-                
-    // Note that the below prepared ajax call depends on the presence of a few attendance objects existing in the database. The adminLocation should be the active admin's/branch managers locationId.
-     $('#report-date-btn').click(function(event) {
-         $("#noAttendees").hide();
-         var adminLocationId = 5;
-         specifiedDate = "2020-06-02";
-
-        
-        //$('#authPendRows').empty();
-        //$('#arrivalRows').empty();
-
-        var isAttendingRows = $('#isAttendingRows');
-        $('#isAttendingRows').empty();
-        
-        $.ajax({
-            type: 'GET',
-             url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
-             headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
-             },
-
-
-            success: function (response) {
-                $("#isAttendingTable").show();
-                $("#noAttendees").hide();
-
-                console.log(response);
-                if (response.length === 0) {
-                    console.log("There are no attendance records on the date selected.");
-                    $("#isAttendingTable").hide();
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
-                }
-                
-                var isAttendingRows = $("#isAttendingRows");
-                
-                $.each(response, function (i, user) {
-                    var userName = user.user.firstName + ' ' + user.user.lastName;
-                    var userEmail = user.user.email;
-                    var userLocation = user.user.location.cityName;
-                    var row = '<tr>';
-                
-                
-                if (response[i].isAttending === true) {
-                    row = '<tr>';
-                    row += '<td>' + userName + '</td>';
-                    row += '<td>' + userEmail + '</td>';
-                    row += '<td>' + userLocation + '</td>';
-                    row += '<td>' +''+ '</td>';
-                    row += '</tr>';
-                    isAttendingRows.append(row);
-                }
-                if (row.length === 0) {
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
-                    //isAttendingRows.append("There are no attendance records for the date selected");
-                }
-                
-                console.log('The request for the attendance report was successful.');
-                });
-                
-
-            },
-             error: function (http) {
-                 console.log(http);
-                 console.log('An error resulted when attempting to retrieve the attendance report.');
-            }
-         });
-
-     });
-
-
+    // 
+    // 
     // // @PostMapping("/deactivateUser/{id}")
     // // public ResponseEntity<User> deactivateUser
 

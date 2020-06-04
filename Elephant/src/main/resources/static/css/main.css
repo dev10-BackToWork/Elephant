@@ -120,24 +120,37 @@ footer {
   margin-bottom: 12px; /* Add some space below the input */
 }
 
-#myUL {
+#myList {
   /* Remove default list styling */
   list-style-type: none;
   padding: 0;
   margin: 0;
+  width: 30rem;
 }
 
-#myUL li a {
-  border: 1px solid #ddd; /* Add a border to all links */
-  margin-top: -1px; /* Prevent double borders */
-  background-color: #f6f6f6; /* Grey background color */
-  padding: 12px; /* Add some padding */
-  text-decoration: none; /* Remove default text underline */
-  font-size: 18px; /* Increase the font-size */
+#myList li {
+  display: none;
+  border: 1px solid #ddd; 
+  margin-top: -1px;
+  background-color: #f6f6f6; 
+  padding: 1px;
+  
+  font-size: 12px; /* Increase the font-size */
   color: black; /* Add a black text color */
   display: block; /* Make it into a block element to fill the whole list */
 }
 
-#myUL li a:hover:not(.header) {
+#myList li:hover:not(.header) {
   background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+
+
+.date-btn {
+    width: 5rem;
+}
+
+.report-user-select {
+    background-color: rgb(228,112,31);
+    width: 5rem;
+    margin-left: 20px;
 }
