@@ -17,6 +17,6 @@ public interface UsersRepository extends JpaRepository<User, Integer>{
 
 	List<User> findAllByLocation(Location location);
 
-	@Query(value = "SELECT * FROM `User` u WHERE u.isActive = 1 and u.locationid = ?1", nativeQuery = true)
+	@Query(value = "SELECT u.userId, u.firstName, u.lastName, u.email, u.defaultPW, u.passwords, u.locationId, u.roleId, u.isActive FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId WHERE u.isActive = 1 and u.locationid = ?1 AND a.isAttending IS NULL", nativeQuery = true)
 	List<User> findAllActiveByLocation(Location location);
 }
