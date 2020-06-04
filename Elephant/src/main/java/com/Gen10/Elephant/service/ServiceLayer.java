@@ -89,6 +89,19 @@ public class ServiceLayer {
         return currentAttendance;
     }
     
+    public List<LocalDate> retrieveDatesPresent(int id) {
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceWithinLast30Days();
+        List<LocalDate> usersAttendanceDates = new ArrayList<>();
+        
+        for (Attendance attendance : allAttendance) {
+            if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
+                usersAttendanceDates.add(attendance.getAttendanceDate());
+            }
+        }
+        
+        return usersAttendanceDates;
+    }
+    
     public List<Attendance> generateAttendanceReport(int id, String date) {
         List<Attendance> allAttendance = attendanceRepo.findAll();
         List<Attendance> attendanceReport = new ArrayList<>();
@@ -294,9 +307,6 @@ public class ServiceLayer {
 
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-
-        String encryptedPW = BCrypt.hashpw(user.getPasswords(), BCrypt.gensalt(10));
-        existingUser.setPasswords(encryptedPW);
 
         existingUser.setEmail(user.getEmail());
         existingUser.setLocation(user.getLocation());

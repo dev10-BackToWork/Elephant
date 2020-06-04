@@ -13,6 +13,7 @@ $(document).ready(function () {
     $("#navBarDiv").hide();
     $("#dashboardDiv").hide();
     $("#allEmployeesDiv").hide();
+    $("#reportingDiv").hide();
     $("#createAccountDiv").hide();
     $("#createLocationDiv").hide();
     $("#employeeInfoDiv").hide();
@@ -24,6 +25,7 @@ $(document).ready(function () {
     $("#survey-bye").hide();
     $("#deleteEmployeeDiv").hide();
     $("#successfulDeleteDiv").hide();
+    $("#successfulActivateDiv").hide();
     $("#locationInfoDiv").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
@@ -203,6 +205,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -214,6 +217,7 @@ $(document).ready(function () {
         $("#survey-bye").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         $('#time-success').hide();
         $("#loginErr").hide();  
@@ -227,6 +231,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -234,6 +239,7 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         
         $("#noResErrorMessages").hide();
@@ -346,6 +352,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -353,6 +360,7 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         
                 
@@ -465,6 +473,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -472,10 +481,15 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         
         $("#errorMessages").hide();
         $("#inactiveErrorMessages").hide();
+        $("#inactiveEmployees").hide();
+        $("#activeEmployees").show();
+        $('#employeeOption').val(1);
+        
 
         $('#contentRows').empty();
         $('#inactiveRows').empty();
@@ -499,61 +513,21 @@ $(document).ready(function () {
                         var email = user.email;
                         var location = user.location.cityName;
                         var id = user.userId;
-
-                        var row = '<tr>';
-                        row += '<td>' + name + '</td>';
-                        row += '<td>' + email + '</td>';
-                        row += '<td>' + location + '</td>';
-                        row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
-                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
+                        var active = user.isActive;
                         
-                        row += '</tr>';
-                        contentRows.append(row);
-                    });
+                        if (active === true) {
 
-//              $('.deleteAllEmployeeBtn').click(function (event) {
-//                $("#loginNav").hide();
-//                $("#adminLoginDiv").hide();
-//                $("#loginErr").hide();
-//                $("#navBarDiv").show();
-//                $("#dashboardDiv").hide();
-//                $("#allEmployeesDiv").hide();
-//                $("#createAccountDiv").hide();
-//                $("#createLocationDiv").hide();
-//                $("#employeeInfoDiv").hide();
-//                $("#healthSurveyDiv").hide();
-//                $("#scheduleArrivalDiv").hide();
-//                $("#deleteEmployeeDiv").show();
-//                $("#successfulDeleteDiv").hide();
-//                $("#locationInfoDiv").hide();
-//
-//                var userId = 7;
-//
-//                    $.ajax({
-//                    type: 'GET',
-//                    url: 'http://localhost:8080/api/admin/user/' + userId,
-//                    headers: {
-//                         'email': adminEmail,
-//                         'password': adminPassword
-//                     },
-//                    success: function(data, status) {
-//                          $('#delete-first-name').val(data.firstName);
-//                          $('#delete-last-name').val(data.lastName);
-//                          $('#delete-email').val(data.email);
-//                          $('#delete-password').val(data.passwords);
-//                          $('#delete-location').val(data.location.cityName);
-//                          $('#delete-role').val(data.role.name);
-//                      },
-//                      error: function() {
-//                        $('#deleteErrorMessages')
-//                           .append($('<li>')
-//                           .attr({class: 'list-group-item list-group-item-danger'})
-//                           .text('An error has occurred.  Please try again later.'));
-//                      }
-//                    });
-//
-//
-//            });
+                            var row = '<tr>';
+                            row += '<td>' + name + '</td>';
+                            row += '<td>' + email + '</td>';
+                            row += '<td>' + location + '</td>';
+                            row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
+                            row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
+
+                            row += '</tr>';
+                            contentRows.append(row);
+                        }
+                    });
 
                 },
                 error: function() {
@@ -577,15 +551,19 @@ $(document).ready(function () {
                         var inactiveEmail = user.email;
                         var inactiveLocation = user.location.cityName;
                         var inactiveId = user.userId;
-
-                        var row = '<tr>';
-                        row += '<td>' + inactiveName + '</td>';
-                        row += '<td>' + inactiveEmail + '</td>';
-                        row += '<td>' + inactiveLocation + '</td>';
-                        row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+                        var inactiveActive = user.isActive;
                         
-                        row += '</tr>';
-                        inactiveRows.append(row);
+                        if (inactiveActive === false) {
+
+                            var row = '<tr>';
+                            row += '<td>' + inactiveName + '</td>';
+                            row += '<td>' + inactiveEmail + '</td>';
+                            row += '<td>' + inactiveLocation + '</td>';
+                            row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+
+                            row += '</tr>';
+                            inactiveRows.append(row);
+                        }
                     });
 
                 },
@@ -600,6 +578,43 @@ $(document).ready(function () {
     });
     
     
+   $('#submitEmployeeOption').click(function (event) {  
+       var option = $('#employeeOption').val();
+       if (option == 1) {
+            $("#activeEmployees").hide();
+            $("#inactiveEmployees").hide();
+            $("#activeEmployees").show();
+        }
+        if (option == 2) {
+            $("#activeEmployees").hide();
+            $("#inactiveEmployees").hide();
+            $("#inactiveEmployees").show();
+        }
+  });
+  
+    $('#reportingBtn').click(function (event) {  
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#reportingDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#overall-success").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
+        $("#locationInfoDiv").hide();
+  });
+    
+    
+    
+    
+    
     $('#createEmployeeBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
@@ -607,12 +622,14 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         $("#overall-success").hide();
 
@@ -650,6 +667,7 @@ $(document).ready(function () {
     //     $("#navBarDiv").show();
     //     $("#dashboardDiv").hide();
     //     $("#allEmployeesDiv").hide();
+    //     $("#reportingDiv").hide();
     //     $("#createAccountDiv").hide();
     //     $("#createLocationDiv").show();
     //     $("#employeeInfoDiv").hide();
@@ -657,6 +675,7 @@ $(document).ready(function () {
     //     $("#scheduleArrivalDiv").hide();
     //     $("#deleteEmployeeDiv").hide();
     //     $("#successfulDeleteDiv").hide();
+    //     $("#successfulActivateDiv").hide();
     //     $("#locationInfoDiv").hide();
     // });
     
@@ -667,6 +686,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -674,6 +694,7 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").show();
         
         $("#editLocErrorMessages").hide();
@@ -711,6 +732,7 @@ $(document).ready(function () {
         $("#navBarDiv").hide();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -718,6 +740,7 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
     });
     
@@ -816,6 +839,7 @@ $(document).ready(function () {
                     // $("#navBarDiv").show();
                     // $("#dashboardDiv").hide();
                     // $("#allEmployeesDiv").show();
+                    // $("#reportingDiv").hide();
                     // $("#createAccountDiv").hide();
                     // $("#createLocationDiv").hide();
                     // $("#employeeInfoDiv").hide();
@@ -823,6 +847,7 @@ $(document).ready(function () {
                     // $("#scheduleArrivalDiv").hide();
                     // $("#deleteEmployeeDiv").hide();
                     // $("#successfulDeleteDiv").hide();
+                    // $("#successfulActivateDiv").hide();
                     // $("#locationInfoDiv").hide();
 
                     $('#firstNameAddUser').val("");
@@ -879,12 +904,14 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         $("#overall-success").hide();
         
@@ -902,20 +929,21 @@ $(document).ready(function () {
         var lastNameField = $('#edit-last-name').val();
         var emailField = $('#edit-email').val();
         // var defaultPWField = 'password';
-        var passwordsField = $('#edit-password').val();
+        // var passwordsField = $('#edit-password').val();
         var locationIdField = $('#edit-location').val();
         var cityNameField = allLocations[locationIdField - 1].cityName;
         var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
         var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
         var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
         var endTimeField = allLocations[locationIdField - 1].endTime;
-        var roleNameField = $('#edit-role').val();
-        var roleIdField;
+        var roleIdField = $('#edit-role').val();
+        var roleNameField;
 
-        if(roleNameField == "ROLE_ADMIN") {
-            roleIdField = 1;
+        if(roleIdField == 1) {
+            roleNameField = "ROLE_ADMIN";
         } else {
             roleIdField = 2;
+            roleNameField = "ROLE_USER";
         }
 
         if (firstNameField.length < 1 || firstNameField.length > 25) {
@@ -939,12 +967,12 @@ $(document).ready(function () {
             errorCount += 1;
         }
 
-        if (passwordsField.length < 1) {
-            $('#editErrorMessages').append($('<li>')
-            .attr({class: 'list-group-item list-group-item-danger' })
-            .text('Please enter a password.'));
-        errorCount += 1;
-        }
+        // if (passwordsField.length < 1) {
+        //     $('#editErrorMessages').append($('<li>')
+        //     .attr({class: 'list-group-item list-group-item-danger' })
+        //     .text('Please enter a password.'));
+        // errorCount += 1;
+        // }
         
         if(errorCount == 0) {
 
@@ -954,7 +982,7 @@ $(document).ready(function () {
                 "lastName": lastNameField,
                 "email": emailField,
                 // "defaultPW": defaultPWField,
-                "passwords": passwordsField,
+                // "passwords": passwordsField,
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
@@ -990,12 +1018,14 @@ $(document).ready(function () {
                     // $("#navBarDiv").show();
                     // $("#dashboardDiv").hide();
                     // $("#allEmployeesDiv").show();
+                    // $("#reportingDiv").hide();
                     // $("#createAccountDiv").hide();
                     // $("#createLocationDiv").hide();
                     // $("#employeeInfoDiv").hide();
                     // $("#healthSurveyDiv").hide();
                     // $("#deleteEmployeeDiv").hide();
                     // $("#successfulDeleteDiv").hide();
+                    // $("#successfulActivateDiv").hide();
                     // $("#locationInfoDiv").hide();
 
                     $('#employeesBtn').click();
@@ -1043,6 +1073,7 @@ $(document).ready(function () {
     //     $("#navBarDiv").show();
     //     $("#dashboardDiv").hide();
     //     $("#allEmployeesDiv").hide();
+    //     $("#reportingDiv").hide();
     //     $("#createAccountDiv").hide();
     //     $("#createLocationDiv").hide();
     //     $("#employeeInfoDiv").hide();
@@ -1050,6 +1081,7 @@ $(document).ready(function () {
     //     $("#scheduleArrivalDiv").hide();
     //     $("#deleteEmployeeDiv").show();
     //     $("#successfulDeleteDiv").hide();
+    //     $("#successfulActivateDiv").hide();
     //     $("#locationInfoDiv").hide();
     // });
     
@@ -1060,12 +1092,14 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         $("#overall-success").hide();
     });
@@ -1091,6 +1125,7 @@ $(document).ready(function () {
 //            $("#navBarDiv").show();
 //            $("#dashboardDiv").hide();
 //            $("#allEmployeesDiv").show();
+//            $("#reportingDiv").hide();
 //            $("#createAccountDiv").hide();
 //            $("#createLocationDiv").hide();
 //            $("#employeeInfoDiv").hide();
@@ -1098,6 +1133,7 @@ $(document).ready(function () {
 //            $("#scheduleArrivalDiv").hide();
 //            $("#deleteEmployeeDiv").hide();
 //            $("#successfulDeleteDiv").hide();
+//            $("#successfulActivateDiv").hide();
 //            $("#locationInfoDiv").hide();
 //
 //            $("#allEmployeeErr").hide();
@@ -1140,6 +1176,7 @@ $(document).ready(function () {
 //                    $("#navBarDiv").show();
 //                    $("#dashboardDiv").hide();
 //                    $("#allEmployeesDiv").hide();
+//                    $("#reportingDiv").hide();
 //                    $("#createAccountDiv").hide();
 //                    $("#createLocationDiv").hide();
 //                    $("#employeeInfoDiv").show();
@@ -1147,6 +1184,7 @@ $(document).ready(function () {
 //                    $("#scheduleArrivalDiv").hide();
 //                    $("#deleteEmployeeDiv").hide();
 //                    $("#successfulDeleteDiv").hide();
+//                    $("#successfulActivateDiv").hide();
 //                    $("#locationInfoDiv").hide();
 //
 //                    var userId = 7;
@@ -1181,6 +1219,7 @@ $(document).ready(function () {
 //                $("#navBarDiv").show();
 //                $("#dashboardDiv").hide();
 //                $("#allEmployeesDiv").show();
+//                $("#reportingDiv").hide();
 //                $("#createAccountDiv").hide();
 //                $("#createLocationDiv").hide();
 //                $("#employeeInfoDiv").hide();
@@ -1188,6 +1227,7 @@ $(document).ready(function () {
 //                $("#scheduleArrivalDiv").hide();
 //                $("#deleteEmployeeDiv").hide();
 //                $("#successfulDeleteDiv").hide();
+//                $("#successfulActivateDiv").hide();
 //                $("#locationInfoDiv").hide();
 //
 //
@@ -1200,6 +1240,7 @@ $(document).ready(function () {
 //                $("#navBarDiv").show();
 //                $("#dashboardDiv").hide();
 //                $("#allEmployeesDiv").hide();
+//                $("#reportingDiv").hide();
 //                $("#createAccountDiv").hide();
 //                $("#createLocationDiv").hide();
 //                $("#employeeInfoDiv").hide();
@@ -1207,6 +1248,7 @@ $(document).ready(function () {
 //                $("#scheduleArrivalDiv").hide();
 //                $("#deleteEmployeeDiv").show();
 //                $("#successfulDeleteDiv").hide();
+//                $("#successfulActivateDiv").hide();
 //                $("#locationInfoDiv").hide();
 //
 //                var userId = 7;
@@ -1283,6 +1325,7 @@ $(document).ready(function () {
     //         $("#navBarDiv").show();
     //         $("#dashboardDiv").hide();
     //         $("#allEmployeesDiv").show();
+    //         $("#reportingDiv").hide();
     //         $("#createAccountDiv").hide();
     //         $("#createLocationDiv").hide();
     //         $("#employeeInfoDiv").hide();
@@ -1290,6 +1333,7 @@ $(document).ready(function () {
     //         $("#scheduleArrivalDiv").hide();
     //         $("#deleteEmployeeDiv").hide();
     //         $("#successfulDeleteDiv").hide();
+    //         $("#successfulActivateDiv").hide();
     //         $("#locationInfoDiv").hide();
 
     //         $("#allEmployeeErr").hide();
@@ -1332,6 +1376,7 @@ $(document).ready(function () {
     //                 $("#navBarDiv").show();
     //                 $("#dashboardDiv").hide();
     //                 $("#allEmployeesDiv").hide();
+    //                 $("#reportingDiv").hide();
     //                 $("#createAccountDiv").hide();
     //                 $("#createLocationDiv").hide();
     //                 $("#employeeInfoDiv").show();
@@ -1339,6 +1384,7 @@ $(document).ready(function () {
     //                 $("#scheduleArrivalDiv").hide();
     //                 $("#deleteEmployeeDiv").hide();
     //                 $("#successfulDeleteDiv").hide();
+    //                 $("#successfulActivateDiv").hide();
     //                 $("#locationInfoDiv").hide();
 
     //                 var userId = 7;
@@ -1373,6 +1419,7 @@ $(document).ready(function () {
     //             $("#navBarDiv").show();
     //             $("#dashboardDiv").hide();
     //             $("#allEmployeesDiv").show();
+    //             $("#reportingDiv").hide();
     //             $("#createAccountDiv").hide();
     //             $("#createLocationDiv").hide();
     //             $("#employeeInfoDiv").hide();
@@ -1380,6 +1427,7 @@ $(document).ready(function () {
     //             $("#scheduleArrivalDiv").hide();
     //             $("#deleteEmployeeDiv").hide();
     //             $("#successfulDeleteDiv").hide();
+    //             $("#successfulActivateDiv").hide();
     //             $("#locationInfoDiv").hide();
 
 
@@ -1392,6 +1440,7 @@ $(document).ready(function () {
     //             $("#navBarDiv").show();
     //             $("#dashboardDiv").hide();
     //             $("#allEmployeesDiv").hide();
+    //             $("#reportingDiv").hide();
     //             $("#createAccountDiv").hide();
     //             $("#createLocationDiv").hide();
     //             $("#employeeInfoDiv").hide();
@@ -1399,6 +1448,7 @@ $(document).ready(function () {
     //             $("#scheduleArrivalDiv").hide();
     //             $("#deleteEmployeeDiv").show();
     //             $("#successfulDeleteDiv").hide();
+    //             $("#successfulActivateDiv").hide();
     //             $("#locationInfoDiv").hide();
 
     //             var userId = 7;
@@ -1460,12 +1510,14 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
         $("#healthSurveyDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
         $("#overall-success").hide();
     });
@@ -1719,12 +1771,14 @@ var startTime;
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
+        $("#reportingDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").show();
         $("#healthSurveyDiv").hide();
         $("#deleteEmployeeDiv").hide();
         $("#successfulDeleteDiv").hide();
+        $("#successfulActivateDiv").hide();
 
         var userId = id;
 
@@ -1732,7 +1786,7 @@ var startTime;
         type: 'GET',
         url: 'http://localhost:8080/api/admin/user/' + userId,
         headers: {
-                'email': 'user@user.com',
+                'email': 'twyborny@genesis10.com',
                 'password': 'password'
             },
         success: function(data, status) {
@@ -1767,7 +1821,7 @@ var startTime;
             type: 'GET',
             url: 'http://localhost:8080/api/admin/locations',
             headers: {
-                'email': 'user@user.com',
+                'email': 'twyborny@genesis10.com',
                 'password': 'password'
             },
             success: function (data) {
@@ -1802,7 +1856,7 @@ var startTime;
             type: 'GET',
             url: 'http://localhost:8080/api/admin/roles/',
             headers: {
-                'email': 'user@user.com',
+                'email': 'twyborny@genesis10.com',
                 'password': 'password'
             },
             success: function (data) {
@@ -1830,184 +1884,87 @@ var startTime;
 
 
 
-    function deleteUser(userId) {  
-        let isDelete = confirm("This user will be permanently deleted.");
+function deleteUser(userId) {  
+        let isDelete = confirm("This user will be deactivated.");
         
     if (isDelete === true) {
         $.ajax({
-             type: 'DELETE',
-             url: 'http://localhost:8080/api/admin/user/' + userId,
+             type: 'POST',
+             url: 'http://localhost:8080/api/admin/deactivateUser/' + userId,
              headers: {
-                 'email': 'user@user.com',
+                 'email': 'twyborny@genesis10.com',
                  'password': 'password'
              },
              success: function (data) {
-                 console.log(data);
                  
-            $("#loginNav").hide();
-            $("#adminLoginDiv").hide();
-            $("#loginErr").hide();
-            $("#navBarDiv").show();
-            $("#dashboardDiv").hide();
-            $("#allEmployeesDiv").hide();
-            $("#createAccountDiv").hide();
-            $("#createLocationDiv").hide();
-            $("#employeeInfoDiv").hide();
-            $("#healthSurveyDiv").hide();
-            $("#deleteEmployeeDiv").hide();
-            $("#successfulDeleteDiv").show();
-            $("#locationInfoDiv").hide();
-
-//            $("#allEmployeeErr").hide();
-//
-//            $('#contentRows').empty();
-//
-//            var contentRows = $('#contentRows');
-//            var password = $("#inputPassword").val();
-//            var email = $("#inputEmail").val();
-//            var locationId = adminLocation;
-//
-//            $.ajax({
-//                type: "GET",
-//        //Need to change url so that it takes the admins location as the location id
-//                url: "http://localhost:8080/api/admin/users/" + locationId,
-//                headers: {
-//                    "email": email,
-//                    "password": password
-//                },
-//                success: function (data, status) {
-//                    $.each(data, function (index, user) {
-//                        var name = user.firstName + ' ' + user.lastName;
-//                        var email = user.email;
-//                        var location = user.location.cityName;
-//                        var id = user.userId;
-//
-//                        var row = '<tr>';
-//                        row += '<td>' + name + '</td>';
-//                        row += '<td>' + email + '</td>';
-//                        row += '<td>' + location + '</td>';
-//                        row += '<td><button class="editAllEmployeeBtn btn btn-info">Edit</button></td>';
-//                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Delete</button></td>';
-//                        row += '</tr>';
-//                        contentRows.append(row);
-//                    });
-//                $('.editAllEmployeeBtn').click(function (event) {
-//                    $("#loginNav").hide();
-//                    $("#adminLoginDiv").hide();
-//                    $("#loginErr").hide();
-//                    $("#navBarDiv").show();
-//                    $("#dashboardDiv").hide();
-//                    $("#allEmployeesDiv").hide();
-//                    $("#createAccountDiv").hide();
-//                    $("#createLocationDiv").hide();
-//                    $("#employeeInfoDiv").show();
-//                    $("#healthSurveyDiv").hide();
-//                    $("#scheduleArrivalDiv").hide();
-//                    $("#deleteEmployeeDiv").hide();
-//
-//                    var userId = 7;
-//
-//                    $.ajax({
-//                    type: 'GET',
-//                    url: 'http://localhost:8080/api/admin/user/' + userId,
-//                    headers: {
-//                         'email': 'user@user.com',
-//                         'password': 'password'
-//                     },
-//                    success: function(data, status) {
-//                          $('#edit-first-name').val(data.firstName);
-//                          $('#edit-last-name').val(data.lastName);
-//                          $('#edit-email').val(data.email);
-//                          $('#edit-password').val(data.passwords);
-//                          $('#edit-location').val(data.location.cityName);
-//                          $('#edit-role').val(data.role.name);
-//                      },
-//                      error: function() {
-//                        $('#editErrorMessages')
-//                           .append($('<li>')
-//                           .attr({class: 'list-group-item list-group-item-danger'})
-//                           .text('An error has occurred.  Please try again later.'));
-//                      }
-//                    });
-//
-//
-//                 $("#loginNav").hide();
-//                $("#adminLoginDiv").hide();
-//                $("#loginErr").hide();
-//                $("#navBarDiv").show();
-//                $("#dashboardDiv").hide();
-//                $("#allEmployeesDiv").show();
-//                $("#createAccountDiv").hide();
-//                $("#createLocationDiv").hide();
-//                $("#employeeInfoDiv").hide();
-//                $("#healthSurveyDiv").hide();
-//                $("#scheduleArrivalDiv").hide();
-//                $("#deleteEmployeeDiv").hide();
-//
-//
-//                });
-//
-//              $('.deleteAllEmployeeBtn').click(function (event) {
-//                $("#loginNav").hide();
-//                $("#adminLoginDiv").hide();
-//                $("#loginErr").hide();
-//                $("#navBarDiv").show();
-//                $("#dashboardDiv").hide();
-//                $("#allEmployeesDiv").hide();
-//                $("#createAccountDiv").hide();
-//                $("#createLocationDiv").hide();
-//                $("#employeeInfoDiv").hide();
-//                $("#healthSurveyDiv").hide();
-//                $("#scheduleArrivalDiv").hide();
-//                $("#deleteEmployeeDiv").show();
-//
-//                var userId = 7;
-//
-//                    $.ajax({
-//                    type: 'GET',
-//                    url: 'http://localhost:8080/api/admin/user/' + userId,
-//                    headers: {
-//                         'email': 'user@user.com',
-//                         'password': 'password'
-//                     },
-//                    success: function(data, status) {
-//                          $('#delete-first-name').val(data.firstName);
-//                          $('#delete-last-name').val(data.lastName);
-//                          $('#delete-email').val(data.email);
-//                          $('#delete-password').val(data.passwords);
-//                          $('#delete-location').val(data.location.cityName);
-//                          $('#delete-role').val(data.role.name);
-//                      },
-//                      error: function() {
-//                        $('#deleteErrorMessages')
-//                           .append($('<li>')
-//                           .attr({class: 'list-group-item list-group-item-danger'})
-//                           .text('An error has occurred.'));
-//                      }
-//                    });
-//
-//
-//            });
-//
-//                },
-//                error: function() {
-//                    $('#errorMessages')
-//                        .append($('<li>')
-//                        .attr({class: 'list-group-item list-group-item-danger'})
-//                        .text('An error has occurred.'));
-//                }
-//
-//            });     
-
-                     },
-                     error: function() {
-                        $('#deleteErrorMessages')
-                           .append($('<li>')
-                           .attr({class: 'list-group-item list-group-item-danger'})
-                           .text('An error has occurred.'));
-                      }
-                 });
+                $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#reportingDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").hide();
+                $("#healthSurveyDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+                $("#successfulDeleteDiv").show();
+                $("#successfulActivateDiv").hide();
+                $("#locationInfoDiv").hide();
+             },
+             error: function() {
+                console.log(http);
+                console.log('An error resulted when attempting to deactivate the user.');
              }
+         });
+     }
+
+}
+
+function activateUser(userId) {  
+    let isActivate = confirm("This user will be activated.");
+        
+    if (isActivate === true) {
+         
+         $.ajax({
+             type: 'POST',
+             url: 'http://localhost:8080/api/admin/reactivateUser/' + userId,
+             headers: {
+                 'email': 'twyborny@genesis10.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 
+                 $("#loginNav").hide();
+                $("#adminLoginDiv").hide();
+                $("#loginErr").hide();
+                $("#navBarDiv").show();
+                $("#dashboardDiv").hide();
+                $("#allEmployeesDiv").hide();
+                $("#reportingDiv").hide();
+                $("#createAccountDiv").hide();
+                $("#createLocationDiv").hide();
+                $("#employeeInfoDiv").hide();
+                $("#healthSurveyDiv").hide();
+                $("#deleteEmployeeDiv").hide();
+                $("#successfulActivateDiv").show();
+                $("#locationInfoDiv").hide();
+                
+             },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to activate the user.');
+             }
+         });
+         
+         
+         
+         
+         
+         
+     }
+
 }
 
 function clearLogin() {
