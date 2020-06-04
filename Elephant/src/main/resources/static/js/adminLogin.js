@@ -935,20 +935,21 @@ $(document).ready(function () {
         var lastNameField = $('#edit-last-name').val();
         var emailField = $('#edit-email').val();
         // var defaultPWField = 'password';
-        var passwordsField = $('#edit-password').val();
+        // var passwordsField = $('#edit-password').val();
         var locationIdField = $('#edit-location').val();
         var cityNameField = allLocations[locationIdField - 1].cityName;
         var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
         var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
         var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
         var endTimeField = allLocations[locationIdField - 1].endTime;
-        var roleNameField = $('#edit-role').val();
-        var roleIdField;
+        var roleIdField = $('#edit-role').val();
+        var roleNameField;
 
-        if(roleNameField == "ROLE_ADMIN") {
-            roleIdField = 1;
+        if(roleIdField == 1) {
+            roleNameField = "ROLE_ADMIN";
         } else {
             roleIdField = 2;
+            roleNameField = "ROLE_USER";
         }
 
         if (firstNameField.length < 1 || firstNameField.length > 25) {
@@ -972,12 +973,12 @@ $(document).ready(function () {
             errorCount += 1;
         }
 
-        if (passwordsField.length < 1) {
-            $('#editErrorMessages').append($('<li>')
-            .attr({class: 'list-group-item list-group-item-danger' })
-            .text('Please enter a password.'));
-        errorCount += 1;
-        }
+        // if (passwordsField.length < 1) {
+        //     $('#editErrorMessages').append($('<li>')
+        //     .attr({class: 'list-group-item list-group-item-danger' })
+        //     .text('Please enter a password.'));
+        // errorCount += 1;
+        // }
         
         if(errorCount == 0) {
 
@@ -987,7 +988,7 @@ $(document).ready(function () {
                 "lastName": lastNameField,
                 "email": emailField,
                 // "defaultPW": defaultPWField,
-                "passwords": passwordsField,
+                // "passwords": passwordsField,
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
@@ -1940,8 +1941,7 @@ function activateUser(userId) {
                  'password': 'password'
              },
              success: function (data) {
-                 
-                 $("#loginNav").hide();
+                $("#loginNav").hide();
                 $("#adminLoginDiv").hide();
                 $("#loginErr").hide();
                 $("#navBarDiv").show();
@@ -2421,20 +2421,19 @@ function showGuidelines() {
        
        
         function loadReportDiv(){
-        $("#noAttendees").hide();
-        $("#isAttendingTable").hide();
-       
-    
-        //load users to dropdown list
-        getUsersByLocation(locationId);
+            $("#noAttendees").hide();
+            $("#isAttendingTable").hide();
+
+            //load users to dropdown list
+            getUsersByLocation(locationId);
         
-        //filter search list functionality 
+            //filter search list functionality 
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#myList li").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
-        });
         };
   
        
@@ -2479,7 +2478,8 @@ function showGuidelines() {
             });
         };
 
-    var specifiedDate;
+    
+ var date;
  
         function getAttendance (userId){
             
@@ -2492,6 +2492,7 @@ function showGuidelines() {
              },
              success: function (data) {
                  console.log(data);
+                 
                  console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
                  $("#attendance-message").empty();
                  $('#report-attendance-dates').empty();
@@ -2500,7 +2501,7 @@ function showGuidelines() {
                   
                  var attendanceDateDiv = $('#report-attendance-dates');
                  if (data.length === 0) {
-                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days")
+                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days");
                         console.log('this user does not have any attendance records!');
                     }
                  else if (data.length > 0) {
@@ -2511,39 +2512,84 @@ function showGuidelines() {
                     date = data[i];
                     
                     console.log(date);
-                    var dateBtn = '<button onclick="getEmployeesByDate(' + date + ')" class="date-btn" id='+i+'>'+date+'';
-                    //var dateBtn = '<button class="date-btn" id='+i+'>'+date+'';
-                    dateBtn += "</button>";
-                    attendanceDateDiv.append(dateBtn);
+                    
+                    //var dateBtn = '<button onclick="getEmployeesByDate(' + date + ')" class="date-btn" id='+date+'>'+date+'';
+                    var dateBtn = "<div class='col-2'>";
+                    //dateBtn += "<button class='btn time' id='" + i + "'>';"
+                    //dateBtn = "<button onclick='getEmployeesByDate(' + date + ')" class="date-btn" id='+date+'>'+date+'';
+                    dateBtn += '<button onclick="getEmployeesByDate(' + date + ')" class="btn report-user-select">';
 
+                    ///row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
+
+                    //        <td><button onclick='deleteUser(' + ßid + ')" class="btn btn-danger">Deactivate</button></td>';
+                   //dateBtn += "<button class='report-date-btn' id='"+i+">";
+                    dateBtn += "<p class='item'>" + date + "</p>";
+                    dateBtn += "</button>";
+                    dateBtn += "</div>";
+                    attendanceDateDiv.append(dateBtn);
+                    console.log(date);
+                    
+//                    var departureBtn = "<div class='col-3'>";
+//                    departureBtn += "<button class='btn-primary btn-lg time' id='" + timeSlotId + "'>";
+//                    departureBtn += "<p class='item'>" + startTime + "</p>";
+//                    departureBtn += "</button>";
+//                    departureBtn += "</div>";
+//                    departureDiv.append(departureBtn);
                 });
+                
             },
+            
              error: function (http) {
                  console.log(http);
                  console.log('An error resulted when attempting to retrieve user ' + userId + ' attendance within the last 30 days.');
              }
          });
      }
+     
 
-//        $(".date-btn").on('click', function (e) {
-//            //var timeSlotId = parseInt(this.id);
-//            var specifiedDate = $(this).getDate();
-//            console.log(specifiedDate);
-//        });
+//var specifiedDate = date;
+
+              //  $('.keely').on('click', function () {
+                   
+               //     var btnId = parseInt(this.id);
+                    //var time = $(this).find('.item').html(); 
+               //     console.log(btnId);
+                    //console.log(time);
+                    //$("#departureTimeSelectedTime").val(time);
+                    //$("#departureTimeSelected").val(timeSlotId);
+              // });
+
+
+//      $(".report-date-btn").on("click", function () {
+//          alert('clicked!');
+//        //var selectedDate = parseInt(this.id);
+//        //var time = $(this).find('.item').html(); 
+//       // console.log(time);
+//        //var year = $()
+//        //var month = "06";
+//        //var day = "01";
+//            //var specifiedDate = $(this).getDate();
+//            //console.log(specifiedDate);
+//       });
                 
-                
+    
     function getEmployeesByDate(){
-         
-    date = specifiedDate;     
+        //let startDate = new Date(date);
+        //var dateSelected = $(".date-btn").text();
+        console.log(date);
+        
      //$('#report-date-btn').click(function(event) {
          $("#noAttendees").hide();
+         
          var adminLocationId = 5;
          var year = "2020";
          var month = "06";
          var day = "01";
-         specifiedDate = year +'-'+month+'-'+day;
-         console.log(specifiedDate);
-         //specifiedDate = "2020-06-03";
+         
+         //specifiedDate = year +'-'+month+'-'+day;
+         //console.log(specifiedDate);
+         specifiedDate = date;
+
 
         $('#isAttendingRows').empty();
         
