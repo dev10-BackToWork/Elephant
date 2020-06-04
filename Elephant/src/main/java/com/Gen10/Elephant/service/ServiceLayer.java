@@ -307,9 +307,6 @@ public class ServiceLayer {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
 
-        String encryptedPW = BCrypt.hashpw(user.getPasswords(), BCrypt.gensalt(10));
-        existingUser.setPasswords(encryptedPW);
-
         existingUser.setEmail(user.getEmail());
         existingUser.setLocation(user.getLocation());
         existingUser.setRole(user.getRole());
