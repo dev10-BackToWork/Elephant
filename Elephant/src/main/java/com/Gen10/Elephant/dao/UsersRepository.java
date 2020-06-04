@@ -14,7 +14,7 @@ public interface UsersRepository extends JpaRepository<User, Integer>{
 
 	User findByEmail(String email);
 
-	
+
 	List<User> findAllByLocation(Location location);
 
 	@Query(value = "SELECT * FROM `User` u WHERE u.isActive = 1 and u.locationid = ?1", nativeQuery = true)
