@@ -675,18 +675,94 @@
         </div>
         
         <!-- Reporting Div -->   
-        <div class="container" id="reportingDiv">
+        <div class="container" id="reportDiv">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="col-md-12 text-center">
                         <ul class="list-group" id="reportErrorMessages"></ul>
                     </div>
-                    <h3 class="mt-5">Reporting will go here</h3>
-                    <div class="row">
+                    
+                    
+<!--                <button class="btn-primary" id="getUsers" type="button">Load users by location (change to automatically call and load on report section load)</button>-->
+                <h3 class="mt-5">Contact Tracing Report</h3>
+
+
+
+                <div class="row">
+                    <div class="col-12">
+                            <h5>View dates an employee was in the office:</h5>
+                            <!--  <select name="report-attendance-names">-->
+                            <div class="row">
+                                <input id="myInput" type="text" placeholder="Search by employee name...">
+<!--                            <button class="btn btn-primary" id="submit-report-btn">Submit</button>-->
+                                <ul id="myList"></ul>
+                             </div>
                     </div>
-                </div>
+                </div>           
+            
+
+
+                    <div class="row">
+                        <div class="col-12" id="attendance-message">
+<!--                            <p>Over the past 30 days, the selected employee was in the office on the following dates:</p> -->
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="report-attendance-dates"></div>
+                        </div>
+                    </div>
+        
+<!--                    <div class="row" id="report-attendance-date-list">
+                        <div class="col-12">
+                            <h5>View office attendance on the following date:<h5>
+                        </div>-->
+                        
+<!--                    <div class="row">
+                        
+                        <div class="col-9">
+                            <label class="control-label"> Date Selected: </label>
+                            <label for="attendanceDate">Search Attendance Date</label>
+                                 <input
+                                     type="date"
+                                     name="attendanceDate"
+                                     id="attendanceDate"
+                                     class="form-control"
+                                 />
+                         </div>
+
+                        <div class="col-3">
+                            <button class="btn btn-primary" id="report-date-btn">Submit</button>
+                        </div>
+             
+                        </div>-->
+                        
+
+
+<!--                    </div>  -->
+                    
+                    <div class="alert alert-danger" id="noAttendees" role="alert"></div>
+                    <div class="row" id="report-attendance-table">
+                         <div class="col-12">
+                                 <table class="table table-striped" id="isAttendingTable" style='table-layout:fixed;'>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Location</th>
+                                            <th><button class="btn btn-primary" id="export-report-btn">Export To CSV</button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="isAttendingRows"></tbody>
+                                </table>
+
+                         </div>
+  
+                    </div>      
+                </div>    
             </div>
         </div>
+        
+        
+
         
         
 

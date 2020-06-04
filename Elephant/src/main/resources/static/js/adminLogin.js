@@ -31,8 +31,10 @@ $(document).ready(function () {
     $("#loginErr").hide();
     $("#resetPasswordAdmin").hide();
     $("#edit-hashed-password").hide();
-    $("#noAttendees").hide();
-     $("#isAttendingTable").hide();
+    $("#reportDiv").hide();
+//    $("#noAttendees").hide();
+//    $("#isAttendingTable").hide();
+    
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -483,6 +485,7 @@ $(document).ready(function () {
         $("#successfulDeleteDiv").hide();
         $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#reportDiv").hide();
         
         $("#errorMessages").hide();
         $("#inactiveErrorMessages").hide();
@@ -697,6 +700,7 @@ $(document).ready(function () {
         $("#successfulDeleteDiv").hide();
         $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").show();
+        $("#reportDiv").hide();
         
         $("#editLocErrorMessages").hide();
 
@@ -743,6 +747,7 @@ $(document).ready(function () {
         $("#successfulDeleteDiv").hide();
         $("#successfulActivateDiv").hide();
         $("#locationInfoDiv").hide();
+        $("#reportDiv").hide();
     });
     
     $('#createAcctBtn').click(function (event) {
@@ -2399,15 +2404,44 @@ function showGuidelines() {
 
     // });
 
+    
 
     // // @GetMapping("/users/{id}")
     // // public ResponseEntity<List<User>> getUsers
-  
+
+        //filter search function 
+        //$(document).ready(function(){
         var locationId = 5;
+         
+       $("#reportingBtn").click(function (event) {
+          loadReportDiv();
+          $("#reportDiv").show();
+           
+       });
+       
+       
+        function loadReportDiv(){
+        $("#noAttendees").hide();
+        $("#isAttendingTable").hide();
+       
     
-        $('#getUsers').click(function (event) {
-            getUsersByLocation(locationId);
+        //load users to dropdown list
+        getUsersByLocation(locationId);
+        
+        //filter search list functionality 
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myList li").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
         });
+        };
+  
+       
+    
+//        $('#getUsers').click(function (event) {
+//            getUsersByLocation(locationId);
+//        });
         
         //function loadReportPage(locationId){
             
@@ -2445,7 +2479,7 @@ function showGuidelines() {
             });
         };
 
- var specifiedDate;
+    var specifiedDate;
  
         function getAttendance (userId){
             
@@ -2498,10 +2532,9 @@ function showGuidelines() {
 //        });
                 
                 
-     function getEmployeesByDate(){
+    function getEmployeesByDate(){
          
-         date = specifiedDate;     
-    // Note that the below prepared ajax call depends on the presence of a few attendance objects existing in the database. The adminLocation should be the active admin's/branch managers locationId.
+    date = specifiedDate;     
      //$('#report-date-btn').click(function(event) {
          $("#noAttendees").hide();
          var adminLocationId = 5;
@@ -2571,6 +2604,7 @@ function showGuidelines() {
      
     // });
  };
+
 
     
         
