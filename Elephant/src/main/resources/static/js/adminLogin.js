@@ -929,20 +929,21 @@ $(document).ready(function () {
         var lastNameField = $('#edit-last-name').val();
         var emailField = $('#edit-email').val();
         // var defaultPWField = 'password';
-        var passwordsField = $('#edit-password').val();
+        // var passwordsField = $('#edit-password').val();
         var locationIdField = $('#edit-location').val();
         var cityNameField = allLocations[locationIdField - 1].cityName;
         var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
         var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
         var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
         var endTimeField = allLocations[locationIdField - 1].endTime;
-        var roleNameField = $('#edit-role').val();
-        var roleIdField;
+        var roleIdField = $('#edit-role').val();
+        var roleNameField;
 
-        if(roleNameField == "ROLE_ADMIN") {
-            roleIdField = 1;
+        if(roleIdField == 1) {
+            roleNameField = "ROLE_ADMIN";
         } else {
             roleIdField = 2;
+            roleNameField = "ROLE_USER";
         }
 
         if (firstNameField.length < 1 || firstNameField.length > 25) {
@@ -966,12 +967,12 @@ $(document).ready(function () {
             errorCount += 1;
         }
 
-        if (passwordsField.length < 1) {
-            $('#editErrorMessages').append($('<li>')
-            .attr({class: 'list-group-item list-group-item-danger' })
-            .text('Please enter a password.'));
-        errorCount += 1;
-        }
+        // if (passwordsField.length < 1) {
+        //     $('#editErrorMessages').append($('<li>')
+        //     .attr({class: 'list-group-item list-group-item-danger' })
+        //     .text('Please enter a password.'));
+        // errorCount += 1;
+        // }
         
         if(errorCount == 0) {
 
@@ -981,7 +982,7 @@ $(document).ready(function () {
                 "lastName": lastNameField,
                 "email": emailField,
                 // "defaultPW": defaultPWField,
-                "passwords": passwordsField,
+                // "passwords": passwordsField,
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
