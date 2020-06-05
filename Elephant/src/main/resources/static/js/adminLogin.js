@@ -1974,6 +1974,16 @@ var btnIdString;
      }
      
 
+     //get value of date picker and send to ajax call
+    $("#report-date-btn").on("click", function() {
+        var dateInput = $("#attendanceDate").val();
+        btnIdString = dateInput.toString();
+        console.log('clicked on: ' + btnIdString);
+        getEmployeesByDate();
+    });
+
+
+
     function getEmployeesByDate(){
         var adminLocationId = 5;
         $(".report-date-submit").hide();
@@ -2037,6 +2047,12 @@ var btnIdString;
          });
      
  };
+
+
+
+
+
+
 
 
     //     var locationId = 1;
