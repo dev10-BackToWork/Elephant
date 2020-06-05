@@ -66,7 +66,7 @@ var user;
                      $("#login").hide();
                      $("#resetPassword").hide();
                 } else if (response.role.roleId === 1) {
-                    $("#screener-div").show();
+                     $("#screener-div").show();
                      $("#login").hide();
                      $("#resetPassword").hide();
                     
