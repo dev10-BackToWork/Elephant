@@ -32,62 +32,47 @@
             <!-- Page Content -->
 
             <!-- Report Div -->   
+            
             <div class="container" id="reportDiv">
+                <button class="btn-primary" id="getUsers" type="button">Load users by location (change to automatically call and load on report section load)</button>
                 <h3>Contact Tracing Report</h3>
-                
+
+                <div class="row">
+                    <ul class="list-group" id="reportErrorMessages"></ul>
+                </div>
+
                 <div class="row">
                     <div class="col-12">
-                        <ul class="list-group" id="reportErrorMessages"></ul>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12">
                             <h5>View dates an employee was in the office:</h5>
-<!--                            <select name="report-attendance-names">-->
-<div class="row"><input type="text" id="myInput" onkeyup="filterUser()" placeholder="Search for names.."><button class="btn btn-primary" id="submit-report-btn">Submit</button></div>
-
-
-                                <ul id="myUL">
-                                    <li><a href="#">Keely Brennan</a></li>
-                                    <li><a href="#">Nate Wood</a></li>
-                                    <li><a href="#">Matthew</a></li>
-                                    <li><a href="#">Brianna</a></li>
-                                </ul>
-<!--                                <option>John Smith</option>
-                                <option>Jane Smith</option>
-                                <option>Joe Smith</option>
-                                <option>Joey Smith </option>
-                                <option>JJ Smith</option>-->
-<!--                            </select>-->
-                        </div>           
+                            <!--  <select name="report-attendance-names">-->
+                            <div class="row">
+                                <input id="myInput" type="text" placeholder="Search by employee name...">
+                            <button class="btn btn-primary" id="submit-report-btn">Submit</button>
+                                <ul id="myList"></ul>
+                             </div>
                     </div>
+                </div>           
+            
 
 
                     <div class="row">
-                        <div class="col-12">
-                            <p>Over the past 30 days, the selected employee was in the office on the following dates:</p> 
+                        <div class="col-12" id="attendance-message">
+<!--                            <p>Over the past 30 days, the selected employee was in the office on the following dates:</p> -->
                         </div>
                         <div class="row">
-                        <div class="col-sm-3" id="report-attendance-dates">
-                            <button class="date-btn">05/29/2020</button>
-                            <button class="date-btn">05/30/2020</button>
-                            <button class="date-btn">06/02/2020</button>
-                            <button class="date-btn">06/03/2020</button>
-                            <button class="date-btn">06/04/2020</button>
-                        </div>
+                            <div class="col-12" id="report-attendance-dates"></div>
                         </div>
                     </div>
-
-                    <div class="row" id="report-attendance-date-list">
+        
+<!--                    <div class="row" id="report-attendance-date-list">
                         <div class="col-12">
-                            <h6>View office attendance on the following date:<h6>
-                        </div>
+                            <h5>View office attendance on the following date:<h5>
+                        </div>-->
                         
-                        <div class="row form-group">
+<!--                    <div class="row">
                         
                         <div class="col-9">
-<!--                            <label class="control-label"> Date Selected: </label>-->
+                            <label class="control-label"> Date Selected: </label>
                             <label for="attendanceDate">Search Attendance Date</label>
                                  <input
                                      type="date"
@@ -101,11 +86,11 @@
                             <button class="btn btn-primary" id="report-date-btn">Submit</button>
                         </div>
              
-                        </div>
+                        </div>-->
                         
 
 
-                    </div>  
+<!--                    </div>  -->
                     
                     <div class="alert alert-danger" id="noAttendees" role="alert"></div>
                     <div class="row" id="report-attendance-table">
@@ -126,7 +111,7 @@
   
                     </div>      
                 </div>    
-            </div>
+           
 
 
     </main>

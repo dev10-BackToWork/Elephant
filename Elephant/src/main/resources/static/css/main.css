@@ -109,35 +109,64 @@ footer {
 
 /*search table on admin report*/
 
-#myInput {
-  background-image: url('/css/searchicon.png'); /* Add a search icon to input */
-  background-position: 10px 12px; /* Position the search icon */
-  background-repeat: no-repeat; /* Do not repeat the icon image */
-  width: 100%; /* Full-width */
-  font-size: 16px; /* Increase font-size */
-  padding: 12px 20px 12px 40px; /* Add some padding */
-  border: 1px solid #ddd; /* Add a grey border */
-  margin-bottom: 12px; /* Add some space below the input */
+li {
+    align-content: left;
 }
 
-#myUL {
+#myInput {
+  width: 100%; 
+  font-size: 14px; 
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd; 
+  margin-bottom: 12px; 
+  line-height: 1;
+}
+
+#attendanceDate {
+  width: 100%; 
+  font-size: 14px; 
+  padding: 12px 20px 12px 40px; 
+  border: 1px solid #ddd;
+  margin-bottom: 12px; 
+  border-radius: 0; 
+  
+}
+
+
+#myList {
   /* Remove default list styling */
   list-style-type: none;
   padding: 0;
   margin: 0;
+  
 }
 
-#myUL li a {
-  border: 1px solid #ddd; /* Add a border to all links */
-  margin-top: -1px; /* Prevent double borders */
-  background-color: #f6f6f6; /* Grey background color */
-  padding: 12px; /* Add some padding */
-  text-decoration: none; /* Remove default text underline */
-  font-size: 18px; /* Increase the font-size */
-  color: black; /* Add a black text color */
-  display: block; /* Make it into a block element to fill the whole list */
+#myList li {
+  display: none;
+  border: 1px solid #ddd; 
+  margin-top: -1px;
+  padding: 1px;
+  font-size: 12px; 
+  color: black; 
+  display: block;
+  align-items: left;
 }
 
-#myUL li a:hover:not(.header) {
+#myList li:hover:not(.header) {
   background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+
+
+.date-btn {
+    width: 100%;
+}
+
+.report-user-select {
+/*    background-color: rgb(228,112,31);*/
+    width: 100%;
+/*    margin-left: 20px;*/
+}
+
+.report-date-submit {
+    border: 0px;
 }
