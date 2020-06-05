@@ -30,9 +30,7 @@ $(document).ready(function () {
     $("#resetPasswordAdmin").hide();
     $("#edit-hashed-password").hide();
     $("#reportDiv").hide();
-//    $("#noAttendees").hide();
-//    $("#isAttendingTable").hide();
-    
+
 
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -237,7 +235,7 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
-        
+       
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
         $("#arrivalErrorMessages").hide();
@@ -2022,8 +2020,8 @@ var btnIdString;
             type: 'GET',
              url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
              headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
              },
 
             success: function (response) {

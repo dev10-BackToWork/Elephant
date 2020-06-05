@@ -551,21 +551,34 @@
                             </div>
                             <div class="col-11">
                                 <div class="form-check">
-                                <label for="q1" class="form-check-label">Do you have symptoms of fever (100.4 degrees), cough, shortness of breath, sore throat, or diarrhea?</label>
+                                <label for="q1" class="form-check-label">Do you have any of the following symptoms:</label>
+                                    <ul>
+                                        <li>Fever (100.4 degrees) or chills </li>
+                                        <li>Cough</li>
+                                        <li>Shortness of breath or difficulty breathing</li>
+                                        <li>Fatigue</li>
+                                        <li>Muscle or body aches</li>
+                                        <li>Headache</li>
+                                        <li>Sore throat</li>
+                                        <li>Congestion or runny nose</li>
+                                        <li>Nausea or vomiting</li>
+                                        <li>Diarrhea</li> 
+                                    </ul>
                                 </div>
                             </div>
 
                             <div class="col-1">
+                            <br>
                             <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
                                 data-on="Yes" data-off="No" data-style="android">
                             </div>
-    <!--                         <div id="q1Equals"></div>-->
+
                         </div>
 
                         <div class="row">
                              <div class="col-11">
                                 <div class="form-check">
-                                <label for="q2" class="form-check-label">Have you had close contact with an individual diagnosed with COVID-19 in the last 14 days?</label>
+                                <label for="q2" class="form-check-label">Have you had close contact in the last 14 days with an individual diagnosed with COVID-19? </label>
                                 </div>
                              </div>
 
@@ -573,24 +586,22 @@
                             <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
                                 data-on="Yes" data-off="No" data-style="android">
                             </div>
-    <!--                         <div id="q2Equals"></div>-->
+
                         </div>
 
                         <div class="row">
                              <div class="col-11">
                                 <div class="form-check">
-                                    <label for="q3" class="form-check-label">Have you traveled internationally or domestically in the last 14 days?</label>
+                                    <label for="q3" class="form-check-label">Have you traveled outside the United States or Canada within the last 14 days?</label>
                                 </div>
                              </div>
 
                              <div class="col-1">
                             <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
                                 data-on="Yes" data-off="No" data-style="android">
-    <!--                         <div id="q3Equals"></div>-->
                              </div>
                         </div>
 
-    <!--                </div>-->
                     <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
                     <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
                 </form>
