@@ -1845,14 +1845,16 @@ function showGuidelines() {
        
        
         function loadReportDiv(){
+            $("#myList").hide();
             $("#noAttendees").hide();
             $("#isAttendingTable").hide();
-
             //load users to dropdown list
             getUsersByLocation(locationId);
-        
+            
             //filter search list functionality 
             $("#myInput").on("keyup", function() {
+                clearReport(); 
+                $("#myList").show();
                 var value = $(this).val().toLowerCase();
                 $("#myList li").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
@@ -1861,15 +1863,12 @@ function showGuidelines() {
         };
   
        
-    
-//        $('#getUsers').click(function (event) {
-//            getUsersByLocation(locationId);
-//        });
-        
-        //function loadReportPage(locationId){
-            
+    var nameInput;
+
         function getUsersByLocation(locationId) {
             $("#myList").empty();
+            $("#myInput").val('');
+            
             $.ajax({
                 type: "GET",
                 url: "http://localhost:8080/api/admin/users/" + locationId,
@@ -1883,16 +1882,19 @@ function showGuidelines() {
                     console.log(data);
                     var myList = $("#myList");
                     $.each(data, function (index, user) {
+                          //nameInput = user.firstName + ' ' + user.lastName;
                           var name = user.firstName + ' ' + user.lastName;
                           var id = user.userId;
-                          var nameLi = "<li class='report-name' id="+id+">"+name;
-                          nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">Select</button>';
+//                        var nameLi = "<li class='report-name' id="+id+">"+name;
+                          var nameLi = "<li class='report-name' id="+id+">";
+                          nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">'+name+'</button>';
                           nameLi += "</li>";
                           myList.append(nameLi); 
                     });
 
                 },
                 error: function() {
+                    
                     $('#errorMessages')
                         .append($('<li>')
                         .attr({class: 'list-group-item list-group-item-danger'})
@@ -1913,7 +1915,11 @@ var dateStringId; //for date button id
 var btnIdString;
 
         function getAttendance (userId){
-            
+            $("#myList").hide();
+//            var nameInput2 = this.name;
+//            $("#myInput").val(nameInput2);
+//            console.log(nameInput2);
+             
             $.ajax({
              type: 'GET',
              url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
@@ -1932,11 +1938,11 @@ var btnIdString;
                   
                  var attendanceDateDiv = $('#report-attendance-dates');
                  if (data.length === 0) {
-                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days");
+                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days.");
                         console.log('this user does not have any attendance records!');
                     }
                  else if (data.length > 0) {
-                     $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates:"); 
+                     $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the office."); 
                  }
                  $.each(data, function (i) {
                     var dateStringId = data[i].toString();
@@ -1956,6 +1962,8 @@ var btnIdString;
                     dateBtn += "</button>";
                     dateBtn += "</div>";
                     attendanceDateDiv.append(dateBtn);
+                    
+                    
                 });
                     
                     $(".report-date-submit").on("click", function() {
@@ -1963,6 +1971,10 @@ var btnIdString;
                         btnIdString = btnId.toString();
                         //console.log('clicked on ' + btnId + ' -- ' + btnIdString);
                         getEmployeesByDate();
+                        $("#attendance-message").empty();
+                        
+//                        var attendanceMessageDiv = $('#attendance-message');
+//                        attendanceMessageDiv.append(dateStringDisplay);
                     });
             },
             
@@ -1976,12 +1988,25 @@ var btnIdString;
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
+        $("#myList").hide();
+        $("#attendance-message").empty();
         var dateInput = $("#attendanceDate").val();
         btnIdString = dateInput.toString();
         console.log('clicked on: ' + btnIdString);
         getEmployeesByDate();
     });
 
+
+    $('#myInput').click(function (e) {
+        clearReport(); 
+    });
+        
+        
+      function clearReport() {
+        $("input[type=date]").val(''); //reset date picker
+        $('#noAttendees').hide(); //hide no attendees on date error 
+        $("#attendance-message").empty();
+    };
 
 
     function getEmployeesByDate(){
