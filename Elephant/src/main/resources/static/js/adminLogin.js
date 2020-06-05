@@ -13,7 +13,7 @@ $(document).ready(function () {
     $("#navBarDiv").hide();
     $("#dashboardDiv").hide();
     $("#allEmployeesDiv").hide();
-    $("#reportingDiv").hide();
+    $("#reportDiv").hide();
     $("#createAccountDiv").hide();
     $("#createLocationDiv").hide();
     $("#employeeInfoDiv").hide();
@@ -203,7 +203,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -227,7 +227,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -346,7 +346,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -465,7 +465,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -591,7 +591,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").show();
+        $("#reportDiv").show();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -608,7 +608,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -650,7 +650,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -692,7 +692,7 @@ $(document).ready(function () {
         $("#navBarDiv").hide();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -816,7 +816,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -956,7 +956,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -1215,7 +1215,7 @@ var startTime;
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").show();
@@ -1370,7 +1370,7 @@ function activateUser(userId) {
                 $("#navBarDiv").show();
                 $("#dashboardDiv").hide();
                 $("#allEmployeesDiv").hide();
-                $("#reportingDiv").hide();
+                $("#reportDiv").hide();
                 $("#createAccountDiv").hide();
                 $("#createLocationDiv").hide();
                 $("#employeeInfoDiv").hide();
