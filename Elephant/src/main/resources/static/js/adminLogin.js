@@ -2009,6 +2009,7 @@ var btnIdString;
 
     function getEmployeesByDate(){
         var adminLocationId = 5;
+        
         $(".report-date-submit").hide();
         console.log('date in get empl function: ' + btnIdString);
          $("#noAttendees").hide();
@@ -2019,9 +2020,10 @@ var btnIdString;
         $.ajax({
             type: 'GET',
              url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
+             
              headers: {
-                'email': adminEmail,
-                'password': adminPassword
+                 'email': 'twyborny@genesis10.com',
+                 'password': 'password'
              },
 
             success: function (response) {
