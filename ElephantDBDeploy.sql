@@ -2,18 +2,18 @@ DROP DATABASE IF EXISTS elephantDB;
 CREATE DATABASE elephantDB;
 USE elephantDB;
 
-CREATE TABLE `role` (
+CREATE TABLE `Role` (
 	roleId int primary key,
 	roleName varchar(10) not null
 );
 
-CREATE TABLE location (
+CREATE TABLE Location (
 	locationId int primary key auto_increment,
     cityName varchar(50) not null,
     maxOccupancy int not null
 );
 
-CREATE TABLE `user` (
+CREATE TABLE `User` (
 	userId int primary key auto_increment,
     firstName varchar(25) not null,
     lastName varchar(25) not null,
@@ -23,26 +23,26 @@ CREATE TABLE `user` (
     locationId int,
     roleId int,
     isActive boolean default true,
-    CONSTRAINT fk_user_location
+    CONSTRAINT fk_User_location
 		FOREIGN KEY (locationId)
-        REFERENCES location(locationId),
-	CONSTRAINT fk_user_role
+        REFERENCES Location(locationId),
+	CONSTRAINT fk_User_Role
 		FOREIGN KEY (roleId)
-        REFERENCES role(roleId)
+        REFERENCES Role(roleId)
 );
 
-CREATE TABLE attendance (
+CREATE TABLE Attendance (
 	attendanceId int primary key auto_increment,
     isAttending boolean default false,
     attendanceDate date not null,
     userId int,
     isAuthorized boolean default false,
-    CONSTRAINT fk_attendance_user
+    CONSTRAINT fk_Attendance_User
 		FOREIGN KEY (userId)
-        REFERENCES user(userId)
+        REFERENCES `User`(userId)
 );
 
-INSERT INTO location (cityName, maxOccupancy) VALUES 
+INSERT INTO Location (cityName, maxOccupancy) VALUES 
 	("GA, Norcross", 20),
 	("KS, Lenexa", 20),
     ("KS, Lenexa (Kansas Delivery Center)", 20),
@@ -58,11 +58,11 @@ INSERT INTO location (cityName, maxOccupancy) VALUES
     ("TX, Dallas (Plano Delivery Center)", 20),
     ("WI, Milwaukee", 20);
 
-INSERT INTO `role` (roleId, roleName)
+INSERT INTO `Role` (roleId, roleName)
 VALUES (1, "ROLE_ADMIN"),
 (2, "ROLE_USER");
 
-INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
+INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
 	("default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
 	("Agnes","Atem","agnesatem2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Padmavathi","Vadrevu","vpadma0881@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
@@ -419,12 +419,12 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
 -- BEGIN
-	-- SET SQL_SAFE_UPDATES = 0;
+-- 	SET SQL_SAFE_UPDATES = 0;
     
--- DELETE FROM attendance
-    -- WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
+--    DELETE FROM attendance
+--    WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
     
-    -- SET SQL_SAFE_UPDATES = 1;
+--    SET SQL_SAFE_UPDATES = 1;
 -- END$$
 
 -- CREATE EVENT elephantdb.generateTimeSlots
@@ -432,11 +432,11 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 -- 	STARTS '2020-05-27 15:26:15'
 -- DO
 -- BEGIN
-    CALL removeOldData();
+-- CALL removeOldData();
 -- END
 
 -- testing purposes
-INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUES
+INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized) VALUES
 	(1, "2020-04-28", 348, 1),
     (1, "2020-04-29", 349, 1),
     (1, "2020-04-30", 348, 1),
