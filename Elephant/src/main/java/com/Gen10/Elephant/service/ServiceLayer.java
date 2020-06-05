@@ -222,14 +222,14 @@ public class ServiceLayer {
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
-        List<User> usersByLocation = getAllUsersByLocation(location);
+        // List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation(location);
 
-        for (User user : usersByLocation) {
-            if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
-                usersByLocationNotAnswered.remove(user);
-            }
-        }
+        // for (User user : usersByLocation) {
+        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
+        //         usersByLocationNotAnswered.remove(user);
+        //     }
+        // }
 
         return usersByLocationNotAnswered;
     }
@@ -288,11 +288,12 @@ public class ServiceLayer {
 
         if (dbUser != null){
             Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "nwood@dev-10.com", "Account Created", 
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com",
+                "Account Created", 
                 "<p>Hello " + dbUser.getFirstName() + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>" + dbUser.getEmail() + "</strong></span>" + 
                 "<br/> &emsp; Your temporary password is: <strong>" + dbUser.getDefaultPW() + 
                 "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>" + 
-                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+                "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
             );
         }
 
@@ -357,7 +358,7 @@ public class ServiceLayer {
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
                 "Authorization for " + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName(),
                 "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
-                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
             );
         }
 
@@ -368,8 +369,9 @@ public class ServiceLayer {
                 "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
                 "Max Capacity Warning",
                 "<p> More people than currently recommended by your max capacity of <strong>" + location.getMaxOccupancy() + "</strong> are currently signed up to come in today." +
-                "<br/> Please take any necessary actions to ensure the safety of the employees at your location.</p>" +
-                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+                "<br/> Please take any necessary actions to ensure the safety of the employees at your location." + 
+                "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>" +
+                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
             );
         }
 
@@ -438,10 +440,11 @@ public class ServiceLayer {
         
         if (savedUser != null){
             Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", "Reset Password for " + existingUser.getEmail(), 
-                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We recieved a password reset request for your account from your branch manager." + 
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
+                "Reset Password for " + existingUser.getEmail(), 
+                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We received a password reset request for your account from your branch manager." + 
                 "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>" +
-                "<p>This is an automatically generated email from the Gen10 Back To Work application.</p>"
+                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
             );
         }
 
