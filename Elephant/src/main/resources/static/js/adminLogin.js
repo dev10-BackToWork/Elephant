@@ -1739,7 +1739,7 @@ function showGuidelines() {
     // // public ResponseEntity<List<User>> getFlagged
     // $('#getFlaggedUsers').click(function (event) {
 
-    //     var locationId = 1;
+    //     var locationId = 5;
 
     //     $.ajax({
     //         type: 'GET',
