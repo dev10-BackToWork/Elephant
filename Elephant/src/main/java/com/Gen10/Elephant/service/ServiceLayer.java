@@ -20,6 +20,10 @@ import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -115,6 +119,43 @@ public class ServiceLayer {
         }
         
         return attendanceReport;
+    }
+    
+    public TreeMap<LocalDate, List<User>> generateAttendanceDuringRange (int id, String startDate, String endDate) {
+        LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
+        LocalDate earliestDate = LocalDate.parse(startDate);
+        
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+        HashMap<LocalDate, List<User>> usersByDate = new HashMap<>();
+        TreeMap<LocalDate, List<User>> sortedUsersByDate = new TreeMap<>();
+        
+        for (Attendance attendance : allAttendance) {
+            usersByDate.computeIfAbsent(attendance.getAttendanceDate(), k -> new ArrayList<>()).add(attendance.getUser());
+        }
+        
+        sortedUsersByDate.putAll(usersByDate);
+        
+        return sortedUsersByDate;
+    }
+    
+    public List<User> generateAttendanceDuringRangeSummary(int id, String startDate, String endDate) {
+        LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
+        LocalDate earliestDate = LocalDate.parse(startDate);
+        
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+        List<User> uniqueUsers = new ArrayList<>();
+        
+        for (Attendance attendance : allAttendance) {
+            if(!uniqueUsers.contains(attendance.getUser())) {
+                uniqueUsers.add(attendance.getUser());
+            }
+        }
+        
+        List<User> uniqueUsersSorted = uniqueUsers.stream()
+                .sorted(Comparator.comparing(User::getLastName))
+                .collect(Collectors.toList());
+        
+        return uniqueUsersSorted;
     }
 
     // **********
