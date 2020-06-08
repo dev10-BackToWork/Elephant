@@ -562,7 +562,43 @@ $(document).ready(function () {
                         .text('An error has occurred.'));
                 }
 
-            });                
+            });
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/users/" + locationId,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data, status) {
+                    $.each(data, function (index, user) {
+                        var inactiveName = user.firstName + ' ' + user.lastName;
+                        var inactiveEmail = user.email;
+                        var inactiveLocation = user.location.cityName;
+                        var inactiveId = user.userId;
+                        var inactiveActive = user.isActive;
+                        
+                        if (inactiveActive === false) {
+
+                            var row = '<tr>';
+                            row += '<td>' + inactiveName + '</td>';
+                            row += '<td>' + inactiveEmail + '</td>';
+                            row += '<td>' + inactiveLocation + '</td>';
+                            row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+
+                            row += '</tr>';
+                            inactiveRows.append(row);
+                        }
+                    });
+                },
+                error: function() {
+                    $('#inactiveErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+
+            });
              
         }  
 
