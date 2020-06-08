@@ -2128,8 +2128,8 @@ var btnIdString;
     //     });
 
     // });
-    // 
-    // 
+    
+    
     // // @PostMapping("/deactivateUser/{id}")
     // // public ResponseEntity<User> deactivateUser
 
@@ -2179,6 +2179,64 @@ var btnIdString;
     //             console.log('An error resulted when attempting to reactivate the user.');
     //         }
     //     });
+    // });
+
+
+    // // @GetMapping("/traceContact/{id}/{startDate}/{endDate}")
+    // // public ResponseEntity<TreeMap<LocalDate, List<User>>> traceContact
+
+    // $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
+
+    //     var locationId = 5;
+    //     var startDate = "2020-05-21";
+    //     var endDate = "2020-06-03";
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request for attendance over the specified range was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve attendance over the specified range.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @GetMapping("/traceContactSummary/{id}/{startDate}/{endDate}")    
+
+    // $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
+
+    //     var locationId = 5;
+    //     var startDate = "2020-05-21";
+    //     var endDate = "2020-06-03";
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request for a user attendance summary for the specified range was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+    //         }
+    //     });
+
     // });
 
 

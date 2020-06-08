@@ -19,4 +19,13 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "FROM attendance a\n"
             + "WHERE a.attendanceDate >= DATE(NOW() - INTERVAL 30 DAY)", nativeQuery = true)
     List<Attendance> findAttendanceWithinLast30Days();
+
+    @Query(value = "SELECT a.*\n"
+            + "FROM attendance a\n"
+            + "INNER JOIN user u ON a.userId = u.userId\n"
+            + "INNER JOIN location lo ON u.locationId = lo.locationId\n"
+            + "WHERE a.attendanceDate BETWEEN ?2 and ?3\n"
+            + "AND lo.locationId = ?1\n"
+            + "AND a.isAuthorized = 1;", nativeQuery = true)
+    List<Attendance> findAttendanceAuthorizedWithinRange(int locationId, LocalDate startDate, LocalDate endDate);
 }

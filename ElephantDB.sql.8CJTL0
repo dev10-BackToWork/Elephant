@@ -440,17 +440,10 @@ INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
 	(1, "2020-04-28", 348, 1),
     (1, "2020-04-29", 349, 1),
     (1, "2020-04-30", 348, 1),
-    (1, "2020-05-21", 210, 1),
-    (1, "2020-05-21", 211, 1),
-    (1, "2020-05-21", 212, 0),
-    (0, "2020-05-21", 213, 0),
-    (1, "2020-05-21", 348, 1),
     (1, "2020-05-27", 348, 1),
     (1, "2020-05-28", 348, 1),
     (1, "2020-05-29", 348, 0),
     (1, "2020-05-29", 349, 1),
-    (1, "2020-06-01", 160, 1),
-    (1, "2020-06-01", 161, 1),
     (1, "2020-06-01", 199, 1),
     (1, "2020-06-01", 200, 1),
     (1, "2020-06-01", 201, 1),
@@ -462,21 +455,14 @@ INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (0, "2020-06-02", 348, 0),
     (0, "2020-06-02", 349, 0),
     (1, "2020-06-03", 348, 1),
-    (1, "2020-06-03", 349, 1),
-    (0, "2020-06-05", 348, 0),
-    (1, "2020-06-08", 348, 0);
+    (1, "2020-06-03", 349, 1);
     
--- SELECT a.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate BETWEEN "2020-06-01" and "2020-06-03"
--- AND lo.locationId = 5;
+DECLARE x DATE;
+DECLARE y DATE;
 
-SELECT a.*
+SET x "2020-06-01";
+set y "2020-06-03";
+       
+SELECT *
 FROM attendance a
-INNER JOIN user u ON a.userId = u.userId
-INNER JOIN location lo ON u.locationId = lo.locationId
-WHERE a.attendanceDate BETWEEN "2020-05-21" and "2020-06-03"
-AND lo.locationId = 5
-AND a.isAuthorized = 1;
+WHERE a.attendanceDate BETWEEN x and y;
