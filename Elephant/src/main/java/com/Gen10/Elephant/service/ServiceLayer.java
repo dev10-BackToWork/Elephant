@@ -107,18 +107,13 @@ public class ServiceLayer {
     }
     
     public List<Attendance> generateAttendanceReport(int id, String date) {
-        List<Attendance> allAttendance = attendanceRepo.findAll();
-        List<Attendance> attendanceReport = new ArrayList<>();
-        Date specifiedDate = Date.valueOf(date);
+        LocalDate specifiedDate = LocalDate.parse(date);
         
-        System.out.println("CP1: " + specifiedDate);
+        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(id, specifiedDate);
         
-        for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().toString().equals(specifiedDate.toString()) && attendance.getUser().getLocation().getLocationId() == id && attendance.getIsAuthorized())
-                attendanceReport.add(attendance);
-        }
-        
-        return attendanceReport;
+        return attendanceList.stream()
+                .sorted((o1, o2) -> o1.getUser().getLastName().compareTo(o2.getUser().getLastName()))
+                .collect(Collectors.toList());
     }
     
     public TreeMap<LocalDate, List<User>> generateAttendanceDuringRange (int id, String startDate, String endDate) {
@@ -132,6 +127,11 @@ public class ServiceLayer {
         for (Attendance attendance : allAttendance) {
             usersByDate.computeIfAbsent(attendance.getAttendanceDate(), k -> new ArrayList<>()).add(attendance.getUser());
         }
+        
+        usersByDate.forEach((key, value) -> 
+                usersByDate.put(key, value.stream()
+                .sorted(Comparator.comparing(User::getLastName))
+                .collect(Collectors.toList())));
         
         sortedUsersByDate.putAll(usersByDate);
         
@@ -243,20 +243,7 @@ public class ServiceLayer {
 
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
-        Location location = locationRepo.findById(id).orElse(null);
-        List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationInAttendance = new ArrayList<>();
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-
-        for (User users : usersByLocation) {
-            for (Attendance attendance : currentAttendance) {
-                if (attendance.getUser().equals(users) && attendance.getIsAttending() && attendance.getIsAuthorized()) {
-                    usersByLocationInAttendance.add(users);
-                }
-            }
-        }
-
-        return usersByLocationInAttendance;
+        return usersRepo.findCurrentUsersInOffice(id);
     }
 
     // Edited Nate Wood 05/13/2020
@@ -280,17 +267,7 @@ public class ServiceLayer {
     }
 
     public List<User> getFlaggedUsers(int id) {
-        List<User> usersByLocationFlagged = new ArrayList<>();
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-
-        for (Attendance attendance : currentAttendance) {
-            if (attendance.getIsAuthorized() == false && attendance.getIsAttending() == true
-                    && attendance.getUser().getLocation().getLocationId() == id) {
-                usersByLocationFlagged.add(attendance.getUser());
-            }
-        }
-
-        return usersByLocationFlagged;
+        return usersRepo.findFlaggedUsersByLocation(id);
     }
 
     public User getUserById(int userId) {
