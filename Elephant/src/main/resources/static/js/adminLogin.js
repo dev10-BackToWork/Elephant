@@ -519,6 +519,7 @@ $(document).ready(function () {
             });
         }  
         else if (adminRoleId === 1) {
+            $('#locationEmployeePage').hide();
             $('#employeeLocationOption')
                             .append($("<option></option>")
                                 .attr("value", adminLocation)
