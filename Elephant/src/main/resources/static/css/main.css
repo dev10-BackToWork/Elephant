@@ -116,18 +116,18 @@ li {
 #myInput {
   width: 100%; 
   font-size: 14px; 
-  padding: 12px 20px 12px 40px;
+  padding: 20px;
   border: 1px solid #ddd; 
-  margin-bottom: 12px; 
+  margin-bottom: 4px; 
   line-height: 1;
 }
 
-#attendanceDate {
+#attendanceDate, #attendanceDateTwo {
   width: 100%; 
   font-size: 14px; 
-  padding: 12px 20px 12px 40px; 
+  padding: 18px;
   border: 1px solid #ddd;
-  margin-bottom: 12px; 
+  margin-bottom: 4px; 
   border-radius: 0; 
   
 }
@@ -169,4 +169,17 @@ li {
 
 .report-date-submit {
     border: 0px;
+    margin: 1px;
+    padding: 10px 20px;
+    background-color: white;
+    border-bottom: 1px black;
+
+}
+
+.report-date-submit:hover {
+    background-color: #eee;
+}
+
+#report-date-btn {
+    float: right;
 }
