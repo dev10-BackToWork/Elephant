@@ -58,9 +58,10 @@ INSERT INTO location (cityName, maxOccupancy) VALUES
     ("TX, Dallas (Plano Delivery Center)", 20),
     ("WI, Milwaukee", 20);
 
-INSERT INTO `role` (roleId, roleName)
-VALUES (1, "ROLE_ADMIN"),
-(2, "ROLE_USER");
+INSERT INTO `role` (roleId, roleName) VALUES 
+	(1, "ROLE_ADMIN"),
+	(2, "ROLE_USER"),
+    (3, "ROLE_SUPERADMIN");
 
 INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
 	("default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
@@ -98,8 +99,8 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Eric","Tyson","tysonericj@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Shawn","Wilson","sdwilson03@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Netsanet","Woldesenbet","netsanet.woldesenbet@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Ben","none","alehqaeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Mounika","none","mounika112090@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Ben","Saleh","alehqaeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Mounika","Kathula","mounika112090@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Timothy","Evans","Tevans611@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
 	("Michael","Young","michaelyoung@live.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
 	("David","Bach","davidbach@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
@@ -321,7 +322,7 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Sandy","Medley","smedley@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("April","Young","ayoung@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("Angela","Gonzales","agonzales@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
-	("John","Triggs","jtriggs@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
+	("John","Triggs","jtriggs@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",3,2),
 	("Ronald","Clampitt","rclampitt@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("Andrew","Chertoff","achertoff@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
 	("Jeff","Dorilas","jdorilas@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
@@ -414,7 +415,8 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
-    ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2);
+    ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
+    ("Super", "User", "superuser@user.com", "password", "2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 1);
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
@@ -444,8 +446,14 @@ INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (1, "2020-05-28", 348, 1),
     (1, "2020-05-29", 348, 0),
     (1, "2020-05-29", 349, 1),
+    (1, "2020-06-01", 199, 1),
+    (1, "2020-06-01", 200, 1),
+    (1, "2020-06-01", 201, 1),
+    (1, "2020-06-01", 202, 1),
     (1, "2020-06-01", 348, 1),
     (1, "2020-06-01", 349, 0),
+    (1, "2020-06-01", 350, 1),
+    (1, "2020-06-01", 351, 1),
     (0, "2020-06-02", 348, 0),
     (0, "2020-06-02", 349, 0),
     (1, "2020-06-03", 348, 1),

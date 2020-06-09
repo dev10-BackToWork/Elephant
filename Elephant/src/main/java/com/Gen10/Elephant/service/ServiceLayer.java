@@ -110,7 +110,7 @@ public class ServiceLayer {
         System.out.println("CP1: " + specifiedDate);
         
         for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().toString().equals(specifiedDate.toString()) && attendance.getUser().getLocation().getLocationId() == id)
+            if (attendance.getAttendanceDate().toString().equals(specifiedDate.toString()) && attendance.getUser().getLocation().getLocationId() == id && attendance.getIsAuthorized())
                 attendanceReport.add(attendance);
         }
         
@@ -395,7 +395,7 @@ public class ServiceLayer {
     public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
         if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
-                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {
+                && (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
             // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
             return dbUser;
         }
