@@ -224,17 +224,7 @@ public class ServiceLayer {
     // User(s)
 
     public List<User> getUsers(int locationId) {
-
-        List<User> users = usersRepo.findAll();
-        List<User> usersOfLocation = new ArrayList<>();
-
-        for (User u : users) {
-            if (u.getLocation().getLocationId() == locationId) {
-                usersOfLocation.add(u);
-            }
-        }
-
-        return usersOfLocation;
+        return usersRepo.findAllUsersOfSpecifiedLocation(locationId);
     }
 
     public List<User> getAllUsersByLocation(Location location) {
