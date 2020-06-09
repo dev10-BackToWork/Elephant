@@ -1053,31 +1053,34 @@ $(document).ready(function () {
     });
 
     $("#reset-password-button").click(function (e) {
+        let isEdit = confirm("Please confirm that you would like to update the user's password by pressing ok. Pressing cancel will leave the user's password unchanged.");
 
-        var userIdField = $('#edit-userId').val();
+        if(isEdit === true) {
+            var userIdField = $('#edit-userId').val();
 
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:8080/api/admin/resetPassword/' + userIdField,
-            headers: {
-                'email': adminEmail,
-                'password': adminPassword
-            },
-            success: function (data) {
-                console.log(data);
-                $('#editErrorMessages').append($('<li>')
-                .attr({class: 'list-group-item list-group-item-success' })
-                .text('The user password was updated.'));
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/admin/resetPassword/' + userIdField,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#editErrorMessages').append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-success' })
+                    .text('The user password was updated.'));
 
-                setTimeout(function() {
-                    $('#editErrorMessages').empty();
-                    $('#employeesBtn').click();
-                }, 2000);
-            },
-            error: function (http) {
-                console.log('An error resulted when attempting to reset the user password.');
-            }
-        });
+                    setTimeout(function() {
+                        $('#editErrorMessages').empty();
+                        $('#employeesBtn').click();
+                    }, 2000);
+                },
+                error: function (http) {
+                    console.log('An error resulted when attempting to reset the user password.');
+                }
+            });
+        }
     });
     
     $('#createLocationSubmitBtn').click(function (event) {
@@ -2465,7 +2468,7 @@ function prepCSVRow(arr, columnCount, initial) {
     // });
 
 
-    // // @GetMapping("/traceContact/{id}/{startDate}/{endDate}")
+    // // @GetMapping("/attendanceDuringRange/{id}/{startDate}/{endDate}")
     // // public ResponseEntity<TreeMap<LocalDate, List<User>>> traceContact
 
     // $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
@@ -2495,7 +2498,7 @@ function prepCSVRow(arr, columnCount, initial) {
 
 
     // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    // // @GetMapping("/traceContactSummary/{id}/{startDate}/{endDate}")    
+    // // @GetMapping("/attendanceDuringRangeSummary/{id}/{startDate}/{endDate}")    
 
 //    $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
 //
