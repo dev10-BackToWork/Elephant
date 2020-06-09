@@ -14,6 +14,7 @@
 
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
         rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/survey.css">
 
@@ -52,7 +53,7 @@
         <button id="makeUser349Inactive" type="button">makeUser349Inactive</button>
         <button id="makeUser349Active" type="button">makeUser349Active</button>
         <button id="attendanceDuringRangeMay21ToJun3InMinne" type="button">attendanceDuringRangeMay21ToJun3InMinne</button>
-        <button id="attendanceDuringRangeSummaryMay21ToJun3InMinne" type="button">attendanceDuringRangeSummaryMay21ToJun3InMinne</button> -->
+        <button id="attendanceDuringRangeSummaryMay21ToJun3InMinne" type="button">attendanceDuringRangeSummaryMay21ToJun3InMinne</button> 
         <!-- ********** Preparing Ajax calls End -->
 
         <!-- Admin Login Div -->
@@ -673,67 +674,72 @@
         <!-- Reporting Div -->   
         <div class="container" id="reportDiv">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="col-md-12">
+                <div class="col-12">
+                    <div class="col-12">
                         <ul class="list-group" id="reportErrorMessages"></ul>
                     </div>
                     
                     
-<!--                <button class="btn-primary" id="getUsers" type="button">Load users by location (change to automatically call and load on report section load)</button>-->
                 <h3>Contact Tracing Report</h3>
 
-<!--                <div class="row">
-                    <div class="col-12">
-                            <h5>View dates an employee was in the office:</h5>
-                              <select name="report-attendance-names">
-                    </div>   -->
-                            <div class="row">
-                                <div class="col-6">
+                         <div class="row">
+                             <div class="col-6">
                                 <label><i class="fas fa-user-circle"></i>  Search By Employee Name</label>
+                                 <div class="col-12">
                                 <input id="myInput" type="text" placeholder="enter employee">
-<!--                            
-                                <button class="btn btn-primary" id="submit-report-btn">Submit</button>-->
-                                <ul id="myList"></ul>
-                                </div>
-                                                
-                        <div class="col-5">
-<!--                            <label class="control-label"> Date Selected: </label>-->
-                            <label for="attendanceDate"><i class="fas fa-calendar-alt"></i>  Search By Attendance Date</label>
+                                    <ul id="myList"></ul>
+                                </div>              
+                             </div>
+                             
+                            <div class="col-6">
+                               
+                            <label><i class="fas fa-calendar-alt"></i>  Search By Attendance Date</label> <button class="btn btn-primary" id="report-date-btn">Submit</button>
+                           <div class="row">
+                             <div class="col-6">
                                  <input
                                      type="date"
                                      name="attendanceDate"
                                      id="attendanceDate"
                                      class="form-control"
-                                     
                                  />
-<!--                             <button class="btn btn-primary" id="report-date-btn">Submit</button>-->
-                         </div>
-
-                        <div class="col-1">
+                                  <label for="attendanceDate">Start Date</label>
+                             </div>
+                                
+                            <div class="col-6">
+                                 <input
+                                     type="date"
+                                     name="attendanceDateTwo"
+                                     id="attendanceDateTwo"
+                                     class="form-control"
+                                 />
+                                 <label for="attendanceDateTwo">End Date</label>
+                            </div>
+<!--                        <div class="col-1">
                             <button class="btn btn-primary" id="report-date-btn">Submit</button>
+                                </div>
+                            </div>-->
                         </div>
- 
+
+                    </div>
+
                     </div>
                 </div>
                  
+                
 
                     <div class="row">
-                        <div class="col-12" id="attendance-message">
-<!--                            <p>Over the past 30 days, the selected employee was in the office on the following dates:</p> -->
+                        
+                        <div class="col-12" id="attendance-message-div">
+<!--                      <p id='attendance-message'>Over the past 30 days, the selected employee was in the office on the following dates:</p> -->
+                           <h5 id="attendanceNameTableHeader"></h5>
+                           <p id="attendance-message"></p> 
                         </div>
-                        <div class="row">
-                            <div class="col-12" id="report-attendance-dates"></div>
-                        </div>
+                        <div class="row" id="report-attendance-dates"></div>
                     </div>
-        
-                    <div class="row" id="report-attendance-date-list">
-<!--                            <h5>View office attendance on the following date:<h5>-->
 
-                    </div>  
 
-                    
-                    <div class="alert alert-danger" id="noAttendees" role="alert"></div>
                     <div class="row" id="report-attendance-table">
+                         <h5 id="attendanceTableHeader"><h5>
                          <div class="col-12">
                                  <table class="table table-striped" id="isAttendingTable" style='table-layout:fixed;'>
                                     <thead>
@@ -741,6 +747,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Location</th>
+                                            <th>Date</th>
                                             <th><button class="btn btn-primary" id="export-report-btn">Export To CSV</button></th>
                                         </tr>
                                     </thead>
