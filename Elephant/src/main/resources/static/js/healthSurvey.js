@@ -107,7 +107,10 @@ var user;
               //  e.preventDefault();
                 email = $("#resetEmail").val();
                 password = $("#resetPasswordInput").val();
-                        
+                
+                password = $("#inputPassword").val();
+                email = $("#inputEmail").val();
+        
                 if (email.length === 0) {
                     $('#resetPasswordErr').show();
                     $('#resetPasswordErr').text("Please enter your email address.");
@@ -212,8 +215,8 @@ $("#q1No").on("click", function (e) {
 //    $("#departure-container").hide();
    
     console.log(user);
-    email = user.email;
-    password = user.passwords;
+    //email = email;
+    //password = password;
     
     $.ajax({
         type: "POST",
@@ -320,9 +323,9 @@ $("#surveySubmit").on("click", function (e) {
 
 function notAuthorized() {
         console.log(user);
-        email = user.email;
+        //email = user.email;
         //password = user.defaultPW;
-        password = user.passwords;
+        //password = user.passwords;
     
         $.ajax({
             type: "POST",
@@ -353,8 +356,8 @@ function notAuthorized() {
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
         console.log(user);
-        email = user.email;
-        password = user.passwords;
+        //email = user.email;
+        //password = user.passwords;
     
         $.ajax({
             type: "POST",
