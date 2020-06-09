@@ -728,9 +728,7 @@
                 
 
                     <div class="row">
-                        
                         <div class="col-12" id="attendance-message-div">
-<!--                      <p id='attendance-message'>Over the past 30 days, the selected employee was in the office on the following dates:</p> -->
                            <h5 id="attendanceNameTableHeader"></h5>
                            <p id="attendance-message"></p> 
                         </div>
@@ -741,30 +739,22 @@
                     <div class="row" id="report-attendance-table">
                          <h5 id="attendanceTableHeader"><h5>
                          <div class="col-12">
-                                 <table class="table table-striped" id="isAttendingTable" style='table-layout:fixed;'>
+                                 <table class="table table-striped dataTable" id="isAttendingTable" style='table-layout:fixed;'>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Location</th>
                                             <th>Date</th>
-                                            <th><button class="btn btn-primary" id="export-report-btn">Export To CSV</button></th>
+                                            <th><button class="btn btn-primary" id="export">Export To CSV</button></th>
                                         </tr>
                                     </thead>
                                     <tbody id="isAttendingRows"></tbody>
                                 </table>
-
                          </div>
-  
                     </div>      
                 </div>    
             </div>
-       
-        
-        
-
-        
-        
 
     </main>
     <footer>
@@ -781,8 +771,10 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
+<!--    <script src="js/report.js"></script>-->
     <script src="js/adminLogin.js"></script>
+           
+
 </body>
 
 </html>
