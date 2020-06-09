@@ -183,3 +183,7 @@ li {
 #report-date-btn {
     float: right;
 }
+
+h5.table-header {
+    align-text: center;
+}

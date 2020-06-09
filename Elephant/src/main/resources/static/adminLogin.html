@@ -52,8 +52,8 @@
         <button id="getAttendance6-01-2020" type="button">getAttendance6-01-2020</button>
         <button id="makeUser349Inactive" type="button">makeUser349Inactive</button>
         <button id="makeUser349Active" type="button">makeUser349Active</button>
-        <button id="attendanceDuringRangeMay21ToJun3InMinne" type="button">attendanceDuringRangeMay21ToJun3InMinne</button>
-        <button id="attendanceDuringRangeSummaryMay21ToJun3InMinne" type="button">attendanceDuringRangeSummaryMay21ToJun3InMinne</button> 
+-->        <button id="attendanceDuringRangeMay21ToJun3InMinne" type="button">attendanceDuringRangeMay21ToJun3InMinne</button><!--
+<button id="attendanceDuringRangeSummaryMay21ToJun3InMinne" type="button">attendanceDuringRangeSummaryMay21ToJun3InMinne</button> <!--
         <!-- ********** Preparing Ajax calls End -->
 
         <!-- Admin Login Div -->
@@ -736,10 +736,10 @@
                     </div>
 
 
-                    <div class="row" id="report-attendance-table">
-                         <h5 id="attendanceTableHeader"><h5>
+                    <div class="table-responsive-sm table-hover table-sm" id="report-attendance-table">
+                         <h5 class="table-header" id="attendanceTableHeader"><h5>
                          <div class="col-12">
-                                 <table class="table table-striped dataTable" id="isAttendingTable" style='table-layout:fixed;'>
+                                 <table class="table table-striped dataTable" id="isAttendingTable">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -752,7 +752,26 @@
                                     <tbody id="isAttendingRows"></tbody>
                                 </table>
                          </div>
-                    </div>      
+                    </div>  
+                    
+                
+                     <div class="table-responsive-md table-hover table-sm" id="reportSummaryTable">
+                         <h5 class="table-header" id="reportSummaryTableHeader"><h5>
+                         <div class="col-12">
+                                 <table class="table table-striped dataTable" id="reportSummaryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Location</th>
+                                            <th>Date</th>
+                                            <th><button class="btn btn-primary" id="export">Export To CSV</button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reportSummaryRow"></tbody>
+                                </table>
+                         </div>
+                    </div>  
                 </div>    
             </div>
 
