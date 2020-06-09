@@ -10,6 +10,8 @@ import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -221,6 +223,28 @@ public class AdminController {
             return new ResponseEntity<List<LocalDate>>(service.retrieveDatesPresent(id), HttpStatus.OK);
         }
         String message = "There was an error while retrieving the dates the user was in the office.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/attendanceDuringRange/{id}/{startDate}/{endDate}")
+    public ResponseEntity<TreeMap<LocalDate, List<User>>> attendanceDuringRange (@PathVariable int id, @PathVariable String startDate, @PathVariable String endDate, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<TreeMap<LocalDate, List<User>>>(service.generateAttendanceDuringRange(id, startDate, endDate), HttpStatus.OK);
+        }
+        String message = "There was an error while attempt to trace contact with other users in the office.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/attendanceDuringRangeSummary/{id}/{startDate}/{endDate}")
+    public ResponseEntity<List<User>> attendanceDuringRangeSummary (@PathVariable int id, @PathVariable String startDate, @PathVariable String endDate, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<User>>(service.generateAttendanceDuringRangeSummary(id, startDate, endDate), HttpStatus.OK);
+        }
+        String message = "There was an error while attempt to trace contact with other users in the office.";
         return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }

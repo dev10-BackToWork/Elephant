@@ -20,6 +20,10 @@ import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -103,18 +107,55 @@ public class ServiceLayer {
     }
     
     public List<Attendance> generateAttendanceReport(int id, String date) {
-        List<Attendance> allAttendance = attendanceRepo.findAll();
-        List<Attendance> attendanceReport = new ArrayList<>();
-        Date specifiedDate = Date.valueOf(date);
+        LocalDate specifiedDate = LocalDate.parse(date);
         
-        System.out.println("CP1: " + specifiedDate);
+        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(id, specifiedDate);
+        
+        return attendanceList.stream()
+                .sorted((o1, o2) -> o1.getUser().getLastName().compareTo(o2.getUser().getLastName()))
+                .collect(Collectors.toList());
+    }
+    
+    public TreeMap<LocalDate, List<User>> generateAttendanceDuringRange (int id, String startDate, String endDate) {
+        LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
+        LocalDate earliestDate = LocalDate.parse(startDate);
+        
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+        HashMap<LocalDate, List<User>> usersByDate = new HashMap<>();
+        TreeMap<LocalDate, List<User>> sortedUsersByDate = new TreeMap<>();
         
         for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().toString().equals(specifiedDate.toString()) && attendance.getUser().getLocation().getLocationId() == id && attendance.getIsAuthorized())
-                attendanceReport.add(attendance);
+            usersByDate.computeIfAbsent(attendance.getAttendanceDate(), k -> new ArrayList<>()).add(attendance.getUser());
         }
         
-        return attendanceReport;
+        usersByDate.forEach((key, value) -> 
+                usersByDate.put(key, value.stream()
+                .sorted(Comparator.comparing(User::getLastName))
+                .collect(Collectors.toList())));
+        
+        sortedUsersByDate.putAll(usersByDate);
+        
+        return sortedUsersByDate;
+    }
+    
+    public List<User> generateAttendanceDuringRangeSummary(int id, String startDate, String endDate) {
+        LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
+        LocalDate earliestDate = LocalDate.parse(startDate);
+        
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+        List<User> uniqueUsers = new ArrayList<>();
+        
+        for (Attendance attendance : allAttendance) {
+            if(!uniqueUsers.contains(attendance.getUser())) {
+                uniqueUsers.add(attendance.getUser());
+            }
+        }
+        
+        List<User> uniqueUsersSorted = uniqueUsers.stream()
+                .sorted(Comparator.comparing(User::getLastName))
+                .collect(Collectors.toList());
+        
+        return uniqueUsersSorted;
     }
 
     // **********
@@ -202,20 +243,7 @@ public class ServiceLayer {
 
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
-        Location location = locationRepo.findById(id).orElse(null);
-        List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationInAttendance = new ArrayList<>();
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-
-        for (User users : usersByLocation) {
-            for (Attendance attendance : currentAttendance) {
-                if (attendance.getUser().equals(users) && attendance.getIsAttending() && attendance.getIsAuthorized()) {
-                    usersByLocationInAttendance.add(users);
-                }
-            }
-        }
-
-        return usersByLocationInAttendance;
+        return usersRepo.findCurrentUsersInOffice(id);
     }
 
     // Edited Nate Wood 05/13/2020
@@ -239,17 +267,7 @@ public class ServiceLayer {
     }
 
     public List<User> getFlaggedUsers(int id) {
-        List<User> usersByLocationFlagged = new ArrayList<>();
-        List<Attendance> currentAttendance = findAttendanceByCurrentDate();
-
-        for (Attendance attendance : currentAttendance) {
-            if (attendance.getIsAuthorized() == false && attendance.getIsAttending() == true
-                    && attendance.getUser().getLocation().getLocationId() == id) {
-                usersByLocationFlagged.add(attendance.getUser());
-            }
-        }
-
-        return usersByLocationFlagged;
+        return usersRepo.findFlaggedUsersByLocation(id);
     }
 
     public User getUserById(int userId) {

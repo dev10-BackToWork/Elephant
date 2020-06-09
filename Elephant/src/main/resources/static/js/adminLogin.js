@@ -1,11 +1,13 @@
 $(document).ready(function () {
 
     var adminLocation;
+    var adminLocationName;
     var allLocations;
     var adminId;
     var adminEmail;
     var adminPassword;
     var user;
+    var adminRoleId;
 
     $("#loginNav").show();
     $("#adminLoginDiv").show();
@@ -13,7 +15,7 @@ $(document).ready(function () {
     $("#navBarDiv").hide();
     $("#dashboardDiv").hide();
     $("#allEmployeesDiv").hide();
-    $("#reportingDiv").hide();
+    $("#reportDiv").hide();
     $("#createAccountDiv").hide();
     $("#createLocationDiv").hide();
     $("#employeeInfoDiv").hide();
@@ -48,12 +50,14 @@ $(document).ready(function () {
                 console.log(response);
                 if (response.role.roleId === 2) {
                     window.location.replace('/index.html');
-                } else if (response.role.roleId === 1) {
+                } else if (response.role.roleId === 1 || response.role.roleId === 3) {
                     adminLocation = response.location.locationId;
+                    adminLocationName = response.location.cityName;
                     adminId = response.userId;
                     adminEmail = response.email;
                     adminPassword = response.defaultPW;
                     user = response;
+                    adminRoleId = response.role.roleId;
                     
                     $.ajax({
                         type: 'GET',
@@ -203,7 +207,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -227,7 +231,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -346,7 +350,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -465,7 +469,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -480,20 +484,161 @@ $(document).ready(function () {
         $("#inactiveEmployees").hide();
         $("#activeEmployees").show();
         $('#employeeOption').val(1);
-        
 
         $('#contentRows').empty();
         $('#inactiveRows').empty();
 
-            var contentRows = $('#contentRows');
-            var inactiveRows = $('#inactiveRows');
-            var password = $("#inputPassword").val();
-            var email = $("#inputEmail").val();
-            var locationId = adminLocation;
+        var contentRows = $('#contentRows');
+        var inactiveRows = $('#inactiveRows');
+        var password = $("#inputPassword").val();
+        var email = $("#inputEmail").val();
+        var locationId = adminLocation;
+        
+        $('#employeeLocationOption').empty();
+            
+        if (adminRoleId === 3) {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/admin/locations',
+                headers: {
+                    'email': 'twyborny@genesis10.com',
+                    'password': 'password'
+                },
+                success: function (data) {
+                    $.each(data, function(index, datum) {
+                        $('#employeeLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                    });
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            });
+        }  
+        else if (adminRoleId === 1) {
+            $('#locationEmployeePage').hide();
+            $('#employeeLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
 
             $.ajax({
                 type: "GET",
                 url: "http://localhost:8080/api/admin/users/" + locationId,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data, status) {
+                    $.each(data, function (index, user) {
+                        var name = user.firstName + ' ' + user.lastName;
+                        var email = user.email;
+                        var location = user.location.cityName;
+                        var id = user.userId;
+                        var active = user.isActive;
+                        
+                        if (active === true) {
+
+                            var row = '<tr>';
+                            row += '<td>' + name + '</td>';
+                            row += '<td>' + email + '</td>';
+                            row += '<td>' + location + '</td>';
+                            row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
+                            row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
+
+                            row += '</tr>';
+                            contentRows.append(row);
+                        }
+                    });
+
+                },
+                error: function() {
+                    $('#errorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+
+            });
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/users/" + locationId,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data, status) {
+                    $.each(data, function (index, user) {
+                        var inactiveName = user.firstName + ' ' + user.lastName;
+                        var inactiveEmail = user.email;
+                        var inactiveLocation = user.location.cityName;
+                        var inactiveId = user.userId;
+                        var inactiveActive = user.isActive;
+                        
+                        if (inactiveActive === false) {
+
+                            var row = '<tr>';
+                            row += '<td>' + inactiveName + '</td>';
+                            row += '<td>' + inactiveEmail + '</td>';
+                            row += '<td>' + inactiveLocation + '</td>';
+                            row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+
+                            row += '</tr>';
+                            inactiveRows.append(row);
+                        }
+                    });
+                },
+                error: function() {
+                    $('#inactiveErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+
+            });
+             
+        }  
+
+    });
+    
+    
+   $('#submitEmployeeOption').click(function (event) {  
+       var option = $('#employeeOption').val();
+       if (option == 1) {
+            $("#activeEmployees").hide();
+            $("#inactiveEmployees").hide();
+            $("#activeEmployees").show();
+        }
+        if (option == 2) {
+            $("#activeEmployees").hide();
+            $("#inactiveEmployees").hide();
+            $("#inactiveEmployees").show();
+        }
+  });
+  
+     $('#submitEmployeeLocOption').click(function (event) {  
+       var option = $('#employeeLocationOption').val();
+       $("#errorMessages").hide();
+        $("#inactiveErrorMessages").hide();
+        $("#inactiveEmployees").hide();
+        $("#activeEmployees").show();
+        $('#employeeOption').val(1);
+        
+
+        $('#contentRows').empty();
+        $('#inactiveRows').empty();
+        
+            var contentRows = $('#contentRows');
+            var inactiveRows = $('#inactiveRows');
+            var password = $("#inputPassword").val();
+            var email = $("#inputEmail").val();
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/users/" + option,
                 headers: {
                     'email': adminEmail,
                     'password': adminPassword
@@ -532,7 +677,7 @@ $(document).ready(function () {
             });
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/api/admin/users/" + locationId,
+                url: "http://localhost:8080/api/admin/users/" + option,
                 headers: {
                     'email': adminEmail,
                     'password': adminPassword
@@ -567,21 +712,7 @@ $(document).ready(function () {
                 }
 
             });
-    });
-    
-    
-   $('#submitEmployeeOption').click(function (event) {  
-       var option = $('#employeeOption').val();
-       if (option == 1) {
-            $("#activeEmployees").hide();
-            $("#inactiveEmployees").hide();
-            $("#activeEmployees").show();
-        }
-        if (option == 2) {
-            $("#activeEmployees").hide();
-            $("#inactiveEmployees").hide();
-            $("#inactiveEmployees").show();
-        }
+        
   });
   
     $('#reportingBtn').click(function (event) {  
@@ -591,7 +722,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").show();
+        $("#reportDiv").show();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -608,7 +739,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -650,7 +781,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -692,7 +823,7 @@ $(document).ready(function () {
         $("#navBarDiv").hide();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -816,7 +947,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -956,7 +1087,7 @@ $(document).ready(function () {
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -1215,7 +1346,7 @@ var startTime;
         $("#navBarDiv").show();
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
-        $("#reportingDiv").hide();
+        $("#reportDiv").hide();
         $("#createAccountDiv").hide();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").show();
@@ -1324,7 +1455,6 @@ var startTime;
     }
 
 
-
 function deleteUser(userId) {  
         let isDelete = confirm("This user will be deactivated.");
         
@@ -1336,10 +1466,8 @@ function deleteUser(userId) {
                  'email': 'twyborny@genesis10.com',
                  'password': 'password'
              },
-             success: function (data) {
-                 
-                 $('#employeesBtn').click();
-                 
+             success: function (data) {  
+                 $('#submitEmployeeLocOption').click();   
              },
              error: function() {
                 console.log(http);
@@ -1362,27 +1490,8 @@ function activateUser(userId) {
                  'email': 'twyborny@genesis10.com',
                  'password': 'password'
              },
-             success: function (data) {
-
-                $("#loginNav").hide();
-                $("#adminLoginDiv").hide();
-                $("#loginErr").hide();
-                $("#navBarDiv").show();
-                $("#dashboardDiv").hide();
-                $("#allEmployeesDiv").hide();
-                $("#reportingDiv").hide();
-                $("#createAccountDiv").hide();
-                $("#createLocationDiv").hide();
-                $("#employeeInfoDiv").hide();
-                $("#healthSurveyDiv").hide();
-                $("#deleteEmployeeDiv").hide();
-                $("#successfulActivateDiv").show();
-                $("#locationInfoDiv").hide();
-
-                 
-                $('#employeesBtn').click();
-
-                
+             success: function (data) {                 
+                $('#submitEmployeeLocOption').click();
              },
              error: function (http) {
                  console.log(http);
@@ -1665,7 +1774,7 @@ function showGuidelines() {
     // // public ResponseEntity<List<User>> getFlagged
     // $('#getFlaggedUsers').click(function (event) {
 
-    //     var locationId = 1;
+    //     var locationId = 5;
 
     //     $.ajax({
     //         type: 'GET',
@@ -1841,7 +1950,6 @@ function showGuidelines() {
            
        });
        
-       
         function loadReportDiv(){
             $("#myList").hide();
             $("#noAttendees").hide();
@@ -1860,7 +1968,7 @@ function showGuidelines() {
             });
         };
   
-       
+    //var name;
     var nameInput;
 
         function getUsersByLocation(locationId) {
@@ -1880,19 +1988,16 @@ function showGuidelines() {
                     console.log(data);
                     var myList = $("#myList");
                     $.each(data, function (index, user) {
-                          //nameInput = user.firstName + ' ' + user.lastName;
                           var name = user.firstName + ' ' + user.lastName;
                           var id = user.userId;
-//                        var nameLi = "<li class='report-name' id="+id+">"+name;
                           var nameLi = "<li class='report-name' id="+id+">";
                           nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">'+name+'</button>';
                           nameLi += "</li>";
                           myList.append(nameLi); 
                     });
-
+                   
                 },
                 error: function() {
-                    
                     $('#errorMessages')
                         .append($('<li>')
                         .attr({class: 'list-group-item list-group-item-danger'})
@@ -1902,7 +2007,6 @@ function showGuidelines() {
             });
         };
 
-    
 var day; // just day 
 var month; // just month
 var year; // just year 
@@ -1912,12 +2016,12 @@ var dateStringId; //for date button id
 
 var btnIdString;
 
+
         function getAttendance (userId){
             $("#myList").hide();
-//            var nameInput2 = this.name;
-//            $("#myInput").val(nameInput2);
-//            console.log(nameInput2);
-             
+            console.log(userId);
+            updateInputName(userId);
+
             $.ajax({
              type: 'GET',
              url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
@@ -1933,10 +2037,11 @@ var btnIdString;
                  $('#report-attendance-dates').empty();
                  $("#isAttendingTable").hide();
                  $("#isAttendingRow").empty();
+                 
                   
                  var attendanceDateDiv = $('#report-attendance-dates');
                  if (data.length === 0) {
-                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days.");
+                     $("#attendance-message").html("No attendance records exist for the past 30 days.");
                         console.log('this user does not have any attendance records!');
                     }
                  else if (data.length > 0) {
@@ -1954,14 +2059,13 @@ var btnIdString;
                     day = fullDate2.substring(8);
                     dateStringDisplay = month +'/' +day+'/'+year;
                     
-                    var dateBtn = "<div class='col-2'>";
+                    var dateBtn = "<div class='col-3'>";
                     dateBtn += "<button class='report-date-submit' id='" + dateStringId + "'>";
                     dateBtn += "<p class='item'>" + month+'/' +day+'/'+year + "</p>";
                     dateBtn += "</button>";
                     dateBtn += "</div>";
                     attendanceDateDiv.append(dateBtn);
-                    
-                    
+                     
                 });
                     
                     $(".report-date-submit").on("click", function() {
@@ -1970,7 +2074,6 @@ var btnIdString;
                         //console.log('clicked on ' + btnId + ' -- ' + btnIdString);
                         getEmployeesByDate();
                         $("#attendance-message").empty();
-                        
 //                        var attendanceMessageDiv = $('#attendance-message');
 //                        attendanceMessageDiv.append(dateStringDisplay);
                     });
@@ -1983,15 +2086,50 @@ var btnIdString;
          });
      }
      
+    function updateInputName(userId){
+        $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/user/' + userId,
+        headers: {
+                'email': 'twyborny@genesis10.com',
+                'password': 'password'
+            },
+        success: function(data, status) {
+               $("#myInput").val('');
+               $("#attendanceNameTableHeader").show();
+               $("#attendanceNameTableHeader").html(data.firstName + ' ' + data.lastName);
+            },
+            error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve user ' + userId + ' user name.');
+             }
+        });
+    }
+
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
         $("#myList").hide();
         $("#attendance-message").empty();
         var dateInput = $("#attendanceDate").val();
+        var dateInputTwo = $("#attendanceDateTwo").val();
         btnIdString = dateInput.toString();
-        console.log('clicked on: ' + btnIdString);
-        getEmployeesByDate();
+        btnIdStringTwo = dateInputTwo.toString();
+        
+        console.log('start date clicked on: ' + btnIdString);
+        console.log('end date clicked on: ' + btnIdStringTwo);
+       
+        if(btnIdStringTwo !== null && btnIdStringTwo !== '') {
+            getEmployeesByDateRange();
+
+        } else {
+            getEmployeesByDate();
+        
+        }
+        
+        $(".report-date-submit").hide();
+        $("#attendanceNameTableHeader").empty();
+        $("#attendanceNameTableHeader").hide();
     });
 
 
@@ -2004,16 +2142,21 @@ var btnIdString;
         $("input[type=date]").val(''); //reset date picker
         $('#noAttendees').hide(); //hide no attendees on date error 
         $("#attendance-message").empty();
+        $("#attendanceTableHeader").empty();
+        $("#attendanceTableHeader").hide();               
+        $("#attendanceNameTableHeader").empty();
+        $("#attendanceNameTableHeader").hide();
+
     };
 
 
     function getEmployeesByDate(){
         var adminLocationId = 5;
-        
-        $(".report-date-submit").hide();
+        $("#attendanceNameTableHeader").html(specifiedDate);
+       // $(".report-date-submit").hide();
+       // $('#datePicker').val(new Date().toDateInputValue());
         console.log('date in get empl function: ' + btnIdString);
-         $("#noAttendees").hide();
-         var specifiedDate = btnIdString;
+        var specifiedDate = btnIdString;
 
         $('#isAttendingRows').empty();
         
@@ -2028,14 +2171,16 @@ var btnIdString;
 
             success: function (response) {
                 $("#isAttendingTable").show();
-                $("#noAttendees").hide();
 
-                console.log(response);
-                if (response.length === 0) {
+                if (response.length <= 0) {
                     console.log("There are no attendance records on the date selected.");
+                    $("#attendanceNameTableHeader").show();
+                    $("#attendanceNameTableHeader").html('<br>' + specifiedDate);
+                    $("#attendanceTableHeader").empty();
+                    $("#attendanceTableHeader").hide();
+                    $("#attendance-message").show();
+                    $("#attendance-message").text("There are no attendance records on the date selected.");
                     $("#isAttendingTable").hide();
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
                 }
                 
                 var isAttendingRows = $("#isAttendingRows");
@@ -2044,6 +2189,7 @@ var btnIdString;
                     var userName = user.user.firstName + ' ' + user.user.lastName;
                     var userEmail = user.user.email;
                     var userLocation = user.user.location.cityName;
+                    var attendanceDate = user.attendanceDate;
                     var row = '<tr>';
                 
                 if (response[i].isAttending === true) {
@@ -2051,17 +2197,16 @@ var btnIdString;
                     row += '<td>' + userName + '</td>';
                     row += '<td>' + userEmail + '</td>';
                     row += '<td>' + userLocation + '</td>';
+                    row += '<td>' + attendanceDate + '</td>';
                     row += '<td>' +''+ '</td>';
                     row += '</tr>';
                     isAttendingRows.append(row);
                 }
-                if (row.length === 0) {
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
-                    //isAttendingRows.append("There are no attendance records for the date selected");
-                }
-                
-                console.log('The request for the attendance report was successful.' + specifiedDate);
+
+                 $("#isAttendingTable").show();
+                 $("#attendanceTableHeader").show();
+                 $("#attendanceTableHeader").html(attendanceDate + '<br> ' + userLocation + ' Office Attendance');
+                 console.log('The request for the attendance report was successful.' + specifiedDate);
                 });
                 
             },
@@ -2071,11 +2216,149 @@ var btnIdString;
             }
          });
      
- };
+     };
 
 
+    function getEmployeesByDateRange(){
+        var locationId = 5;
+        //var startDate = "2020-05-21";
+        var startDate = btnIdString;
+        //var endDate = "2020-06-03";
+        var endDate = btnIdStringTwo;
+        console.log(btnIdStringTwo);
+        //$(".report-date-submit").hide();
+        console.log('date in get empl function: ' + btnIdString);
+         $("#noAttendees").hide();
+         var specifiedDate = btnIdString;
 
+        $('#isAttendingRows').empty();
+        
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
 
+             
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+
+            success: function (response) {
+                console.log('The request for a user attendance summary for the specified range was successful.');
+                $("#isAttendingTable").show();
+
+                if (response.length <= 0) {
+                    console.log("There are no attendance records for the date range selected.");
+                    $("#attendanceNameTableHeader").show();
+                    $("#attendanceNameTableHeader").html(startDate + ' - ' + endDate);
+                    $("#attendanceTableHeader").empty();
+                    $("#attendanceTableHeader").hide();
+                    $("#attendance-message").show();
+                    $("#attendance-message").text("There are no attendance records on the date selected.");
+                    $("#isAttendingTable").hide();
+                }
+
+                var isAttendingRows = $("#isAttendingRows");
+                
+                $.each(response, function (i, response) {
+                    console.log(response);
+                    console.log(response.firstName);
+                     
+                    var userName = response.firstName + ' ' + response.lastName;
+                    var userEmail = response.email;
+                    var userLocation = response.location.cityName;
+                    var row = '<tr>';
+                
+                //if (response[i].isAttending === true) {
+                    row = '<tr>';
+                    row += '<td>' + userName + '</td>';
+                    row += '<td>' + userEmail + '</td>';
+                    row += '<td>' + userLocation + '</td>';
+                    row += '<td>' + startDate + ' - ' + endDate + '</td>';
+                    row += '<td>' +''+ '</td>';
+                    row += '</tr>';
+                    isAttendingRows.append(row);
+               // }
+                if (row.length === 0) {
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                    //isAttendingRows.append("There are no attendance records for the date selected");
+                }
+                 $("#isAttendingTable").show();
+                 $("#attendanceTableHeader").show();
+                 $("#attendanceTableHeader").html(startDate + ' - ' + endDate  +'<br> ' + userLocation + ' Office Attendance');
+                 console.log('The request for the attendance report was successful.' + specifiedDate);
+                });
+                
+            },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+             }
+         });
+    };
+  
+  //export to CSV
+ $('#export').click(function() {
+  var titles = [];
+  var data = [];
+
+  $('.dataTable th').each(function() {
+    titles.push($(this).text());
+  });
+
+  $('.dataTable td').each(function() {
+    data.push($(this).text());
+  });
+  
+// Convert data to CSV string
+  var CSVString = prepCSVRow(titles, titles.length, '');
+  CSVString = prepCSVRow(data, titles.length, CSVString);
+
+var reportTitle = $("#attendanceTableHeader").text();
+console.log(reportTitle);
+//Make CSV downloadable
+  var downloadLink = document.createElement("a");
+  var blob = new Blob(["\ufeff", CSVString]);
+  var url = URL.createObjectURL(blob);
+  downloadLink.href = url;
+  downloadLink.download = reportTitle + ".csv";
+
+// download CSV
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+});
+
+function prepCSVRow(arr, columnCount, initial) {
+  var row = ''; // this will hold data
+  var delimeter = ';'; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+  var newLine = '\r\n'; // newline separator for CSV row
+
+  function splitArray(_arr, _count) {
+    var splitted = [];
+    var result = [];
+    _arr.forEach(function(item, idx) {
+      if ((idx + 1) % _count === 0) {
+        splitted.push(item);
+        result.push(splitted);
+        splitted = [];
+      } else {
+        splitted.push(item);
+      }
+    });
+    return result;
+  }
+  var plainArr = splitArray(arr, columnCount);
+  // it converts `['a', 'b', 'c']` to `a,b,c` string
+  plainArr.forEach(function(arrItem) {
+    arrItem.forEach(function(item, idx) {
+      row += item + ((idx + 1) === arrItem.length ? '' : delimeter);
+    });
+    row += newLine;
+  });
+  return initial + row;
+}
 
 
 
@@ -2128,8 +2411,8 @@ var btnIdString;
     //     });
 
     // });
-    // 
-    // 
+    
+    
     // // @PostMapping("/deactivateUser/{id}")
     // // public ResponseEntity<User> deactivateUser
 
@@ -2180,6 +2463,64 @@ var btnIdString;
     //         }
     //     });
     // });
+
+
+    // // @GetMapping("/traceContact/{id}/{startDate}/{endDate}")
+    // // public ResponseEntity<TreeMap<LocalDate, List<User>>> traceContact
+
+    // $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
+
+    //     var locationId = 5;
+    //     var startDate = "2020-05-21";
+    //     var endDate = "2020-06-03";
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             console.log('The request for attendance over the specified range was successful.');
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve attendance over the specified range.');
+    //         }
+    //     });
+
+    // });
+
+
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @GetMapping("/traceContactSummary/{id}/{startDate}/{endDate}")    
+
+//    $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
+//
+//         var locationId = 5;
+//         var startDate = "2020-05-21";
+//         var endDate = "2020-06-03";
+//
+//         $.ajax({
+//             type: 'GET',
+//             url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
+//             headers: {
+//                 'email': 'user@user.com',
+//                 'password': 'password'
+//             },
+//             success: function (data) {
+//                 console.log(data);
+//                 console.log('The request for a user attendance summary for the specified range was successful.');
+//             },
+//             error: function (http) {
+//                 console.log(http);
+//                 console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+//             }
+//         });
+//
+//    });
 
 
     // // ********** Preparing Ajax calls End
