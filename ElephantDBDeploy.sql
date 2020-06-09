@@ -2,18 +2,18 @@ DROP DATABASE IF EXISTS elephantDB;
 CREATE DATABASE elephantDB;
 USE elephantDB;
 
-CREATE TABLE `role` (
+CREATE TABLE `Role` (
 	roleId int primary key,
 	roleName varchar(10) not null
 );
 
-CREATE TABLE location (
+CREATE TABLE Location (
 	locationId int primary key auto_increment,
     cityName varchar(50) not null,
     maxOccupancy int not null
 );
 
-CREATE TABLE `user` (
+CREATE TABLE `User` (
 	userId int primary key auto_increment,
     firstName varchar(25) not null,
     lastName varchar(25) not null,
@@ -23,26 +23,26 @@ CREATE TABLE `user` (
     locationId int,
     roleId int,
     isActive boolean default true,
-    CONSTRAINT fk_user_location
+    CONSTRAINT fk_User_location
 		FOREIGN KEY (locationId)
-        REFERENCES location(locationId),
-	CONSTRAINT fk_user_role
+        REFERENCES Location(locationId),
+	CONSTRAINT fk_User_Role
 		FOREIGN KEY (roleId)
-        REFERENCES role(roleId)
+        REFERENCES Role(roleId)
 );
 
-CREATE TABLE attendance (
+CREATE TABLE Attendance (
 	attendanceId int primary key auto_increment,
     isAttending boolean default false,
     attendanceDate date not null,
     userId int,
     isAuthorized boolean default false,
-    CONSTRAINT fk_attendance_user
+    CONSTRAINT fk_Attendance_User
 		FOREIGN KEY (userId)
-        REFERENCES user(userId)
+        REFERENCES `User`(userId)
 );
 
-INSERT INTO location (cityName, maxOccupancy) VALUES 
+INSERT INTO Location (cityName, maxOccupancy) VALUES 
 	("GA, Norcross", 20),
 	("KS, Lenexa", 20),
     ("KS, Lenexa (Kansas Delivery Center)", 20),
@@ -50,7 +50,6 @@ INSERT INTO location (cityName, maxOccupancy) VALUES
     ("MN, Saint Paul", 20),
     ("NC, Charlotte", 20),
     ("NC, Charlotte (Charlotte Delivery Center)", 20),
-    ("NC, Charlotte (Charlotte Delivery Center - UV)", 20),
     ("NY, New York", 20),
     ("OH, Akron", 20),
     ("Remote", 20),
@@ -59,24 +58,31 @@ INSERT INTO location (cityName, maxOccupancy) VALUES
     ("TX, Dallas (Plano Delivery Center)", 20),
     ("WI, Milwaukee", 20);
 
-INSERT INTO `role` (roleId, roleName) VALUES 
-	(1, "ROLE_ADMIN"),
-	(2, "ROLE_USER"),
-    (3, "ROLE_SUPERADMIN");
+INSERT INTO `Role` (roleId, roleName)
+VALUES (1, "ROLE_ADMIN"),
+(2, "ROLE_USER");
 
-INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
+INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
 	("default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
+	("Agnes","Atem","agnesatem2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Padmavathi","Vadrevu","vpadma0881@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Kingsley","Awah","kingsleyawah33@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Asad","Chughtai","asadmqd@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Michael","Edwards","medwards180@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Jeffrey","Freed","jfreed@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Geethabhavani","Gajbinkar","gajbinkar.geeetha@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("John","Gallina Jr","john2gallina@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Randy","Gosier","randyrosiere@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Richard","Harriman","rsharriman@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Gregory","Huckleberry","glhuckleberry@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Mandar","Joshi","joshimandar1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Mounika","Kathula","mounika112090@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("William","Kamdem","kamdemwill@yahoo.fr","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Anjali","Khandelwal","anjalik.ba@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Sridhar","Kotha","kothasridhar@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Prasad","Krovvidi","krovvididad@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Antonette","Lund","antonette.lund@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Diane","Maisonet","drmaiso1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Ravindar","Maruru","ravib2021@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Derrick","Murray","dtmurray0498@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Leslie","Pack","lesliepack@live.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Dhruv","Patel","dhruvmailbox5@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
@@ -84,24 +90,16 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("William","Percoco","wpercoco2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("James","Perry","braxton@aol.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Mahanandi","Pulkurthi","mahareddyy@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Dawn","Sakai","dawn.sakai@outlook.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Luis","Salcedo","luissalcedo@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Ben","Saleh","alehqaeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Ravali","Savva","savvaravali@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Shivkumar","Sonkar","sksonkar@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Bhavya","Thota","bhavyat08@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Eric","Tyson","tysonericj@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Padmavathi","Vadrevu","vpadma0881@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Shawn","Wilson","sdwilson03@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Netsanet","Woldesenbet","netsanet.woldesenbet@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Agnes","Atem","agnesatem2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Kingsley","Awah","kingsleyawah33@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Michael","Edwards","medwards180@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Jeffrey","Freed","jfreed@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Richard","Harriman","rsharriman@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("William","Kamdem","kamdemwill@yahoo.fr","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Anjali","Khandelwal","anjalik.ba@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Derrick","Murray","dtmurray0498@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Dawn","Sakai","dawn.sakai@outlook.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Ravali","Savva","savvaravali@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
-	("Bhavya","Thota","bhavyat08@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Ben","none","alehqaeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Mounika","none","mounika112090@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Timothy","Evans","Tevans611@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
 	("Michael","Young","michaelyoung@live.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
 	("David","Bach","davidbach@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",1,2),
@@ -166,63 +164,63 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Christine","Taylor","chris.taylor@savageshooter.us","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",3,2),
 	("Carolyn","Terry","ckm.terry@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",3,2),
 	("Larry","Dreiling","larry.dreiling@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",3,2),
-	("Frank","Degise","fdegise@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Morgan","Chalut","mchalut@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Nicole","Burnham","burnham.nicole@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Kehinde","Adeleke","adelekks@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("James","Buckley","james.m.buckley.1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Nookaraju","Buddha","buddhaunix@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Elvis","Che","chesh22@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Sambaiah","Dodda","sambadodda@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Victoria","Dorn","vdorn01@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Olakunle","Fasesimi","richiefash1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Regina","Hemphill","regina.hemp@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Samer","Khader","skhader@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Kyle","Kucera","kylekucera@verizon.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Yong","Lan","lany2006@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Lonnie","McCloud","lrmccloud@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Sivasatya","Medapati","sivamedapati8888@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Chiranjibi","Neeroula","neeroula@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Mansoor","Nooruddin","mansoor.nooruddin@outlook.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Girish","Pardikar","girish_pardikar@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Krunal","Patel","krunal099@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Ashish","Patwari","patwari.ashish@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Palaniraj","Pavunraj","ppalanirajh@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Tuan","Pham","tuanp955@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Mounika","Ravipati","mounika.ravipati5@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Shahzad","Riasat","shahzad.riasat@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Shahzad","Siddiqui","shahzad_siddiqui@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Venkata","Vuyyuru","bvuyyuru@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Uzair","Zaheer","uzairz@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Derrick","Alexander","dbmackn@aol.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Joshua","Barksdale","joshuaray.2012@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Srinivas","Bhadriraju","s.bhadriraju@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Pavithra","Bhat","pavibhat2011@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Michael","Campbell","campbellmichaelr@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Victor","Dupuy II","victordupuy@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Douglas","Fleming","dougfleming09@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Glenn","Goodrich","gwgosu@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Robert","Grayson","bobgrayson@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("James","Jenkins","jenkins_jim@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Pavan","Kamineni","pkamineni@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Peggy","Love","peggy_love@ymail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Stephen","Meents","smeents@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Rosemary","Nahas","rlnahas@att.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("David","Ogden","dogden2@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Kimberly","Pramanik","kim@dipakpramanik.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("David","Pugh","dvdwpgh@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Robby","Purcell","r-purcell@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Pavan","Puttaparthi","pavanputtaparthi@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Mary","Quandt","mjquandt@att.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Afsheen","Qureshi","afsheen.qures@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Amir","Qureshi","amir.qures@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Karen","Rhodes","kayli.rhodes@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Padmavathi","Vijayakumar","Padma.vijay@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Richard","Koerwer","rkoerwer@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Mackenzie","Leopeng","mackenzieleopeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Dumisani","Mkhize","LloydMkhize@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Barry","Putnam","bputnam65@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
-	("Tony","Ho","tony.life87@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Frank","Degise","fdegise@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Morgan","Chalut","mchalut@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Nicole","Burnham","burnham.nicole@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Kehinde","Adeleke","adelekks@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("James","Buckley","james.m.buckley.1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Nookaraju","Buddha","buddhaunix@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Elvis","Che","chesh22@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Sambaiah","Dodda","sambadodda@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Victoria","Dorn","vdorn01@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Olakunle","Fasesimi","richiefash1@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Regina","Hemphill","regina.hemp@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Samer","Khader","skhader@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Kyle","Kucera","kylekucera@verizon.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Yong","Lan","lany2006@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Lonnie","McCloud","lrmccloud@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Sivasatya","Medapati","sivamedapati8888@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Chiranjibi","Neeroula","neeroula@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Mansoor","Nooruddin","mansoor.nooruddin@outlook.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Girish","Pardikar","girish_pardikar@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Krunal","Patel","krunal099@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Ashish","Patwari","patwari.ashish@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Palaniraj","Pavunraj","ppalanirajh@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Tuan","Pham","tuanp955@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Mounika","Ravipati","mounika.ravipati5@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Shahzad","Riasat","shahzad.riasat@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Shahzad","Siddiqui","shahzad_siddiqui@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Venkata","Vuyyuru","bvuyyuru@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Uzair","Zaheer","uzairz@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Derrick","Alexander","dbmackn@aol.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Joshua","Barksdale","joshuaray.2012@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Srinivas","Bhadriraju","s.bhadriraju@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Pavithra","Bhat","pavibhat2011@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Michael","Campbell","campbellmichaelr@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Victor","Dupuy II","victordupuy@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Douglas","Fleming","dougfleming09@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Glenn","Goodrich","gwgosu@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Robert","Grayson","bobgrayson@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("James","Jenkins","jenkins_jim@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Pavan","Kamineni","pkamineni@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Peggy","Love","peggy_love@ymail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Stephen","Meents","smeents@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Rosemary","Nahas","rlnahas@att.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("David","Ogden","dogden2@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Kimberly","Pramanik","kim@dipakpramanik.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("David","Pugh","dvdwpgh@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Robby","Purcell","r-purcell@sbcglobal.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Pavan","Puttaparthi","pavanputtaparthi@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Mary","Quandt","mjquandt@att.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Afsheen","Qureshi","afsheen.qures@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Amir","Qureshi","amir.qures@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Karen","Rhodes","kayli.rhodes@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Padmavathi","Vijayakumar","Padma.vijay@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Richard","Koerwer","rkoerwer@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Mackenzie","Leopeng","mackenzieleopeng@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Dumisani","Mkhize","LloydMkhize@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Barry","Putnam","bputnam65@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
+	("Tony","Ho","tony.life87@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
 	("Nicholas","Pranis","npranis@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
 	("Jacqueline","Bertolini","jbertolini@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
 	("Matthew","Hebert","matthewhebert@mac.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
@@ -245,23 +243,23 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Roy","Thompson","dthompson140@verizon.net","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
 	("Trenease","Thrasher","trenease.thrasher@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
 	("Rose","Tyler","pmigirlrt@hotmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",4,2),
-	("Stephen","Biles","sbiles@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
-	("Colleen","McIntyre","csadowski@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,1),
-	("Nicole","Forsthoefel","nforsthoefel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
-	("Victoria Alexis","Arndt","varndt@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
-	("Angela","Hillin","ahillin@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
-	("Paul","Waine","pwaine@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
-	("Jaimi","Nielsen","Jnielsen@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
-	("Wayne","Sueltz","wsueltz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,1),
-	("Kevin","Zoch","kzoch@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",13,2),
-	("Johnathon","Klink","jklink@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Timothy","Koelbl","tkoelbl@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Julie","Spahr","jspahr@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Sara","Brahm","sbrahm@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Aaron","Lemkau","alemkau@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Tristan","Schulz","tschulz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
-	("Joseph","Jens","jjens@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,1),
-	("Meghan","Zehm","mkalis@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",15,2),
+	("Stephen","Biles","sbiles@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,2),
+	("Colleen","McIntyre","csadowski@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,1),
+	("Nicole","Forsthoefel","nforsthoefel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",11,2),
+	("Victoria Alexis","Arndt","varndt@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
+	("Angela","Hillin","ahillin@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
+	("Paul","Waine","pwaine@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
+	("Jaimi","Nielsen","Jnielsen@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
+	("Wayne","Sueltz","wsueltz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,1),
+	("Kevin","Zoch","kzoch@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",12,2),
+	("Johnathon","Klink","jklink@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Timothy","Koelbl","tkoelbl@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Julie","Spahr","jspahr@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Sara","Brahm","sbrahm@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Aaron","Lemkau","alemkau@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Tristan","Schulz","tschulz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
+	("Joseph","Jens","jjens@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,1),
+	("Meghan","Zehm","mkalis@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",14,2),
 	("Tracy","Beckmann","tbeckmann@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",5,1),
 	("Beth","Burris","bburris@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",5,2),
 	("Nichoel","Ellis","nellis@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",5,2),
@@ -323,39 +321,39 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Sandy","Medley","smedley@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("April","Young","ayoung@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("Angela","Gonzales","agonzales@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
-	("John","Triggs","jtriggs@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",3,2),
+	("John","Triggs","jtriggs@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
 	("Ronald","Clampitt","rclampitt@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",2,2),
-	("Andrew","Chertoff","achertoff@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Jeff","Dorilas","jdorilas@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Tariqul","Islam","tislam@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Siddiq","Kayoon","skayoon@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Glenn","Klein","gklein@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,1),
-	("Ian","McCormick","imccormick@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Eileen","Rodriguez","erodriguez@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Darren","Rosemond","drosemond@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Tremayne","Wilson","twilson@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Jeremy","Abrams","jabrams@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Gabby","Angel","GAngel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Michael","Glaberman","mglaberman@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Eric","Ku","eku@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Lyndsey","Restivo","lrestivo@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("John","Rualo","jvrualo@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,1),
-	("Ejazz","Shamid","eshamid@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Steven","Dorlen","sdorlen@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Stefane","Golub","sgolub@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("John","Larcamp","mlarcamp@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Helen","Leventon","hblake@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Roqueline","Lustosa-Sary","llustosa@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
-	("Valerie","Quinata","vquinata@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Lauren","Pavka","lpavka@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Katlin","Potochnik","kpotochnik@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Andrew","Goedel","agoedel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Rodney","Mullins","rmullins@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Nathan","Gram","ngram@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,1),
-	("Deborah","James","djames@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Rachel","Hill","ryoho@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Jennifer","Vitale","jvitale@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
-	("Matthew","Fleshman","mfleshman@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
+	("Andrew","Chertoff","achertoff@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Jeff","Dorilas","jdorilas@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Tariqul","Islam","tislam@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Siddiq","Kayoon","skayoon@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Glenn","Klein","gklein@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,1),
+	("Ian","McCormick","imccormick@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Eileen","Rodriguez","erodriguez@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Darren","Rosemond","drosemond@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Tremayne","Wilson","twilson@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Jeremy","Abrams","jabrams@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Gabby","Angel","GAngel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Michael","Glaberman","mglaberman@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Eric","Ku","eku@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Lyndsey","Restivo","lrestivo@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("John","Rualo","jvrualo@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,1),
+	("Ejazz","Shamid","eshamid@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Steven","Dorlen","sdorlen@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Stefane","Golub","sgolub@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("John","Larcamp","mlarcamp@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Helen","Leventon","hblake@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Roqueline","Lustosa-Sary","llustosa@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
+	("Valerie","Quinata","vquinata@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Lauren","Pavka","lpavka@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Katlin","Potochnik","kpotochnik@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Andrew","Goedel","agoedel@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Rodney","Mullins","rmullins@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Nathan","Gram","ngram@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,1),
+	("Deborah","James","djames@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Rachel","Hill","ryoho@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Jennifer","Vitale","jvitale@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
+	("Matthew","Fleshman","mfleshman@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",9,2),
 	("Jeff","Edwards","jdedwards@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
 	("Shindy","Pagba","spagba@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,2),
 	("Caron","Katz","ckatz@genesis10.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",10,1),
@@ -416,18 +414,17 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Nate", "Wood", "nate@nate.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
-    ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
-    ("Super", "User", "superuser@user.com", "password", "2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 1);
+    ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2);
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
 -- BEGIN
-	-- SET SQL_SAFE_UPDATES = 0;
+-- 	SET SQL_SAFE_UPDATES = 0;
     
--- DELETE FROM attendance
-    -- WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
+--    DELETE FROM attendance
+--    WHERE attendanceDate < CURDATE() - INTERVAL 90 DAY;
     
-    -- SET SQL_SAFE_UPDATES = 1;
+--    SET SQL_SAFE_UPDATES = 1;
 -- END$$
 
 -- CREATE EVENT elephantdb.generateTimeSlots
@@ -435,25 +432,18 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 -- 	STARTS '2020-05-27 15:26:15'
 -- DO
 -- BEGIN
-    CALL removeOldData();
+-- CALL removeOldData();
 -- END
 
 -- testing purposes
-INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUES
+INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized) VALUES
 	(1, "2020-04-28", 348, 1),
     (1, "2020-04-29", 349, 1),
     (1, "2020-04-30", 348, 1),
-    (1, "2020-05-21", 210, 1),
-    (1, "2020-05-21", 211, 1),
-    (1, "2020-05-21", 212, 0),
-    (0, "2020-05-21", 213, 0),
-    (1, "2020-05-21", 348, 1),
     (1, "2020-05-27", 348, 1),
     (1, "2020-05-28", 348, 1),
     (1, "2020-05-29", 348, 0),
     (1, "2020-05-29", 349, 1),
-    (1, "2020-06-01", 160, 1),
-    (1, "2020-06-01", 161, 1),
     (1, "2020-06-01", 199, 1),
     (1, "2020-06-01", 200, 1),
     (1, "2020-06-01", 201, 1),
@@ -465,61 +455,4 @@ INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (0, "2020-06-02", 348, 0),
     (0, "2020-06-02", 349, 0),
     (1, "2020-06-03", 348, 1),
-    (1, "2020-06-03", 349, 1),
-    (0, "2020-06-05", 348, 0),
-    (1, "2020-06-08", 348, 0),
-    (1, "2020-06-08", 214, 1),
-    (1, "2020-06-08", 215, 0),
-    (0, "2020-06-08", 216, 0),
-    (1, "2020-06-08", 217, 1),
-    (1, "2020-06-08", 100, 1),
-    (1, "2020-06-08", 101, 1),
-    (1, "2020-06-08", 102, 1),
-    (1, "2020-06-08", 99, 0),
-    (0, "2020-06-08", 98, 0),
-    (0, "2020-06-08", 104, 0),
-    (1, "2020-06-08", 105, 0),
-    (1, "2020-06-08", 106, 1),
-    (1, "2020-06-08", 107, 1);
-    
--- SELECT a.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate BETWEEN "2020-06-01" and "2020-06-03"
--- AND lo.locationId = 5;
-
--- SELECT a.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate BETWEEN "2020-05-21" and "2020-06-03"
--- AND lo.locationId = 5
--- AND a.isAuthorized = 1;
-
--- SELECT a.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate = "2020-06-01"
--- AND lo.locationId = 5
--- AND a.isAuthorized = 1;
-
--- SELECT u.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate = CURDATE()
--- AND a.isAuthorized = 1
--- AND u.locationId = 13
--- ORDER BY u.lastName;
-
--- SELECT u.*
--- FROM attendance a
--- INNER JOIN user u ON a.userId = u.userId
--- INNER JOIN location lo ON u.locationId = lo.locationId
--- WHERE a.attendanceDate = CURDATE()
--- AND a.isAttending = 1
--- AND a.isAuthorized = 0
--- AND u.locationId = 13
--- ORDER BY u.lastName;
+    (1, "2020-06-03", 349, 1);

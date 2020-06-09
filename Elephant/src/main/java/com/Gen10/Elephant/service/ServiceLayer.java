@@ -413,7 +413,7 @@ public class ServiceLayer {
     public User checkAdmin(String email, String password) {
         User dbUser = usersRepo.findByEmail(email);
         if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
-                && dbUser.getRole().getName().equals("ROLE_ADMIN")) {
+                && (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
             // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
             return dbUser;
         }
