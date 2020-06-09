@@ -417,7 +417,7 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
-    ("Super", "User", "superuser@user.com", "password", "2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 1);
+    ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
