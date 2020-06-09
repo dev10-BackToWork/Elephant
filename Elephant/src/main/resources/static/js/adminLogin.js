@@ -2221,9 +2221,7 @@ var btnIdString;
 
     function getEmployeesByDateRange(){
         var locationId = 5;
-        //var startDate = "2020-05-21";
         var startDate = btnIdString;
-        //var endDate = "2020-06-03";
         var endDate = btnIdStringTwo;
         console.log(btnIdStringTwo);
         //$(".report-date-submit").hide();
@@ -2297,6 +2295,37 @@ var btnIdString;
              }
          });
     };
+    
+     $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
+        var startDate = btnIdString;
+        var endDate = btnIdStringTwo;
+        console.log(btnIdStringTwo);
+        var locationId = 5;
+        // var startDate = "2020-05-21";
+        // var endDate = "2020-06-03";
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+             success: function (data) {
+                 console.log(data);
+                 console.log('The request for attendance over the specified range was successful.');
+             },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve attendance over the specified range.');
+             }
+         });
+
+     });
+    
+    
+    
+    
   
   //export to CSV
  $('#export').click(function() {
