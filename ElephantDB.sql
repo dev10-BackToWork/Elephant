@@ -4,7 +4,7 @@ USE elephantDB;
 
 CREATE TABLE `role` (
 	roleId int primary key,
-	roleName varchar(10) not null
+	roleName varchar(15) not null
 );
 
 CREATE TABLE location (
@@ -435,7 +435,7 @@ INSERT INTO `user` (firstName, lastName, email, defaultPW, passwords, locationId
 -- 	STARTS '2020-05-27 15:26:15'
 -- DO
 -- BEGIN
-    CALL removeOldData();
+--     CALL removeOldData();
 -- END
 
 -- testing purposes
@@ -523,3 +523,8 @@ INSERT INTO attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
 -- AND a.isAuthorized = 0
 -- AND u.locationId = 13
 -- ORDER BY u.lastName;
+
+SELECT u.*
+FROM user u
+WHERE u.locationId = 5
+ORDER BY u.lastName;
