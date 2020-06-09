@@ -1841,7 +1841,6 @@ function showGuidelines() {
            
        });
        
-       
         function loadReportDiv(){
             $("#myList").hide();
             $("#noAttendees").hide();
@@ -1860,7 +1859,7 @@ function showGuidelines() {
             });
         };
   
-       
+    //var name;
     var nameInput;
 
         function getUsersByLocation(locationId) {
@@ -1889,10 +1888,9 @@ function showGuidelines() {
                           nameLi += "</li>";
                           myList.append(nameLi); 
                     });
-
+                   
                 },
                 error: function() {
-                    
                     $('#errorMessages')
                         .append($('<li>')
                         .attr({class: 'list-group-item list-group-item-danger'})
@@ -1902,7 +1900,6 @@ function showGuidelines() {
             });
         };
 
-    
 var day; // just day 
 var month; // just month
 var year; // just year 
@@ -1912,12 +1909,12 @@ var dateStringId; //for date button id
 
 var btnIdString;
 
+
         function getAttendance (userId){
             $("#myList").hide();
-//            var nameInput2 = this.name;
-//            $("#myInput").val(nameInput2);
-//            console.log(nameInput2);
-             
+            console.log(userId);
+            updateInputName(userId);
+
             $.ajax({
              type: 'GET',
              url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
@@ -1933,10 +1930,11 @@ var btnIdString;
                  $('#report-attendance-dates').empty();
                  $("#isAttendingTable").hide();
                  $("#isAttendingRow").empty();
+                 
                   
                  var attendanceDateDiv = $('#report-attendance-dates');
                  if (data.length === 0) {
-                     $("#attendance-message").html("The selected employee does not have any attendance records over the past 30 days.");
+                     $("#attendance-message").html("No attendance records exist for the past 30 days.");
                         console.log('this user does not have any attendance records!');
                     }
                  else if (data.length > 0) {
@@ -1970,7 +1968,6 @@ var btnIdString;
                         //console.log('clicked on ' + btnId + ' -- ' + btnIdString);
                         getEmployeesByDate();
                         $("#attendance-message").empty();
-                        
 //                        var attendanceMessageDiv = $('#attendance-message');
 //                        attendanceMessageDiv.append(dateStringDisplay);
                     });
@@ -1983,15 +1980,50 @@ var btnIdString;
          });
      }
      
+    function updateInputName(userId){
+        $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/user/' + userId,
+        headers: {
+                'email': 'twyborny@genesis10.com',
+                'password': 'password'
+            },
+        success: function(data, status) {
+               $("#myInput").val('');
+               $("#attendanceNameTableHeader").show();
+               $("#attendanceNameTableHeader").html(data.firstName + ' ' + data.lastName);
+            },
+            error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve user ' + userId + ' user name.');
+             }
+        });
+    }
+
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
         $("#myList").hide();
         $("#attendance-message").empty();
         var dateInput = $("#attendanceDate").val();
+        var dateInputTwo = $("#attendanceDateTwo").val();
         btnIdString = dateInput.toString();
+        btnIdStringTwo = dateInputTwo.toString();
+        
         console.log('clicked on: ' + btnIdString);
-        getEmployeesByDate();
+        console.log('TWO clicked on: ' + btnIdStringTwo);
+       
+        if(btnIdStringTwo !== null && btnIdStringTwo !== '') {
+            getEmployeesByDateRange();
+        
+        
+        } else {
+            getEmployeesByDate();
+        
+        }
+        $(".report-date-submit").hide();
+        $("#attendanceNameTableHeader").empty();
+        $("#attendanceNameTableHeader").hide();
     });
 
 
@@ -2004,15 +2036,21 @@ var btnIdString;
         $("input[type=date]").val(''); //reset date picker
         $('#noAttendees').hide(); //hide no attendees on date error 
         $("#attendance-message").empty();
+        $("#attendanceTableHeader").empty();
+        $("#attendanceTableHeader").hide();               
+        $("#attendanceNameTableHeader").empty();
+        $("#attendanceNameTableHeader").hide();
+
     };
 
 
     function getEmployeesByDate(){
         var adminLocationId = 5;
-        
-        $(".report-date-submit").hide();
+
+        $("#attendanceNameTableHeader").html(specifiedDate);
+       // $(".report-date-submit").hide();
+      
         console.log('date in get empl function: ' + btnIdString);
-         $("#noAttendees").hide();
          var specifiedDate = btnIdString;
 
         $('#isAttendingRows').empty();
@@ -2028,14 +2066,16 @@ var btnIdString;
 
             success: function (response) {
                 $("#isAttendingTable").show();
-                $("#noAttendees").hide();
 
-                console.log(response);
-                if (response.length === 0) {
+                if (response.length <= 0) {
                     console.log("There are no attendance records on the date selected.");
+                    $("#attendanceNameTableHeader").show();
+                    $("#attendanceNameTableHeader").html('<br>' + specifiedDate);
+                    $("#attendanceTableHeader").empty();
+                    $("#attendanceTableHeader").hide();
+                    $("#attendance-message").show();
+                    $("#attendance-message").text("There are no attendance records on the date selected.");
                     $("#isAttendingTable").hide();
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
                 }
                 
                 var isAttendingRows = $("#isAttendingRows");
@@ -2044,6 +2084,7 @@ var btnIdString;
                     var userName = user.user.firstName + ' ' + user.user.lastName;
                     var userEmail = user.user.email;
                     var userLocation = user.user.location.cityName;
+                    var attendanceDate = user.attendanceDate;
                     var row = '<tr>';
                 
                 if (response[i].isAttending === true) {
@@ -2051,17 +2092,16 @@ var btnIdString;
                     row += '<td>' + userName + '</td>';
                     row += '<td>' + userEmail + '</td>';
                     row += '<td>' + userLocation + '</td>';
+                    row += '<td>' + attendanceDate + '</td>';
                     row += '<td>' +''+ '</td>';
                     row += '</tr>';
                     isAttendingRows.append(row);
                 }
-                if (row.length === 0) {
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
-                    //isAttendingRows.append("There are no attendance records for the date selected");
-                }
-                
-                console.log('The request for the attendance report was successful.' + specifiedDate);
+
+                 $("#isAttendingTable").show();
+                 $("#attendanceTableHeader").show();
+                 $("#attendanceTableHeader").html(attendanceDate + '<br> ' + userLocation + ' Office Attendance');
+                 console.log('The request for the attendance report was successful.' + specifiedDate);
                 });
                 
             },
@@ -2071,10 +2111,93 @@ var btnIdString;
             }
          });
      
- };
+     };
 
 
+    $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
+       getEmployeesByDateRange();
+        
+     });
+    
+    
+    
+    function getEmployeesByDateRange(){
+        var locationId = 5;
+        //var startDate = "2020-05-21";
+        var startDate = btnIdString;
+        //var endDate = "2020-06-03";
+        var endDate = btnIdStringTwo;
+        console.log(btnIdStringTwo);
+        //$(".report-date-submit").hide();
+        console.log('date in get empl function: ' + btnIdString);
+         $("#noAttendees").hide();
+         var specifiedDate = btnIdString;
 
+        $('#isAttendingRows').empty();
+        
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
+
+             
+             headers: {
+                 'email': 'user@user.com',
+                 'password': 'password'
+             },
+
+            success: function (response) {
+                console.log('The request for a user attendance summary for the specified range was successful.');
+                $("#isAttendingTable").show();
+
+                if (response.length <= 0) {
+                    console.log("There are no attendance records for the date range selected.");
+                    $("#attendanceNameTableHeader").show();
+                    $("#attendanceNameTableHeader").html(startDate + ' - ' + endDate);
+                    $("#attendanceTableHeader").empty();
+                    $("#attendanceTableHeader").hide();
+                    $("#attendance-message").show();
+                    $("#attendance-message").text("There are no attendance records on the date selected.");
+                    $("#isAttendingTable").hide();
+                }
+
+                var isAttendingRows = $("#isAttendingRows");
+                
+                $.each(response, function (i, response) {
+                    console.log(response);
+                    console.log(response.firstName);
+                     
+                    var userName = response.firstName + ' ' + response.lastName;
+                    var userEmail = response.email;
+                    var userLocation = response.location.cityName;
+                    var row = '<tr>';
+                
+                //if (response[i].isAttending === true) {
+                    row = '<tr>';
+                    row += '<td>' + userName + '</td>';
+                    row += '<td>' + userEmail + '</td>';
+                    row += '<td>' + userLocation + '</td>';
+                    row += '<td>' + startDate + ' - ' + endDate + '</td>';
+                    row += '</tr>';
+                    isAttendingRows.append(row);
+               // }
+                if (row.length === 0) {
+                    $("#noAttendees").show();
+                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                    //isAttendingRows.append("There are no attendance records for the date selected");
+                }
+                 $("#isAttendingTable").show();
+                 $("#attendanceTableHeader").show();
+                 $("#attendanceTableHeader").html(startDate + ' - ' + endDate  +'<br> ' + userLocation + ' Office Attendance');
+                 console.log('The request for the attendance report was successful.' + specifiedDate);
+                });
+                
+            },
+             error: function (http) {
+                 console.log(http);
+                 console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+             }
+         });
+    };
 
 
 
@@ -2214,30 +2337,30 @@ var btnIdString;
     // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
     // // @GetMapping("/traceContactSummary/{id}/{startDate}/{endDate}")    
 
-    // $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
-
-    //     var locationId = 5;
-    //     var startDate = "2020-05-21";
-    //     var endDate = "2020-06-03";
-
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
-    //         headers: {
-    //             'email': 'user@user.com',
-    //             'password': 'password'
-    //         },
-    //         success: function (data) {
-    //             console.log(data);
-    //             console.log('The request for a user attendance summary for the specified range was successful.');
-    //         },
-    //         error: function (http) {
-    //             console.log(http);
-    //             console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
-    //         }
-    //     });
-
-    // });
+//    $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
+//
+//         var locationId = 5;
+//         var startDate = "2020-05-21";
+//         var endDate = "2020-06-03";
+//
+//         $.ajax({
+//             type: 'GET',
+//             url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + locationId + '/' + startDate + '/' + endDate,
+//             headers: {
+//                 'email': 'user@user.com',
+//                 'password': 'password'
+//             },
+//             success: function (data) {
+//                 console.log(data);
+//                 console.log('The request for a user attendance summary for the specified range was successful.');
+//             },
+//             error: function (http) {
+//                 console.log(http);
+//                 console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+//             }
+//         });
+//
+//    });
 
 
     // // ********** Preparing Ajax calls End

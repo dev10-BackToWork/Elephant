@@ -123,6 +123,7 @@ var user;
     
                 console.log(password);
 
+
                 $.ajax({
                     type: "post",
                     url: "http://localhost:8080/api/users/login",
