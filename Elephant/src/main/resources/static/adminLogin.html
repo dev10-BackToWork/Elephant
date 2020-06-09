@@ -49,7 +49,7 @@
         <button id="getRoles" type="button">getRoles</button>
         <button id="getUsers" type="button">getUsers</button>
         <button id="getUser7" type="button">getUser7</button>
-        <button id="getAttendance5-29-2020" type="button">getAttendance5-29-2020</button>
+        <button id="getAttendance6-01-2020" type="button">getAttendance6-01-2020</button>
         <button id="makeUser349Inactive" type="button">makeUser349Inactive</button>
         <button id="makeUser349Active" type="button">makeUser349Active</button>
         <button id="attendanceDuringRangeMay21ToJun3InMinne" type="button">attendanceDuringRangeMay21ToJun3InMinne</button>
@@ -247,10 +247,21 @@
         <!-- All Employees Div -->
         <div class="container" id="allEmployeesDiv">
             <div class="container" id="employeesOptions">
+                <div class="row" style="margin-top: 15px; margin-bottom: 30px;" id="locationEmployeePage">
+                    <div class="col-md-4">
+                    </div>
+                     <div class="col-md-4">
+                         <select id="employeeLocationOption" name="locOption" class="form-control" >
+                         </select>   
+                    </div> 
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" id="submitEmployeeLocOption">Submit</button>
+                    </div>
+                </div>
                 <div class="row" style="margin-top: 15px">
                     <div class="col-md-4">
                     </div>
-                     <div class="col-md-4"">
+                     <div class="col-md-4">
                         <select name="option" id="employeeOption" class="form-control">
                             <option value="1" selected>Active Employees</option>
                              <option value="2">Inactive Employees</option>
