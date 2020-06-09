@@ -1324,7 +1324,6 @@ var startTime;
     }
 
 
-
 function deleteUser(userId) {  
         let isDelete = confirm("This user will be deactivated.");
         
@@ -1879,10 +1878,8 @@ function showGuidelines() {
                     console.log(data);
                     var myList = $("#myList");
                     $.each(data, function (index, user) {
-                          //nameInput = user.firstName + ' ' + user.lastName;
                           var name = user.firstName + ' ' + user.lastName;
                           var id = user.userId;
-//                        var nameLi = "<li class='report-name' id="+id+">"+name;
                           var nameLi = "<li class='report-name' id="+id+">";
                           nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">'+name+'</button>';
                           nameLi += "</li>";
@@ -1952,14 +1949,13 @@ var btnIdString;
                     day = fullDate2.substring(8);
                     dateStringDisplay = month +'/' +day+'/'+year;
                     
-                    var dateBtn = "<div class='col-2'>";
+                    var dateBtn = "<div class='col-3'>";
                     dateBtn += "<button class='report-date-submit' id='" + dateStringId + "'>";
                     dateBtn += "<p class='item'>" + month+'/' +day+'/'+year + "</p>";
                     dateBtn += "</button>";
                     dateBtn += "</div>";
                     attendanceDateDiv.append(dateBtn);
-                    
-                    
+                     
                 });
                     
                     $(".report-date-submit").on("click", function() {
@@ -2010,17 +2006,17 @@ var btnIdString;
         btnIdString = dateInput.toString();
         btnIdStringTwo = dateInputTwo.toString();
         
-        console.log('clicked on: ' + btnIdString);
-        console.log('TWO clicked on: ' + btnIdStringTwo);
+        console.log('start date clicked on: ' + btnIdString);
+        console.log('end date clicked on: ' + btnIdStringTwo);
        
         if(btnIdStringTwo !== null && btnIdStringTwo !== '') {
             getEmployeesByDateRange();
-        
-        
+
         } else {
             getEmployeesByDate();
         
         }
+        
         $(".report-date-submit").hide();
         $("#attendanceNameTableHeader").empty();
         $("#attendanceNameTableHeader").hide();
@@ -2114,13 +2110,6 @@ var btnIdString;
      };
 
 
-    $('#attendanceDuringRangeSummaryMay21ToJun3InMinne').click(function (event) {
-       getEmployeesByDateRange();
-        
-     });
-    
-    
-    
     function getEmployeesByDateRange(){
         var locationId = 5;
         //var startDate = "2020-05-21";
@@ -2177,6 +2166,7 @@ var btnIdString;
                     row += '<td>' + userEmail + '</td>';
                     row += '<td>' + userLocation + '</td>';
                     row += '<td>' + startDate + ' - ' + endDate + '</td>';
+                    row += '<td>' +''+ '</td>';
                     row += '</tr>';
                     isAttendingRows.append(row);
                // }
