@@ -424,7 +424,7 @@ public class ServiceLayer {
         User dbUser = usersRepo.findByEmail(email);
         if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
                 && (dbUser.getRole().getName().equals("ROLE_ADMIN")
-                        || dbUser.getRole().getName().equals("ROLE_USER"))) {
+                        || dbUser.getRole().getName().equals("ROLE_USER") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
             return dbUser;
         }
         return null;
