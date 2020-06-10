@@ -2295,12 +2295,14 @@ var btnIdString;
     };
     
      $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
-        var startDate = btnIdString;
-        var endDate = btnIdStringTwo;
-        console.log(btnIdStringTwo);
-        var locationId = 5;
-        // var startDate = "2020-05-21";
-        // var endDate = "2020-06-03";
+        //var startDate = btnIdString;
+        //var endDate = btnIdStringTwo;
+        //console.log(btnIdStringTwo);
+         var locationId = 5;
+         var startDate = "2020-05-21";
+         var endDate = "2020-06-03";
+         var startDate = btnIdString;
+         var endDate = btnIdStringTwo;
 
          $.ajax({
              type: 'GET',
@@ -2309,9 +2311,72 @@ var btnIdString;
                  'email': 'user@user.com',
                  'password': 'password'
              },
-             success: function (data) {
-                 console.log(data);
-                 console.log('The request for attendance over the specified range was successful.');
+             success: function (response) {
+                console.log('The request for the attendance summary report over date range was successful.' + startDate +' -' + endDate);
+                var reportSummaryRow = $(".reportSummaryRow");
+                var reportSummaryTableHeader = $("#reportSummaryTableHeader");
+                var reportSummaryTableDiv = $("#reportSummaryTableDiv");
+                var firstName;
+                var lastName;
+                var email;
+                var location;
+                var dateRow;
+                var data;
+                
+                $.each(response, function (date, data) {
+                   var reportTitle = date;
+                   //var date = i;
+                   //console.log(date);
+                    var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">'+reportTitle+'<h5>';
+                    reportSummaryTable += '<div class="col-12">';
+                    reportSummaryTable += '<table class="table table-striped dataTable" id="reportSummaryTable">';
+                    reportSummaryTable += '<thead>';
+                    reportSummaryTable += '<tr>';      
+                    reportSummaryTable +=  '<th>First Name</th>';  
+                    reportSummaryTable +=  '<th>Last Name</th>';  
+                    reportSummaryTable +=  '<th>Email</th>';  
+                    reportSummaryTable +=  '<th>Location</th>';
+                    reportSummaryTable +=  '<th>Date</th>';
+                    reportSummaryTable += '<th><button class="btn btn-primary" id="export">Export To CSV</button></th>';
+                    reportSummaryTable += '</tr>';     
+                    reportSummaryTable += '</thead>';   
+                   //reportSummaryTable += '<tbody id="reportSummaryRow'+reportTitle+'"></tbody>';
+                   // reportSummaryTable += '<div id="reportSummaryRowDiv"></div>';
+                    reportSummaryTable += '<tbody class="reportSummaryRow" id='+date+'></tbody>';
+                    reportSummaryTable += '</table>';
+                    reportSummaryTable += '</div>';
+
+                    reportSummaryTableDiv.append(reportSummaryTable);      
+                  
+                    var row;
+                    
+                    $.each(data, function (i, user) {
+                       console.log(i);
+                        
+                      var userObj = user;
+                      console.log(userObj);
+                      firstName = userObj.firstName;
+                      lastName = userObj.lastName;
+                      email = userObj.email;
+                      location = userObj.location.cityName;
+                     // dateRow = i;
+                    
+                    //var reportSummaryRowDiv = '<div>' +reportTitle + '</div>'
+                    row = '<tr>';
+                    row = '<tr>';
+                    row += '<td>' + firstName + '</td>';
+                    row += '<td>' + lastName + '</td>';
+                    row += '<td>' + email + '</td>';
+                    row += '<td>' + location + '</td>';
+                    row += '<td>' + i + '</td>';
+                    row += '<td>' +''+ '</td>';
+                    row += '</tr>';
+                    //reportSummaryRow.append(row);
+                   });
+ 
+                  reportSummaryRow.append(row);
+
+                });
              },
              error: function (http) {
                  console.log(http);
@@ -2321,12 +2386,9 @@ var btnIdString;
 
      });
     
-    
-    
-    
-  
+
   //export to CSV
- $('#export').click(function() {
+ $('.export').click(function() {
   var titles = [];
   var data = [];
 
