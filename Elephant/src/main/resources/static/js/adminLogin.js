@@ -2272,122 +2272,115 @@ var btnIdString;
                     row += '<td>' + userLocation + '</td>';
                     row += '<td>' + startDate + ' - ' + endDate + '</td>';
                     row += '<td>' +''+ '</td>';
-                    row += '</tr>';
-                    isAttendingRows.append(row);
-               // }
+                row += '</tr>';
+                isAttendingRows.append(row);
+                // }
                 if (row.length === 0) {
                     $("#noAttendees").show();
                     $("#noAttendees").text("There are no attendance records on the date selected.");
                     //isAttendingRows.append("There are no attendance records for the date selected");
                 }
-                 $("#isAttendingTable").show();
-                 $("#attendanceTableHeader").show();
-                 $("#attendanceTableHeader").html(startDate + ' - ' + endDate  +'<br> ' + userLocation + ' Office Attendance');
-                 console.log('The request for the attendance report was successful.' + specifiedDate);
-                });
-                
-            },
-             error: function (http) {
-                 console.log(http);
-                 console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
-             }
-         });
-    };
-    
-     $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
+                $("#isAttendingTable").show();
+                $("#attendanceTableHeader").show();
+                $("#attendanceTableHeader").html(startDate + ' - ' + endDate + '<br> ' + userLocation + ' Office Attendance');
+                console.log('The request for the attendance report was successful.' + specifiedDate);
+            });
 
-         var locationId = 5;
-         var startDate = "2020-05-21";
-         var endDate = "2020-06-03";
-         //console.log(btnIdStringTwo);
-         //var startDate = btnIdString;
-         //var endDate = btnIdStringTwo;
+        },
+        error: function (http) {
+            console.log(http);
+            console.log('An error resulted when attempting to retrieve a user attendance summary for the specified range.');
+        }
+    });
 
-         $.ajax({
-             type: 'GET',
-             url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
-             headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
-             },
-             success: function (response) {
-                console.log('The request for the attendance summary report over date range was successful.' + startDate +' -' + endDate);
-                var reportSummaryRow = $(".reportSummaryRow");
-                var reportSummaryTableHeader = $("#reportSummaryTableHeader");
-                var reportSummaryTableDiv = $("#reportSummaryTableDiv");
-                var firstName;
-                var lastName;
-                var email;
-                var location;
-                var dateRow;
-                var data;
-                
-                $.each(response, function (date, data) {
-                   var reportTitle = date;
-                   //var date = i;
-                   //console.log(date);
-                    var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">'+reportTitle+'<h5>';
-                    reportSummaryTable += '<div class="col-12">';
-                    reportSummaryTable += '<table class="table table-striped dataTable" id="reportSummaryTable">';
-                    reportSummaryTable += '<thead>';
-                    reportSummaryTable += '<tr>';      
-                    reportSummaryTable +=  '<th>First Name</th>';  
-                    reportSummaryTable +=  '<th>Last Name</th>';  
-                    reportSummaryTable +=  '<th>Email</th>';  
-                    reportSummaryTable +=  '<th>Location</th>';
-                    reportSummaryTable +=  '<th>Date</th>';
-                    reportSummaryTable += '<th><button class="btn btn-primary" id="export">Export To CSV</button></th>';
-                    reportSummaryTable += '</tr>';     
-                    reportSummaryTable += '</thead>';   
-                   //reportSummaryTable += '<tbody id="reportSummaryRow'+reportTitle+'"></tbody>';
-                   // reportSummaryTable += '<div id="reportSummaryRowDiv"></div>';
-                    reportSummaryTable += '<tbody class="reportSummaryRow" id='+date+'></tbody>';
-                    reportSummaryTable += '</table>';
-                    reportSummaryTable += '</div>';
 
-                    reportSummaryTableDiv.append(reportSummaryTable);   
-                  
-                    var row;
-                    
+//$('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
+
+    var locationId = 5;
+    //var startDate = "2020-05-21";
+    //var endDate = "2020-06-03";
+    //console.log(btnIdStringTwo);
+    var startDate = btnIdString;
+    var endDate = btnIdStringTwo;
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
+        headers: {
+            'email': 'user@user.com',
+            'password': 'password'
+        },
+        success: function (response) {
+            console.log('The request for the attendance summary report over date range was successful.' + startDate + ' -' + endDate);
+            var reportSummaryRow = $("#date");
+            var reportSummaryTableHeader = $("#reportSummaryTableHeader");
+            var reportSummaryTableDiv = $("#reportSummaryTableDiv");
+            var firstName;
+            var lastName;
+            var email;
+            var location;
+            var dateRow;
+            var data;
+
+            $.each(response, function (date, data) {
+                var reportTitle = date;
+                var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">' + reportTitle + '<h5>';
+                reportSummaryTable += '<th><button class="btn btn-primary" class="export">Export To CSV</button></th>';
+                reportSummaryTable += '<div class="col-12">';
+                reportSummaryTable += '<table class="table table-striped dataTable" id="reportSummary' + date + 'Table">';
+                reportSummaryTable += '<thead>';
+                reportSummaryTable += '<tr>';
+                reportSummaryTable += '<th>First Name</th>';
+                reportSummaryTable += '<th>Last Name</th>';
+                reportSummaryTable += '<th>Email</th>';
+                reportSummaryTable += '<th>Location</th>';
+                reportSummaryTable += '<th>Date</th>';
+                reportSummaryTable += '</tr>';
+                reportSummaryTable += '</thead>';
+                reportSummaryTable += '<tbody class="reportSummaryRow" id=' + date + '></tbody>';
+                reportSummaryTable += '</table>';
+                reportSummaryTable += '</div>';
+
+                reportSummaryTableDiv.append(reportSummaryTable);
+                rowsPerDay();
+
+                var row;
+                function rowsPerDay() {
                     $.each(data, function (i, user) {
-                       console.log(i);
-                        
-                      var userObj = user;
-                      console.log(userObj);
-                      firstName = userObj.firstName;
-                      lastName = userObj.lastName;
-                      email = userObj.email;
-                      location = userObj.location.cityName;
-                     // dateRow = i;
-                    
-                    //var reportSummaryRowDiv = '<div>' +reportTitle + '</div>'
-                    row = '<tr>';
-                    row = '<tr>';
-                    row += '<td>' + firstName + '</td>';
-                    row += '<td>' + lastName + '</td>';
-                    row += '<td>' + email + '</td>';
-                    row += '<td>' + location + '</td>';
-                    row += '<td>' + date + '</td>';
-                    row += '<td>' +''+ '</td>';
-                    row += '</tr>';
-                    
-                   
-                    reportSummaryRow.append(row);
-                   });
- 
-                  //reportSummaryRow.append(row);
+                        console.log(i);
 
-                });
-             },
+                        var userObj = user;
+                        console.log(userObj);
+                        firstName = userObj.firstName;
+                        lastName = userObj.lastName;
+                        email = userObj.email;
+                        location = userObj.location.cityName;
+
+                        row = '<tr>';
+                        row = '<tr>';
+                        row += '<td>' + firstName + '</td>';
+                        row += '<td>' + lastName + '</td>';
+                        row += '<td>' + email + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + date + '</td>';
+                        row += '<td>' + '' + '</td>';
+                        row += '</tr>';
+                        $('#reportSummary' + date + 'Table').append(row);
+                    });
+
+                };
+
+            });
+        },
              error: function (http) {
                  console.log(http);
                  console.log('An error resulted when attempting to retrieve attendance over the specified range.');
              }
          });
 
-     });
+     };
     
-
+   
   //export to CSV
  $('.export').click(function() {
   var titles = [];
