@@ -2345,7 +2345,7 @@ var btnIdString;
                     reportSummaryTable += '</table>';
                     reportSummaryTable += '</div>';
 
-                    reportSummaryTableDiv.append(reportSummaryTable);      
+                    reportSummaryTableDiv.append(reportSummaryTable);   
                   
                     var row;
                     
@@ -2370,6 +2370,8 @@ var btnIdString;
                     row += '<td>' + date + '</td>';
                     row += '<td>' +''+ '</td>';
                     row += '</tr>';
+                    
+                   
                     reportSummaryRow.append(row);
                    });
  
