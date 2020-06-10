@@ -501,8 +501,8 @@ $(document).ready(function () {
                 type: 'GET',
                 url: 'http://localhost:8080/api/admin/locations',
                 headers: {
-                    'email': 'twyborny@genesis10.com',
-                    'password': 'password'
+                    'email': adminEmail,
+                    'password': adminPassword
                 },
                 success: function (data) {
                     $.each(data, function(index, datum) {
@@ -1336,13 +1336,55 @@ var startTime;
             //alert('error' + err);
             console.log(err);
         }
-    });
-}
+        });
+    }
 
+    deleteUser = function(userId) {  
+        let isDelete = confirm("This user will be deactivated.");
+        
+        if (isDelete === true) {
+            $.ajax({
+                 type: 'POST',
+                 url: 'http://localhost:8080/api/admin/deactivateUser/' + userId,
+                 headers: {
+                     'email': adminEmail,
+                     'password': adminPassword
+                 },
+                 success: function (data) {  
+                     $('#submitEmployeeLocOption').click();   
+                 },
+                 error: function() {
+                    console.log('An error resulted when attempting to deactivate the user.');
+                 }
+             });
+         }
 
-});
+    };
 
-    function editSelectedUser(id) {
+    activateUser = function(userId) {  
+        let isActivate = confirm("This user will be activated.");
+
+        if (isActivate === true) {
+         
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/admin/reactivateUser/' + userId,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {                 
+                   $('#submitEmployeeLocOption').click();
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to activate the user.');
+                }
+            });
+        }
+    };
+
+    editSelectedUser = function(id) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -1362,8 +1404,8 @@ var startTime;
         type: 'GET',
         url: 'http://localhost:8080/api/admin/user/' + userId,
         headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
             },
         success: function(data, status) {
                 $('#edit-userId').val(id);
@@ -1385,9 +1427,9 @@ var startTime;
             }
         });
                     
-    }
+    };
 
-    function populateEditLocationSelect(currentCityName) {
+    populateEditLocationSelect = function(currentCityName) {
 
         $('#edit-location').empty();
 
@@ -1397,8 +1439,8 @@ var startTime;
             type: 'GET',
             url: 'http://localhost:8080/api/admin/locations',
             headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
             },
             success: function (data) {
                 $.each(data, function(index, datum) {
@@ -1420,9 +1462,9 @@ var startTime;
             }
         });
 
-    }
+    };
 
-    function populateEditRoleSelect(currentRole) {
+    populateEditRoleSelect = function(currentRole) {
 
         $('#edit-role').empty();
         
@@ -1432,8 +1474,8 @@ var startTime;
             type: 'GET',
             url: 'http://localhost:8080/api/admin/roles/',
             headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
             },
             success: function (data) {
                 $.each(data, function(index, datum) {
@@ -1455,56 +1497,9 @@ var startTime;
             }
         });
 
-    }
+    };
 
-
-function deleteUser(userId) {  
-        let isDelete = confirm("This user will be deactivated.");
-        
-    if (isDelete === true) {
-        $.ajax({
-             type: 'POST',
-             url: 'http://localhost:8080/api/admin/deactivateUser/' + userId,
-             headers: {
-                 'email': 'twyborny@genesis10.com',
-                 'password': 'password'
-             },
-             success: function (data) {  
-                 $('#submitEmployeeLocOption').click();   
-             },
-             error: function() {
-                console.log(http);
-                console.log('An error resulted when attempting to deactivate the user.');
-             }
-         });
-     }
-
-}
-
-function activateUser(userId) {  
-    let isActivate = confirm("This user will be activated.");
-        
-    if (isActivate === true) {
-         
-         $.ajax({
-             type: 'POST',
-             url: 'http://localhost:8080/api/admin/reactivateUser/' + userId,
-             headers: {
-                 'email': 'twyborny@genesis10.com',
-                 'password': 'password'
-             },
-             success: function (data) {                 
-                $('#submitEmployeeLocOption').click();
-             },
-             error: function (http) {
-                 console.log(http);
-                 console.log('An error resulted when attempting to activate the user.');
-             }
-         });
-
-     }
-
-}
+});
 
 function clearLogin() {
     $('#inputEmail').click(function (e) {
