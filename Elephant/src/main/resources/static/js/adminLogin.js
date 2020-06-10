@@ -2295,14 +2295,13 @@ var btnIdString;
     };
     
      $('#attendanceDuringRangeMay21ToJun3InMinne').click(function (event) {
-        //var startDate = btnIdString;
-        //var endDate = btnIdStringTwo;
-        //console.log(btnIdStringTwo);
+
          var locationId = 5;
          var startDate = "2020-05-21";
          var endDate = "2020-06-03";
-         var startDate = btnIdString;
-         var endDate = btnIdStringTwo;
+         //console.log(btnIdStringTwo);
+         //var startDate = btnIdString;
+         //var endDate = btnIdStringTwo;
 
          $.ajax({
              type: 'GET',
@@ -2368,13 +2367,13 @@ var btnIdString;
                     row += '<td>' + lastName + '</td>';
                     row += '<td>' + email + '</td>';
                     row += '<td>' + location + '</td>';
-                    row += '<td>' + i + '</td>';
+                    row += '<td>' + date + '</td>';
                     row += '<td>' +''+ '</td>';
                     row += '</tr>';
-                    //reportSummaryRow.append(row);
+                    reportSummaryRow.append(row);
                    });
  
-                  reportSummaryRow.append(row);
+                  //reportSummaryRow.append(row);
 
                 });
              },
