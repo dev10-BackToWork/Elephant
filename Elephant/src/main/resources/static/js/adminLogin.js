@@ -588,9 +588,10 @@ $(document).ready(function () {
         
         
         
-        
-        
-        
+//       $('#submitReportLocOption').click(function (event) {  
+//       var option = $('#reportLocationOption').val();
+//       console.log(option);
+//         });
   });
     
     $('#createEmployeeBtn').click(function (event) {
@@ -1367,7 +1368,7 @@ var startTime;
             //$("#reportSummaryTableDiv").hide();
             //$("#report-attendance-table").empty();
             //load users to dropdown list
-            getUsersByLocation(locationId);
+            //getUsersByLocation(locationId);
             
             //filter search list functionality 
             $("#myInput").on("keyup", function() {
@@ -1829,58 +1830,30 @@ function showGuidelines() {
 
         //filter search function 
         //$(document).ready(function(){
-        var locationId = 5;
+        
          
 //       $("#reportingBtn").click(function (event) {
 //          loadReportDiv();
 //          $("#reportDiv").show();
 //          //checkSuperAdmin();
 //       });
+var option;
+var locationId;
+ //if admin role is 1, set locationId equal to the admin's location 
+ //if admin role is 3, show the select location div and set locationId equal to the location selected. 
+       $('#submitReportLocOption').click(function (event) {  
+            locationId = $('#reportLocationOption').val();
+            getUsersByLocation();
+            //locationId= parseInt(locationId);
+            //console.log(locationId);
+       });
        
-
- 
-
-
-//    function checkSuperAdmin(adminEmail, adminPassword, adminRoleId, adminLocationName, adminLocation){
-//        if (adminRoleId === 3) {
-//            $.ajax({
-//                type: 'GET',
-//                url: 'http://localhost:8080/api/admin/locations',
-//                headers: {
-//                    'email': adminEmail,
-//                    'password': adminPassword
-//                },
-//                success: function (data) {
-//                    console.log('checkSuperAdmin func success');
-//                    $.each(data, function(index, datum) {
-//                        $('#reportLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", index + 1)
-//                                .text(datum.cityName));
-//                    });
-//                },
-//                error: function (http) {
-//                    console.log(http);
-//                    console.log('An error resulted when attempting to retrieve locations.');
-//                }
-//            });
-//        }  
-//        else if (adminRoleId === 1) {
-//            $('#locationReportPage').hide();
-//            $('#reportLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", adminLocation)
-//                                .text(adminLocationName));
-//        }
-//    };
-        
-
-
-  
     //var name;
     var nameInput;
 
-        function getUsersByLocation(locationId) {
+        function getUsersByLocation() {
+            locationId = $('#reportLocationOption').val();
+            console.log(locationId);
             $("#myList").empty();
             $("#myInput").val('');
             
@@ -1888,8 +1861,8 @@ function showGuidelines() {
                 type: "GET",
                 url: "http://localhost:8080/api/admin/users/" + locationId,
                 headers: {
-                    'email': 'twyborny@genesis10.com',
-                    'password': 'password'
+                 'email': 'user@user.com',
+                 'password': 'password'
                     //'email': adminEmail,
                     //'password': adminPassword
                 },
@@ -1939,7 +1912,7 @@ var btnIdString;
              type: 'GET',
              url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
              headers: {
-                 'email': 'twyborny@genesis10.com',
+                 'email': 'user@user.com',
                  'password': 'password'
              },
              success: function (data) {
@@ -1985,7 +1958,8 @@ var btnIdString;
                         var btnId = this.id;
                         btnIdString = btnId.toString();
                         //console.log('clicked on ' + btnId + ' -- ' + btnIdString);
-                        getEmployeesByDate();
+                        getEmployeesByDate(locationId);
+                        console.log(locationId);
                         $("#attendance-message").empty();
 //                        var attendanceMessageDiv = $('#attendance-message');
 //                        attendanceMessageDiv.append(dateStringDisplay);
@@ -2005,8 +1979,8 @@ var btnIdString;
         type: 'GET',
         url: 'http://localhost:8080/api/admin/user/' + userId,
         headers: {
-                'email': 'twyborny@genesis10.com',
-                'password': 'password'
+                 'email': 'user@user.com',
+                 'password': 'password'
             },
         success: function(data, status) {
                $("#myInput").val('');
@@ -2023,6 +1997,9 @@ var btnIdString;
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
+        
+        locationId = $('#reportLocationOption').val();
+        console.log(locationId);
         $("#myList").hide();
         $("#attendance-message").empty();
         var dateInput = $("#attendanceDate").val();
@@ -2034,10 +2011,10 @@ var btnIdString;
         console.log('end date clicked on: ' + btnIdStringTwo);
        
         if(btnIdStringTwo !== null && btnIdStringTwo !== '') {
-            getEmployeesByDateRange();
+            getEmployeesByDateRange(locationId);
 
         } else {
-            getEmployeesByDate();
+            getEmployeesByDate(locationId);
         
         }
         
@@ -2055,8 +2032,7 @@ var btnIdString;
       function clearReport() {
         $("input[type=date]").val(''); //reset date picker
         $('#noAttendees').hide(); //hide no attendees on date error 
-        $("#attendance-message").empty();
-        
+        //$("#attendance-message").empty();
         //$("#attendanceTableHeader").empty();
         //$("#attendanceTableHeader").hide();               
         //$("#attendanceNameTableHeader").empty();
@@ -2065,8 +2041,8 @@ var btnIdString;
     };
 
 
-    function getEmployeesByDate(){
-        var adminLocationId = 5;
+    function getEmployeesByDate(locationId){
+       // var adminLocationId = 5;
         $("#reportSummaryTableDiv").empty();
         $("#attendanceNameTableHeader").html(specifiedDate);
        // $(".report-date-submit").hide();
@@ -2078,10 +2054,10 @@ var btnIdString;
         
         $.ajax({
             type: 'GET',
-             url: 'http://localhost:8080/api/admin/attendanceReport/' + adminLocationId + '/' + specifiedDate,
+             url: 'http://localhost:8080/api/admin/attendanceReport/' + locationId + '/' + specifiedDate,
              
              headers: {
-                 'email': 'twyborny@genesis10.com',
+                 'email': 'user@user.com',
                  'password': 'password'
              },
 
@@ -2138,9 +2114,10 @@ var btnIdString;
      };
 
 
-    function getEmployeesByDateRange(){
+    function getEmployeesByDateRange(locationId){
         $("#reportSummaryTableDiv").empty();
-        var locationId = 5;
+       var locationId = locationId;
+       console.log(locationId);
         var startDate = btnIdString;
         var endDate = btnIdStringTwo;
         console.log(btnIdStringTwo);
