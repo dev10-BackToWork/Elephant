@@ -154,10 +154,9 @@ $(document).ready(function () {
         var locationId = adminLocation;
         
         if (adminRoleId === 3) {
-            //NEED TO CHANGE THIS AJAX CALL
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/api/admin/flagged/' + locationId,
+                url: 'http://localhost:8080/api/admin/flaggedGlobal',
                 headers: {
                    'email': adminEmail,
                    'password': adminPassword
