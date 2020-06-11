@@ -173,17 +173,39 @@ li {
     padding: 10px 20px;
     background-color: white;
     border-bottom: 1px black;
+    color: green;
 
+}
+#reportDiv {
+    align-content: center;
 }
 
 .report-date-submit:hover {
     background-color: #eee;
 }
 
+
 #report-date-btn {
+    float: right;
+}
+.export {
     float: right;
 }
 
 h5.table-header {
-    align-text: center;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 1.6rem;    
+}
+
+
+#reportSummaryTableDiv {
+    width: 100%;
+    align-content: center;
+    margin: 0px;
+}
+#report-attendance-table{
+    width: 100%;
+    align-content: center;
+    margin: 0px;
 }
