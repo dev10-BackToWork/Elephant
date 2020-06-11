@@ -506,6 +506,7 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     $.each(data, function(index, datum) {
+                        console.log(data);
                         $('#employeeLocationOption')
                             .append($("<option></option>")
                                 .attr("value", index + 1)
@@ -730,6 +731,46 @@ $(document).ready(function () {
         $("#overall-success").hide();
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
+        
+        loadReportDiv();
+          $("#reportDiv").show();
+          
+        if (adminRoleId === 3) {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/admin/locations',
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {
+                    console.log('checkSuperAdmin func success');
+                    $.each(data, function(index, datum) {
+                        $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                    });
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            });
+        }  
+        else if (adminRoleId === 1) {
+            $('#locationReportPage').hide();
+            $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+        }
+        
+        
+        
+        
+        
+        
   });
     
     $('#createEmployeeBtn').click(function (event) {
@@ -1499,6 +1540,34 @@ var startTime;
 
     };
 
+    loadReportDiv = function(){
+            $("#myList").hide();
+            $("#noAttendees").hide();
+            $("#isAttendingTable").hide();
+            //$("#reportSummaryTableDiv").hide();
+            //$("#report-attendance-table").empty();
+            //load users to dropdown list
+            getUsersByLocation(locationId);
+            
+            //filter search list functionality 
+            $("#myInput").on("keyup", function() {
+                clearReport(); 
+                $("#myList").show();
+                var value = $(this).val().toLowerCase();
+                $("#myList li").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        };
+
+
+
+
+
+
+
+
+
 });
 
 function clearLogin() {
@@ -1942,31 +2011,51 @@ function showGuidelines() {
         //$(document).ready(function(){
         var locationId = 5;
          
-       $("#reportingBtn").click(function (event) {
-          loadReportDiv();
-          $("#reportDiv").show();
-           
-       });
+//       $("#reportingBtn").click(function (event) {
+//          loadReportDiv();
+//          $("#reportDiv").show();
+//          checkSuperAdmin();
+//       });
        
-        function loadReportDiv(){
-            $("#myList").hide();
-            $("#noAttendees").hide();
-            $("#isAttendingTable").hide();
-            //$("#reportSummaryTableDiv").hide();
-            //$("#report-attendance-table").empty();
-            //load users to dropdown list
-            getUsersByLocation(locationId);
-            
-            //filter search list functionality 
-            $("#myInput").on("keyup", function() {
-                clearReport(); 
-                $("#myList").show();
-                var value = $(this).val().toLowerCase();
-                $("#myList li").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
-            });
-        };
+
+ 
+
+
+//    function checkSuperAdmin(adminEmail, adminPassword, adminRoleId, adminLocationName, adminLocation){
+//        if (adminRoleId === 3) {
+//            $.ajax({
+//                type: 'GET',
+//                url: 'http://localhost:8080/api/admin/locations',
+//                headers: {
+//                    'email': adminEmail,
+//                    'password': adminPassword
+//                },
+//                success: function (data) {
+//                    console.log('checkSuperAdmin func success');
+//                    $.each(data, function(index, datum) {
+//                        $('#reportLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", index + 1)
+//                                .text(datum.cityName));
+//                    });
+//                },
+//                error: function (http) {
+//                    console.log(http);
+//                    console.log('An error resulted when attempting to retrieve locations.');
+//                }
+//            });
+//        }  
+//        else if (adminRoleId === 1) {
+//            $('#locationReportPage').hide();
+//            $('#reportLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", adminLocation)
+//                                .text(adminLocationName));
+//        }
+//    };
+        
+
+
   
     //var name;
     var nameInput;
