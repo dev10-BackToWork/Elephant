@@ -506,6 +506,7 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     $.each(data, function(index, datum) {
+                        console.log(data);
                         $('#employeeLocationOption')
                             .append($("<option></option>")
                                 .attr("value", index + 1)
@@ -1945,7 +1946,7 @@ function showGuidelines() {
        $("#reportingBtn").click(function (event) {
           loadReportDiv();
           $("#reportDiv").show();
-          // checkSuperAdmin();
+          checkSuperAdmin();
        });
        
         function loadReportDiv(){
@@ -1967,38 +1968,41 @@ function showGuidelines() {
                 });
             });
         };
-  
-//    function checkSuperAdmin(){
-//        if (adminRoleId === 3) {
-//            $.ajax({
-//                type: 'GET',
-//                url: 'http://localhost:8080/api/admin/locations',
-//                headers: {
-//                    'email': 'twyborny@genesis10.com',
-//                    'password': 'password'
-//                },
-//                success: function (data) {
-//                    $.each(data, function(index, datum) {
-//                        $('#employeeLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", index + 1)
-//                                .text(datum.cityName));
-//                    });
-//                },
-//                error: function (http) {
-//                    console.log(http);
-//                    console.log('An error resulted when attempting to retrieve locations.');
-//                }
-//            });
-//        }  
-//        else if (adminRoleId === 1) {
-//            $('#locationEmployeePage').hide();
-//            $('#employeeLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", adminLocation)
-//                                .text(adminLocationName));
-//        }
-//    };
+ 
+
+
+    function checkSuperAdmin(adminEmail, adminPassword, adminRoleId, adminLocationName, adminLocation){
+        if (adminRoleId === 3) {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/admin/locations',
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {
+                    console.log('checkSuperAdmin func success');
+                    $.each(data, function(index, datum) {
+                        $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                    });
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            });
+        }  
+        else if (adminRoleId === 1) {
+            $('#locationReportPage').hide();
+            $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+        }
+    };
         
 
 
