@@ -2011,11 +2011,11 @@ function showGuidelines() {
         //$(document).ready(function(){
         var locationId = 5;
          
-//       $("#reportingBtn").click(function (event) {
-//          loadReportDiv();
-//          $("#reportDiv").show();
-//          checkSuperAdmin();
-//       });
+       $("#reportingBtn").click(function (event) {
+          loadReportDiv();
+          $("#reportDiv").show();
+          //checkSuperAdmin();
+       });
        
 
  
