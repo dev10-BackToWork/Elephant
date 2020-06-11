@@ -49,7 +49,12 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(response);
                 if (response.role.roleId === 2) {
-                    window.location.replace('/index.html');
+                    let errorMessage = confirm("You have attempted to log in to the Admin Dashboard without admin privileges, you will now be routed to the user login.");
+        
+                    if (errorMessage === true) {
+                         window.location.replace('/index.html');
+                     }
+ 
                 } else if (response.role.roleId === 1 || response.role.roleId === 3) {
                     adminLocation = response.location.locationId;
                     adminLocationName = response.location.cityName;
@@ -75,129 +80,20 @@ $(document).ready(function () {
                             console.log('An error resulted when attempting to retrieve locations.');
                         }
                     });
-    
-    
-                    $("#adminLoginDiv").hide();
-                    $("#loginNav").hide();
-                    $("#navBarDiv").show();
-                    $("#dashboardDiv").show();
-                    
-                    $("#noResErrorMessages").hide();
-                    $("#authErrorMessages").hide();
-                    $("#arrivalErrorMessages").hide();
-
-                    $('#noResponseRows').empty();
-                    $('#authPendRows').empty();
-                    $('#arrivalRows').empty();
-
-                    var noResponseRows = $('#noResponseRows');
-                    var authPendRows = $('#authPendRows');
-                    var arrivalRows = $('#arrivalRows');
-
-                    var locationId = adminLocation;
-
-                     $.ajax({
-                         type: 'GET',
-                         url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
-                         headers: {
-                             'email': adminEmail,
-                             'password': adminPassword
-                         },
-                         success: function (data) {
-                            $.each(data, function (index, user) {
-                            var name = user.firstName + ' ' + user.lastName;
-                            var email = user.email;
-                            var location = user.location.cityName;
-
-                            var row = '<tr>';
-                            row += '<td>' + name + '</td>';
-                            row += '<td>' + email + '</td>';
-                            row += '<td>' + location + '</td>';
-                            row += '</tr>';
-                            noResponseRows.append(row);
-                        });
-
-                         },
-                         error: function() {
-                        $('#noResErrorMessages')
-                            .append($('<li>')
-                            .attr({class: 'list-group-item list-group-item-danger'})
-                            .text('An error has occurred.'));
-                    }
-                     });
-
-                     $.ajax({
-                         type: 'GET',
-                         url: 'http://localhost:8080/api/admin/flagged/' + locationId,
-                         headers: {
-                             'email': adminEmail,
-                             'password': adminPassword
-                         },
-                         success: function (data) {
-                             $.each(data, function (index, user) {
-                            var name = user.firstName + ' ' + user.lastName;
-                            var email = user.email;
-                            var location = user.location.cityName;
-
-                            var row = '<tr>';
-                            row += '<td>' + name + '</td>';
-                            row += '<td>' + email + '</td>';
-                            row += '<td>' + location + '</td>';
-                            row += '</tr>';
-                            authPendRows.append(row);
-                        });
-
-                         },
-                         error: function() {
-                        $('#authErrorMessages')
-                            .append($('<li>')
-                            .attr({class: 'list-group-item list-group-item-danger'})
-                            .text('An error has occurred.'));
-                    }
-                     });
-                     
-            $.ajax({
-                 type: 'GET',
-                     url: 'http://localhost:8080/api/admin/occupants/' + locationId,
-                     headers: {
-                         'email': adminEmail,
-                         'password': adminPassword
-                     },
-                     success: function (data) {
-                         $.each(data, function(index, datum) {
-                        var name = datum.firstName + ' ' + datum.lastName;
-                        var location = datum.location.cityName;
-
-                        var row = '<tr>';
-                        row += '<td>' + name + '</td>';
-                        row += '<td>' + location + '</td>';
-                        row += '</tr>';
-                        arrivalRows.append(row);
-                         });
-                     },
-                     error: function() {
-                    $('#arrivalErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
+                    $('#dashboardBtn').click();
                 }
-            });
 
+            },
+            error: function (err) {
+                console.log(err);
+                $('#loginErr').show();
+                $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
+                clearLogin();
+                return false;
+            }
 
-
-                            }
-
-                        },
-                        error: function (err) {
-                            console.log(err);
-                            $('#loginErr').show();
-                            $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
-                            clearLogin();
-                            return false;
-                        }
-
-                    });
-                    return false;
+        });
+        return false;
     });
     
     $('#takeSurveyBtn').click(function (event) {
@@ -242,17 +138,56 @@ $(document).ready(function () {
        
         $("#noResErrorMessages").hide();
         $("#authErrorMessages").hide();
+        $("#allAuthErrorMessages").hide();
         $("#arrivalErrorMessages").hide();
         
         $('#noResponseRows').empty();
         $('#authPendRows').empty();
+        $('#allAuthPendRows').empty();
         $('#arrivalRows').empty();
 
         var noResponseRows = $('#noResponseRows');
         var authPendRows = $('#authPendRows');
+        var allAuthPendRows = $('#allAuthPendRows');
         var arrivalRows = $('#arrivalRows');
 
         var locationId = adminLocation;
+        
+        if (adminRoleId === 3) {
+            //NEED TO CHANGE THIS AJAX CALL
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/admin/flagged/' + locationId,
+                headers: {
+                   'email': adminEmail,
+                   'password': adminPassword
+                },
+                success: function (data) {
+                    $.each(data, function (index, user) {
+                   var allName = user.firstName + ' ' + user.lastName;
+                   var allEmail = user.email;
+                   var allLocation = user.location.cityName;
+
+                   var row = '<tr>';
+                   row += '<td>' + allName + '</td>';
+                   row += '<td>' + allEmail + '</td>';
+                   row += '<td>' + allLocation + '</td>';
+                   row += '</tr>';
+                   allAuthPendRows.append(row);
+               });
+
+                },
+                error: function() {
+               $('#allAuthErrorMessages')
+                   .append($('<li>')
+                   .attr({class: 'list-group-item list-group-item-danger'})
+                   .text('An error has occurred.'));
+                }
+            });
+        }  
+        else if (adminRoleId === 1) {
+            $('#allAuthPendTableDiv').hide();
+        }
 
          $.ajax({
              type: 'GET',
@@ -314,152 +249,38 @@ $(document).ready(function () {
         }
          });
 
-            $.ajax({
-                 type: 'GET',
-                     url: 'http://localhost:8080/api/admin/occupants/' + locationId,
-                     headers: {
-                         'email': adminEmail,
-                         'password': adminPassword
-                     },
-                     success: function (data) {
-                         $.each(data, function(index, datum) {
-                        var name = datum.firstName + ' ' + datum.lastName;
-                        var location = datum.location.cityName;
+        $.ajax({
+             type: 'GET',
+                 url: 'http://localhost:8080/api/admin/occupants/' + locationId,
+                 headers: {
+                     'email': adminEmail,
+                     'password': adminPassword
+                 },
+                 success: function (data) {
+                     $.each(data, function(index, datum) {
+                    var name = datum.firstName + ' ' + datum.lastName;
+                    var location = datum.location.cityName;
 
-                        var row = '<tr>';
-                        row += '<td>' + name + '</td>';
-                        row += '<td>' + location + '</td>';
-                        row += '</tr>';
-                        arrivalRows.append(row);
-                         });
-                     },
-                     error: function() {
-                    $('#arrivalErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
-            });
-
+                    var row = '<tr>';
+                    row += '<td>' + name + '</td>';
+                    row += '<td>' + location + '</td>';
+                    row += '</tr>';
+                    arrivalRows.append(row);
+                     });
+                 },
+                 error: function() {
+                $('#arrivalErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            }
+        });  
+            
+  
     });
     
     $('#logoBtn').click(function (event) {
-        $("#loginNav").hide();
-        $("#adminLoginDiv").hide();
-        $("#loginErr").hide();
-        $("#navBarDiv").show();
-        $("#dashboardDiv").show();
-        $("#allEmployeesDiv").hide();
-        $("#reportDiv").hide();
-        $("#createAccountDiv").hide();
-        $("#createLocationDiv").hide();
-        $("#employeeInfoDiv").hide();
-        $("#healthSurveyDiv").hide();
-        $("#overall-success").hide();
-        $("#deleteEmployeeDiv").hide();
-        $("#locationInfoDiv").hide();
-        
-                
-        $("#noResErrorMessages").hide();
-        $("#authErrorMessages").hide();
-        $("#arrivalErrorMessages").hide();
-        
-        $('#noResponseRows').empty();
-        $('#authPendRows').empty();
-        $('#arrivalRows').empty();
-
-        var noResponseRows = $('#noResponseRows');
-        var authPendRows = $('#authPendRows');
-        var arrivalRows = $('#arrivalRows');
-
-        var locationId = adminLocation;
-
-         $.ajax({
-             type: 'GET',
-             url: 'http://localhost:8080/api/admin/noAnswers/' + locationId,
-             headers: {
-                 'email': adminEmail,
-                 'password': adminPassword
-             },
-             success: function (data) {
-                 $.each(data, function (index, user) {
-                var name = user.firstName + ' ' + user.lastName;
-                var email = user.email;
-                var location = user.location.cityName;
-
-                var row = '<tr>';
-                row += '<td>' + name + '</td>';
-                row += '<td>' + email + '</td>';
-                row += '<td>' + location + '</td>';
-                row += '</tr>';
-                noResponseRows.append(row);
-            });
-            
-             },
-             error: function() {
-            $('#noResErrorMessages')
-                .append($('<li>')
-                .attr({class: 'list-group-item list-group-item-danger'})
-                .text('An error has occurred.'));
-        }
-         });
-
-         $.ajax({
-             type: 'GET',
-             url: 'http://localhost:8080/api/admin/flagged/' + locationId,
-             headers: {
-                'email': adminEmail,
-                'password': adminPassword
-             },
-             success: function (data) {
-                 $.each(data, function (index, user) {
-                var name = user.firstName + ' ' + user.lastName;
-                var email = user.email;
-                var location = user.location.cityName;
-
-                var row = '<tr>';
-                row += '<td>' + name + '</td>';
-                row += '<td>' + email + '</td>';
-                row += '<td>' + location + '</td>';
-                row += '</tr>';
-                authPendRows.append(row);
-            });
-            
-             },
-             error: function() {
-            $('#authErrorMessages')
-                .append($('<li>')
-                .attr({class: 'list-group-item list-group-item-danger'})
-                .text('An error has occurred.'));
-        }
-         });
-
-            $.ajax({
-                 type: 'GET',
-                     url: 'http://localhost:8080/api/admin/occupants/' + locationId,
-                     headers: {
-                         'email': adminEmail,
-                         'password': adminPassword
-                     },
-                     success: function (data) {
-                         $.each(data, function(index, datum) {
-                        var name = datum.firstName + ' ' + datum.lastName;
-                        var location = datum.location.cityName;
-
-                        var row = '<tr>';
-                        row += '<td>' + name + '</td>';
-                        row += '<td>' + location + '</td>';
-                        row += '</tr>';
-                        arrivalRows.append(row);
-                         });
-                     },
-                     error: function() {
-                    $('#arrivalErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
-            });
+        $('#dashboardBtn').click();
     });
     
     $('#employeesBtn').click(function (event) {
