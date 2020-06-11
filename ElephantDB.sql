@@ -23,6 +23,7 @@ CREATE TABLE `User` (
     locationId int,
     roleId int,
     isActive boolean default true,
+    phoneNumber varchar(15) null,
     CONSTRAINT fk_user_location
 		FOREIGN KEY (locationId)
         REFERENCES Location(locationId),
@@ -37,6 +38,7 @@ CREATE TABLE Attendance (
     attendanceDate date not null,
     userId int,
     isAuthorized boolean default false,
+    departedEarly boolean default false,
     CONSTRAINT fk_attendance_user
 		FOREIGN KEY (userId)
         REFERENCES `User`(userId)
