@@ -259,6 +259,10 @@ public class ServiceLayer {
     public List<User> getFlaggedUsers(int id) {
         return usersRepo.findFlaggedUsersByLocation(id);
     }
+    
+    public List<User> getFlaggedUsersGlobal() {
+        return usersRepo.findFlaggedUsersGlobal();
+    }
 
     public User getUserById(int userId) {
         User user = usersRepo.findById(userId).orElse(null);

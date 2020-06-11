@@ -101,6 +101,17 @@ public class AdminController {
         }
         return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);  
     }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/flaggedGlobal")
+    public ResponseEntity<List<User>> getFlaggedGlobal(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<User>>(service.getFlaggedUsersGlobal(), HttpStatus.OK);
+        }
+        String message = "There was an error while attempting to get all of the unauthorized/flagged users for the current date.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
 
     // Round 2
     @CrossOrigin(origins = "https://044db60.netsolhost.com")

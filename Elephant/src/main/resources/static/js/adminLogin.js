@@ -2525,4 +2525,32 @@ function prepCSVRow(arr, columnCount, initial) {
 //    });
 
 
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @GetMapping("/flaggedGlobal/{id}")
+
+
+    // $('#getFlaggedUsersGlobal').click(function (event) {
+    
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/flaggedGlobal',
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function (data) {
+    //             console.log('The request for flagged personnel was successful.');
+    //             $.each(data, function(index, datum) {
+    //                 console.log(datum);
+    //             });
+    //         },
+    //         error: function (http) {
+    //             console.log(http);
+    //             console.log('An error resulted when attempting to retrieve flagged personnel.');
+    //         }
+    //     });
+    // })
+
+
     // // ********** Preparing Ajax calls End

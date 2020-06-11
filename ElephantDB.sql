@@ -517,4 +517,20 @@ INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (1, "2020-06-11", 208, 1),
     (1, "2020-06-11", 209, 1),
     (0, "2020-06-11", 211, 0),
-    (0, "2020-06-11", 212, 0);
+    (0, "2020-06-11", 212, 0),
+    (1, "2020-06-11", 188, 0),
+    (1, "2020-06-11", 189, 0),
+    (1, "2020-06-11", 190, 0),
+    (1, "2020-06-11", 191, 0),
+    (1, "2020-06-11", 179, 0),
+    (1, "2020-06-11", 181, 0),
+    (1, "2020-06-11", 182, 0);
+    
+SELECT u.*
+	FROM Attendance a
+	INNER JOIN User u ON a.userId = u.userId
+	INNER JOIN Location lo ON u.locationId = lo.locationId
+	WHERE a.attendanceDate = CURDATE()
+	AND a.isAttending = 1
+	AND a.isAuthorized = 0
+	ORDER BY u.lastName;
