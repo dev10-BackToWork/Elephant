@@ -359,6 +359,7 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
+        // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
         
         if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
