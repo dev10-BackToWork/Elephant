@@ -1945,7 +1945,7 @@ function showGuidelines() {
        $("#reportingBtn").click(function (event) {
           loadReportDiv();
           $("#reportDiv").show();
-           
+          // checkSuperAdmin();
        });
        
         function loadReportDiv(){
@@ -1967,6 +1967,41 @@ function showGuidelines() {
                 });
             });
         };
+  
+//    function checkSuperAdmin(){
+//        if (adminRoleId === 3) {
+//            $.ajax({
+//                type: 'GET',
+//                url: 'http://localhost:8080/api/admin/locations',
+//                headers: {
+//                    'email': 'twyborny@genesis10.com',
+//                    'password': 'password'
+//                },
+//                success: function (data) {
+//                    $.each(data, function(index, datum) {
+//                        $('#employeeLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", index + 1)
+//                                .text(datum.cityName));
+//                    });
+//                },
+//                error: function (http) {
+//                    console.log(http);
+//                    console.log('An error resulted when attempting to retrieve locations.');
+//                }
+//            });
+//        }  
+//        else if (adminRoleId === 1) {
+//            $('#locationEmployeePage').hide();
+//            $('#employeeLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", adminLocation)
+//                                .text(adminLocationName));
+//        }
+//    };
+        
+
+
   
     //var name;
     var nameInput;
