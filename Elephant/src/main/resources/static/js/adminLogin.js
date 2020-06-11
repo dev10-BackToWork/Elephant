@@ -2014,7 +2014,7 @@ function showGuidelines() {
 //       $("#reportingBtn").click(function (event) {
 //          loadReportDiv();
 //          $("#reportDiv").show();
-//          checkSuperAdmin();
+//          //checkSuperAdmin();
 //       });
        
 
@@ -2283,6 +2283,8 @@ var btnIdString;
                 
                 $.each(response, function (i, user) {
                     var userName = user.user.firstName + ' ' + user.user.lastName;
+                    var firstName = user.user.firstName;
+                    var lastName = user.user.lastName;
                     var userEmail = user.user.email;
                     var userLocation = user.user.location.cityName;
                     var attendanceDate = user.attendanceDate;
@@ -2290,7 +2292,8 @@ var btnIdString;
                 
                 if (response[i].isAttending === true) {
                     row = '<tr>';
-                    row += '<td>' + userName + '</td>';
+                    row += '<td>' + firstName + '</td>';
+                    row += '<td>' + lastName + '</td>';
                     row += '<td>' + userEmail + '</td>';
                     row += '<td>' + userLocation + '</td>';
                     row += '<td>' + attendanceDate + '</td>';
