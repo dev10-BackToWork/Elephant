@@ -16,23 +16,23 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     Attendance findTodayByUser(int userId, LocalDate date);
 
     @Query(value = "SELECT * \n"
-            + "FROM attendance a\n"
+            + "FROM Attendance a\n"
             + "WHERE a.attendanceDate >= DATE(NOW() - INTERVAL 30 DAY)", nativeQuery = true)
     List<Attendance> findAttendanceWithinLast30Days();
 
     @Query(value = "SELECT a.*\n"
-            + "FROM attendance a\n"
-            + "INNER JOIN user u ON a.userId = u.userId\n"
-            + "INNER JOIN location lo ON u.locationId = lo.locationId\n"
+            + "FROM Attendance a\n"
+            + "INNER JOIN User u ON a.userId = u.userId\n"
+            + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
             + "WHERE a.attendanceDate = ?2\n"
             + "AND lo.locationId = ?1\n"
             + "AND a.isAuthorized = 1;", nativeQuery = true)
     List<Attendance> findAttendanceAuthorizedOnDate(int locationId, LocalDate date);
 
     @Query(value = "SELECT a.*\n"
-            + "FROM attendance a\n"
-            + "INNER JOIN user u ON a.userId = u.userId\n"
-            + "INNER JOIN location lo ON u.locationId = lo.locationId\n"
+            + "FROM Attendance a\n"
+            + "INNER JOIN User u ON a.userId = u.userId\n"
+            + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
             + "WHERE a.attendanceDate BETWEEN ?2 and ?3\n"
             + "AND lo.locationId = ?1\n"
             + "AND a.isAuthorized = 1;", nativeQuery = true)
