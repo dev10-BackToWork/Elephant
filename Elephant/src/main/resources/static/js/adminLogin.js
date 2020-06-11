@@ -2014,7 +2014,7 @@ function showGuidelines() {
 //       $("#reportingBtn").click(function (event) {
 //          loadReportDiv();
 //          $("#reportDiv").show();
-//          checkSuperAdmin();
+//          //checkSuperAdmin();
 //       });
        
 
