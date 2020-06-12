@@ -52,6 +52,9 @@ public class User {
         
         @Column
         private boolean isActive;
+        
+        @Column
+        private String phoneNumber;
 	
 
 	public int getUserId() {
@@ -126,21 +129,76 @@ public class User {
             this.isActive = isActive;
         }
         
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof User)) {
-			return false;
-		}
-		User user = (User) o;
-		return userId == user.userId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(defaultPW, user.defaultPW) && Objects.equals(passwords, user.passwords) && Objects.equals(location, user.location) && Objects.equals(role, user.role);
-	}
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+        
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(userId, firstName, lastName, email, defaultPW, passwords, location, role);
-	}
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + this.userId;
+        hash = 53 * hash + Objects.hashCode(this.firstName);
+        hash = 53 * hash + Objects.hashCode(this.lastName);
+        hash = 53 * hash + Objects.hashCode(this.email);
+        hash = 53 * hash + Objects.hashCode(this.defaultPW);
+        hash = 53 * hash + Objects.hashCode(this.passwords);
+        hash = 53 * hash + Objects.hashCode(this.location);
+        hash = 53 * hash + Objects.hashCode(this.role);
+        hash = 53 * hash + (this.isActive ? 1 : 0);
+        hash = 53 * hash + Objects.hashCode(this.phoneNumber);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (this.userId != other.userId) {
+            return false;
+        }
+        if (this.isActive != other.isActive) {
+            return false;
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.defaultPW, other.defaultPW)) {
+            return false;
+        }
+        if (!Objects.equals(this.passwords, other.passwords)) {
+            return false;
+        }
+        if (!Objects.equals(this.phoneNumber, other.phoneNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.role, other.role)) {
+            return false;
+        }
+        return true;
+    }
+
+    
 
 }
