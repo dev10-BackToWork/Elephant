@@ -23,6 +23,7 @@ CREATE TABLE `User` (
     locationId int,
     roleId int,
     isActive boolean default true,
+    phoneNumber varchar(15) null,
     CONSTRAINT fk_user_location
 		FOREIGN KEY (locationId)
         REFERENCES Location(locationId),
@@ -37,6 +38,7 @@ CREATE TABLE Attendance (
     attendanceDate date not null,
     userId int,
     isAuthorized boolean default false,
+    departedEarly boolean default false,
     CONSTRAINT fk_attendance_user
 		FOREIGN KEY (userId)
         REFERENCES `User`(userId)
@@ -524,13 +526,8 @@ INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (1, "2020-06-11", 191, 0),
     (1, "2020-06-11", 179, 0),
     (1, "2020-06-11", 181, 0),
-    (1, "2020-06-11", 182, 0);
-    
-SELECT u.*
-	FROM Attendance a
-	INNER JOIN User u ON a.userId = u.userId
-	INNER JOIN Location lo ON u.locationId = lo.locationId
-	WHERE a.attendanceDate = CURDATE()
-	AND a.isAttending = 1
-	AND a.isAuthorized = 0
-	ORDER BY u.lastName;
+    (1, "2020-06-11", 182, 0),
+    (1, "2020-06-12", 348, 1),
+    (1, "2020-06-12", 349, 1),
+    (1, "2020-06-12", 350, 1),
+    (1, "2020-06-12", 351, 1);

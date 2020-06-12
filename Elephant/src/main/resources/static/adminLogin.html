@@ -54,7 +54,8 @@
         <button id="makeUser349Active" type="button">makeUser349Active</button>
         <button id="attendanceDuringRangeMay21ToJun3InMinne" type="button">attendanceDuringRangeMay21ToJun3InMinne</button>
         <button id="attendanceDuringRangeSummaryMay21ToJun3InMinne" type="button">attendanceDuringRangeSummaryMay21ToJun3InMinne</button>
-        <button id="getFlaggedUsersGlobal" type="button">getFlaggedUsersGlobal</button> -->
+        <button id="getFlaggedUsersGlobal" type="button">getFlaggedUsersGlobal</button>
+        <button id="markUser348AsDepartedEarly" type="button">markUser348AsDepartedEarly</button> -->
         <!-- ********** Preparing Ajax calls End -->
 
         <!-- Admin Login Div -->
@@ -168,102 +169,120 @@
         
         <!-- Dashboard Div -->
         <div class="container" id="dashboardDiv">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <ul class="list-group" id="dashboardAlerts"></ul>
-                            <h2 class="center">Welcome back!</h2>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <ul class="list-group" id="dashboardAlerts"></ul>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="card-body">
-                                <h5>Please click below if you haven't taken today's survey:</h5> 
-                                <button class="btn btn-primary" id="takeSurveyBtn">Take Survey</button>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="card-body">
+                            <h5>Please click below if you haven't taken today's survey:</h5> 
+                            <button class="btn btn-primary" id="takeSurveyBtn">Take Survey</button>
                         </div>
                     </div>
                 </div>
-                <div class="container">
-                         <div class="row">
-                            <div class="col-md-12 text-center" id="authPendTableDiv">
-                                <ul class="list-group" id="authErrorMessages"></ul>
-                                <h3 class="mt-5">Authorization Pending</h3>
-                                <div class="col text-center">
-                                    <table class="table table-striped" id="authPendTable" style='table-layout:fixed;'>
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Location</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="authPendRows"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                <div class="container">
-                     <div class="row">
-                        <div class="col-md-12 text-center" id="noResponseTableDiv">
-                            <ul class="list-group" id="noResErrorMessages"></ul>
-                            <h3 class="mt-5">No Response</h3>
-                            <div class="col text-center">
-                                <table class="table table-striped" id="noResponseTable" style='table-layout:fixed;'>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Location</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="noResponseRows"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> 
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center" id="arrivalTableDiv">
-                            <ul class="list-group" id="arrivalErrorMessages"></ul>
-                            <h3 class="mt-5">Today's Attendance</h3>
-                            <div class="col text-center">
-                                <table class="table table-striped" id="arrivalTable" style='table-layout:fixed;'>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Location</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="arrivalRows"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                       <div class="col-md-12 text-center" id="allAuthPendTableDiv">
-                           <ul class="list-group" id="allAuthErrorMessages"></ul>
-                           <h3 class="mt-5">Authorization Pending for All Locations</h3>
-                           <div class="col text-center">
-                               <table class="table table-striped" id="allAuthPendTable" style='table-layout:fixed;'>
-                                   <thead>
-                                       <tr>
-                                           <th>Name</th>
-                                           <th>Email</th>
-                                           <th>Location</th>
-                                       </tr>
-                                   </thead>
-                                   <tbody id="allAuthPendRows"></tbody>
-                               </table>
-                           </div>
-                       </div>
-                   </div> 
-               </div>
             </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-lg-12 text-center" >
+                    <h2>Today's Overview</h2>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;" id="locationDashPage">
+                <div class="col-md-4">
+                </div>
+                 <div class="col-md-3">
+                     <select id="dashLocationOption" name="locOptionDash" class="form-control" >
+                     </select> 
+                </div> 
+                <div class="col-md-1">
+                     <button class="btn btn-primary" id="submitDashLocOption">Submit</button>
+                </div> 
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                   <div class="col-md-12 text-center" id="authPendTableDiv">
+                       <ul class="list-group" id="authErrorMessages"></ul>
+                       <h3 class="mt-5">Authorization Pending</h3>
+                       <div class="col text-center">
+                           <table class="table table-striped" id="authPendTable" style='table-layout:fixed;'>
+                               <thead>
+                                   <tr>
+                                       <th>Name</th>
+                                       <th>Email</th>
+                                       <th>Location</th>
+                                   </tr>
+                               </thead>
+                               <tbody id="authPendRows"></tbody>
+                           </table>
+                       </div>
+                   </div>
+               </div> 
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center" id="arrivalTableDiv">
+                        <ul class="list-group" id="arrivalErrorMessages"></ul>
+                        <h3 class="mt-5">Today's Attendance</h3>
+                        <div class="col text-center">
+                            <table class="table table-striped" id="arrivalTable" style='table-layout:fixed;'>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Location</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="arrivalRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                 <div class="row">
+                    <div class="col-md-12 text-center" id="noResponseTableDiv">
+                        <ul class="list-group" id="noResErrorMessages"></ul>
+                        <h3 class="mt-5">No Response</h3>
+                        <div class="col text-center">
+                            <table class="table table-striped" id="noResponseTable" style='table-layout:fixed;'>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="noResponseRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="container">
+                <div class="row">
+                   <div class="col-md-12 text-center" id="allAuthPendTableDiv">
+                       <ul class="list-group" id="allAuthErrorMessages"></ul>
+                       <h3 class="mt-5">Authorization Pending for All Locations</h3>
+                       <div class="col text-center">
+                           <table class="table table-striped" id="allAuthPendTable" style='table-layout:fixed;'>
+                               <thead>
+                                   <tr>
+                                       <th>Name</th>
+                                       <th>Email</th>
+                                       <th>Location</th>
+                                   </tr>
+                               </thead>
+                               <tbody id="allAuthPendRows"></tbody>
+                           </table>
+                       </div>
+                   </div>
+               </div> 
+           </div>
+        </div>
         
         <!-- All Employees Div -->
         <div class="container" id="allEmployeesDiv">
@@ -271,25 +290,30 @@
                 <div class="row" style="margin-top: 15px; margin-bottom: 30px;" id="locationEmployeePage">
                     <div class="col-md-4">
                     </div>
-                     <div class="col-md-4">
+                     <div class="col-md-3">
                          <select id="employeeLocationOption" name="locOption" class="form-control" >
                          </select>   
                     </div> 
-                    <div class="col-md-4">
+                    <div class="col-md-1">
                         <button class="btn btn-primary" id="submitEmployeeLocOption">Submit</button>
+                    </div>
+                    <div class="col-md-4">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 15px">
                     <div class="col-md-4">
                     </div>
-                     <div class="col-md-4">
+                     <div class="col-md-3">
                         <select name="option" id="employeeOption" class="form-control">
                             <option value="1" selected>Active Employees</option>
                              <option value="2">Inactive Employees</option>
+                             <option value="3">Guests</option>
                         </select>
                     </div> 
+                    <div class="col-md-1">
+                         <button class="btn btn-primary" id="submitEmployeeOption">Submit</button>
+                    </div>
                     <div class="col-md-4">
-                        <button class="btn btn-primary" id="submitEmployeeOption">Submit</button>
                     </div>
                 </div>
             </div>
@@ -331,6 +355,28 @@
                                     </tr>
                                 </thead>
                                 <tbody id="inactiveRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="guests">
+                <div class="row">
+                    <div class="col-md-12 text-center" id="guestTableDiv">
+                        <ul class="list-group" id="guestErrorMessages"></ul>
+                        <h3 class="mt-5">Guests</h3>
+                        <div class="col text-center">
+                            <table class="table table-striped" id="guestTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Location</th>
+                                        <th><button class="btn btn-primary" id="createGuestBtn">Create Guest</button></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="guestContentRows"></tbody>
                             </table>
                         </div>
                     </div>
