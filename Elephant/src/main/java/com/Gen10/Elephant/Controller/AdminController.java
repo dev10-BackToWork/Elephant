@@ -101,6 +101,17 @@ public class AdminController {
         }
         return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);  
     }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/flaggedGlobal")
+    public ResponseEntity<List<User>> getFlaggedGlobal(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<User>>(service.getFlaggedUsersGlobal(), HttpStatus.OK);
+        }
+        String message = "There was an error while attempting to get all of the unauthorized/flagged users for the current date.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
 
     // Round 2
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
@@ -245,6 +256,17 @@ public class AdminController {
             return new ResponseEntity<List<User>>(service.generateAttendanceDuringRangeSummary(id, startDate, endDate), HttpStatus.OK);
         }
         String message = "There was an error while attempt to trace contact with other users in the office.";
+        return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+    }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/departedEarly/{id}")
+    public ResponseEntity<String> departedEarly(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<String>(service.markDepartedEarly(id), HttpStatus.OK);
+        }
+        String message = "There was an error while attempting to mark the user as departed early for the current date.";
         return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
     }
 }
