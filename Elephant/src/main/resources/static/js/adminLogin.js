@@ -1928,6 +1928,10 @@ function showGuidelines() {
 //          $("#reportDiv").show();
 //          //checkSuperAdmin();
 //       });
+
+
+
+
 var option;
 var locationId;
  //if admin role is 1, set locationId equal to the admin's location 
@@ -1935,6 +1939,12 @@ var locationId;
        $('#submitReportLocOption').click(function (event) {  
             locationId = $('#reportLocationOption').val();
             getUsersByLocation();
+            clearReport();
+            $("#reportSummaryTableDiv").empty();
+            $("#attendanceTableHeader").empty();
+            
+
+            $("#attendanceTableHeader").empty();
             //locationId= parseInt(locationId);
             //console.log(locationId);
        });
@@ -2123,6 +2133,7 @@ var btnIdString;
       function clearReport() {
         $("input[type=date]").val(''); //reset date picker
         $('#noAttendees').hide(); //hide no attendees on date error 
+        
         //$("#attendance-message").empty();
         //$("#attendanceTableHeader").empty();
         //$("#attendanceTableHeader").hide();               
@@ -2133,7 +2144,6 @@ var btnIdString;
 
 
     function getEmployeesByDate(locationId){
-       // var adminLocationId = 5;
         $("#reportSummaryTableDiv").empty();
         $("#attendanceNameTableHeader").html(specifiedDate);
        // $(".report-date-submit").hide();
@@ -2310,10 +2320,10 @@ var btnIdString;
 
             $.each(response, function (date, data) {
                 var reportTitle = date;
-                var reportSummaryTable = '<h5 class="table-header attendanceTableHeader" id="reportSummaryTableHeader">'+'Office Attendance for '+ reportTitle+'</h5>';
+                var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">'+'Office Attendance for '+ reportTitle+'</h5>';
 //                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export">Export To CSV</button></div>';
                 reportSummaryTable += '<div class="col-12">';
-                reportSummaryTable += '<table class="table table-striped dataTable" id="reportSummary' + date + 'Table">';
+                reportSummaryTable += '<table class="table table-striped" id="reportSummary' + date + 'Table">';
                 reportSummaryTable += '<thead>';
                 reportSummaryTable += '<tr>';
                 reportSummaryTable += '<th>First Name</th>';
@@ -2384,7 +2394,7 @@ var btnIdString;
   var CSVString = prepCSVRow(titles, titles.length, '');
   CSVString = prepCSVRow(data, titles.length, CSVString);
 
-var reportTitle = $(".attendanceTableHeader").text();
+var reportTitle = $("#attendanceTableHeader").text();
 console.log(reportTitle);
 //Make CSV downloadable
   var downloadLink = document.createElement("a");
