@@ -6,8 +6,10 @@ import com.Gen10.Elephant.dto.Attendance;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
@@ -37,4 +39,13 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "AND lo.locationId = ?1\n"
             + "AND a.isAuthorized = 1;", nativeQuery = true)
     List<Attendance> findAttendanceAuthorizedWithinRange(int locationId, LocalDate startDate, LocalDate endDate);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE attendance a SET\n"
+            + "	a.departedEarly = 1\n"
+            + "WHERE a.userId = ?1\n"
+            + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
+    void markUserDepartedEarly(int id);
+
 }
