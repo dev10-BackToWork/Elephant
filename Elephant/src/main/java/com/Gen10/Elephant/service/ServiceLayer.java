@@ -157,6 +157,11 @@ public class ServiceLayer {
         
         return uniqueUsersSorted;
     }
+    
+    public String markDepartedEarly(int id) {
+        attendanceRepo.markUserDepartedEarly(id);
+        return "The request to mark user " + id + " as departed early for the current date was processed.";
+    }
 
     // **********
     // Location
@@ -258,6 +263,10 @@ public class ServiceLayer {
 
     public List<User> getFlaggedUsers(int id) {
         return usersRepo.findFlaggedUsersByLocation(id);
+    }
+    
+    public List<User> getFlaggedUsersGlobal() {
+        return usersRepo.findFlaggedUsersGlobal();
     }
 
     public User getUserById(int userId) {

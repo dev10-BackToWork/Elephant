@@ -36,6 +36,16 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     List<User> findAllActiveByLocation(Location location);
 
     @Query(value = "SELECT u.*\n"
+            + "	FROM Attendance a\n"
+            + "	INNER JOIN User u ON a.userId = u.userId\n"
+            + "	INNER JOIN Location lo ON u.locationId = lo.locationId\n"
+            + "	WHERE a.attendanceDate = CURDATE()\n"
+            + "	AND a.isAttending = 1\n"
+            + "	AND a.isAuthorized = 0\n"
+            + "	ORDER BY u.lastName;", nativeQuery = true)
+    List<User> findFlaggedUsersGlobal();
+
+    @Query(value = "SELECT u.*\n"
             + "FROM Attendance a\n"
             + "INNER JOIN User u ON a.userId = u.userId\n"
             + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
