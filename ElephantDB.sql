@@ -18,8 +18,8 @@ CREATE TABLE `User` (
     firstName varchar(25) not null,
     lastName varchar(25) not null,
     email varchar(50) not null,
-    defaultPW varchar(50) not null,
-    passwords varchar(125) not null,
+    defaultPW varchar(50),
+    passwords varchar(125),
     locationId int,
     roleId int,
     isActive boolean default true,
@@ -65,6 +65,7 @@ INSERT INTO `Role` (roleId, roleName) VALUES
 	(1, "ROLE_ADMIN"),
 	(2, "ROLE_USER"),
     (3, "ROLE_SUPERADMIN");
+    (4, "ROLE_GUEST");
 
 INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId, roleId) VALUES 
 	("default", "user", "user@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 1, 1),
@@ -420,6 +421,7 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
+    ("Guest", "User", "guest@guest.com", "password", 
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
