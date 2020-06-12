@@ -158,9 +158,9 @@ public class ServiceLayer {
         return uniqueUsersSorted;
     }
     
-    public String markDepartedEarly(int id) {
-        attendanceRepo.markUserDepartedEarly(id);
-        return "The request to mark user " + id + " as departed early for the current date was processed.";
+    public Attendance markDepartedEarly(int id) {
+        attendanceRepo.markAttendanceDepartedEarly(id);
+        return attendanceRepo.findAttendanceDepartedEarly(id);
     }
 
     // **********

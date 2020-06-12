@@ -261,10 +261,10 @@ public class AdminController {
     
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/departedEarly/{id}")
-    public ResponseEntity<String> departedEarly(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+    public ResponseEntity<Attendance> departedEarly(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
-            return new ResponseEntity<String>(service.markDepartedEarly(id), HttpStatus.OK);
+            return new ResponseEntity<Attendance>(service.markDepartedEarly(id), HttpStatus.OK);
         }
         String message = "There was an error while attempting to mark the user as departed early for the current date.";
         return new ResponseEntity(message, HttpStatus.BAD_REQUEST);

@@ -32,6 +32,9 @@ public class Attendance {
         
 	@Column
 	private boolean isAuthorized;
+        
+        @Column
+        private boolean departedEarly;
 
 	public int getAttendanceId() {
 		return this.attendanceId;
@@ -76,4 +79,12 @@ public class Attendance {
 	public void setIsAuthorized(boolean isAuthorized) {
 		this.isAuthorized = isAuthorized;
 	}
+
+        public boolean isDepartedEarly() {
+            return departedEarly;
+        }
+
+        public void setDepartedEarly(boolean departedEarly) {
+            this.departedEarly = departedEarly;
+        }
 }

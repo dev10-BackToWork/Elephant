@@ -46,6 +46,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "	a.departedEarly = 1\n"
             + "WHERE a.userId = ?1\n"
             + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
-    void markUserDepartedEarly(int id);
+    void markAttendanceDepartedEarly(int id);
+
+    @Query(value = "SELECT *\n"
+            + "FROM attendance a\n"
+            + "WHERE a.userId = ?1\n"
+            + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
+    Attendance findAttendanceDepartedEarly(int id);
 
 }
