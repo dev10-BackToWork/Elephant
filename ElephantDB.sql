@@ -420,8 +420,7 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Matthew", "Gerszewski", "matthew@matthew.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
-    ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3),
-    ("Guest", "User", "guest@guest.com", "password");
+    ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
@@ -529,7 +528,7 @@ INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized) VALUE
     (1, "2020-06-11", 179, 0),
     (1, "2020-06-11", 181, 0),
     (1, "2020-06-11", 182, 0),
-    (1, "2020-06-12", 348, 1),
+    (1, "2020-06-12", 348, 0),
     (1, "2020-06-12", 349, 1),
     (1, "2020-06-12", 350, 1),
     (1, "2020-06-12", 351, 1);
