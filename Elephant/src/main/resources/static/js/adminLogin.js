@@ -2529,4 +2529,29 @@ function prepCSVRow(arr, columnCount, initial) {
     // })
 
 
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @PostMapping("/departedEarly/{id}")
+
+    // $('#markUser348AsDepartedEarly').click(function(event) {
+
+    //     var userId = 348;
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/api/admin/departedEarly/' + userId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function(data) {
+    //             console.log(data)
+    //         },
+    //         error: function(http) {
+    //             console.log(http)
+    //         }
+    //     })
+
+    // });
+
+
     // // ********** Preparing Ajax calls End
