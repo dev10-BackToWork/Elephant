@@ -258,11 +258,13 @@ $(document).ready(function () {
                  success: function (data) {
                      $.each(data, function(index, datum) {
                     var name = datum.firstName + ' ' + datum.lastName;
+                    var id = datum.userId;
                     var location = datum.location.cityName;
 
                     var row = '<tr>';
-                    row += '<td>' + name + '</td>';
-                    row += '<td>' + location + '</td>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
                     row += '</tr>';
                     arrivalRows.append(row);
                      });
@@ -275,7 +277,73 @@ $(document).ready(function () {
             }
         });  
             
-  
+             },
+             error: function() {
+                $('#noResErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            }
+         });
+
+         $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/flagged/' + option,
+             headers: {
+                'email': adminEmail,
+                'password': adminPassword
+             },
+             success: function (data) {
+                 $.each(data, function (index, user) {
+                    var name = user.firstName + ' ' + user.lastName;
+                    var email = user.email;
+                    var location = user.location.cityName;
+
+                    var row = '<tr>';
+                    row += '<td>' + name + '</td>';
+                    row += '<td>' + email + '</td>';
+                    row += '<td>' + location + '</td>';
+                    row += '</tr>';
+                    authPendRows.append(row);
+                });
+             },
+             error: function() {
+                $('#authErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+             }
+         });
+
+        $.ajax({
+             type: 'GET',
+                 url: 'http://localhost:8080/api/admin/occupants/' + option,
+                 headers: {
+                     'email': adminEmail,
+                     'password': adminPassword
+                 },
+                 success: function (data) {
+                     $.each(data, function(index, datum) {
+                        var name = datum.firstName + ' ' + datum.lastName;
+                        var location = datum.location.cityName;
+                        var id = datum.userId;
+
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                     });
+                 },
+                 error: function() {
+                    $('#arrivalErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred.'));
+                }
+        }); 
+
     });
     
     $('#logoBtn').click(function (event) {
@@ -1244,6 +1312,29 @@ var startTime;
                 }
             });
         }
+    };
+    
+    departEarly = function(userId) {  
+        let isLeavingEarly = confirm("It will be recorded that this user left early today.");
+        
+        if (isLeavingEarly === true) {
+            
+            $.ajax({
+             type: 'POST',
+             url: 'http://localhost:8080/api/admin/departedEarly/' + userId,
+             headers: {
+                'email': adminEmail,
+                'password': adminPassword
+             },
+             success: function(data) {
+                 console.log(data);
+                 $('#submitDashLocOption').click(); 
+             },
+             error: function(http) {
+                 console.log(http);
+             }
+         });
+         }
     };
 
     editSelectedUser = function(id) {
