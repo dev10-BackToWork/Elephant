@@ -499,12 +499,18 @@ $(document).ready(function () {
                     'password': adminPassword
                 },
                 success: function (data) {
+                    $('#employeeLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName)); 
                     $.each(data, function(index, datum) {
                         console.log(data);
+                        if (datum.cityName !== adminLocationName) {
                         $('#employeeLocationOption')
                             .append($("<option></option>")
                                 .attr("value", index + 1)
                                 .text(datum.cityName));
+                        }
                     });
                 },
                 error: function (http) {
@@ -518,84 +524,86 @@ $(document).ready(function () {
             $('#employeeLocationOption')
                             .append($("<option></option>")
                                 .attr("value", adminLocation)
-                                .text(adminLocationName));
+                                .text(adminLocationName));  
+        }
+        
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/admin/users/" + locationId,
+            headers: {
+                'email': adminEmail,
+                'password': adminPassword
+            },
+            success: function (data, status) {
+                $.each(data, function (index, user) {
+                    var name = user.firstName + ' ' + user.lastName;
+                    var email = user.email;
+                    var location = user.location.cityName;
+                    var id = user.userId;
+                    var active = user.isActive;
 
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8080/api/admin/users/" + locationId,
-                headers: {
-                    'email': adminEmail,
-                    'password': adminPassword
-                },
-                success: function (data, status) {
-                    $.each(data, function (index, user) {
-                        var name = user.firstName + ' ' + user.lastName;
-                        var email = user.email;
-                        var location = user.location.cityName;
-                        var id = user.userId;
-                        var active = user.isActive;
-                        
-                        if (active === true) {
+                    if (active === true) {
 
-                            var row = '<tr>';
-                            row += '<td>' + name + '</td>';
-                            row += '<td>' + email + '</td>';
-                            row += '<td>' + location + '</td>';
-                            row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
-                            row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + email + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td><button onclick="editSelectedUser(' + id + ')" class="btn btn-info">Edit</button></td>';
+                        row += '<td><button onclick="deleteUser(' + id + ')" class="btn btn-danger">Deactivate</button></td>';
 
-                            row += '</tr>';
-                            contentRows.append(row);
-                        }
-                    });
+                        row += '</tr>';
+                        contentRows.append(row);
+                    }
+                });
 
-                },
-                error: function() {
-                    $('#errorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
+            },
+            error: function() {
+                $('#errorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            }
 
-            });
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8080/api/admin/users/" + locationId,
-                headers: {
-                    'email': adminEmail,
-                    'password': adminPassword
-                },
-                success: function (data, status) {
-                    $.each(data, function (index, user) {
-                        var inactiveName = user.firstName + ' ' + user.lastName;
-                        var inactiveEmail = user.email;
-                        var inactiveLocation = user.location.cityName;
-                        var inactiveId = user.userId;
-                        var inactiveActive = user.isActive;
-                        
-                        if (inactiveActive === false) {
+        });
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/api/admin/users/" + locationId,
+            headers: {
+                'email': adminEmail,
+                'password': adminPassword
+            },
+            success: function (data, status) {
+                $.each(data, function (index, user) {
+                    var inactiveName = user.firstName + ' ' + user.lastName;
+                    var inactiveEmail = user.email;
+                    var inactiveLocation = user.location.cityName;
+                    var inactiveId = user.userId;
+                    var inactiveActive = user.isActive;
 
-                            var row = '<tr>';
-                            row += '<td>' + inactiveName + '</td>';
-                            row += '<td>' + inactiveEmail + '</td>';
-                            row += '<td>' + inactiveLocation + '</td>';
-                            row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
+                    if (inactiveActive === false) {
 
-                            row += '</tr>';
-                            inactiveRows.append(row);
-                        }
-                    });
-                },
-                error: function() {
-                    $('#inactiveErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
+                        var row = '<tr>';
+                        row += '<td>' + inactiveName + '</td>';
+                        row += '<td>' + inactiveEmail + '</td>';
+                        row += '<td>' + inactiveLocation + '</td>';
+                        row += '<td><button onclick="activateUser(' + inactiveId + ')" class="btn btn-danger">Activate</button></td>';
 
-            });
-             
-        }  
+                        row += '</tr>';
+                        inactiveRows.append(row);
+                    }
+                });
+            },
+            error: function() {
+                $('#inactiveErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            }
+
+        });
+
+
+        //WILL NEED TO ADD AN AJAX CALL FOR GUESTS HERE
 
     });
     
@@ -717,6 +725,8 @@ $(document).ready(function () {
                 }
 
             });
+            
+            //WILL NEED TO ADD AN AJAX CALL FOR GUESTS HERE
         
   });
   
