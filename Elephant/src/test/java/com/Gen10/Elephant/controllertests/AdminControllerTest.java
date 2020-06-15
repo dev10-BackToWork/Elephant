@@ -70,18 +70,18 @@ public class AdminControllerTest {
         assertEquals(createdUser, loggedIn);
     }
 
-    @Test
-    public void testGetOccupants() {
-        User user = adminCon.getUserById(2, adminEmail, adminPW).getBody();
-        Attendance att = new Attendance();
-        att.setAttendanceDate(LocalDate.now());
-        att.setIsAttending(true);
-        att.setIsAuthorized(true);
-        att.setUser(user);
-        userCon.markAttendance(att, adminEmail, adminPW);
-        List<User> occupants = adminCon.getOccupants(1, adminEmail, adminPW).getBody();
-        assertTrue(occupants.size() > 0);
-    }
+//    @Test
+//    public void testGetOccupants() {
+//        User user = adminCon.getUserById(2, adminEmail, adminPW).getBody();
+//        Attendance att = new Attendance();
+//        att.setAttendanceDate(LocalDate.now());
+//        att.setIsAttending(true);
+//        att.setIsAuthorized(true);
+//        att.setUser(user);
+//        userCon.markAttendance(att, adminEmail, adminPW);
+//        List<User> occupants = adminCon.getOccupants(1, adminEmail, adminPW).getBody();
+//        assertTrue(occupants.size() > 0);
+//    }
 
     //Relies on test user from testAddGetUser()
     @Test
