@@ -33,8 +33,12 @@ public class Attendance {
 	@Column
 	private boolean isAuthorized;
         
-        @Column
-        private boolean departedEarly;
+	@Column
+	private boolean departedEarly;
+
+	@ManyToOne
+	@JoinColumn(name = "locationid")
+	private Location location;
 
 	public int getAttendanceId() {
 		return this.attendanceId;
@@ -86,5 +90,14 @@ public class Attendance {
 
         public void setDepartedEarly(boolean departedEarly) {
             this.departedEarly = departedEarly;
-        }
+		}
+		
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	
 }

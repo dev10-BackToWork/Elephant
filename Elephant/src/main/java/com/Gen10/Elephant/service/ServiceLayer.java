@@ -108,8 +108,8 @@ public class ServiceLayer {
     
     public List<Attendance> generateAttendanceReport(int id, String date) {
         LocalDate specifiedDate = LocalDate.parse(date);
-        
-        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(id, specifiedDate);
+        int locIdOnDate = usersRepo.findUserLocationIdOnDate(id, date);
+        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(locIdOnDate, specifiedDate);
         
         return attendanceList.stream()
                 .sorted((o1, o2) -> o1.getUser().getLastName().compareTo(o2.getUser().getLastName()))
