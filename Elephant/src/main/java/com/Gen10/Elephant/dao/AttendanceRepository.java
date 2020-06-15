@@ -50,4 +50,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
     Attendance findAttendanceDepartedEarly(int id);
 
+    @Query(value = "SELECT a.*\n"
+            + "FROM Attendance a\n"
+            + "INNER JOIN User u ON a.userId = u.userId\n"
+            + "WHERE a.attendanceDate = CURDATE()\n"
+            + "AND a.isAuthorized = 1\n"
+            + "AND a.locationId = ?1\n"
+            + "ORDER BY u.lastName", nativeQuery = true)
+    List<Attendance> findCurrentAttendancesInOffice(int id);
 }

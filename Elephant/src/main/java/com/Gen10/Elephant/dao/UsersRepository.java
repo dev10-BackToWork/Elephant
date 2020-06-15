@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.User;
 
