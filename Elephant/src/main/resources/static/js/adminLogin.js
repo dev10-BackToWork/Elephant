@@ -8,7 +8,6 @@ $(document).ready(function () {
     var adminPassword;
     var user;
     var adminRoleId;
-    var JSONattendanceDuringRange;
 
     $("#loginNav").show();
     $("#adminLoginDiv").show();
@@ -2431,7 +2430,6 @@ var btnIdString;
             'password': 'password'
         },
         success: function (response) {
-            JSONattendanceDuringRange = response;
             console.log(response);
             console.log('The request for the attendance summary report over date range was successful.' + startDate + ' -' + endDate);
             var reportSummaryRow = $("#date");
@@ -2443,8 +2441,6 @@ var btnIdString;
             var location;
 //            var dateRow;
 //            var data;
-            
-            $('#reportSummaryTableDiv').append('<button id="rangeExport" type="button">Junk</button>');
 
             $.each(response, function (date, data) {
                 var reportTitle = date;
@@ -2568,27 +2564,7 @@ function prepCSVRow(arr, columnCount, initial) {
 
 
 
-// Range export to CSV
-$(document).on("click", '#rangeExport', function() {
 
-    $.each(JSONattendanceDuringRange, function(date, data) {
-        var specificDate = date;
-        console.log(date);
-        
-        $.each(date, function(index, field) {
-            console.log(specificDate[index]);
-        })
-    });
-
-    // $.each(JSONattendanceDuringRange, function(index, datum) {
-    //     console.log(index);
-    //     console.log(datum);
-    // });
-
-    var titles = ['First Name', 'Last Name', 'Email', 'Location', 'Date'];
-    var data = [];
-
-});
 
     //     var locationId = 1;
 
