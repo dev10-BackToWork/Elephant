@@ -93,13 +93,13 @@ public class ServiceLayer {
         return currentAttendance;
     }
     
-    public List<LocalDate> retrieveDatesPresent(int id) {
+    public List<Attendance> retrieveDatesPresent(int id) {
         List<Attendance> allAttendance = attendanceRepo.findAttendanceWithinLast30Days();
-        List<LocalDate> usersAttendanceDates = new ArrayList<>();
+        List<Attendance> usersAttendanceDates = new ArrayList<>();
         
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
-                usersAttendanceDates.add(attendance.getAttendanceDate());
+                usersAttendanceDates.add(attendance);
             }
         }
         
