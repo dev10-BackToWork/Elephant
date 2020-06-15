@@ -1,14 +1,18 @@
 package com.Gen10.Elephant.Controller;
 
-import com.Gen10.Elephant.dto.Attendance;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.Gen10.Elephant.dto.Attendance;
+import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.User;
 import com.Gen10.Elephant.service.ServiceLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +38,16 @@ public class UserController {
             return new ResponseEntity<User>(dbUser, HttpStatus.OK);
         }
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
+    }
+
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/locations")
+    public ResponseEntity<List<Location>> getLocations(@RequestHeader("email") String email, @RequestHeader("password") String password){
+        User dbAdmin = service.checkUser(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<Location>>(service.getAllLocations(), HttpStatus.OK);
+        }
+        return new ResponseEntity<List<Location>>(new ArrayList<Location>(), HttpStatus.UNAUTHORIZED);
     }
 
     //edts a user, restricted to password only
