@@ -2384,8 +2384,6 @@ var btnIdString;
                 var isAttendingRows = $("#isAttendingRows");
                 
                 $.each(response, function (i, response) {
-                    console.log(response);
-                    console.log(response.firstName);
                      
                     var userFirstName = response.firstName;
                     var userLastName = response.lastName;
@@ -2433,6 +2431,7 @@ var btnIdString;
             'password': 'password'
         },
         success: function (response) {
+            console.log(response);
             console.log('The request for the attendance summary report over date range was successful.' + startDate + ' -' + endDate);
             var reportSummaryRow = $("#date");
             var reportSummaryTableHeader = $("#reportSummaryTableHeader");
@@ -2443,7 +2442,6 @@ var btnIdString;
             var location;
 //            var dateRow;
 //            var data;
-            
 
             $.each(response, function (date, data) {
                 var reportTitle = date;
@@ -2470,10 +2468,8 @@ var btnIdString;
                 var row;
                 function rowsPerDay() {
                     $.each(data, function (i, user) {
-                        console.log(i);
 
                         var userObj = user;
-                        console.log(userObj);
                         firstName = userObj.firstName;
                         lastName = userObj.lastName;
                         email = userObj.email;
@@ -2492,7 +2488,7 @@ var btnIdString;
                     });
 
                 };
-
+                
             });
         },
              error: function (http) {
@@ -2565,6 +2561,8 @@ function prepCSVRow(arr, columnCount, initial) {
   });
   return initial + row;
 }
+
+
 
 
 
