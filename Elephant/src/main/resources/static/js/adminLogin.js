@@ -2122,7 +2122,7 @@ var year; // just year
 var dateStringDisplay; //formatted to display on button
 var fullDate2;
 var dateStringId; //for date button id 
-
+var selectedUserId;
 var btnIdString;
 
 
@@ -2133,6 +2133,7 @@ var btnIdString;
             $("#attendanceTableHeader").hide();
             
             console.log(userId);
+            selectedUserId = userId;
             updateInputName(userId);
 
             $.ajax({
@@ -2224,7 +2225,7 @@ var btnIdString;
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
-        
+
         locationId = $('#reportLocationOption').val();
         console.log(locationId);
         $("#myList").hide();
@@ -2281,7 +2282,7 @@ var btnIdString;
         
         $.ajax({
             type: 'GET',
-             url: 'http://localhost:8080/api/admin/attendanceReport/' + locationId + '/' + specifiedDate,
+             url: 'http://localhost:8080/api/admin/attendanceReport/' + selectedUserId + '/' + specifiedDate,
              
              headers: {
                  'email': 'user@user.com',
