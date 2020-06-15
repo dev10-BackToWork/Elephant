@@ -13,7 +13,10 @@ $(document).ready(function () {
 var email;
 var password;
 var userId;
-var user;  
+var user;
+var locationName;
+var locationId;
+var cityName;
     
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -63,10 +66,12 @@ var user;
                 
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
+                     getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                 } else if (response.role.roleId === 1) {
                      $("#screener-div").show();
+                     getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                     
@@ -161,6 +166,7 @@ var user;
                                 console.log(response);
                                 $("#passwordSuccess").show('success');
                                 $("#resetPassword").hide();
+                                getAttendanceLocation();
                                 $("#screener-div").show();
                             },
                             error: function (err) {
@@ -203,6 +209,40 @@ var user;
         });
     };
 
+
+    function getAttendanceLocation(user){
+        console.log(user);
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/users/locations',
+                headers: {
+                    'email': email,
+                    'password': password
+                },
+                success: function (data) {
+                   console.log(data);
+//                    $('#userLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", location)
+//                                .text(locationName));
+//                    $.each(data, function(index, datum) {
+//                        //console.log(data);
+//                        if (datum.cityName !== locationName) {
+//                           $('#userLocationOption')
+//                            .append($("<option></option>")
+//                                .attr("value", index + 1)
+//                                .text(datum.cityName));
+//                        }
+                    //});
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            })
+        };
+            
+            
 //================ SURVEY ==========================//
 
 //if user is NOT coming in to the office: 
@@ -217,7 +257,7 @@ $("#q1No").on("click", function (e) {
     console.log(user);
     //email = email;
     //password = password;
-    
+
     $.ajax({
         type: "POST",
         url: "http://localhost:8080/api/users/coming",

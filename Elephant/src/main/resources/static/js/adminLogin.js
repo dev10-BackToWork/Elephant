@@ -2290,6 +2290,7 @@ var btnIdString;
              },
 
             success: function (response) {
+                console.log(response);
                 $("#isAttendingTable").show();
 
                 if (response.length <= 0) {
