@@ -120,7 +120,7 @@ $(document).ready(function () {
         
     });
     
-    $('#dashboardBtn').click(function (event) {
+$('#dashboardBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -292,13 +292,20 @@ $(document).ready(function () {
                  },
                  success: function (data) {
                      $.each(data, function(index, datum) {
-                    var name = datum.firstName + ' ' + datum.lastName;
-                    var id = datum.userId;
+                    var name = datum.user.firstName + ' ' + datum.user.lastName;
+                    var id = datum.user.userId;
                     var location = datum.location.cityName;
+                    var status = datum.departedEarly;
+                    if (status == true) {
+                        status = "Left Early";
+                    } if (status == false) {
+                        status = "In Office";
+                    }
                     
                     var row = '<tr>';
                         row += '<td>' + name + '</td>';
                         row += '<td>' + location + '</td>';
+                        row += '<td>' + status + '</td>';
                         row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
                     row += '</tr>';
                     arrivalRows.append(row);
@@ -419,7 +426,7 @@ $(document).ready(function () {
              }
          });
 
-        $.ajax({
+       $.ajax({
              type: 'GET',
                  url: 'http://localhost:8080/api/admin/occupants/' + option,
                  headers: {
@@ -428,24 +435,31 @@ $(document).ready(function () {
                  },
                  success: function (data) {
                      $.each(data, function(index, datum) {
-                        var name = datum.firstName + ' ' + datum.lastName;
-                        var location = datum.location.cityName;
-                        var id = datum.userId;
-
-                        var row = '<tr>';
-                            row += '<td>' + name + '</td>';
-                            row += '<td>' + location + '</td>';
-                            row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
-                        row += '</tr>';
-                        arrivalRows.append(row);
+                    var name = datum.user.firstName + ' ' + datum.user.lastName;
+                    var id = datum.user.userId;
+                    var location = datum.location.cityName;
+                    var status = datum.departedEarly;
+                    if (status == true) {
+                        status = "Left Early";
+                    } if (status == false) {
+                        status = "In Office";
+                    }
+                    
+                    var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + status + '</td>';
+                        row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
+                    row += '</tr>';
+                    arrivalRows.append(row);
                      });
                  },
                  error: function() {
-                    $('#arrivalErrorMessages')
-                        .append($('<li>')
-                        .attr({class: 'list-group-item list-group-item-danger'})
-                        .text('An error has occurred.'));
-                }
+                $('#arrivalErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            }
         }); 
         
     });
@@ -2385,8 +2399,6 @@ var btnIdString;
                 var isAttendingRows = $("#isAttendingRows");
                 
                 $.each(response, function (i, response) {
-                    console.log(response);
-                    console.log(response.firstName);
                      
                     var userFirstName = response.firstName;
                     var userLastName = response.lastName;
@@ -2434,6 +2446,7 @@ var btnIdString;
             'password': 'password'
         },
         success: function (response) {
+            console.log(response);
             console.log('The request for the attendance summary report over date range was successful.' + startDate + ' -' + endDate);
             var reportSummaryRow = $("#date");
             var reportSummaryTableHeader = $("#reportSummaryTableHeader");
@@ -2444,7 +2457,6 @@ var btnIdString;
             var location;
 //            var dateRow;
 //            var data;
-            
 
             $.each(response, function (date, data) {
                 var reportTitle = date;
@@ -2471,10 +2483,8 @@ var btnIdString;
                 var row;
                 function rowsPerDay() {
                     $.each(data, function (i, user) {
-                        console.log(i);
 
                         var userObj = user;
-                        console.log(userObj);
                         firstName = userObj.firstName;
                         lastName = userObj.lastName;
                         email = userObj.email;
@@ -2493,7 +2503,7 @@ var btnIdString;
                     });
 
                 };
-
+                
             });
         },
              error: function (http) {
@@ -2566,6 +2576,8 @@ function prepCSVRow(arr, columnCount, initial) {
   });
   return initial + row;
 }
+
+
 
 
 

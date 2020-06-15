@@ -72,12 +72,12 @@ public class AdminController {
     //  Round 2
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @GetMapping("/occupants/{id}")
-    public ResponseEntity<List<User>> getOccupants(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+    public ResponseEntity<List<Attendance>> getOccupants(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
         if(dbAdmin != null){
-            return new ResponseEntity<List<User>>(service.currentUsersInOffice(id), HttpStatus.OK);
+            return new ResponseEntity<List<Attendance>>(service.currentAttendancesInOffice(id), HttpStatus.OK);
         }
-        return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<List<Attendance>>(new ArrayList<Attendance>(), HttpStatus.UNAUTHORIZED);
     }
     
     // Round 2 edited

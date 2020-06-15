@@ -241,6 +241,10 @@ public class ServiceLayer {
         return usersRepo.findCurrentUsersInOffice(id);
     }
 
+    public List<Attendance> currentAttendancesInOffice(int id) {
+        return attendanceRepo.findCurrentAttendancesInOffice(id);
+    }
+
     // Edited Nate Wood 05/13/2020
     // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
