@@ -93,13 +93,13 @@ public class ServiceLayer {
         return currentAttendance;
     }
     
-    public List<LocalDate> retrieveDatesPresent(int id) {
+    public List<Attendance> retrieveDatesPresent(int id) {
         List<Attendance> allAttendance = attendanceRepo.findAttendanceWithinLast30Days();
-        List<LocalDate> usersAttendanceDates = new ArrayList<>();
+        List<Attendance> usersAttendanceDates = new ArrayList<>();
         
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
-                usersAttendanceDates.add(attendance.getAttendanceDate());
+                usersAttendanceDates.add(attendance);
             }
         }
         
@@ -108,8 +108,8 @@ public class ServiceLayer {
     
     public List<Attendance> generateAttendanceReport(int id, String date) {
         LocalDate specifiedDate = LocalDate.parse(date);
-        
-        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(id, specifiedDate);
+        int locIdOnDate = usersRepo.findUserLocationIdOnDate(id, date);
+        List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(locIdOnDate, specifiedDate);
         
         return attendanceList.stream()
                 .sorted((o1, o2) -> o1.getUser().getLastName().compareTo(o2.getUser().getLastName()))
@@ -158,9 +158,9 @@ public class ServiceLayer {
         return uniqueUsersSorted;
     }
     
-    public String markDepartedEarly(int id) {
-        attendanceRepo.markUserDepartedEarly(id);
-        return "The request to mark user " + id + " as departed early for the current date was processed.";
+    public Attendance markDepartedEarly(int id) {
+        attendanceRepo.markAttendanceDepartedEarly(id);
+        return attendanceRepo.findAttendanceDepartedEarly(id);
     }
 
     // **********
@@ -368,6 +368,7 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
+        // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
         
         if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {

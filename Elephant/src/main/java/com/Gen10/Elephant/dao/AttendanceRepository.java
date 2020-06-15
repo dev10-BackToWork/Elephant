@@ -24,19 +24,15 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 
     @Query(value = "SELECT a.*\n"
             + "FROM Attendance a\n"
-            + "INNER JOIN User u ON a.userId = u.userId\n"
-            + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
             + "WHERE a.attendanceDate = ?2\n"
-            + "AND lo.locationId = ?1\n"
+            + "AND a.locationId = ?1\n"
             + "AND a.isAuthorized = 1;", nativeQuery = true)
     List<Attendance> findAttendanceAuthorizedOnDate(int locationId, LocalDate date);
 
     @Query(value = "SELECT a.*\n"
             + "FROM Attendance a\n"
-            + "INNER JOIN User u ON a.userId = u.userId\n"
-            + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
             + "WHERE a.attendanceDate BETWEEN ?2 and ?3\n"
-            + "AND lo.locationId = ?1\n"
+            + "AND a.locationId = ?1\n"
             + "AND a.isAuthorized = 1;", nativeQuery = true)
     List<Attendance> findAttendanceAuthorizedWithinRange(int locationId, LocalDate startDate, LocalDate endDate);
 
@@ -46,6 +42,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "	a.departedEarly = 1\n"
             + "WHERE a.userId = ?1\n"
             + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
-    void markUserDepartedEarly(int id);
+    void markAttendanceDepartedEarly(int id);
+
+    @Query(value = "SELECT *\n"
+            + "FROM attendance a\n"
+            + "WHERE a.userId = ?1\n"
+            + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
+    Attendance findAttendanceDepartedEarly(int id);
 
 }

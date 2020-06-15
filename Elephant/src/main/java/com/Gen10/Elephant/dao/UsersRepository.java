@@ -25,10 +25,9 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT u.*\n"
             + "FROM Attendance a\n"
             + "INNER JOIN User u ON a.userId = u.userId\n"
-            + "INNER JOIN Location lo ON u.locationId = lo.locationId\n"
             + "WHERE a.attendanceDate = CURDATE()\n"
             + "AND a.isAuthorized = 1\n"
-            + "AND u.locationId = ?1\n"
+            + "AND a.locationId = ?1\n"
             + "ORDER BY u.lastName", nativeQuery = true)
     List<User> findCurrentUsersInOffice(int id);
 
@@ -55,4 +54,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             + "AND u.locationId = ?1\n"
             + "ORDER BY u.lastName;", nativeQuery = true)
     List<User> findFlaggedUsersByLocation(int id);
+    
+    @Query(value = "SELECT a.locationId FROM User u INNER JOIN Attendance a ON u.userId = a.userId WHERE u.userId = ?1 AND a.attendanceDate = ?2", nativeQuery = true)
+    int findUserLocationIdOnDate(int id, String date);
 }
