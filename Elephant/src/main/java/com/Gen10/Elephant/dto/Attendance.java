@@ -40,6 +40,12 @@ public class Attendance {
 	@JoinColumn(name = "locationid")
 	private Location location;
 
+	@Column
+	private String visitingHost;
+
+	@Column
+	private String miscInfo;
+
 	public int getAttendanceId() {
 		return this.attendanceId;
 	}
@@ -98,6 +104,14 @@ public class Attendance {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public String getVisitingHost() {
+		return this.visitingHost;
+	}
+
+	public void setVisitingHost(String visitingHost) {
+		this.visitingHost = visitingHost;
 	}
 	
 }
