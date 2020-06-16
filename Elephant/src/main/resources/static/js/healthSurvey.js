@@ -14,9 +14,11 @@ var email;
 var password;
 var userId;
 var user;
+var userLocation;
 var locationName;
 var locationId;
 var cityName;
+var attendanceLocation; // for selected location choice
     
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -66,12 +68,12 @@ var cityName;
                 
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
-                     getAttendanceLocation();
+                     //getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                 } else if (response.role.roleId === 1) {
                      $("#screener-div").show();
-                     getAttendanceLocation();
+                    // getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                     
@@ -127,10 +129,7 @@ var cityName;
                         //$("#messages").text("You must select an item");
                         //resetMessagesStatus();
                         //$("#messages").addClass("warning");
-    
-    
-                console.log(password);
-
+                        //console.log(password);
 
                 $.ajax({
                     type: "post",
@@ -166,7 +165,7 @@ var cityName;
                                 console.log(response);
                                 $("#passwordSuccess").show('success');
                                 $("#resetPassword").hide();
-                                getAttendanceLocation();
+                                //getAttendanceLocation();
                                 $("#screener-div").show();
                             },
                             error: function (err) {
@@ -210,8 +209,12 @@ var cityName;
     };
 
 
-    function getAttendanceLocation(user){
-        console.log(user);
+    function getAttendanceLocation(){
+        locationId = user.location.locationId;
+        userLocation = user.location.cityName;
+        console.log(locationId);
+        console.log(userLocation);
+        
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:8080/api/users/locations',
@@ -221,19 +224,22 @@ var cityName;
                 },
                 success: function (data) {
                    console.log(data);
-//                    $('#userLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", location)
-//                                .text(locationName));
-//                    $.each(data, function(index, datum) {
-//                        //console.log(data);
-//                        if (datum.cityName !== locationName) {
-//                           $('#userLocationOption')
-//                            .append($("<option></option>")
-//                                .attr("value", index + 1)
-//                                .text(datum.cityName));
-//                        }
-                    //});
+                   
+                    $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", locationId)
+                                .text(userLocation));
+                    $.each(data, function(index, datum) {
+                        //console.log(data);
+                        locationName = data[index].cityName;
+                        //console.log(locationName);
+                        if (datum.cityName !== userLocation) {
+                           $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                        }
+                    });
                 },
                 error: function (http) {
                     console.log(http);
@@ -248,15 +254,16 @@ var cityName;
 //if user is NOT coming in to the office: 
 $("#q1No").on("click", function (e) {
     e.preventDefault();
+    //attendanceLocation = $('#userLocationOption').val();
+    //console.log(attendanceLocation);
     $("#screener-div").hide();
     $("#survey-not-authorized").hide();
     $("#survey-authorized").hide();
 //    $("#arrival-container").hide();
 //    $("#departure-container").hide();
-   
+    
+    //console.log(userLocation);
     console.log(user);
-    //email = email;
-    //password = password;
 
     $.ajax({
         type: "POST",
@@ -265,6 +272,7 @@ $("#q1No").on("click", function (e) {
         data: JSON.stringify({
             user: user,
             "isAttending": false
+            //"location" : attendanceLocation
             //"isAuthorized": true
             }),
 //        contentType: "application/json;charset=UTF-8",
@@ -289,6 +297,8 @@ $("#q1No").on("click", function (e) {
 
 //if user is coming in to the office, show health survey questions:
 $("#q1Yes").on("click", function () {
+    getAttendanceLocation();
+
     $("#screener-div").hide();
     $("#survey-div").show();
     $("#survey-not-authorized").hide();
@@ -349,6 +359,9 @@ function checkAuth() {
 
 
 $("#surveySubmit").on("click", function (e) {
+    attendanceLocation = $('#userLocationOption').val();
+    console.log(attendanceLocation);
+    
     e.preventDefault();
     $("#survey-container").hide();
     checkAuth();
@@ -363,6 +376,8 @@ $("#surveySubmit").on("click", function (e) {
 
 function notAuthorized() {
         console.log(user);
+        attendanceLocation = $('#userLocationOption').val();
+        console.log(attendanceLocation);
         //email = user.email;
         //password = user.defaultPW;
         //password = user.passwords;
@@ -374,7 +389,8 @@ function notAuthorized() {
             data: JSON.stringify({
                 "isAttending": true,
                 "isAuthorized": false,
-                user: user
+                user: user,
+                "location" : attendanceLocation
             }),
 
         headers: {
@@ -396,6 +412,8 @@ function notAuthorized() {
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
         console.log(user);
+        attendanceLocation = $('#userLocationOption').val();
+        console.log(attendanceLocation);
         //email = user.email;
         //password = user.passwords;
     
@@ -406,6 +424,7 @@ function notAuthorized() {
             data: JSON.stringify({
                      "isAttending": true,
                      "isAuthorized": true,
+                     "location" : attendanceLocation,
                      user: user
                 }),
         headers: {
