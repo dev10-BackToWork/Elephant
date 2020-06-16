@@ -43,7 +43,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             + "ORDER BY u.lastName", nativeQuery = true)
     List<User> findCurrentUsersInOffice(int id);
 
-    @Query(value = "SELECT u.* FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId AND a.attendanceDate = CURDATE() WHERE u.isActive = 1 and u.locationid = ?1 AND u.roldId <> 4 AND a.isAttending IS NULL ORDER BY u.lastName", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId AND a.attendanceDate = CURDATE() WHERE u.isActive = 1 and u.locationid = ?1 AND u.roleId <> 4 AND a.isAttending IS NULL ORDER BY u.lastName", nativeQuery = true)
     List<User> findAllInactiveByLocation(Location location);
 
     @Query(value = "SELECT u.*\n"
