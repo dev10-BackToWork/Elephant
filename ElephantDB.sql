@@ -428,10 +428,11 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
     
-INSERT INTO `User` (firstName, lastName, email, locationId, roleId) VALUES 
+INSERT INTO `User` (firstName, lastName, email, locationId, roleId, phoneNumber) VALUES 
 	("Guest", "User", "guest@guest.com", 5, 4, "(555)-555-5555)");
 
 -- DELIMITER $$
+
 -- CREATE PROCEDURE removeOldData()
 -- BEGIN
 	-- SET SQL_SAFE_UPDATES = 0;
