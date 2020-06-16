@@ -382,23 +382,7 @@
                                         <th><button class="btn btn-primary" id="createGuestBtn">Create New Guest</button></th>
                                     </tr>
                                 </thead>
-<!--                                <tbody id="guestContentRows"></tbody>-->
-                                <tbody>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td>john@john.com</td>
-                                        <td>555-555-5555</td>
-                                        <td>MN, Saint Paul</td>
-                                        <td><button class="btn btn-info" id="guestAttend">Coming to Office</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jane Doe</td>
-                                        <td>jane@jane.com</td>
-                                        <td>555-555-5555</td>
-                                        <td>MN, Saint Paul</td>
-                                        <td><button class="btn btn-info">Coming to Office</button></td>
-                                    </tr>
-                                 </tbody>
+                                <tbody id="guestRows"></tbody>
                             </table>
                         </div>
                     </div>
@@ -597,6 +581,44 @@
             <div class="row">
                 <div class="col-md-12 mt-3 text-center">
                     <a class="btn btn-warning" id="reset-password-button">Reset User Password</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Guest Attending Div -->   
+        <div class="container" id="guestAttendingDiv">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="col-md-12 text-center">
+                        <ul class="list-group" id="attendErrorMessages"></ul>
+                    </div>
+                    <h3 class="mt-5">Guest Attendance Form</h3>
+                    <input type="hidden" id="guestId" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="guestname">Name</label>
+                            <input type="text" name="guestname" id="guest-name" class="form-control" placeholder="Guest Name" style="text-align:center;" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="guestemail">Email</label>
+                            <input type="text" name="guestemail" id="guest-email" class="form-control" placeholder="Email" style="text-align:center;" readonly/>
+                        </div>
+                    </div>
+                    <div class="row" style='margin-top: 15px'>
+                        <div class="col-md-6 col-md-offset-3">
+                            <label for="guestvisiting">Who is the guest visiting today?</label>
+                            <input type="text" name="guestvisiting" id="guest-visiting" class="form-control" style="text-align:center;"/>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <label for="guestmisc">Miscellaneous Information (optional):</label>
+                            <input type="text" name="guestmisc" id="guest-misc" class="form-control" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-3">
+                            <a class="btn btn-info" id="submitGuestAttendBtn" style="color: white">Submit</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
