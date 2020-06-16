@@ -58,6 +58,17 @@ public class AdminController {
         return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);  
     }
 
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/guests/{id}")
+    public ResponseEntity<List<User>> getGuests(@PathVariable int id, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        System.out.println("Got guests for a location");
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            return new ResponseEntity<List<User>>(service.getGuests(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<List<User>>(new ArrayList<User>(), HttpStatus.UNAUTHORIZED);  
+    }
+
     //  Round 2
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @GetMapping("/roles")
@@ -140,6 +151,21 @@ public class AdminController {
     }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/newGuest")
+    public ResponseEntity<User> createGuest(@RequestBody User guest, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            try{
+                User newGuest = service.createGuest(guest);
+                return new ResponseEntity<User>(newGuest, HttpStatus.OK);
+            } catch (DataFormatException e) {
+                return new ResponseEntity(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+        }
+        return new ResponseEntity<User>(guest, HttpStatus.UNAUTHORIZED);
+    }
+
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody User user, @RequestHeader("email") String email, @RequestHeader("password") String password) {
         User dbAdmin = service.checkAdmin(email, password);
@@ -148,6 +174,17 @@ public class AdminController {
             return new ResponseEntity<User>(editUser, HttpStatus.OK);
         }
         return new ResponseEntity<User>(user, HttpStatus.UNAUTHORIZED);
+    }
+
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/signUpGuest")
+    public ResponseEntity<Attendance> signUpGuest(@RequestBody Attendance attendance, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        User dbAdmin = service.checkAdmin(email, password);
+        if(dbAdmin != null){
+            Attendance savedAttendance = service.markGuestAttendance(attendance);
+            return new ResponseEntity<Attendance>(savedAttendance, HttpStatus.OK);
+        }
+        return new ResponseEntity<Attendance>(attendance, HttpStatus.UNAUTHORIZED);
     }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")

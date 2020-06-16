@@ -232,6 +232,10 @@ public class ServiceLayer {
         return usersRepo.findAllUsersOfSpecifiedLocation(locationId);
     }
 
+	public List<User> getGuests(int id) {
+		return usersRepo.findAllGuestsOfSpecifiedLocation(id);
+	}
+
     public List<User> getAllUsersByLocation(Location location) {
         return usersRepo.findAllByLocation(location);
     }
@@ -250,7 +254,7 @@ public class ServiceLayer {
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
         // List<User> usersByLocation = getAllUsersByLocation(location);
-        List<User> usersByLocationNotAnswered = usersRepo.findAllActiveByLocation(location);
+        List<User> usersByLocationNotAnswered = usersRepo.findAllInactiveByLocation(location);
 
         // for (User user : usersByLocation) {
         //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
@@ -259,10 +263,6 @@ public class ServiceLayer {
         // }
 
         return usersByLocationNotAnswered;
-    }
-
-    private List<User> getAllActiveUsersByLocation(Location location) {
-        return null;
     }
 
     public List<User> getFlaggedUsers(int id) {
@@ -318,8 +318,16 @@ public class ServiceLayer {
             );
         }
 
-        return usersRepo.save(dbUser);
+        return dbUser;
     }
+
+    
+	public User createGuest(User guest) throws DataFormatException{
+		if (usersRepo.findByName(guest.getFirstName(), guest.getLastName()) != null) {
+            throw new DataFormatException("A guest already exists for that name");
+        }
+        return usersRepo.save(guest);
+	}
 
     public User editUser(User user) {
         // Due to auto-incrementing of users in database, the specific user object needs
@@ -400,6 +408,32 @@ public class ServiceLayer {
         if (todaysAttendance != null) {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
+            return attendanceRepo.save(todaysAttendance);
+        } else {
+            return attendanceRepo.save(attendance);
+        }
+    }
+
+    public Attendance markGuestAttendance(Attendance attendance) {
+        attendance.setAttendanceDate(LocalDate.now());
+        // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
+        Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
+
+        Location location = attendance.getUser().getLocation();
+        List<User> usersInOffice = currentUsersInOffice(location.getLocationId());
+        if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
+            Mailer.send(
+                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
+                "Max Capacity Warning",
+                "<p> More people than currently recommended by your max capacity of <strong>" + location.getMaxOccupancy() + "</strong> are currently signed up to come in today." +
+                "<br/> Please take any necessary actions to ensure the safety of the employees at your location." + 
+                "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>" +
+                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
+            );
+        }
+
+        if (todaysAttendance != null) {
+            todaysAttendance.setIsAttending(attendance.getIsAttending());
             return attendanceRepo.save(todaysAttendance);
         } else {
             return attendanceRepo.save(attendance);

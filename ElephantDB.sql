@@ -37,8 +37,10 @@ CREATE TABLE Attendance (
     isAttending boolean default false,
     attendanceDate date not null,
     userId int,
-    isAuthorized boolean default false,
     locationId int,
+    isAuthorized boolean default false,
+    visitingHost varchar(125),
+    miscInfo varchar(255),
     departedEarly boolean default false,
     CONSTRAINT fk_attendance_user
 		FOREIGN KEY (userId)
@@ -425,6 +427,9 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Brianna", "Schladweiler", "brianna@brianna.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Hypo", "Thetical", "hypo@hypo.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 2),
     ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
+    
+INSERT INTO `User` (firstName, lastName, email, locationId, roleId) VALUES 
+	("Guest", "User", "guest@guest.com", 5, 4, "(555)-555-5555)");
 
 -- DELIMITER $$
 -- CREATE PROCEDURE removeOldData()
