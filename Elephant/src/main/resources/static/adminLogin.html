@@ -395,103 +395,204 @@
           <ul class="list-group" id="createAccountErrorMessages"></ul>
           <h1 class="heading">Create Account</h1>
 
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <div class="card">
-            <div class="card-header">
-              New User
-            </div>
-            <div class="card-body">
-              <form>
-                <div class="row my-2">
-                  <div class="col">
-                    <label for="firstName">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      id="firstNameAddUser"
-                      class="form-control"
-                    />
-                  </div>
+            <div class="row">
+            <div class="col-md-12 text-center">
+              <div class="card">
+                <div class="card-header">
+                  New User
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="firstName">First Name</label>
+                        <input
+                          type="text"
+                          name="firstName"
+                          id="firstNameAddUser"
+                          class="form-control"
+                        />
+                      </div>
 
-                  <div class="col">
-                    <label for="lastName">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      id="lastNameAddUser"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-                <div class="row my-2">
-                  <div class="col">
-                    <label for="email">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="emailAddUser"
-                      class="form-control"
-                    />
-                  </div>
+                      <div class="col">
+                        <label for="lastName">Last Name</label>
+                        <input
+                          type="text"
+                          name="lastName"
+                          id="lastNameAddUser"
+                          class="form-control"
+                        />
+                      </div>
+                    </div>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="email">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          id="emailAddUser"
+                          class="form-control"
+                        />
+                      </div>
 
-                  <div class="col">
-                    <label for="password">Temporary Password</label>
-                    <!-- <button class="btn btn-primary btn-sm">
-                      Generate Random Password
-                    </button> -->
-                    <!-- <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      class="form-control"
-                    /> -->
-                    <input
-                      type="text"
-                      name="password"
-                      id="passwordAddUser"
-                      class="form-control"
-                      readonly
-                      value="Password auto-generated. Available in account details page."
-                    />
-                  </div>
-                </div>
-                <div class="row my-2">
-                  <div class="col">
-                    <label for="location">Location</label>
-                    <select name="location" id="locationAddUser" class="form-control" placeholder="--Select Location--">
-                      <option selected>--Select Location--</option>
-                    </select>
-                  </div>
+                      <div class="col">
+                        <label for="password">Temporary Password</label>
+                        <!-- <button class="btn btn-primary btn-sm">
+                          Generate Random Password
+                        </button> -->
+                        <!-- <input
+                          type="password"
+                          name="password"
+                          id="password"
+                          class="form-control"
+                        /> -->
+                        <input
+                          type="text"
+                          name="password"
+                          id="passwordAddUser"
+                          class="form-control"
+                          readonly
+                          value="Password auto-generated. Available in account details page."
+                        />
+                      </div>
+                    </div>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="location">Location</label>
+                        <select name="location" id="locationAddUser" class="form-control" placeholder="--Select Location--">
+                          <option selected>--Select Location--</option>
+                        </select>
+                      </div>
 
-                  <div class="col">
-                    <label for="role">Role</label>
-                    <select name="role" id="roleAddUser" class="form-control">
-                      <option value="1">Branch Administrator</option>
-                      <option value="2" selected>Branch Employee</option>
-                    </select>
-                  </div>
+                      <div class="col">
+                        <label for="role">Role</label>
+                        <select name="role" id="roleAddUser" class="form-control">
+                          <option value="1">Branch Administrator</option>
+                          <option value="2" selected>Branch Employee</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- <div class="row my-2 ml-2">
+                      <a class="btn btn-primary" id="addLocationBtn" style="color: white">Add New Location</a>
+                    </div> -->
+                    <div class="row mt-4">
+                      <div class="col">
+                        <button class="btn btn-primary" id="createAcctBtn" type="button">
+                          Create Account
+                        </button>
+                        <br />
+                        <button class="btn btn-primary mt-3" id="cancelAcctBtn" type="button">
+                            Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                <!-- <div class="row my-2 ml-2">
-                  <a class="btn btn-primary" id="addLocationBtn" style="color: white">Add New Location</a>
-                </div> -->
-                <div class="row mt-4">
-                  <div class="col">
-                    <button class="btn btn-primary" id="createAcctBtn" type="button">
-                      Create Account
-                    </button>
-                    <br />
-                    <button class="btn btn-primary mt-3" id="cancelAcctBtn" type="button">
-                        Cancel
-                    </button>
-                  </div>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        
+        <!-- Create Guest Div -->
+        <div class="container" id="createGuestDiv">
+          <ul class="list-group" id="createGuestErrorMessages"></ul>
+          <h1 class="heading">Create Guest</h1>
+
+            <div class="row">
+            <div class="col-md-12 text-center">
+              <div class="card">
+                <div class="card-header">
+                  New Guest
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="firstName">First Name</label>
+                        <input
+                          type="text"
+                          name="firstName"
+                          id="firstNameAddGuest"
+                          class="form-control"
+                        />
+                      </div>
+
+                      <div class="col">
+                        <label for="lastName">Last Name</label>
+                        <input
+                          type="text"
+                          name="lastName"
+                          id="lastNameAddGuest"
+                          class="form-control"
+                        />
+                      </div>
+                    </div>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="email">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          id="emailAddGuest"
+                          class="form-control"
+                        />
+                      </div>
+
+                      <div class="col">
+                        <label for="phone">Phone Number</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          placeholder="000-000-0000" 
+                          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
+                          id="phoneAddGuest"
+                          class="form-control"
+                        />
+                      </div>
+                    </div>
+                    <div class="row my-2">
+                      <div class="col">
+                        <label for="location">Location</label>
+                        <select name="location" id="locationAddGuest" class="form-control" placeholder="--Select Location--">
+                          <option selected>--Select Location--</option>
+                        </select>
+                      </div>
+
+                      <div class="col">
+                        <label for="role">Role</label>
+                        <select name="role" id="roleAddGuest" class="form-control" readonly>
+                          <option value="1" selected>Guest</option>
+                        </select>
+                      </div>
+                    </div>
+                      <div class="row my-2">
+                      <div class="col-md-6 col-md-offset-3">
+                            <label for="addguestvisiting">Who is the guest visiting today?</label>
+                            <input type="text" name="addguestvisiting" id="add-guest-visiting" class="form-control" style="text-align:center;"/>
+                        </div>
+
+                      <div class="col-md-6 col-md-offset-3">
+                            <label for="addguestmisc">Miscellaneous Information (optional):</label>
+                            <input type="text" name="addguestmisc" id="add-guest-misc" class="form-control" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                      <div class="col">
+                        <button class="btn btn-primary" id="confirmCreateGuestBtn" type="button">
+                          Create Guest
+                        </button>
+                        <br />
+                        <button class="btn btn-primary mt-3" id="cancelGuestBtn" type="button">
+                            Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         
         
     <!-- Create Location Div -->
