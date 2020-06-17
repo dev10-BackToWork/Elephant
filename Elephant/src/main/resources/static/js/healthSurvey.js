@@ -18,6 +18,7 @@ var userLocation;
 var locationName;
 var locationId;
 var cityName;
+var allLocations;//for returned list of all location objects
 var attendanceLocation; // for selected location choice
     
     $("#submitLoginButton").click(function (e) {
@@ -224,6 +225,8 @@ var attendanceLocation; // for selected location choice
                 },
                 success: function (data) {
                    console.log(data);
+                   allLocations = data;
+                   console.log(allLocations);
                    
                     $('#userLocationOption')
                             .append($("<option></option>")
@@ -245,7 +248,7 @@ var attendanceLocation; // for selected location choice
                     console.log(http);
                     console.log('An error resulted when attempting to retrieve locations.');
                 }
-            })
+            });
         };
             
             
@@ -254,15 +257,13 @@ var attendanceLocation; // for selected location choice
 //if user is NOT coming in to the office: 
 $("#q1No").on("click", function (e) {
     e.preventDefault();
-    //attendanceLocation = $('#userLocationOption').val();
-    //console.log(attendanceLocation);
+    
     $("#screener-div").hide();
     $("#survey-not-authorized").hide();
     $("#survey-authorized").hide();
 //    $("#arrival-container").hide();
 //    $("#departure-container").hide();
-    
-    //console.log(userLocation);
+
     console.log(user);
 
     $.ajax({
@@ -272,7 +273,7 @@ $("#q1No").on("click", function (e) {
         data: JSON.stringify({
             user: user,
             "isAttending": false
-            //"location" : attendanceLocation
+           
             //"isAuthorized": true
             }),
 //        contentType: "application/json;charset=UTF-8",
@@ -359,9 +360,7 @@ function checkAuth() {
 
 
 $("#surveySubmit").on("click", function (e) {
-    attendanceLocation = $('#userLocationOption').val();
-    console.log(attendanceLocation);
-    
+
     e.preventDefault();
     $("#survey-container").hide();
     checkAuth();
@@ -377,11 +376,9 @@ $("#surveySubmit").on("click", function (e) {
 function notAuthorized() {
         console.log(user);
         attendanceLocation = $('#userLocationOption').val();
-        console.log(attendanceLocation);
-        //email = user.email;
-        //password = user.defaultPW;
-        //password = user.passwords;
-    
+        var locationObj = allLocations[(attendanceLocation - 1)];
+        console.log(locationObj);
+
         $.ajax({
             type: "POST",
             url: "http://localhost:8080/api/users/coming",
@@ -390,7 +387,7 @@ function notAuthorized() {
                 "isAttending": true,
                 "isAuthorized": false,
                 user: user,
-                "location" : attendanceLocation
+                location : locationObj,
             }),
 
         headers: {
@@ -414,6 +411,10 @@ function notAuthorized() {
         console.log(user);
         attendanceLocation = $('#userLocationOption').val();
         console.log(attendanceLocation);
+        
+        console.log(allLocations[attendanceLocation - 1]);
+        var locationObj = allLocations[(attendanceLocation - 1)];
+        console.log(locationObj);
         //email = user.email;
         //password = user.passwords;
     
@@ -424,7 +425,7 @@ function notAuthorized() {
             data: JSON.stringify({
                      "isAttending": true,
                      "isAuthorized": true,
-                     "location" : attendanceLocation,
+                     location : locationObj,
                      user: user
                 }),
         headers: {
@@ -435,7 +436,8 @@ function notAuthorized() {
         success: function (response) {
             //alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
              $("#survey-authorized").show();
-            console.log(response);
+             $("#survey-authorized-text").html('You are authorized to come in to the ' + response.location.cityName + ' office today.');
+            //console.log(response);
         },
         error: function (err) {
             //alert('error' + err);
