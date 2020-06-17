@@ -668,14 +668,21 @@
             </div>
 
             <div class="form-group" id="survey-div">
-                <form id="survey">
-    <!--                <div class="row" id="questionDiv">-->
-                        <div class="row">
-                            <div class="col-11">
-                                <h5>Please take your temperature immediately prior to answering the following questions.</h5>
+                        <form id="survey">
+                        <div class="col-md-6">
+                            <label for="locOptionUser">Please select the location you plan to attend today:</label>
+                            <select id="userLocationOption" name="locOptionUser" class="form-control" ></select> 
+                        </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Please take your temperature immediately prior to answering the following questions.</h5>
+                                </div>
                             </div>
-                            <div class="col-11">
-                                <div class="form-check">
+
+                            <div class="row">
+                                <div class="col-10">
+                                  <div class="form-check">
                                 <label for="q1" class="form-check-label">Do you have any of the following symptoms:</label>
                                     <ul>
                                         <li>Fever (100.4 degrees) or chills </li>
@@ -690,58 +697,63 @@
                                         <li>Diarrhea</li> 
                                     </ul>
                                 </div>
-                            </div>
-
-                            <div class="col-1">
-                            <br>
-                            <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
-                                data-on="Yes" data-off="No" data-style="android">
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                             <div class="col-11">
-                                <div class="form-check">
-                                <label for="q2" class="form-check-label">Have you had close contact in the last 14 days with an individual diagnosed with COVID-19? </label>
                                 </div>
-                             </div>
 
-                            <div class="col-1">
-                            <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
-                                data-on="Yes" data-off="No" data-style="android">
+                                <div class="col-1">
+                                    <br>
+                                    <input id="q1" class="form-check-input" name="q1" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>    
+                            </div>  
+
+
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q2" class="form-check-label">Have you had close contact in the last 14 days with an individual diagnosed with COVID-19? </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <input id="q2" class="form-check-input" name="q2" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>              
                             </div>
 
-                        </div>
-
-                        <div class="row">
-                             <div class="col-11">
-                                <div class="form-check">
-                                    <label for="q3" class="form-check-label">Have you traveled outside the United States or Canada within the last 14 days?</label>
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q3" class="form-check-label">Have you traveled outside the United States or Canada within the last 14 days?</label>
+                                    </div>
                                 </div>
-                             </div>
 
-                             <div class="col-1">
-                            <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
-                                data-on="Yes" data-off="No" data-style="android">
-                             </div>
-                        </div>
+                                <div class="col-1">
+                                    
+                                    <input id="q3" class="form-check-input" name="q3" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>
+                            </div>
 
-                    <!-- <button class="btn btn-lg btn-primary" id="surveyScreener" type="submit">Next</button>         -->
-                    <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
-                </form>
-            </div>
-            
-       </div>
-        
-        <div id="survey-bye">
-             <p class="center">You have not yet been approved to come in to the office. <br>
+                            <button id="surveySubmit" class="btn btn-lg btn-primary submit text-uppercase" type="submit">Submit</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div id="survey-authorized">
+                    <p id="survey-authorized-text" class="center"></p>
+                </div>
+                <div id="survey-bye">
+                    <p class="center">You have not yet been approved to come in to the office. <br>
                  Please contact HR at hr@genesis10.com for further instruction.</p>
-        </div>
-    </div> 
+                </div>
+
+           </div> 
+        
 
     <!-- Survey Success -->
     <div class="container">
+         <p id="survey-authorized-text" class="center"></p>
         <div class="row" id="overall-success" style="font-size: 1.2em"></div>
     </div>
         
@@ -875,6 +887,7 @@
                          </div>
                     </div>  
                     
+                     <div class="table-responsive-md table-hover table-sm" id="userReportSummaryTableDiv"> </div>  
 
                      <div class="table-responsive-md table-hover table-sm" id="reportSummaryTableDiv"> </div>  
                 </div>    

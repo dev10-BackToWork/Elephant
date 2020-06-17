@@ -969,10 +969,21 @@ $('#dashboardBtn').click(function (event) {
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
         
-        loadReportDiv();
-          $("#reportDiv").show();
-          
-        if (adminRoleId === 3) {
+        loadReportDiv(adminLocation);
+        console.log(adminLocation);
+        console.log(adminRoleId);
+        $("#reportDiv").show();
+        
+        if (adminRoleId === 1) {
+            console.log(adminRoleId);
+            //$('#locationReportPage').show();
+            $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+        }
+        
+        else if (adminRoleId === 3) {
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:8080/api/admin/locations',
@@ -995,21 +1006,15 @@ $('#dashboardBtn').click(function (event) {
                 }
             });
         }  
-        else if (adminRoleId === 1) {
-            $('#locationReportPage').hide();
-            $('#reportLocationOption')
-                            .append($("<option></option>")
-                                .attr("value", adminLocation)
-                                .text(adminLocationName));
-        }
         
+    });  
         
         
 //       $('#submitReportLocOption').click(function (event) {  
 //       var option = $('#reportLocationOption').val();
 //       console.log(option);
 //         });
-  });
+
     
     $('#createEmployeeBtn').click(function (event) {
         $("#loginNav").hide();
@@ -1479,6 +1484,7 @@ $("#q1No").on("click", function (e) {
 
 //if user is coming in to the office, show health survey questions:
 $("#q1Yes").on("click", function () {
+    getAttendanceLocation();
     $("#screener-div").hide();
     $("#survey-div").show();
     $("#survey-bye").hide();
@@ -1534,40 +1540,50 @@ $("#surveySubmit").on("click", function (e) {
     if (isAuthorized === true) {
         console.log(isAuthorized);
         //loadArrivals();
-        $('#overall-success').show();
-        $('#overall-success').text("You are authorized to come in to the office today and your response has been recorded."); 
-        
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify({
-                "isAttending": true,
-                "isAuthorized": true,
-                user: user
-            }),
-
-        headers: {
-            "email": adminEmail,
-            "password": adminPassword
-        },
-        success: function (response, status) {
-            console.log(response);
-        },
-        error: function (err) {
-            console.log(err);
-
-        }
-    }); 
-        
+        authorized();
+        //$('#overall-success').show();
+       // $('#overall-success').text("You are authorized to come in to the office today and your response has been recorded."); 
     } else if (isAuthorized === false) {
         notAuthorized();
     }
-});
-
-function notAuthorized() {
-        console.log(user);
+    }); 
     
+//        $.ajax({
+//            type: "POST",
+//            url: "http://localhost:8080/api/users/coming",
+//            contentType: "application/json;charset=UTF-8",
+//            data: JSON.stringify({
+//                "isAttending": true,
+//                "isAuthorized": true,
+//                user: user
+//            }),
+//
+//        headers: {
+//            "email": adminEmail,
+//            "password": adminPassword
+//        },
+//        success: function (response, status) {
+//            console.log(response);
+//        },
+//        error: function (err) {
+//            console.log(err);
+//
+//        }
+   
+        
+    
+//});
+
+var allLocations;
+var attendanceLocation;
+//var user;
+
+    function notAuthorized() {
+        console.log(user);
+        attendanceLocation = $('#userLocationOption').val();
+        var locationObj = allLocations[(attendanceLocation - 1)];
+        console.log(locationObj);
+
         $.ajax({
             type: "POST",
             url: "http://localhost:8080/api/users/coming",
@@ -1575,6 +1591,7 @@ function notAuthorized() {
             data: JSON.stringify({
                 "isAttending": true,
                 "isAuthorized": false,
+                location : locationObj,
                 user: user
             }),
 
@@ -1583,6 +1600,7 @@ function notAuthorized() {
             "password": adminPassword
         },
         success: function (response, status) {
+            $("#survey-not-authorized").show();
             console.log(response);
         },
         error: function (err) {
@@ -1591,14 +1609,18 @@ function notAuthorized() {
         }
     });
 }
-var startTime;
+//var startTime;
 
-
-    
     //called after departure time POST to update attendance and authorization record to true: 
     function authorized() {
-        //console.log(user);
-    
+        console.log(user);
+        attendanceLocation = $('#userLocationOption').val();
+        console.log(attendanceLocation);
+        
+        console.log(allLocations[attendanceLocation - 1]);
+        var locationObj = allLocations[(attendanceLocation - 1)];
+        console.log(locationObj);
+
         $.ajax({
             type: "POST",
             url: "http://localhost:8080/api/users/coming",
@@ -1606,6 +1628,7 @@ var startTime;
             data: JSON.stringify({
                      "isAttending": true,
                      "isAuthorized": true,
+                     location : locationObj,
                      user: user
                 }),
         headers: {
@@ -1613,8 +1636,10 @@ var startTime;
             "password": adminPassword
         },
         success: function (response) {
-            //alert('success - attending:' + response.isAttending + 'authorized: ' +response.isAuthorized);
-            console.log(response);
+             console.log(response);
+             $("#survey-authorized").show();
+             $("#survey-authorized-text").html('You are authorized to come in to the ' + response.location.cityName + ' office today.');
+           
         },
         error: function (err) {
             //alert('error' + err);
@@ -1850,13 +1875,14 @@ var startTime;
     };
 
     loadReportDiv = function(){
+        console.log(adminLocation);
             $("#myList").hide();
             $("#noAttendees").hide();
             $("#isAttendingTable").hide();
             //$("#reportSummaryTableDiv").hide();
             //$("#report-attendance-table").empty();
             //load users to dropdown list
-            //getUsersByLocation(locationId);
+            getUsersByLocation(adminLocation);
             
             //filter search list functionality 
             $("#myInput").on("keyup", function() {
@@ -1868,15 +1894,48 @@ var startTime;
                 });
             });
         };
-
-
-
-
-
-
-
-
-
+        
+    function getAttendanceLocation(){
+        locationId = user.location.locationId;
+        userLocation = user.location.cityName;
+        console.log(locationId);
+        console.log(userLocation);
+        
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/users/locations',
+                headers: {
+                    "email": adminEmail,
+                    "password": adminPassword
+                },
+                success: function (data) {
+                   console.log(data);
+                   allLocations = data;
+                   console.log(allLocations);
+                   
+                    $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", locationId)
+                                .text(userLocation));
+                    $.each(data, function(index, datum) {
+                        //console.log(data);
+                        locationName = data[index].cityName;
+                        //console.log(locationName);
+                        if (datum.cityName !== userLocation) {
+                           $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                        }
+                    });
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            });
+        };
+        
 });
 
 function clearLogin() {
@@ -1894,18 +1953,6 @@ function showGuidelines() {
         x.style.display = "none";
     }
 }
-
-
-
-
-
-
-
-
-
- 
-    
-
 
 
     // // ********** Preparing Ajax calls Start
@@ -2311,20 +2358,6 @@ function showGuidelines() {
 
     // });
 
-    
-
-    // // @GetMapping("/users/{id}")
-    // // public ResponseEntity<List<User>> getUsers
-
-        //filter search function 
-        //$(document).ready(function(){
-        
-         
-//       $("#reportingBtn").click(function (event) {
-//          loadReportDiv();
-//          $("#reportDiv").show();
-//          //checkSuperAdmin();
-//       });
 
 //var adminLocation;
 //var adminLocationName;
@@ -2334,33 +2367,29 @@ var adminEmail;
 var adminPassword;
 //var user;
 //var adminRoleId;
-
-
 var option;
 var locationId;
+var nameInput;
  //if admin role is 1, set locationId equal to the admin's location 
  //if admin role is 3, show the select location div and set locationId equal to the location selected. 
        $('#submitReportLocOption').click(function (event) {  
             locationId = $('#reportLocationOption').val();
-            getUsersByLocation();
+            getUsersByLocation(locationId);
             clearReport();
             $("#reportSummaryTableDiv").empty();
             $("#attendanceTableHeader").empty();
-            
-
             $("#attendanceTableHeader").empty();
-            //locationId= parseInt(locationId);
-            //console.log(locationId);
+            
+            console.log(locationId);
        });
        
-    //var name;
-    var nameInput;
-
         function getUsersByLocation() {
             locationId = $('#reportLocationOption').val();
             console.log(locationId);
             $("#myList").empty();
             $("#myInput").val('');
+            //console.log(adminEmail);
+            //console.log(adminPassword);
             
             $.ajax({
                 type: "GET",
@@ -2368,8 +2397,8 @@ var locationId;
                 headers: {
                  'email': 'user@user.com',
                  'password': 'password'
-                    //'email': adminEmail,
-                    //'password': adminPassword
+//                    'email': adminEmail,
+//                    'password': adminPassword
                 },
                 success: function (data, status) {
                     console.log(data);
@@ -2422,7 +2451,10 @@ var btnIdString;
                  'password': 'password'
              },
              success: function (data) {
-                
+                console.log(data);
+                userName = data[0].user.firstName + ' ' + data[0].user.lastName;
+                console.log(userName);
+                    
                  $("#report-attendance-table").show();
                  console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
                  $("#attendance-message").empty();
@@ -2430,19 +2462,57 @@ var btnIdString;
                  $("#isAttendingTable").hide();
                  $("#isAttendingRow").empty();
                  
-                 var attendanceDateDiv = $('#report-attendance-dates');
-                 if (data.length === 0) {
-                     $("#attendance-message").html("No attendance records exist for the past 30 days.");
-                        console.log('this user does not have any attendance records!');
-                    }
-                 else if (data.length > 0) {
-                     $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the office."); 
-                 }
+            var userReportSummaryTableDiv = $("#userReportSummaryTableDiv");
+
+            var attendanceDateDiv = $('#report-attendance-dates');
+            var userReportSummaryTable;
+            
+            if (data.length === 0) {
+                $("#attendance-message").html("No attendance records exist for the past 30 days.");
+                console.log('this user does not have any attendance records!');
+            } else if (data.length > 0) {
+                var i = 0;
+                $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the office.");
+                
+                var userReportSummaryTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + userName + '</h5>';
+                userReportSummaryTable += '<div class="col-12">';
+                userReportSummaryTable += '<table class="table table-striped" id="userReportSummary' + 'Table">';
+                userReportSummaryTable += '<thead>';
+                userReportSummaryTable += '<tr>';
+                userReportSummaryTable += '<th>First Name</th>';
+                userReportSummaryTable += '<th>Last Name</th>';
+                userReportSummaryTable += '<th>Email</th>';
+                userReportSummaryTable += '<th>Office Attended</th>';
+                userReportSummaryTable += '<th>Home Office</th>';
+                userReportSummaryTable += '<th>Date</th>';
+                userReportSummaryTable += '</tr>';
+                userReportSummaryTable += '</thead>';
+                userReportSummaryTable += '<tbody class="userReportSummaryRow" id=' + i + '></tbody>';
+                userReportSummaryTable += '</table>';
+                userReportSummaryTable += '</div>';
+
+                userReportSummaryTableDiv.append(userReportSummaryTable);
+                //rowsPerDay();
+                }
+                 
+                 
                  $.each(data, function (i) {
-                     console.log(data);
+                    console.log(data);
+                    
                     console.log(data[i].location.cityName);
                     attendanceLocationName = data[i].location.cityName;
                     attendanceId = data[i].location.locationId;
+                    
+                    var dateBtn = "<div class='col-3'>";
+                    dateBtn += "<button class='report-date-submit' id='" + dateStringId + "'>";
+                    dateBtn += "<p class='item'>" + month+'/' +day+'/'+year + "</p>";
+                    dateBtn += "<p class='item'>" + attendanceLocationName+"</p>";
+                    dateBtn += "<p class='item'>" + attendanceId+"</p>";
+                    dateBtn += "</button>";
+                    dateBtn += "</div>";
+                    userReportSummaryTable.append(dateBtn);
+                    
+
                     var dateStringId = data[i].attendanceDate;
                     fullDate2 = data[i].attendanceDate.toString();
                     //console.log('dateStringId: ' + dateStringId);
@@ -2453,14 +2523,39 @@ var btnIdString;
                     day = fullDate2.substring(8);
                     dateStringDisplay = month +'/' +day+'/'+year;
                     
-                    var dateBtn = "<div class='col-3'>";
-                    dateBtn += "<button class='report-date-submit' id='" + dateStringId + "'>";
-                    dateBtn += "<p class='item'>" + month+'/' +day+'/'+year + "</p>";
-                    dateBtn += "<p class='item'>" + attendanceLocationName+"</p>";
-                    dateBtn += "<p class='item'>" + attendanceId+"</p>";
-                    dateBtn += "</button>";
-                    dateBtn += "</div>";
-                    attendanceDateDiv.append(dateBtn);
+                 
+//               $.each(response, function (i, data) {
+//                var userReportTitle = i;
+//                
+//                var userReportSummaryTable = '<h5 class="table-header" id="userReportSummaryTableHeader">'+'Office Attendance for '+ '[User Name]' + ' on 'reportTitle+'</h5>';
+////                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export">Export To CSV</button></div>';
+//                
+//
+//
+//                    $.each(data, function (i, user) {
+//                        
+//                        console.log(user);
+//                        var userObj = user;
+//                        firstName = userObj.firstName;
+//                        lastName = userObj.lastName;
+//                        email = userObj.email;
+//                        location = userObj.location.cityName;
+//
+//                        row = '<tr>';
+//                        row = '<tr>';
+//                        row += '<td>' + firstName + '</td>';
+//                        row += '<td>' + lastName + '</td>';
+//                        row += '<td>' + email + '</td>';
+//                        row += '<td>' + location + '</td>';
+//                        row += '<td>' + location + '</td>';
+//                        row += '<td>' + date + '</td>';
+////                        row += '<td>' + '' + '</td>';
+//                        row += '</tr>';
+//                        $('#reportSummary' + date + 'Table').append(row);
+
+                    
+
+                    
                      
                 });
                     
@@ -2484,7 +2579,7 @@ var btnIdString;
      }
      
     function updateInputName(userId){
-        // $("#reportSummaryTableDiv").empty();
+        $("#reportSummaryTableDiv").empty();
         $.ajax({
         type: 'GET',
         url: 'http://localhost:8080/api/admin/user/' + userId,
@@ -2551,7 +2646,7 @@ var btnIdString;
 
     };
 
-var attendanceLocation;
+//var attendanceLocation;
 var attendanceLocationId;
 
     function getEmployeesByDate(){
@@ -2564,6 +2659,7 @@ var attendanceLocationId;
         //userId = selectedUserId;
         console.log(selectedUserId);
         $('#isAttendingRows').empty();
+        
         
         $.ajax({
             type: 'GET',
@@ -2630,12 +2726,11 @@ var attendanceLocationId;
      };
 
 
-    function getEmployeesByDateRange(attendanceLocationId, attendanceLocation){
+    function getEmployeesByDateRange(attendanceLocationId){
         $("#reportSummaryTableDiv").empty();
-        //locationId = attendanceLocation;
+        locationId = attendanceLocationId;
         console.log(attendanceLocationId);
-        console.log(attendanceLocation);
-        //locationId = attendanceLocationId;
+        console.log(locationId);
         
         var startDate = btnIdString;
         var endDate = btnIdStringTwo;
@@ -2651,7 +2746,7 @@ var attendanceLocationId;
             type: 'GET',
             url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + attendanceLocationId + '/' + startDate + '/' + endDate,
              
-            headers: {
+             headers: {
                  'email': 'user@user.com',
                  'password': 'password'
              },
@@ -2664,7 +2759,7 @@ var attendanceLocationId;
                 if (response.length <= 0) {
                     console.log("There are no attendance records for the date range selected.");
                     $("#attendanceNameTableHeader").show();
-                    $("#attendanceNameTableHeader").html(startDate + ' - ' + endDate);
+                    $("#attendanceNameTableHeader").html(startDate + ' through ' + endDate);
                     $("#attendanceTableHeader").empty();
                     $("#attendanceTableHeader").hide();
                     $("#attendance-message").show();
@@ -2675,7 +2770,7 @@ var attendanceLocationId;
                 var isAttendingRows = $("#isAttendingRows");
                 
                 $.each(response, function (i, response) {
-                     
+                    console.log(response);
                     var userFirstName = response.firstName;
                     var userLastName = response.lastName;
 
@@ -2702,7 +2797,7 @@ var attendanceLocationId;
                 }
                 $("#isAttendingTable").show();
                 $("#attendanceTableHeader").show();
-                $("#attendanceTableHeader").html(startDate + ' - ' + endDate + '<br> ' + attendanceLocationId + ' Office Attendance');
+                $("#attendanceTableHeader").html(startDate + ' through ' + endDate + '<br> ' + attendanceLocationId + ' Office Attendance');
                 console.log('The request for the attendance report was successful.' + specifiedDate);
             });
 
@@ -2746,7 +2841,8 @@ var attendanceLocationId;
                 reportSummaryTable += '<th>First Name</th>';
                 reportSummaryTable += '<th>Last Name</th>';
                 reportSummaryTable += '<th>Email</th>';
-                reportSummaryTable += '<th>Location</th>';
+                reportSummaryTable += '<th>Office Attended</th>';
+                reportSummaryTable += '<th>Home Office</th>';
                 reportSummaryTable += '<th>Date</th>';
                 reportSummaryTable += '</tr>';
                 reportSummaryTable += '</thead>';
@@ -2773,6 +2869,7 @@ var attendanceLocationId;
                         row += '<td>' + firstName + '</td>';
                         row += '<td>' + lastName + '</td>';
                         row += '<td>' + email + '</td>';
+                        row += '<td>' + location + '</td>';
                         row += '<td>' + location + '</td>';
                         row += '<td>' + date + '</td>';
 //                        row += '<td>' + '' + '</td>';
