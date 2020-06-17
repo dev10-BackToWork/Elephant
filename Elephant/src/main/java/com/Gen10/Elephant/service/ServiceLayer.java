@@ -48,49 +48,10 @@ public class ServiceLayer {
     @Autowired
     private UsersRepository usersRepo;
 
-    // public ServiceLayer( AttendanceRepository attendanceRepo, LocationRepository locationRepo, 
-    //                         RolesRepository rolesRepo, UsersRepository usersRepo) {
-    //     this.attendanceRepo = attendanceRepo;
-    //     this.locationRepo = locationRepo;
-    //     this.rolesRepo = rolesRepo;
-    //     this.usersRepo = usersRepo;
-    // }
-
     // **********
     // Attendance
     public List<Attendance> findAllAttendance() {
         return attendanceRepo.findAll();
-    }
-
-    public Attendance findAttendanceByUserId(int userId) {
-        Attendance attendance = attendanceRepo.findById(userId).orElse(null);
-
-        if (attendance == null) {
-            System.out.println("The attendance object is null");
-            return attendance;
-        } else {
-            return attendance;
-        }
-    }
-
-    public void deleteAttendanceById(int attendanceId) {
-        attendanceRepo.deleteById(attendanceId);
-    }
-
-    public void takeAttendance(Attendance attendance) {
-        attendanceRepo.save(attendance);
-    }
-
-    public List<Attendance> findAttendanceByCurrentDate() {
-        List<Attendance> allAttendance = attendanceRepo.findAll();
-        List<Attendance> currentAttendance = new ArrayList<>();
-        for (Attendance attendance : allAttendance) {
-            if (attendance.getAttendanceDate().equals(LocalDate.now())) {
-                currentAttendance.add(attendance);
-            }
-        }
-
-        return currentAttendance;
     }
     
     public List<Attendance> retrieveDatesPresent(int id) {
@@ -180,14 +141,6 @@ public class ServiceLayer {
         }
     }
 
-    public void deleteLocationById(int locationId) {
-        locationRepo.deleteById(locationId);
-    }
-
-    public void newLocation(Location location) {
-        locationRepo.save(location);
-    }
-
     public Location editCapacity(int id, int num) {
         // Due to auto-incrementing of locations in database, the specific user object
         // needs to be acquired and altered to prevent duplicate location with different
@@ -206,25 +159,6 @@ public class ServiceLayer {
         return rolesRepo.findAll();
     }
 
-    public Role findRoleByName(String identifier) {
-        Role role = rolesRepo.findByName(identifier);
-
-        if (role == null) {
-            System.out.println("The role object is null");
-            return role;
-        } else {
-            return role;
-        }
-    }
-
-    // public void deleteRoleById(int roleId) {
-    // roleRepo.deleteById(roleId);
-    // }
-
-    // public void saveRole(Role role) {
-    // roleRepo.save(role);
-    // }
-
     // **********
     // User(s)
 
@@ -232,15 +166,10 @@ public class ServiceLayer {
         return usersRepo.findAllUsersOfSpecifiedLocation(locationId);
     }
 
-	public List<User> getGuests(int id) {
-		return usersRepo.findAllGuestsOfSpecifiedLocation(id);
-	}
-
-    public List<User> getAllUsersByLocation(Location location) {
-        return usersRepo.findAllByLocation(location);
+    public List<User> getGuests(int id) {
+            return usersRepo.findAllGuestsOfSpecifiedLocation(id);
     }
 
-    // Edited Matthew Gerszewski 5/18/2020
     public List<User> currentUsersInOffice(int id) {
         return usersRepo.findCurrentUsersInOffice(id);
     }
@@ -249,18 +178,9 @@ public class ServiceLayer {
         return attendanceRepo.findCurrentAttendancesInOffice(id);
     }
 
-    // Edited Nate Wood 05/13/2020
-    // Edited Matthew Gerszewski 5/18/2020
     public List<User> getInactiveUsers(int id) {
         Location location = locationRepo.findById(id).orElse(null);
-        // List<User> usersByLocation = getAllUsersByLocation(location);
         List<User> usersByLocationNotAnswered = usersRepo.findAllInactiveByLocation(location);
-
-        // for (User user : usersByLocation) {
-        //     if (attendanceRepo.findTodayByUser(user.getUserId(), LocalDate.now()) != null) {
-        //         usersByLocationNotAnswered.remove(user);
-        //     }
-        // }
 
         return usersByLocationNotAnswered;
     }
