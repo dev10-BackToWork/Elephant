@@ -20,6 +20,7 @@ var locationId;
 var cityName;
 var allLocations;//for returned list of all location objects
 var attendanceLocation; // for selected location choice
+var newPassword;
     
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
@@ -69,12 +70,12 @@ var attendanceLocation; // for selected location choice
                 
                 if (response.role.roleId === 2) {
                      $("#screener-div").show();
-                     //getAttendanceLocation();
+                     getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                 } else if (response.role.roleId === 1) {
                      $("#screener-div").show();
-                    // getAttendanceLocation();
+                      getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
                     
@@ -151,7 +152,18 @@ var attendanceLocation; // for selected location choice
                             $('#resetPasswordErr').show();
                             $('#resetPasswordErr').text("Please enter a new password.");
                             }
-
+ 
+                         //newPassword = password;
+                     },
+                        error: function (err) {
+                                console.log(err);
+                                $("#resetPasswordErr").show();
+                                $('#loginErr').show();
+                                $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+                            }
+                        
+                    });
+ 
                         //on login success, update password 
                         $.ajax({
                             type: "POST",
@@ -166,39 +178,51 @@ var attendanceLocation; // for selected location choice
                                 console.log(response);
                                 $("#passwordSuccess").show('success');
                                 $("#resetPassword").hide();
-                                //getAttendanceLocation();
                                 $("#screener-div").show();
-                            },
+                            },   
                             error: function (err) {
                                 console.log(err);
                                 $("#resetPasswordErr").show();
                                 $('#loginErr').show();
                                 $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
-                            }
-                        });
+                                }
+                        });   
 
-//                if (response.role.roleId === 2) {
-//                     $("#screener-div").show();
-//                     $("#login").hide();
-//                } else if (response.role.roleId === 1) {
-//                    $("#screener-div").show();
-//                    $("#login").hide();
-//                    //window.location.replace('/dashboard.html');
-//                }
-                        //return false;
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        $('#loginErr').show();
-                        $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
-                        clearLogin();
-                        return false;
-                    }
-                });
-                return false;
+                                $.ajax({
+                                type: 'GET',
+                                url: 'http://localhost:8080/api/users/locations',
+                                headers: {
+                                    'email': email,
+                                    'password': password
+                                },
+                                success: function (data) {
+                                    console.log(data);
+                                    allLocations = data;
+                                    console.log(allLocations);
+
+                                    $('#userLocationOption')
+                                            .append($("<option></option>")
+                                                    .attr("value", locationId)
+                                                    .text(userLocation));
+                                    $.each(data, function (index, datum) {
+                                        //console.log(data);
+                                        locationName = data[index].cityName;
+                                        //console.log(locationName);
+                                        if (datum.cityName !== userLocation) {
+                                            $('#userLocationOption')
+                                                    .append($("<option></option>")
+                                                            .attr("value", index + 1)
+                                                            .text(datum.cityName));
+                                        }
+                                    });
+                                },
+                                error: function (http) {
+                                    console.log(http + 'An error resulted when attempting to retrieve locations.');
+                                }
+    
+                        });
             });
         };
-   
     
  
 
@@ -211,10 +235,13 @@ var attendanceLocation; // for selected location choice
 
 
     function getAttendanceLocation(){
+
         locationId = user.location.locationId;
         userLocation = user.location.cityName;
         console.log(locationId);
         console.log(userLocation);
+        console.log(password);
+        console.log(email);
         
             $.ajax({
                 type: 'GET',
@@ -298,7 +325,7 @@ $("#q1No").on("click", function (e) {
 
 //if user is coming in to the office, show health survey questions:
 $("#q1Yes").on("click", function () {
-    getAttendanceLocation();
+    //getAttendanceLocation();
 
     $("#screener-div").hide();
     $("#survey-div").show();
