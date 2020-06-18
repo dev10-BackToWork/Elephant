@@ -430,7 +430,11 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     
 INSERT INTO `User` (firstName, lastName, email, locationId, roleId, phoneNumber) VALUES 
 	("Guest", "User", "guest@guest.com", 5, 4, "(555) 555-5555"),
-    ("Guest2", "User2", "guest2@guest2.com", 5, 4, "(555) 555-5555");
+    ("Guest2", "User2", "guest2@guest2.com", 5, 4, "(555) 555-5555"),
+    ("Guest3", "User3", "guest3@guest3.com", 1, 4, "(111) 111-1111"),
+    ("Guest4", "User4", "guest4@guest4.com", 2, 4, "(222) 222-2222"),
+    ("Guest5", "User5", "guest5@guest5.com", 3, 4, "(333) 333-3333"),
+    ("Guest6", "User6", "guest6@guest6.com", 2, 4, "(222) 222-2222");
 
 -- DELIMITER $$
 
@@ -454,15 +458,21 @@ INSERT INTO `User` (firstName, lastName, email, locationId, roleId, phoneNumber)
 
 -- testing purposes
 INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized, locationId) VALUES
-	(1, "2020-06-10", 348, 1, 1),
+	(1, "2020-06-09", 348, 1, 3),
+	(1, "2020-06-09", 346, 1, 4),
+    (1, "2020-06-10", 348, 1, 1),
+    (1, "2020-06-10", 356, 1, 1),
     (1, "2020-06-11", 348, 1, 2),
+    (1, "2020-06-11", 357, 1, 2),
+    (1, "2020-06-11", 359, 1, 2),
     (1, "2020-06-12", 348, 1, 3),
+    (1, "2020-06-12", 358, 1, 3),
     (1, "2020-06-13", 348, 1, 4),
     (1, "2020-06-14", 348, 1, 5),
     (1, "2020-06-15", 348, 1, 5),
-    (1, "2020-06-09", 348, 1, 3),
     (1, "2020-06-15", 349, 1, 3),
 	(1, "2020-06-15", 347, 1, 3),
-    (1, "2020-06-09", 346, 1, 4),
-    (1, "2020-06-15", 345, 1, 5);
+    (1, "2020-06-15", 345, 1, 5),
+    (1, "2020-06-18", 354, 1, 5),
+    (1, "2020-06-18", 355, 1, 5);
     
