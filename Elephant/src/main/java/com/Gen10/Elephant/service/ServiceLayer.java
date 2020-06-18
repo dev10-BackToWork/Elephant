@@ -48,6 +48,8 @@ public class ServiceLayer {
     @Autowired
     private UsersRepository usersRepo;
 
+    private LocalDate lastCleanDate = LocalDate.now();
+
     // **********
     // Attendance
     public List<Attendance> findAllAttendance() {
@@ -328,6 +330,8 @@ public class ServiceLayer {
         if (todaysAttendance != null) {
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
+            todaysAttendance.setVisitingHost(attendance.getVisitingHost());
+            todaysAttendance.setMiscInfo(attendance.getMiscInfo());
             return attendanceRepo.save(todaysAttendance);
         } else {
             return attendanceRepo.save(attendance);
@@ -361,6 +365,7 @@ public class ServiceLayer {
     }
 
     public User checkLogin(User user) {
+        cleanOldData();
         User dbUser = usersRepo.findByEmail(user.getEmail());
         if ((dbUser != null) && BCrypt.checkpw(user.getPasswords(), dbUser.getPasswords())) {
             return dbUser;
@@ -452,6 +457,17 @@ public class ServiceLayer {
 
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    private void cleanOldData() {
+        int maxAge = 90;
+        if (lastCleanDate != LocalDate.now()){
+            List<Attendance> oldAttendances = attendanceRepo.findAllOldAttendanceIdsByAge(maxAge);
+            attendanceRepo.deleteInBatch(oldAttendances);
+            List<User> oldGuests = usersRepo.findAllOldGuestsByAge(maxAge);
+            usersRepo.deleteInBatch(oldGuests);
+            lastCleanDate = LocalDate.now();
         }
     }
 }

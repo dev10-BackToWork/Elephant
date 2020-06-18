@@ -71,4 +71,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     
     @Query(value = "SELECT a.locationId FROM User u INNER JOIN Attendance a ON u.userId = a.userId WHERE u.userId = ?1 AND a.attendanceDate = ?2", nativeQuery = true)
     int findUserLocationIdOnDate(int id, String date);
+
+    @Query(value = "SELECT u.* FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId WHERE u.roleId = 4 AND a.isAttending IS NULL", nativeQuery = true)
+    List<User> findAllOldGuestsByAge(int maxAge);
 }
