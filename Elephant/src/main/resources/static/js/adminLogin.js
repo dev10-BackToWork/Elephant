@@ -996,6 +996,7 @@ $('#dashboardBtn').click(function (event) {
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
         
+
         $("#attendanceNameTableHeader").empty();
         $("#attendance-message").empty();
         
@@ -1010,6 +1011,7 @@ $('#dashboardBtn').click(function (event) {
         
         if (adminRoleId === 1) {
             console.log(adminRoleId);
+            $('#reportLocationOption').val(1);
             //$('#locationReportPage').show();
             $('#reportLocationOption')
                             .append($("<option></option>")
@@ -1030,6 +1032,7 @@ $('#dashboardBtn').click(function (event) {
                 },
                 success: function (data) {
                     allLocations = data;
+                    
                     console.log(allLocations);
                     console.log('checkSuperAdmin func success');
                     
@@ -1046,9 +1049,9 @@ $('#dashboardBtn').click(function (event) {
                                     .text(datum.cityName));
                         }
                     });
-                
+
                 $('#submitReportLocOption').click();
-                
+
                 },
                 error: function (http) {
                 $('#reportErrorMessages')
