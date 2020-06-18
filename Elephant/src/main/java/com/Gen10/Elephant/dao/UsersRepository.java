@@ -2,13 +2,12 @@ package com.Gen10.Elephant.dao;
 
 import java.util.List;
 
+import com.Gen10.Elephant.dto.Location;
+import com.Gen10.Elephant.dto.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.Gen10.Elephant.dto.Attendance;
-import com.Gen10.Elephant.dto.Location;
-import com.Gen10.Elephant.dto.User;
 
 @Repository
 public interface UsersRepository extends JpaRepository<User, Integer> {
@@ -71,4 +70,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     
     @Query(value = "SELECT a.locationId FROM User u INNER JOIN Attendance a ON u.userId = a.userId WHERE u.userId = ?1 AND a.attendanceDate = ?2", nativeQuery = true)
     int findUserLocationIdOnDate(int id, String date);
+
+    @Query(value = "SELECT u.* FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId WHERE u.roleId = 4 AND a.isAttending IS NULL", nativeQuery = true)
+    List<User> findAllOldGuestsByAge(int maxAge);
 }
