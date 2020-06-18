@@ -996,10 +996,17 @@ $('#dashboardBtn').click(function (event) {
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
         
+        $("#attendanceNameTableHeader").empty();
+        $("#attendance-message").empty();
+        
+        $('#reportLocationOption').empty();
+        
         loadReportDiv(adminLocation);
         console.log(adminLocation);
         console.log(adminRoleId);
         $("#reportDiv").show();
+        
+        
         
         if (adminRoleId === 1) {
             console.log(adminRoleId);
@@ -1008,6 +1015,9 @@ $('#dashboardBtn').click(function (event) {
                             .append($("<option></option>")
                                 .attr("value", adminLocation)
                                 .text(adminLocationName));
+                        
+            $('#submitReportLocOption').click();
+                        
         }
         
         else if (adminRoleId === 3) {
@@ -1022,12 +1032,23 @@ $('#dashboardBtn').click(function (event) {
                     allLocations = data;
                     console.log(allLocations);
                     console.log('checkSuperAdmin func success');
-                    $.each(data, function(index, datum) {
-                        $('#reportLocationOption')
+                    
+                    $('#reportLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
-                                .text(datum.cityName));
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+                    
+                    $.each(data, function(index, datum) {
+                        if (datum.cityName !== adminLocationName) {
+                            $('#reportLocationOption')
+                                .append($("<option></option>")
+                                    .attr("value", index + 1)
+                                    .text(datum.cityName));
+                        }
                     });
+                
+                $('#submitReportLocOption').click();
+                
                 },
                 error: function (http) {
                 $('#reportErrorMessages')
@@ -1042,6 +1063,8 @@ $('#dashboardBtn').click(function (event) {
                 }
             });
         }  
+        
+        
         
     });  
         
@@ -2706,35 +2729,66 @@ var selectedLocationId;
                  'password': 'password'
 //                    'email': adminEmail,
 //                    'password': adminPassword
-                },
-                success: function (data, status) {
-                    console.log(data);
+            },
+            success: function (data, status) {
+            console.log(data);
                     var myList = $("#myList");
                     $.each(data, function (index, user) {
-                          var name = user.firstName + ' ' + user.lastName;
-                          var id = user.userId;
-                          var nameLi = "<li class='report-name' id="+id+">";
-                          nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">'+name+'</button>';
-                          nameLi += "</li>";
-                          myList.append(nameLi); 
+                    var name = user.firstName + ' ' + user.lastName;
+                            var id = user.userId;
+                            var nameLi = "<li class='report-name' id=" + id + ">";
+                            nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">' + name + '</button>';
+                            nameLi += "</li>";
+                            myList.append(nameLi);
                     });
-                   
                 },
-                error: function() {
-                   $('#reportErrorMessages')
-                    .append($('<li>')
+            error: function() {
+            $('#reportErrorMessages')
+            .append($('<li>')
                     .attr({class: 'list-group-item list-group-item-danger'})
                     .text('An error has occurred.'));
-                    setTimeout(function() {
-                        $('#reportErrorMessages').fadeOut('fast');
-                    }, 2000);
-                }
-
+            setTimeout(function() {
+            $('#reportErrorMessages').fadeOut('fast');
+            }, 2000);
+            }
             });
-        };
-
-
         
+             $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/admin/guests/" + locationId,
+                headers: {
+//                'email': adminEmail,
+//                'password': adminPassword
+                    'email': 'user@user.com',
+                    'password': 'password'
+                },
+            success: function (data, status) {
+            console.log(data);
+                    var myList = $("#myList");
+                    $.each(data, function (index, user) {
+                    var name = user.firstName + ' ' + user.lastName;
+                            var id = user.userId;
+                            var nameLi = "<li class='report-name' id=" + id + ">";
+                            nameLi += '<button onclick="getAttendance(' + id + ')" class="btn report-user-select">' + name + '</button>';
+                            nameLi += "</li>";
+                            myList.append(nameLi);
+                    });
+            },
+
+            error: function() {
+            $('#reportErrorMessages')
+            .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('An error has occurred.'));
+            setTimeout(function() {
+            $('#reportErrorMessages').fadeOut('fast');
+            }, 2000);
+            }
+
+        });
+
+        };
+    
         function getAllLocations(selectedLocationId) {
             selectedLocationId--;
             console.log(selectedLocationId);
@@ -2933,9 +2987,7 @@ function getAttendance(userId) {
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
-
         selectedLocationId = $('#reportLocationOption').val();
-        
         cityName = getAllLocations(selectedLocationId);
         console.log(cityName);
         //console.log(allLocations);
