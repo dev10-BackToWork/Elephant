@@ -113,5 +113,12 @@ public class Attendance {
 	public void setVisitingHost(String visitingHost) {
 		this.visitingHost = visitingHost;
 	}
-	
+
+	public String getMiscInfo() {
+		return this.miscInfo;
+	}
+
+	public void setMiscInfo(String miscInfo) {
+		this.miscInfo = miscInfo;
+	}	
 }

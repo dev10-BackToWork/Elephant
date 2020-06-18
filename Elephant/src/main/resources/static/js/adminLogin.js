@@ -996,11 +996,18 @@ $('#dashboardBtn').click(function (event) {
         $("#deleteEmployeeDiv").hide();
         $("#locationInfoDiv").hide();
         
+
+        $("#attendanceNameTableHeader").empty();
+        $("#attendance-message").empty();
+        
+        $('#reportLocationOption').empty();
         
         loadReportDiv(adminLocation);
         console.log(adminLocation);
         console.log(adminRoleId);
         $("#reportDiv").show();
+        
+        
         
         if (adminRoleId === 1) {
             console.log(adminRoleId);
@@ -1010,6 +1017,9 @@ $('#dashboardBtn').click(function (event) {
                             .append($("<option></option>")
                                 .attr("value", adminLocation)
                                 .text(adminLocationName));
+                        
+            $('#submitReportLocOption').click();
+                        
         }
         
         else if (adminRoleId === 3) {
@@ -1025,13 +1035,23 @@ $('#dashboardBtn').click(function (event) {
                     
                     console.log(allLocations);
                     console.log('checkSuperAdmin func success');
-                    $.each(data, function(index, datum) {
-                        $('#reportLocationOption')
-                            .append($("<option></option>")
-                                .attr("value", index + 1)
-                                .text(datum.cityName));
-                    });
                     
+                    $('#reportLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+                    
+                    $.each(data, function(index, datum) {
+                        if (datum.cityName !== adminLocationName) {
+                            $('#reportLocationOption')
+                                .append($("<option></option>")
+                                    .attr("value", index + 1)
+                                    .text(datum.cityName));
+                        }
+                    });
+
+                $('#submitReportLocOption').click();
+
                 },
                 error: function (http) {
                 $('#reportErrorMessages')
@@ -1046,6 +1066,8 @@ $('#dashboardBtn').click(function (event) {
                 }
             });
         }  
+        
+        
         
     });  
         
