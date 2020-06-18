@@ -59,6 +59,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             + "ORDER BY u.lastName", nativeQuery = true)
     List<Attendance> findCurrentAttendancesInOffice(int id);
     
-    @Query(value = "SELECT a.* FROM Attendance WHERE a.attendanceDate < CURDATE() - ?")
+    @Query(value = "SELECT a.* FROM Attendance a WHERE a.attendanceDate < CURDATE() - ?", nativeQuery = true)
     List<Attendance> findAllOldAttendanceIdsByAge(int i);
 }

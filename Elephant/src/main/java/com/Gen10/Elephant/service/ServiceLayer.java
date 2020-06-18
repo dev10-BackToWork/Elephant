@@ -5,11 +5,14 @@
  */
 package com.Gen10.Elephant.service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import com.Gen10.Elephant.dao.AttendanceRepository;
@@ -20,10 +23,6 @@ import com.Gen10.Elephant.dto.Attendance;
 import com.Gen10.Elephant.dto.Location;
 import com.Gen10.Elephant.dto.Role;
 import com.Gen10.Elephant.dto.User;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -364,33 +363,43 @@ public class ServiceLayer {
         }
     }
 
-    public User checkLogin(User user) {
+    public User checkLogin(String email, String password) throws invalidCredentialsException {
         cleanOldData();
-        User dbUser = usersRepo.findByEmail(user.getEmail());
-        if ((dbUser != null) && BCrypt.checkpw(user.getPasswords(), dbUser.getPasswords())) {
+        User dbUser = usersRepo.findByEmail(email);
+        if (dbUser == null) {
+            throw new invalidCredentialsException("Username was invalid");
+        } else if (!BCrypt.checkpw(password, dbUser.getPasswords())) {
+            throw new invalidCredentialsException("Password was incorrect");
+        } else {
             return dbUser;
         }
-        return null;
     }
 
-    public User checkAdmin(String email, String password) {
+    public User checkAdmin(String email, String password) throws invalidCredentialsException {
         User dbUser = usersRepo.findByEmail(email);
-        if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
-                && (dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
-            // if ((dbUser != null) && password.equals(dbUser.getPasswords())){
+        if (dbUser == null) {
+            throw new invalidCredentialsException("Username was invalid");
+        } else if (!BCrypt.checkpw(password, dbUser.getPasswords())) {
+            throw new invalidCredentialsException("Password was incorrect");
+        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
+            throw new invalidCredentialsException("Insufficient permissions");
+        } else {
             return dbUser;
         }
-        return null;
     }
 
-    public User checkUser(String email, String password) {
+    public User checkUser(String email, String password) throws invalidCredentialsException {
         User dbUser = usersRepo.findByEmail(email);
-        if ((dbUser != null) && (BCrypt.checkpw(password, dbUser.getPasswords()))
-                && (dbUser.getRole().getName().equals("ROLE_ADMIN")
-                        || dbUser.getRole().getName().equals("ROLE_USER") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
+        if (dbUser == null) {
+            throw new invalidCredentialsException("Username was invalid");
+        } else if (!BCrypt.checkpw(password, dbUser.getPasswords())) {
+            throw new invalidCredentialsException("Password was incorrect");
+        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN")
+        || dbUser.getRole().getName().equals("ROLE_USER") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
+            throw new invalidCredentialsException("Insufficient permissions");
+        } else {
             return dbUser;
         }
-        return null;
     }
 
     private String generatePassword() {
