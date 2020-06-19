@@ -99,7 +99,7 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
 	("Eric","Tyson","tysonericj@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Padmavathi","Vadrevu","vpadma0881@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Shawn","Wilson","sdwilson03@yahoo.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
-	("Netsanet","Woldesenbet","netsanet.woldesenbet@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
+	("Netsanet","W oldesenbet","netsanet.woldesenbet@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",7,2),
 	("Agnes","Atem","agnesatem2@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
 	("Kingsley","Awah","kingsleyawah33@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
 	("Michael","Edwards","medwards180@gmail.com","password","$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6",8,2),
