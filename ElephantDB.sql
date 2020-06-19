@@ -429,12 +429,12 @@ INSERT INTO `User` (firstName, lastName, email, defaultPW, passwords, locationId
     ("Super", "User", "superuser@user.com", "password", "$2a$06$b8ZkDIvP/uNS1ePFkJYLVedOmCMkgM1M4rkiX8p30lTA6FElY4Fn6", 5, 3);
     
 INSERT INTO `User` (firstName, lastName, email, locationId, roleId, phoneNumber) VALUES 
-	("Guest", "User", "guest@guest.com", 5, 4, "(555) 555-5555"),
-    ("Guest2", "User2", "guest2@guest2.com", 5, 4, "(555) 555-5555"),
-    ("Guest3", "User3", "guest3@guest3.com", 1, 4, "(111) 111-1111"),
-    ("Guest4", "User4", "guest4@guest4.com", 2, 4, "(222) 222-2222"),
-    ("Guest5", "User5", "guest5@guest5.com", 3, 4, "(333) 333-3333"),
-    ("Guest6", "User6", "guest6@guest6.com", 2, 4, "(222) 222-2222");
+	("Guest", "User", "guest@guest.com", 5, 4, "555-555-5555"),
+    ("Guest2", "User2", "guest2@guest2.com", 5, 4, "555-555-5555"),
+    ("Guest3", "User3", "guest3@guest3.com", 1, 4, "111-111-1111"),
+    ("Guest4", "User4", "guest4@guest4.com", 2, 4, "222-222-2222"),
+    ("Guest5", "User5", "guest5@guest5.com", 3, 4, "333-333-3333"),
+    ("Guest6", "User6", "guest6@guest6.com", 2, 4, "222-222-2222");
 
 -- DELIMITER $$
 

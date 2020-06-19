@@ -16,6 +16,7 @@ $(document).ready(function () {
     $("#dashboardDiv").hide();
     $("#allEmployeesDiv").hide();
     $("#reportDiv").hide();
+    $("#adminGuidelinesDiv").hide();
     $("#createAccountDiv").hide();
     $("#createGuestDiv").hide();
     $("#createLocationDiv").hide();
@@ -106,6 +107,7 @@ $(document).ready(function () {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -124,6 +126,33 @@ $(document).ready(function () {
         
     });
     
+    $('#adminGuidelinesBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").show();
+        $("#createAccountDiv").hide();
+        $("#createGuestDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#guestAttendingDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#overall-success").hide();
+        $("#screener-div").hide();
+        $("#survey-div").hide();
+        $("#screener-bye").hide();
+        $("#survey-bye").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#locationInfoDiv").hide();
+        $('#time-success').hide();
+        $("#loginErr").hide();  
+        
+    });
+    
 $('#dashboardBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
@@ -132,6 +161,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").show();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -482,6 +512,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -986,6 +1017,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").show();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -1086,6 +1118,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").show();
         $("#createLocationDiv").hide();
         $("#employeeInfoDiv").hide();
@@ -1131,6 +1164,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createGuestDiv").show();
@@ -1176,6 +1210,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -1220,6 +1255,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -1533,6 +1569,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -1554,6 +1591,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").show();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -1699,6 +1737,7 @@ $('#dashboardBtn').click(function (event) {
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").show();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -2045,6 +2084,7 @@ var attendanceLocation;
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
@@ -2162,6 +2202,7 @@ var attendanceLocation;
         $("#dashboardDiv").hide();
         $("#allEmployeesDiv").hide();
         $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
         $("#createAccountDiv").hide();
         $("#createGuestDiv").hide();
         $("#createLocationDiv").hide();
