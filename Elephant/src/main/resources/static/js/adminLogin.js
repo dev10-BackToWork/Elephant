@@ -8,6 +8,9 @@ $(document).ready(function () {
     var adminPassword;
     var user;
     var adminRoleId;
+    var guestAnswerOne = false;
+    var guestAnswerTwo = false;
+    var guestAnswerThree = false;
 
     $("#loginNav").show();
     $("#adminLoginDiv").show();
@@ -712,6 +715,11 @@ $('#dashboardBtn').click(function (event) {
     
    $('#submitEmployeeOption').click(function (event) {  
        var option = $('#employeeOption').val();
+       
+        $('#q1guest').bootstrapToggle('off');
+        $('#q2guest').bootstrapToggle('off');
+        $('#q3guest').bootstrapToggle('off');
+        
        if (option == 1) {
             $("#activeEmployees").hide();
             $("#inactiveEmployees").hide();
@@ -869,7 +877,7 @@ $('#dashboardBtn').click(function (event) {
   });
   
   $('#submitGuestAttendBtn').click(function (event) {
-      
+       
       $('#guestRows').empty();
 
         $('#attendErrorMessages').empty();
@@ -895,6 +903,13 @@ $('#dashboardBtn').click(function (event) {
             $('#attendErrorMessages').append($('<li>')
                 .attr({class: 'list-group-item list-group-item-danger' })
                 .text('Miscellaneous information must be less than 255 characters. Please enter a response that fits this parameter.'));
+            errorCount += 1;
+        }
+        
+        if (guestAnswerOne == true || guestAnswerTwo == true || guestAnswerThree == true) {
+            $('#attendErrorMessages').append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger' })
+                .text('Guests are only permitted into the office if they answer "No" to all health survey questions.'));
             errorCount += 1;
         }
         
@@ -2227,8 +2242,33 @@ var attendanceLocation;
         
         $("#guest-visiting").val("");
         $("#guest-misc").val("");
-
+        
+        $('#attendErrorMessages').empty();
+        
         var guestId = id;
+        
+        guestAnswerOne = false;
+        guestAnswerTwo = false;
+        guestAnswerThree = false;
+
+        toggleGuest();
+
+        function toggleGuest() {
+            $('#q1guest').change(function () {
+                guestAnswerOne = $(this).prop('checked');
+                console.log("Q1 Guest: " + guestAnswerOne);
+            });
+
+            $('#q2guest').change(function () {
+                guestAnswerTwo = $(this).prop('checked');
+                console.log("Q2 Guest: " + guestAnswerTwo);
+            });
+            $('#q3guest').change(function () {
+                guestAnswerThree = $(this).prop('checked');
+                console.log("Q3 Guest: " + guestAnswerThree);
+            });
+        }
+       
 
         $.ajax({
         type: 'GET',
