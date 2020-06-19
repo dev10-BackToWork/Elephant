@@ -334,17 +334,24 @@ $('#dashboardBtn').click(function (event) {
                     var status = datum.departedEarly;
                     if (status == true) {
                         status = "Left Early";
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + status + '</td>';
+                        row += '<td></td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
                     } if (status == false) {
                         status = "In Office";
-                    }
-                    
-                    var row = '<tr>';
+                        var row = '<tr>';
                         row += '<td>' + name + '</td>';
                         row += '<td>' + location + '</td>';
                         row += '<td>' + status + '</td>';
                         row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
-                    row += '</tr>';
-                    arrivalRows.append(row);
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                    }
+
                      });
                  },
                  error: function() {
@@ -477,17 +484,24 @@ $('#dashboardBtn').click(function (event) {
                     var status = datum.departedEarly;
                     if (status == true) {
                         status = "Left Early";
+                        var row = '<tr>';
+                        row += '<td>' + name + '</td>';
+                        row += '<td>' + location + '</td>';
+                        row += '<td>' + status + '</td>';
+                        row += '<td></td>';
+                        row += '</tr>';
+                        arrivalRows.append(row);
                     } if (status == false) {
                         status = "In Office";
-                    }
-                    
-                    var row = '<tr>';
+                        var row = '<tr>';
                         row += '<td>' + name + '</td>';
                         row += '<td>' + location + '</td>';
                         row += '<td>' + status + '</td>';
                         row += '<td><button onclick="departEarly(' + id + ')" class="btn btn-primary">Left Early</button></td>';
-                    row += '</tr>';
-                    arrivalRows.append(row);
+                        row += '</tr>';
+                        arrivalRows.append(row);
+                    }
+
                      });
                  },
                  error: function() {
