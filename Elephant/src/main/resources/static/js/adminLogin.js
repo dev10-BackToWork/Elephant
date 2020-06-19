@@ -3748,4 +3748,37 @@ function prepCSVRow(arr, columnCount, initial) {
     // });
 
 
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @GetMapping("/addLocation")
+
+    // $('#addNewLocation').click(function(event) {
+
+    //     var cityNameField = "New location"
+    //     var maxOccupancyField = "22"
+    //     var distributionEmailField = "new@location.com"
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/api/admin/addLocation',
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         contentType: "application/json;charset=UTF-8",
+    //         data: JSON.stringify({
+    //             "cityName": cityNameField,
+    //             "maxOccupancy": maxOccupancyField,
+    //             "distributionEmail": distributionEmailField
+    //         }),
+    //         success: function(data) {
+    //             console.log(data);
+    //         },
+    //         error: function(http) {
+    //             console.log(http);
+    //         }
+    //     });
+
+    // });
+
+
     // // ********** Preparing Ajax calls End

@@ -150,6 +150,18 @@ public class AdminController {
             return new ResponseEntity<List<Location>>(new ArrayList<Location>(), HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/addLocation")
+    public ResponseEntity<Location> addLocation(@RequestBody Location location, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        try {
+            service.checkAdmin(email, password);
+            return new ResponseEntity<Location>(service.addLocation(location), HttpStatus.OK);
+        } catch (invalidCredentialsException e) {
+            String message = "There was an error while attempting to create the user.";
+            return new ResponseEntity(message, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/newUser")
