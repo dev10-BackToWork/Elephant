@@ -2903,7 +2903,11 @@ function getAttendance(userId) {
             if (data.length === 0) {
                 $("#attendance-message").html("No attendance records exist for the past 30 days.");
                 console.log('this user does not have any attendance records!');
-            } else if (data.length > 0) {
+            } else if (data.length > 0)  {
+                
+                if (data[0].user.role.roleId === 4) {
+                    
+                console.log(data[0].user.role.roleId);
                 userName = data[0].user.firstName + ' ' + data[0].user.lastName;
                 firstName = data[0].user.firstName;
                 lastName = data[0].user.lastName;
@@ -2918,37 +2922,34 @@ function getAttendance(userId) {
                 $("#isAttendingTable").hide();
                 $("#isAttendingRow").empty();
 
-                var userReportSummaryTableDiv = $("#userReportSummaryTableDiv");
+                var guestReportSummaryTableDiv = $("#guestReportSummaryTableDiv");
 
                 //var attendanceDateDiv = $('#report-attendance-dates');
-                var userReportSummaryTable;
+                var guestReportSummaryTable;
                 var i = 0;
-                $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the attended office.");
+                $("#attendance-message").html("Over the past 30 days, the selected guest was in the office on the following dates.<br>Click a date to view all employees and guests in the attended office.");
 
-                var userReportSummaryTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + userName + '</h5>';
-                userReportSummaryTable += '<div class="col-12">';
-                userReportSummaryTable += '<table class="table table-striped" style="table-layout:fixed;" id="userReportSummary' + 'Table">';
-                userReportSummaryTable += '<thead>';
-                userReportSummaryTable += '<tr>';
+                var guestReportSummaryTable = '<h5 class="table-header" id="guestReportSummaryTableHeader">' + 'Office Attendance for ' + userName + '</h5>';
+                guestReportSummaryTable += '<div class="col-12">';
+                guestReportSummaryTable += '<table class="table table-striped" style="table-layout:fixed;" id="guestReportSummary' + 'Table">';
+                guestReportSummaryTable += '<thead>';
+                guestReportSummaryTable += '<tr>';
 //                userReportSummaryTable += '<th>First Name</th>';
 //                userReportSummaryTable += '<th>Last Name</th>';
 //                userReportSummaryTable += '<th>Email</th>';
-                userReportSummaryTable += '<th>Date</th>';
-                userReportSummaryTable += '<th>Office Attended</th>';
-                userReportSummaryTable += '<th>Departed Early</th>';
-                userReportSummaryTable += '<th>Visiting Host</th>';
-                userReportSummaryTable += '<th>Notes</th>';
-                userReportSummaryTable += '</tr>';
-                userReportSummaryTable += '</thead>';
-                userReportSummaryTable += '<tbody class="userReportSummaryRow" id=' + i + '></tbody>';
-                userReportSummaryTable += '</table>';
-                userReportSummaryTable += '</div>';
+                guestReportSummaryTable += '<th>Date</th>';
+                guestReportSummaryTable += '<th>Office Attended</th>';
+                guestReportSummaryTable += '<th>Departed Early</th>';
+                guestReportSummaryTable += '<th>Visiting Host</th>';
+                guestReportSummaryTable += '<th>Notes</th>';
+                guestReportSummaryTable += '</tr>';
+                guestReportSummaryTable += '</thead>';
+                guestReportSummaryTable += '<tbody class="guestReportSummaryRow" id=' + i + '></tbody>';
+                guestReportSummaryTable += '</table>';
+                guestReportSummaryTable += '</div>';
 
-                userReportSummaryTableDiv.append(userReportSummaryTable);
+                guestReportSummaryTableDiv.append(guestReportSummaryTable);
       
-            }
-
-
             $.each(data, function (i) {
                 console.log(data);
 
@@ -2975,19 +2976,86 @@ function getAttendance(userId) {
                 row += '<td>' + miscInfo + '</td>';
                 row += '</tr>';
 
+                $('.guestReportSummaryRow').append(row);
+            });
+            
+
+            } else {
+                console.log(data[0].user.role.roleId);
+                
+                
+                userName = data[0].user.firstName + ' ' + data[0].user.lastName;
+                firstName = data[0].user.firstName;
+                lastName = data[0].user.lastName;
+                email = data[0].user.email;
+                var visitingHost = data[0].visitingHost;
+                var miscInfo = data[0].miscInfo;
+                
+                //$("#report-attendance-table").show();
+                //console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
+                //$("#attendance-message").empty();
+                $('#report-attendance-dates').empty();
+                $("#isAttendingTable").hide();
+                $("#isAttendingRow").empty();
+
+                var userReportSummaryTableDiv = $("#userReportSummaryTableDiv");
+
+                //var attendanceDateDiv = $('#report-attendance-dates');
+                var userReportSummaryTable;
+                var i = 0;
+                $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees and guests in the attended office.");
+
+                var userReportSummaryTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + userName + '</h5>';
+                userReportSummaryTable += '<div class="col-12">';
+                userReportSummaryTable += '<table class="table table-striped" style="table-layout:fixed;" id="userReportSummary' + 'Table">';
+                userReportSummaryTable += '<thead>';
+                userReportSummaryTable += '<tr>';
+                userReportSummaryTable += '<th>Date</th>';
+                userReportSummaryTable += '<th>Office Attended</th>';
+                userReportSummaryTable += '<th>Departed Early</th>';
+//                userReportSummaryTable += '<th>Visiting Host</th>';
+//                userReportSummaryTable += '<th>Notes</th>';
+                userReportSummaryTable += '</tr>';
+                userReportSummaryTable += '</thead>';
+                userReportSummaryTable += '<tbody class="userReportSummaryRow" id=' + i + '></tbody>';
+                userReportSummaryTable += '</table>';
+                userReportSummaryTable += '</div>';
+
+                userReportSummaryTableDiv.append(userReportSummaryTable);
+
+            $.each(data, function (i) {
+                console.log(data);
+
+                console.log(data[i].location.cityName);
+                attendanceLocationName = data[i].location.cityName;
+                attendanceId = data[i].location.locationId;
+                departedEarly = data[i].departedEarly;
+                //console.log(departedEarly);
+
+                var dateStringId = data[i].attendanceDate;
+                fullDate2 = data[i].attendanceDate.toString();
+                year = fullDate2.substring(0, 4).trim();
+                var monthDate = fullDate2.substring(5);
+                month = monthDate.substring(0, 2).trim();
+                day = fullDate2.substring(8);
+                dateStringDisplay = month + '/' + day + '/' + year;
+
+                var row = '<tr>';
+                row = '<tr>';
+                row += "<td> <button class='report-date-submit' id='" + dateStringId + "'>" + month + '/' + day + '/' + year + "</button> </td>";
+                row += '<td>' + attendanceLocationName + '</td>';
+                row += '<td>' + departedEarly + '</td>';
+//                row += '<td>' + visitingHost + '</td>';
+//                row += '<td>' + miscInfo + '</td>';
+                row += '</tr>';
+
                 $('.userReportSummaryRow').append(row);
             });
+ 
+            }
 
-
-
-
-
-
-
-
-
-
-
+            }
+            
             $(".report-date-submit").on("click", function () {
                 var btnId = this.id;
                 btnIdString = btnId.toString();
@@ -3047,6 +3115,7 @@ function getAttendance(userId) {
         $('#reportAttendanceTableDiv').empty();
         $('#reportSummaryTableDiv').empty();
         $('#dateSummaryTableDiv').empty();
+        $('#guestReportSummaryTableDiv').empty();
         selectedLocationId = $('#reportLocationOption').val();
         cityName = getAllLocations(selectedLocationId);
         console.log(cityName);
@@ -3087,6 +3156,7 @@ function getAttendance(userId) {
         $('#dateSummaryTableDiv').empty();
         $("#attendance-message").empty();
         $("#attendanceNameTableHeader").empty();
+        $('#guestReportSummaryTableDiv').empty();
         //$("#attendanceTableHeader").hide();               
         //$("#attendanceNameTableHeader").empty();
        //$("#attendanceNameTableHeader").hide();
@@ -3101,6 +3171,7 @@ var attendanceLocationId;
         $("#reportSummaryTableDiv").empty();
         $("#attendanceNameTableHeader").html(specifiedDate);
         $("#attendance-message").empty();
+       // $('#guestReportSummaryTableDiv').empty();
        // $(".report-date-submit").hide();
        // $('#datePicker').val(new Date().toDateInputValue());
         console.log('date in get empl function: ' + btnIdString);
@@ -3186,10 +3257,6 @@ var attendanceLocationId;
                     $("#isAttendingTable").hide();
 
                 };
-
-                // $("#isAttendingTable").show();
-                // $("#attendanceTableHeader").show();
-                // $("#attendanceTableHeader").html(attendanceDate + '<br> ' + attendanceLocation + ' Office Attendance');
 
             },
              error: function (http) {
