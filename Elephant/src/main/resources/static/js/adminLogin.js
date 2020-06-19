@@ -2869,7 +2869,7 @@ function getAttendance(userId) {
                 email = data[0].user.email;
                 homeLocation = data[0].user.location.cityName;
 
-                $("#report-attendance-table").show();
+                //$("#report-attendance-table").show();
                 console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
                 //$("#attendance-message").empty();
                 $('#report-attendance-dates').empty();
@@ -2990,6 +2990,12 @@ function getAttendance(userId) {
 
      //get value of date picker and send to ajax call
     $("#report-date-btn").on("click", function() {
+        $("#attendanceNameTableHeader").empty();
+        $('#userReportSummaryTableDiv').empty();
+        $('#userReportSummaryTableDiv').empty();
+        $('#reportAttendanceTableDiv').empty();
+        $('#reportSummaryTableDiv').empty();
+        $('#dateSummaryTableDiv').empty();
         selectedLocationId = $('#reportLocationOption').val();
         cityName = getAllLocations(selectedLocationId);
         console.log(cityName);
@@ -3030,8 +3036,9 @@ function getAttendance(userId) {
         $('#userReportSummaryTableDiv').empty();
         $('#reportAttendanceTableDiv').empty();
         $('#reportSummaryTableDiv').empty();
-        //$("#attendance-message").empty();
-        //$("#attendanceTableHeader").empty();
+        $('#dateSummaryTableDiv').empty();
+         //$("#attendance-message").empty();
+        $("#attendanceNameTableHeader").empty();
         //$("#attendanceTableHeader").hide();               
         //$("#attendanceNameTableHeader").empty();
        //$("#attendanceNameTableHeader").hide();
@@ -3067,16 +3074,15 @@ var attendanceLocationId;
             success: function (response) {
                 console.log('The request for the attendance report was successful.' + specifiedDate);
                 console.log(response);
-                
-                //$("#isAttendingTable").show();
-              //  var isAttendingRows = $("#isAttendingRows");
+
                 var reportAttendanceTableDiv = $("#reportAttendanceTableDiv");
  
-                var i = 0;
+                //var i = 0;
                 if (response.length > 0) {
                 
                 $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the attended office.");
-                 $.each(response, function (i, user) {
+                
+            $.each(response, function (i, user) {
                 firstName = user.user.firstName;
                 lastName = user.user.lastName;
                 userName = user.user.firstName + ' ' + user.user.lastName;
@@ -3084,7 +3090,6 @@ var attendanceLocationId;
                 attendanceLocation = user.location.cityName;
                 attendanceLocationId = user.location.locationId;
                 attendanceDate = user.attendanceDate;
-                
                 
                 var reportAttendanceTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + attendanceLocation + '</h5>';
                 reportAttendanceTable += '<div class="col-12">';
@@ -3123,7 +3128,8 @@ var attendanceLocationId;
                     //$('#reportAttendanceRow').append(row);
                 }
                   $('#reportAttendanceRow').append(row);
-            
+                
+                
                 });
             
                 } else if (response.length <= 0) { 
@@ -3158,80 +3164,112 @@ var attendanceLocationId;
     };
 
 
-    function getEmployeesByDateRange(attendanceLocationId){
-        $("#reportSummaryTableDiv").empty();
-        $("#reportAttendanceTableDiv").empty();
-        locationId = attendanceLocationId;
-        console.log(attendanceLocationId);
-        //console.log(locatonName);
-        
-        var startDate = btnIdString;
-        var endDate = btnIdStringTwo;
-        console.log(btnIdStringTwo);
-        //$(".report-date-submit").hide();
-        console.log('date in get empl function: ' + btnIdString);
-         $("#noAttendees").hide();
-         var specifiedDate = btnIdString;
+function getEmployeesByDateRange(attendanceLocationId) {
+    $('#dateSummaryTableDiv').empty();
+    $("#reportSummaryTableDiv").empty();
+    $("#reportAttendanceTableDiv").empty();
+    locationId = attendanceLocationId;
+    console.log(attendanceLocationId);
+    //console.log(locatonName);
 
-        $('#isAttendingRows').empty();
-        
-        $.ajax({
-            type: 'GET',
-            url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + attendanceLocationId + '/' + startDate + '/' + endDate,
-             
-             headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
-             },
+    var startDate = btnIdString;
+    var endDate = btnIdStringTwo;
+    console.log(btnIdStringTwo);
+    //$(".report-date-submit").hide();
+    console.log('date in get empl function: ' + btnIdString);
+    $("#noAttendees").hide();
+    var specifiedDate = btnIdString;
 
-            success: function (response) {
-                console.log(response);
-                console.log('The request for a user attendance summary for the specified range was successful.');
-                $("#isAttendingTable").show();
+    //$('#isAttendingRows').empty();
 
-                if (response.length <= 0) {
-                    console.log("There are no attendance records for the date range selected.");
-                    $("#attendanceNameTableHeader").show();
-                    $("#attendanceNameTableHeader").html(startDate + ' through ' + endDate);
-                    $("#attendanceTableHeader").empty();
-                    $("#attendanceTableHeader").hide();
-                    $("#attendance-message").show();
-                    $("#attendance-message").text("There are no attendance records on the date selected.");
-                    $("#isAttendingTable").hide();
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + attendanceLocationId + '/' + startDate + '/' + endDate,
+
+        headers: {
+            'email': 'user@user.com',
+            'password': 'password'
+        },
+
+        success: function (response) {
+            console.log('The request for the attendance report was successful.' + specifiedDate);
+            console.log(response);
+
+            if (response.length > 0) {
+
+                //console.log("There are no attendance records for the date range selected.");
+//                    $("#attendanceNameTableHeader").show();
+//                    $("#attendanceNameTableHeader").html(startDate + ' through ' + endDate);
+//                    $("#attendanceTableHeader").empty();
+//                    $("#attendanceTableHeader").hide();
+//                    $("#attendance-message").show();
+//                    $("#attendance-message").text("There are no attendance records on the date selected.");
+//                    $("#isAttendingTable").hide();
+                // var dateAttendanceTableDiv;
+                var dateAttendanceTable = '<h5 class="table-header" id="dateAttendanceSummaryTableHeader"> Summary of ' + locationName + ' Office Attendance<br>' + startDate + ' through ' + endDate + '</h5>';
+                dateAttendanceTable += '<div class="col-12">';
+                dateAttendanceTable += '<table class="table table-striped" style="table-layout:fixed;" id="dateAttendanceSummaryTable">';
+                dateAttendanceTable += '<thead>';
+                dateAttendanceTable += '<tr>';
+                dateAttendanceTable += '<th>First Name</th>';
+                dateAttendanceTable += '<th>Last Name</th>';
+                dateAttendanceTable += '<th>Email</th>';
+                dateAttendanceTable += '<th>Office Attended</th>';
+//                dateAttendanceTable += '<th>Departed Early</th>';
+                dateAttendanceTable += '<th>Home Office</th>';
+//                dateAttendanceTable += '<th>Date</th>';
+                dateAttendanceTable += '</tr>';
+                dateAttendanceTable += '</thead>';
+                dateAttendanceTable += '<tbody id="dateAttendanceRowTable"></tbody>';
+                dateAttendanceTable += '</table>';
+                dateAttendanceTable += '<hr id="dateAttendanceTable">';
+                dateAttendanceTable += '</div>';
+
+                $('#dateSummaryTableDiv').append(dateAttendanceTable);
+
+                //$.each(response, function (i, response) {
+                // $.each(response, function (i) {
+                // var firstName = response.firstName;
+                //  var lastName = response.lastName;
+                //  var userEmail = response.email;
+
+                    $.each(response, function (i, data) {
+                        var firstName = response[i].firstName;
+                        var lastName = response[i].lastName;
+                        var userEmail = response[i].email;
+                        var userLocation = response[i].location.cityName;
+                        console.log(firstName);
+
+
+                        console.log(response);
+                        //var userLocation = response.location.cityName;
+                        console.log('is attending is true!');
+                        console.log(response.firstName);
+                        console.log(response.lastName);
+
+                        var dateSummaryRow = '<tr>';
+                        dateSummaryRow += '<td>' + firstName + '</td>';
+                        dateSummaryRow += '<td>' + lastName + '</td>';
+                        dateSummaryRow += '<td>' + userEmail + '</td>';
+                        dateSummaryRow += '<td>' + locationName + '</td>';
+                        dateSummaryRow += '<td>' + userLocation + '</td>';
+                        dateSummaryRow += '</tr>';
+
+                        $('#dateAttendanceRowTable').append(dateSummaryRow);
+
+                    });
                 }
 
-                var isAttendingRows = $("#isAttendingRows");
-                
-                $.each(response, function (i, response) {
-                    console.log(response);
-                    var userFirstName = response.firstName;
-                    var userLastName = response.lastName;
-                    var userEmail = response.email;
-                    var userLocation = response.location.cityName;
-                    var row = '<tr>';
-                
-                //if (response[i].isAttending === true) {
-                    row = '<tr>';
-                    row += '<td>' + userFirstName + '</td>';
-                    row += '<td>' + userLastName + '</td>';
-                    row += '<td>' + userEmail + '</td>';
-                    row += '<td>' + attendanceLocationId + '</td>';
-                    row += '<td>' + userLocation + '</td>';
-//                    row += '<td>' + startDate + ' - ' + endDate + '</td>';
-                    row += '<td>' +''+ '</td>';
-                row += '</tr>';
-                isAttendingRows.append(row);
-                // }
-                if (row.length === 0) {
+                if (response.length <= 0) {
                     $("#noAttendees").show();
                     $("#noAttendees").text("There are no attendance records on the date selected.");
                     //isAttendingRows.append("There are no attendance records for the date selected");
                 }
-                $("#isAttendingTable").show();
-                $("#attendanceTableHeader").show();
-                $("#attendanceTableHeader").html(startDate + ' through ' + endDate + '<br> ' + attendanceLocationId + ' Office Attendance');
-                console.log('The request for the attendance report was successful.' + specifiedDate);
-            });
+                
+                //$("#isAttendingTable").show();
+                //$("#attendanceTableHeader").show();
+                //$("#attendanceTableHeader").html(startDate + ' through ' + endDate + '<br> ' + attendanceLocationId + ' Office Attendance');
+            
 
         },
         error: function (http) {
@@ -3264,8 +3302,6 @@ var attendanceLocationId;
             var lastName;
             var email;
             var location;
-//            var dateRow;
-//            var data;
 
             $.each(response, function (date, data) {
                 var reportTitle = date;
