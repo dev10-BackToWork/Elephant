@@ -2867,8 +2867,9 @@ function getAttendance(userId) {
                 firstName = data[0].user.firstName;
                 lastName = data[0].user.lastName;
                 email = data[0].user.email;
-                homeLocation = data[0].user.location.cityName;
-
+                var visitingHost = data[0].visitingHost;
+                var miscInfo = data[0].miscInfo;
+                
                 //$("#report-attendance-table").show();
                 console.log('The request for user ' + userId + ' attendance within the last 30 days was successful.');
                 //$("#attendance-message").empty();
@@ -2894,7 +2895,8 @@ function getAttendance(userId) {
                 userReportSummaryTable += '<th>Date</th>';
                 userReportSummaryTable += '<th>Office Attended</th>';
                 userReportSummaryTable += '<th>Departed Early</th>';
-//                userReportSummaryTable += '<th>Home Office</th>';
+                userReportSummaryTable += '<th>Visiting Host</th>';
+                userReportSummaryTable += '<th>Notes</th>';
                 userReportSummaryTable += '</tr>';
                 userReportSummaryTable += '</thead>';
                 userReportSummaryTable += '<tbody class="userReportSummaryRow" id=' + i + '></tbody>';
@@ -2925,17 +2927,25 @@ function getAttendance(userId) {
 
                 var row = '<tr>';
                 row = '<tr>';
-//                      row += '<td>' + firstName + '</td>';
-//                      row += '<td>' + lastName + '</td>';
-//                      row += '<td>' + email + '</td>';
-//                      row += '<td>' + homeLocation + '</td>';
                 row += "<td> <button class='report-date-submit' id='" + dateStringId + "'>" + month + '/' + day + '/' + year + "</button> </td>";
                 row += '<td>' + attendanceLocationName + '</td>';
                 row += '<td>' + departedEarly + '</td>';
+                row += '<td>' + visitingHost + '</td>';
+                row += '<td>' + miscInfo + '</td>';
                 row += '</tr>';
 
                 $('.userReportSummaryRow').append(row);
             });
+
+
+
+
+
+
+
+
+
+
 
             $(".report-date-submit").on("click", function () {
                 var btnId = this.id;
@@ -3017,10 +3027,7 @@ function getAttendance(userId) {
             getEmployeesByDate(locationId);
         
         }
-        
-       // $(".report-date-submit").hide();
-       // $("#attendanceNameTableHeader").empty();
-       // $("#attendanceNameTableHeader").hide();
+
     });
 
 
@@ -3037,7 +3044,7 @@ function getAttendance(userId) {
         $('#reportAttendanceTableDiv').empty();
         $('#reportSummaryTableDiv').empty();
         $('#dateSummaryTableDiv').empty();
-         //$("#attendance-message").empty();
+        $("#attendance-message").empty();
         $("#attendanceNameTableHeader").empty();
         //$("#attendanceTableHeader").hide();               
         //$("#attendanceNameTableHeader").empty();
@@ -3052,6 +3059,7 @@ var attendanceLocationId;
         $("#reportAttendanceTableDiv").empty();
         $("#reportSummaryTableDiv").empty();
         $("#attendanceNameTableHeader").html(specifiedDate);
+        $("#attendance-message").empty();
        // $(".report-date-submit").hide();
        // $('#datePicker').val(new Date().toDateInputValue());
         console.log('date in get empl function: ' + btnIdString);
@@ -3073,23 +3081,13 @@ var attendanceLocationId;
 
             success: function (response) {
                 console.log('The request for the attendance report was successful.' + specifiedDate);
-                console.log(response);
-
+                //console.log(response);
                 var reportAttendanceTableDiv = $("#reportAttendanceTableDiv");
- 
-                //var i = 0;
+                var attendanceLocation = response[0].location.cityName;
+                
                 if (response.length > 0) {
-                
+               // if (response.)
                 $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees in the attended office.");
-                
-            $.each(response, function (i, user) {
-                firstName = user.user.firstName;
-                lastName = user.user.lastName;
-                userName = user.user.firstName + ' ' + user.user.lastName;
-                email = user.user.email;
-                attendanceLocation = user.location.cityName;
-                attendanceLocationId = user.location.locationId;
-                attendanceDate = user.attendanceDate;
                 
                 var reportAttendanceTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + attendanceLocation + '</h5>';
                 reportAttendanceTable += '<div class="col-12">';
@@ -3106,12 +3104,20 @@ var attendanceLocationId;
                 reportAttendanceTable += '</tr>';
                 reportAttendanceTable += '</thead>';
                 reportAttendanceTable += '<tbody id="reportAttendanceRow"></tbody>';
-                
-                //reportAttendanceTable += '<tbody id="reportAttendanceRow"></tbody>';
                 reportAttendanceTable += '</table>';
                 reportAttendanceTable += '</div>';
                
                 reportAttendanceTableDiv.append(reportAttendanceTable);
+            
+            $.each(response, function (i, user) {
+                firstName = user.user.firstName;
+                lastName = user.user.lastName;
+                userName = user.user.firstName + ' ' + user.user.lastName;
+                email = user.user.email;
+                attendanceLocation = user.location.cityName;
+                attendanceLocationId = user.location.locationId;
+                attendanceDate = user.attendanceDate;
+                homeLocation = user.user.location.cityName;
                 
                 if (response[i].isAttending === true) {
                     var row = '<tr>';
@@ -3119,19 +3125,15 @@ var attendanceLocationId;
                     row += '<td>' + lastName + '</td>';
                     row += '<td>' + email + '</td>';
                     row += '<td>' + attendanceLocation + '</td>';
-                    row += '<td>' + homeLocation + '</td>';
                     row += '<td>' + departedEarly + '</td>';
+                    row += '<td>' + homeLocation + '</td>';
                     row += '<td>' + attendanceDate + '</td>';
-                    row += '<td>' +''+ '</td>';
                     row += '</tr>';
-                    //$('#reportAttendanceRow').append(row);
-                    //$('#reportAttendanceRow').append(row);
                 }
                   $('#reportAttendanceRow').append(row);
-                
-                
+
                 });
-            
+
                 } else if (response.length <= 0) { 
                     console.log("There are no attendance records on the date selected.");
                     $("#attendanceNameTableHeader").show();
@@ -3168,9 +3170,9 @@ function getEmployeesByDateRange(attendanceLocationId) {
     $('#dateSummaryTableDiv').empty();
     $("#reportSummaryTableDiv").empty();
     $("#reportAttendanceTableDiv").empty();
+    $("#attendance-message").empty();
     locationId = attendanceLocationId;
     console.log(attendanceLocationId);
-    //console.log(locatonName);
 
     var startDate = btnIdString;
     var endDate = btnIdStringTwo;
@@ -3179,8 +3181,6 @@ function getEmployeesByDateRange(attendanceLocationId) {
     console.log('date in get empl function: ' + btnIdString);
     $("#noAttendees").hide();
     var specifiedDate = btnIdString;
-
-    //$('#isAttendingRows').empty();
 
     $.ajax({
         type: 'GET',
@@ -3215,9 +3215,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
                 dateAttendanceTable += '<th>Last Name</th>';
                 dateAttendanceTable += '<th>Email</th>';
                 dateAttendanceTable += '<th>Office Attended</th>';
-//                dateAttendanceTable += '<th>Departed Early</th>';
                 dateAttendanceTable += '<th>Home Office</th>';
-//                dateAttendanceTable += '<th>Date</th>';
                 dateAttendanceTable += '</tr>';
                 dateAttendanceTable += '</thead>';
                 dateAttendanceTable += '<tbody id="dateAttendanceRowTable"></tbody>';
@@ -3227,25 +3225,11 @@ function getEmployeesByDateRange(attendanceLocationId) {
 
                 $('#dateSummaryTableDiv').append(dateAttendanceTable);
 
-                //$.each(response, function (i, response) {
-                // $.each(response, function (i) {
-                // var firstName = response.firstName;
-                //  var lastName = response.lastName;
-                //  var userEmail = response.email;
-
                     $.each(response, function (i, data) {
                         var firstName = response[i].firstName;
                         var lastName = response[i].lastName;
                         var userEmail = response[i].email;
                         var userLocation = response[i].location.cityName;
-                        console.log(firstName);
-
-
-                        console.log(response);
-                        //var userLocation = response.location.cityName;
-                        console.log('is attending is true!');
-                        console.log(response.firstName);
-                        console.log(response.lastName);
 
                         var dateSummaryRow = '<tr>';
                         dateSummaryRow += '<td>' + firstName + '</td>';
@@ -3265,11 +3249,6 @@ function getEmployeesByDateRange(attendanceLocationId) {
                     $("#noAttendees").text("There are no attendance records on the date selected.");
                     //isAttendingRows.append("There are no attendance records for the date selected");
                 }
-                
-                //$("#isAttendingTable").show();
-                //$("#attendanceTableHeader").show();
-                //$("#attendanceTableHeader").html(startDate + ' through ' + endDate + '<br> ' + attendanceLocationId + ' Office Attendance');
-            
 
         },
         error: function (http) {
@@ -3307,7 +3286,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
                 var reportTitle = date;
                 //console.log(reportDate);
                 var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">'+ locationName +' Office Attendance for '+ reportTitle+'</h5>';
-//                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export">Export To CSV</button></div>';
+                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export">Export To CSV</button></div>';
                 reportSummaryTable += '<div class="col-12">';
                 reportSummaryTable += '<table class="table table-striped" style="table-layout:fixed;" id="reportSummary' + date + 'Table">';
                 reportSummaryTable += '<thead>';
