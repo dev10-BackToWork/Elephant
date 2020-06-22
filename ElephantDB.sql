@@ -10,7 +10,8 @@ CREATE TABLE `Role` (
 CREATE TABLE Location (
 	locationId int primary key auto_increment,
     cityName varchar(50) not null,
-    maxOccupancy int not null
+    maxOccupancy int not null,
+    distributionEmail varchar(150)
 );
 
 CREATE TABLE `User` (
@@ -481,4 +482,5 @@ INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized, locat
     (1, "2020-06-19", 1, 0, 1),
     (1, "2020-06-19", 233, 0, 5),
     (1, "2020-06-19", 350, 1, 5);
+    
     

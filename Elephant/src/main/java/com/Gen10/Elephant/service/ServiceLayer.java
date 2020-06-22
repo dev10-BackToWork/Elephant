@@ -141,6 +141,10 @@ public class ServiceLayer {
             return location;
         }
     }
+    
+    public Location addLocation(Location location) {
+        return locationRepo.save(location);
+    }
 
     public Location editCapacity(int id, int num) {
         // Due to auto-incrementing of locations in database, the specific user object
@@ -479,4 +483,5 @@ public class ServiceLayer {
             lastCleanDate = LocalDate.now();
         }
     }
+    
 }
