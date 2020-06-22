@@ -3011,7 +3011,13 @@ function getAttendance(userId) {
                 attendanceLocationName = data[i].location.cityName;
                 attendanceId = data[i].location.locationId;
                 departedEarly = data[i].departedEarly;
-                //console.log(departedEarly);
+                
+                var departedEarlyDisplay;
+                if (departedEarly === true) { 
+                   departedEarlyDisplay = 'Yes';  
+                }else if(departedEarly === false){
+                    departedEarlyDisplay = 'No';
+                }
 
                 var dateStringId = data[i].attendanceDate;
                 fullDate2 = data[i].attendanceDate.toString();
@@ -3025,7 +3031,7 @@ function getAttendance(userId) {
                 row = '<tr>';
                 row += "<td> <button class='report-date-submit' id='" + dateStringId + "'>" + month + '/' + day + '/' + year + "</button> </td>";
                 row += '<td>' + attendanceLocationName + '</td>';
-                row += '<td>' + departedEarly + '</td>';
+                row += '<td>' + departedEarlyDisplay + '</td>';
                 row += '<td>' + visitingHost + '</td>';
                 row += '<td>' + miscInfo + '</td>';
                 row += '</tr>';
@@ -3056,7 +3062,7 @@ function getAttendance(userId) {
 
                 //var attendanceDateDiv = $('#report-attendance-dates');
                 var userReportSummaryTable;
-                var i = 0;
+               // var i = 0;
                 $("#attendance-message").html("Over the past 30 days, the selected employee was in the office on the following dates.<br>Click a date to view all employees and guests in the attended office.");
 
                 var userReportSummaryTable = '<h5 class="table-header" id="userReportSummaryTableHeader">' + 'Office Attendance for ' + userName + '</h5>';
@@ -3084,7 +3090,14 @@ function getAttendance(userId) {
                 attendanceLocationName = data[i].location.cityName;
                 attendanceId = data[i].location.locationId;
                 departedEarly = data[i].departedEarly;
-                //console.log(departedEarly);
+                
+                var departedEarlyDisplay;
+                if (departedEarly === true) { 
+                   departedEarlyDisplay = 'Yes';  
+                }else if(departedEarly === false){
+                    departedEarlyDisplay = 'No';
+                }
+               
 
                 var dateStringId = data[i].attendanceDate;
                 fullDate2 = data[i].attendanceDate.toString();
@@ -3098,7 +3111,7 @@ function getAttendance(userId) {
                 row = '<tr>';
                 row += "<td> <button class='report-date-submit' id='" + dateStringId + "'>" + month + '/' + day + '/' + year + "</button> </td>";
                 row += '<td>' + attendanceLocationName + '</td>';
-                row += '<td>' + departedEarly + '</td>';
+                row += '<td>' + departedEarlyDisplay + '</td>';
 //                row += '<td>' + visitingHost + '</td>';
 //                row += '<td>' + miscInfo + '</td>';
                 row += '</tr>';
@@ -3275,7 +3288,10 @@ var attendanceLocationId;
                
                 reportAttendanceTableDiv.append(reportAttendanceTable);
             
+            //var i = 0;
+            //if (response[i].isAttending === true) {
             $.each(response, function (i, user) {
+                console.log(user);
                 firstName = user.user.firstName;
                 lastName = user.user.lastName;
                 userName = user.user.firstName + ' ' + user.user.lastName;
@@ -3284,22 +3300,34 @@ var attendanceLocationId;
                 attendanceLocationId = user.location.locationId;
                 attendanceDate = user.attendanceDate;
                 homeLocation = user.user.location.cityName;
+
+                departedEarly = user.departedEarly;
+                console.log(departedEarly);
                 
-                if (response[i].isAttending === true) {
+                var departedEarlyDisplay;
+                if (departedEarly === true) { 
+                   departedEarlyDisplay = 'Yes';  
+                }else if(departedEarly === false){
+                    departedEarlyDisplay = 'No';
+                }
+                
+               
+               // if (response[i].isAttending === true) {
                     var row = '<tr>';
                     row += '<td>' + firstName + '</td>';
                     row += '<td>' + lastName + '</td>';
                     row += '<td>' + email + '</td>';
                     row += '<td>' + attendanceLocation + '</td>';
-                    row += '<td>' + departedEarly + '</td>';
+                    row += '<td>' + departedEarlyDisplay + '</td>';
                     row += '<td>' + homeLocation + '</td>';
                     row += '<td>' + attendanceDate + '</td>';
                     row += '</tr>';
-                }
+                
                   $('#reportAttendanceRow').append(row);
 
                 });
-
+                
+            //}
                 } else if (response.length <= 0) { 
                     console.log("There are no attendance records on the date selected.");
                     $("#attendanceNameTableHeader").show();
@@ -3407,8 +3435,8 @@ function getEmployeesByDateRange(attendanceLocationId) {
                 }
 
                 if (response.length <= 0) {
-                    $("#noAttendees").show();
-                    $("#noAttendees").text("There are no attendance records on the date selected.");
+                    $("#attendance-message").show();
+                    $("#attendance-message").text("There are no attendance records on the date selected.");
                     //isAttendingRows.append("There are no attendance records for the date selected");
                 }
 
@@ -3789,7 +3817,7 @@ function prepCSVRow(arr, columnCount, initial) {
 
 
     // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    // // @GetMapping("/addLocation")
+    // // @PosttMapping("/addLocation")
 
     // $('#addNewLocation').click(function(event) {
 
@@ -3819,6 +3847,7 @@ function prepCSVRow(arr, columnCount, initial) {
     //     });
 
     // });
+    
 
 
     // // ********** Preparing Ajax calls End
