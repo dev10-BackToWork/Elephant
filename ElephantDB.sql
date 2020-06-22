@@ -11,7 +11,7 @@ CREATE TABLE Location (
 	locationId int primary key auto_increment,
     cityName varchar(50) not null,
     maxOccupancy int not null,
-    distributionEmail varchar(150)
+    distributionEmail varchar(100) not null
 );
 
 CREATE TABLE `User` (

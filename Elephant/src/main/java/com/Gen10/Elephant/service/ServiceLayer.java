@@ -54,72 +54,72 @@ public class ServiceLayer {
     public List<Attendance> findAllAttendance() {
         return attendanceRepo.findAll();
     }
-    
+
     public List<Attendance> retrieveDatesPresent(int id) {
         List<Attendance> allAttendance = attendanceRepo.findAttendanceWithinLast30Days();
         List<Attendance> usersAttendanceDates = new ArrayList<>();
-        
+
         for (Attendance attendance : allAttendance) {
             if (attendance.getUser().getUserId() == id && attendance.getIsAttending() && attendance.getIsAuthorized()) {
                 usersAttendanceDates.add(attendance);
             }
         }
-        
+
         return usersAttendanceDates;
     }
-    
+
     public List<Attendance> generateAttendanceReport(int id, String date) {
         LocalDate specifiedDate = LocalDate.parse(date);
         int locIdOnDate = usersRepo.findUserLocationIdOnDate(id, date);
         List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(locIdOnDate, specifiedDate);
-        
+
         return attendanceList.stream()
                 .sorted((o1, o2) -> o1.getUser().getLastName().compareTo(o2.getUser().getLastName()))
                 .collect(Collectors.toList());
     }
-    
-    public TreeMap<LocalDate, List<User>> generateAttendanceDuringRange (int id, String startDate, String endDate) {
+
+    public TreeMap<LocalDate, List<User>> generateAttendanceDuringRange(int id, String startDate, String endDate) {
         LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
         LocalDate earliestDate = LocalDate.parse(startDate);
-        
-        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate,
+                firstSpecifiedDate);
         HashMap<LocalDate, List<User>> usersByDate = new HashMap<>();
         TreeMap<LocalDate, List<User>> sortedUsersByDate = new TreeMap<>();
-        
+
         for (Attendance attendance : allAttendance) {
-            usersByDate.computeIfAbsent(attendance.getAttendanceDate(), k -> new ArrayList<>()).add(attendance.getUser());
+            usersByDate.computeIfAbsent(attendance.getAttendanceDate(), k -> new ArrayList<>())
+                    .add(attendance.getUser());
         }
-        
-        usersByDate.forEach((key, value) -> 
-                usersByDate.put(key, value.stream()
-                .sorted(Comparator.comparing(User::getLastName))
-                .collect(Collectors.toList())));
-        
+
+        usersByDate.forEach((key, value) -> usersByDate.put(key,
+                value.stream().sorted(Comparator.comparing(User::getLastName)).collect(Collectors.toList())));
+
         sortedUsersByDate.putAll(usersByDate);
-        
+
         return sortedUsersByDate;
     }
-    
+
     public List<User> generateAttendanceDuringRangeSummary(int id, String startDate, String endDate) {
         LocalDate firstSpecifiedDate = LocalDate.parse(endDate);
         LocalDate earliestDate = LocalDate.parse(startDate);
-        
-        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate, firstSpecifiedDate);
+
+        List<Attendance> allAttendance = attendanceRepo.findAttendanceAuthorizedWithinRange(id, earliestDate,
+                firstSpecifiedDate);
         List<User> uniqueUsers = new ArrayList<>();
-        
+
         for (Attendance attendance : allAttendance) {
-            if(!uniqueUsers.contains(attendance.getUser())) {
+            if (!uniqueUsers.contains(attendance.getUser())) {
                 uniqueUsers.add(attendance.getUser());
             }
         }
-        
-        List<User> uniqueUsersSorted = uniqueUsers.stream()
-                .sorted(Comparator.comparing(User::getLastName))
+
+        List<User> uniqueUsersSorted = uniqueUsers.stream().sorted(Comparator.comparing(User::getLastName))
                 .collect(Collectors.toList());
-        
+
         return uniqueUsersSorted;
     }
-    
+
     public Attendance markDepartedEarly(int id) {
         attendanceRepo.markAttendanceDepartedEarly(id);
         return attendanceRepo.findAttendanceDepartedEarly(id);
@@ -172,7 +172,7 @@ public class ServiceLayer {
     }
 
     public List<User> getGuests(int id) {
-            return usersRepo.findAllGuestsOfSpecifiedLocation(id);
+        return usersRepo.findAllGuestsOfSpecifiedLocation(id);
     }
 
     public List<User> currentUsersInOffice(int id) {
@@ -193,7 +193,7 @@ public class ServiceLayer {
     public List<User> getFlaggedUsers(int id) {
         return usersRepo.findFlaggedUsersByLocation(id);
     }
-    
+
     public List<User> getFlaggedUsersGlobal() {
         return usersRepo.findFlaggedUsersGlobal();
     }
@@ -232,27 +232,25 @@ public class ServiceLayer {
 
         User dbUser = usersRepo.save(user);
 
-        if (dbUser != null){
-            Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com",
-                "Account Created", 
-                "<p>Hello " + dbUser.getFirstName() + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>" + dbUser.getEmail() + "</strong></span>" + 
-                "<br/> &emsp; Your temporary password is: <strong>" + dbUser.getDefaultPW() + 
-                "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>" + 
-                "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
-            );
+        if (dbUser != null) {
+            Mailer.send("noreply.dev10@gmail.com", user.getEmail(), "noreply.dev10@gmail.com", "Account Created",
+                    "<p>Hello " + dbUser.getFirstName()
+                            + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>"
+                            + dbUser.getEmail() + "</strong></span>"
+                            + "<br/> &emsp; Your temporary password is: <strong>" + dbUser.getDefaultPW()
+                            + "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>"
+                            + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
         }
 
         return dbUser;
     }
 
-    
-	public User createGuest(User guest) throws DataFormatException{
-		if (usersRepo.findByName(guest.getFirstName(), guest.getLastName()) != null) {
+    public User createGuest(User guest) throws DataFormatException {
+        if (usersRepo.findByName(guest.getFirstName(), guest.getLastName()) != null) {
             throw new DataFormatException("A guest already exists for that name");
         }
         return usersRepo.save(guest);
-	}
+    }
 
     public User editUser(User user) {
         // Due to auto-incrementing of users in database, the specific user object needs
@@ -270,21 +268,21 @@ public class ServiceLayer {
         System.out.println(usersRepo.findById(existingUser.getUserId()).orElse(null).getFirstName());
         return editedUser;
     }
-    
+
     public User deactivateSpecifiedUser(int id) {
         User existingUser = getUserById(id);
-        
+
         existingUser.setIsActive(false);
-        
+
         User deactivatedUser = usersRepo.save(existingUser);
-        return deactivatedUser;        
+        return deactivatedUser;
     }
-    
+
     public User reactivateSpecifiedUser(int id) {
         User existingUser = getUserById(id);
-        
+
         existingUser.setIsActive(true);
-        
+
         User activatedUser = usersRepo.save(existingUser);
         return activatedUser;
     }
@@ -307,27 +305,35 @@ public class ServiceLayer {
         attendance.setAttendanceDate(LocalDate.now());
         // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
-        
-        if(attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
-            Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
-                "Authorization for " + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName(),
-                "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName() + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at " + attendance.getUser().getEmail() + " for more information.</p>" +
-                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
-            );
+
+        if (attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
+            ArrayList<String> adminEmails = new ArrayList<>();
+            adminEmails.add("hr@genesis10.com");
+            adminEmails.add(locationRepo.getDistributionEmailByLocation(attendance.getLocation().getLocationId()));
+            for (String email : adminEmails) {
+                Mailer.send("noreply.dev10@gmail.com", email, "noreply.dev10@gmail.com",
+                        "Authorization Pending for " + attendance.getUser().getFirstName() + " "
+                                + attendance.getUser().getLastName(),
+                        "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName()
+                                + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at "
+                                + attendance.getUser().getEmail() + " for more information.</p>"
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+            }
         }
 
         Location location = attendance.getUser().getLocation();
         List<User> usersInOffice = currentUsersInOffice(location.getLocationId());
         if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
-            Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
-                "Max Capacity Warning",
-                "<p> More people than currently recommended by your max capacity of <strong>" + location.getMaxOccupancy() + "</strong> are currently signed up to come in today." +
-                "<br/> Please take any necessary actions to ensure the safety of the employees at your location." + 
-                "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>" +
-                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
-            );
+            List<String> adminEmails = usersRepo.getAdminEmailsByLocation(attendance.getLocation().getLocationId());
+            for (String email : adminEmails) {
+                Mailer.send("noreply.dev10@gmail.com", email, "noreply.dev10@gmail.com",
+                        "Max Capacity Warning",
+                        "<p> More people than currently recommended by your max capacity of <strong>"
+                                + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
+                                + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
+                                + "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>"
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+            }
         }
 
         if (todaysAttendance != null) {
@@ -349,14 +355,16 @@ public class ServiceLayer {
         Location location = attendance.getUser().getLocation();
         List<User> usersInOffice = currentUsersInOffice(location.getLocationId());
         if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
-            Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
-                "Max Capacity Warning",
-                "<p> More people than currently recommended by your max capacity of <strong>" + location.getMaxOccupancy() + "</strong> are currently signed up to come in today." +
-                "<br/> Please take any necessary actions to ensure the safety of the employees at your location." + 
-                "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>" +
-                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
-            );
+            List<String> adminEmails = usersRepo.getAdminEmailsByLocation(attendance.getLocation().getLocationId());
+            for (String email : adminEmails) {
+                Mailer.send("noreply.dev10@gmail.com", email, "noreply.dev10@gmail.com",
+                        "Max Capacity Warning",
+                        "<p> More people than currently recommended by your max capacity of <strong>"
+                                + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
+                                + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
+                                + "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>"
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+            }
         }
 
         if (todaysAttendance != null) {
@@ -385,7 +393,8 @@ public class ServiceLayer {
             throw new invalidCredentialsException("Username was invalid");
         } else if (!BCrypt.checkpw(password, dbUser.getPasswords())) {
             throw new invalidCredentialsException("Password was incorrect");
-        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
+        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN")
+                || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
             throw new invalidCredentialsException("Insufficient permissions");
         } else {
             return dbUser;
@@ -398,8 +407,8 @@ public class ServiceLayer {
             throw new invalidCredentialsException("Username was invalid");
         } else if (!BCrypt.checkpw(password, dbUser.getPasswords())) {
             throw new invalidCredentialsException("Password was incorrect");
-        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN")
-        || dbUser.getRole().getName().equals("ROLE_USER") || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
+        } else if (!(dbUser.getRole().getName().equals("ROLE_ADMIN") || dbUser.getRole().getName().equals("ROLE_USER")
+                || dbUser.getRole().getName().equals("ROLE_SUPERADMIN"))) {
             throw new invalidCredentialsException("Insufficient permissions");
         } else {
             return dbUser;
@@ -431,15 +440,14 @@ public class ServiceLayer {
         String encryptPass = BCrypt.hashpw(password, BCrypt.gensalt(10));
         existingUser.setPasswords(encryptPass);
         User savedUser = usersRepo.save(existingUser);
-        
-        if (savedUser != null){
-            Mailer.send(
-                "noreply.dev10@gmail.com", "gwgdtdanxxqwrlts", "noreply.dev10@gmail.com", 
-                "Reset Password for " + existingUser.getEmail(), 
-                "<p>Hi " + savedUser.getFirstName() + ",</p>&emsp; We received a password reset request for your account from your branch manager." + 
-                "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>" +
-                "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
-            );
+
+        if (savedUser != null) {
+            Mailer.send("noreply.dev10@gmail.com", existingUser.getEmail(), "noreply.dev10@gmail.com",
+                    "Reset Password for " + existingUser.getEmail(),
+                    "<p>Hi " + savedUser.getFirstName()
+                            + ",</p>&emsp; We received a password reset request for your account from your branch manager."
+                            + "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>"
+                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
         }
 
         return savedUser;
@@ -456,7 +464,7 @@ public class ServiceLayer {
         return true;
     }
 
-    public Boolean generateAllPasswords(){
+    public Boolean generateAllPasswords() {
         try {
             for (User user : usersRepo.findAll()) {
                 String password = generatePassword();
@@ -475,7 +483,7 @@ public class ServiceLayer {
 
     private void cleanOldData() {
         int maxAge = 90;
-        if (lastCleanDate != LocalDate.now()){
+        if (lastCleanDate != LocalDate.now()) {
             List<Attendance> oldAttendances = attendanceRepo.findAllOldAttendanceIdsByAge(maxAge);
             attendanceRepo.deleteInBatch(oldAttendances);
             List<User> oldGuests = usersRepo.findAllOldGuestsByAge(maxAge);
