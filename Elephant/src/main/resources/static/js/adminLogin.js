@@ -720,6 +720,10 @@ $('#dashboardBtn').click(function (event) {
         $('#q2guest').bootstrapToggle('off');
         $('#q3guest').bootstrapToggle('off');
         
+        $('#q1newGuest').bootstrapToggle('off');
+        $('#q2newGuest').bootstrapToggle('off');
+        $('#q3newGuest').bootstrapToggle('off');
+        
        if (option == 1) {
             $("#activeEmployees").hide();
             $("#inactiveEmployees").hide();
@@ -877,10 +881,10 @@ $('#dashboardBtn').click(function (event) {
   });
   
   $('#submitGuestAttendBtn').click(function (event) {
+      
+      $('#attendErrorMessages').empty();
        
       $('#guestRows').empty();
-
-        $('#attendErrorMessages').empty();
 
         var errorCount = 0;
 
@@ -947,6 +951,9 @@ $('#dashboardBtn').click(function (event) {
                           success: function (response, status) {
                               console.log(response);
                               console.log("Attendance Success!");
+                              
+                              $('#attendErrorMessages').empty();
+                              
                               $('#employeesBtn').click();
 
                           },
@@ -1206,6 +1213,30 @@ $('#dashboardBtn').click(function (event) {
         $("#overall-success").hide();
 
         $('#locationAddGuest').empty();
+        
+        $('#createGuestErrorMessages').empty();
+        
+        guestAnswerOne = false;
+        guestAnswerTwo = false;
+        guestAnswerThree = false;
+
+        toggleNewGuest();
+
+        function toggleNewGuest() {
+            $('#q1newGuest').change(function () {
+                guestAnswerOne = $(this).prop('checked');
+                console.log("Q1 Guest: " + guestAnswerOne);
+            });
+
+            $('#q2newGuest').change(function () {
+                guestAnswerTwo = $(this).prop('checked');
+                console.log("Q2 Guest: " + guestAnswerTwo);
+            });
+            $('#q3newGuest').change(function () {
+                guestAnswerThree = $(this).prop('checked');
+                console.log("Q3 Guest: " + guestAnswerThree);
+            });
+        }
 
         $.ajax({
                     type: 'GET',
@@ -1448,6 +1479,13 @@ $('#dashboardBtn').click(function (event) {
             errorCount += 1;
         }
         
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailField) || emailField === "") {
+            $('#createGuestErrorMessages').append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger' })
+                .text('Please enter a valid email that is 50 characters or less.'));
+            errorCount += 1;
+        }
+        
         if (phoneField.length < 12 || phoneField.length > 12) {
             $('#createGuestErrorMessages').append($('<li>')
                 .attr({class: 'list-group-item list-group-item-danger' })
@@ -1469,10 +1507,10 @@ $('#dashboardBtn').click(function (event) {
             errorCount += 1;
         }
 
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailField) || emailField === "") {
+        if (guestAnswerOne == true || guestAnswerTwo == true || guestAnswerThree == true) {
             $('#createGuestErrorMessages').append($('<li>')
                 .attr({class: 'list-group-item list-group-item-danger' })
-                .text('Please enter a valid email that is 50 characters or less.'));
+                .text('Guests are only permitted into the office if they answer "No" to all health survey questions.'));
             errorCount += 1;
         }
 
@@ -1632,6 +1670,32 @@ $('#dashboardBtn').click(function (event) {
         $("#overall-success").hide();
         
         $("#allEmployeeErr").hide();
+        
+        $('#employeesBtn').click();
+    });
+    
+    $('#cancelGuestAttendBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").show();
+        $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createGuestDiv").hide();
+        $("#createLocationDiv").hide();
+        $("#employeeInfoDiv").hide();
+        $("#guestAttendingDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#locationInfoDiv").hide();
+        $("#overall-success").hide();
+        
+        $('#attendErrorMessages').empty();
+        
+        $('#employeesBtn').click();
     });
     
     $('#submitEmployeeInfoBtn').click(function (event) {
