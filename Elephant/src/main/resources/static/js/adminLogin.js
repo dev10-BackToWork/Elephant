@@ -3749,7 +3749,7 @@ function prepCSVRow(arr, columnCount, initial) {
 
 
     // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
-    // // @GetMapping("/addLocation")
+    // // @PosttMapping("/addLocation")
 
     // $('#addNewLocation').click(function(event) {
 
@@ -3779,6 +3779,7 @@ function prepCSVRow(arr, columnCount, initial) {
     //     });
 
     // });
+    
 
 
     // // ********** Preparing Ajax calls End

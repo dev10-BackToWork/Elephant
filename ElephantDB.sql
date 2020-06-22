@@ -483,3 +483,4 @@ INSERT INTO Attendance (isAttending, attendanceDate, userId, isAuthorized, locat
     (1, "2020-06-19", 233, 0, 5),
     (1, "2020-06-19", 350, 1, 5);
     
+    

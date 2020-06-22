@@ -93,5 +93,4 @@ public class Location {
         }
         return true;
     }
-    
 }
