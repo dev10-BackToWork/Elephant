@@ -10,7 +10,8 @@ CREATE TABLE `Role` (
 CREATE TABLE Location (
 	locationId int primary key auto_increment,
     cityName varchar(50) not null,
-    maxOccupancy int not null
+    maxOccupancy int not null,
+    distributionEmail varchar(50) not null
 );
 
 CREATE TABLE `User` (
@@ -50,22 +51,22 @@ CREATE TABLE Attendance (
         REFERENCES `Location`(locationId)
 );
 
-INSERT INTO Location (cityName, maxOccupancy) VALUES 
-	("GA, Norcross", 20),
-	("KS, Lenexa", 20),
-    ("KS, Lenexa (Kansas Delivery Center)", 20),
-    ("MI, Troy", 20),
-    ("MN, Saint Paul", 20),
-    ("NC, Charlotte", 20),
-    ("NC, Charlotte (Charlotte Delivery Center)", 20),
-    ("NC, Charlotte (Charlotte Delivery Center - UV)", 20),
-    ("NY, New York", 20),
-    ("OH, Akron", 20),
-    ("Remote", 20),
-    ("TX, Austin", 20),
-    ("TX, Dallas", 20),
-    ("TX, Dallas (Plano Delivery Center)", 20),
-    ("WI, Milwaukee", 20);
+INSERT INTO Location (cityName, maxOccupancy, distributionEmail) VALUES 
+	("GA, Norcross", 20, "OutGADC@genesis10.com"),
+	("KS, Lenexa", 20, "OutKCBranch@genesis10.com"),
+    ("KS, Lenexa (Kansas Delivery Center)", 20, "OutKCDC@genesis10.com"),
+    ("MI, Troy", 20, "OUTMIDC@genesis10.com"),
+    ("MN, Saint Paul", 20, "OutMN@genesis10.com"),
+    ("NC, Charlotte", 20, "OutCLTBranch@genesis10.com"),
+    ("NC, Charlotte (Charlotte Delivery Center)", 20, "OutCLTDC@genesis10.com"),
+    ("NC, Charlotte (Charlotte Delivery Center - UV)", 20, "OutCLTDCUV@genesis10.com"),
+    ("NY, New York", 20, "OutNY@genesis10.com"),
+    ("OH, Akron", 20, "OutOH@genesis10.com"),
+    ("Remote", 20, ""),
+    ("TX, Austin", 20, "OutAustin@genesis10.com"),
+    ("TX, Dallas", 20, "OutDALBranch@genesis10.com"),
+    ("TX, Dallas (Plano Delivery Center)", 20, "OUTPlanoDC@genesis10.com"),
+    ("WI, Milwaukee", 20, "OutMILW@genesis10.com");
 
 INSERT INTO `Role` (roleId, roleName) VALUES 
 	(1, "ROLE_ADMIN"),

@@ -20,7 +20,10 @@ public class Location {
 	private String cityName;
 
 	@Column
-	private int maxOccupancy;
+    private int maxOccupancy;
+    
+    @Column
+    String distributionEmail;
 
 	public int getLocationId() {
 		return this.locationId;
@@ -44,39 +47,30 @@ public class Location {
 
 	public void setMaxOccupancy(int maxOccupancy) {
 		this.maxOccupancy = maxOccupancy;
-	}
+    }
 
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 83 * hash + this.locationId;
-            hash = 83 * hash + Objects.hashCode(this.cityName);
-            hash = 83 * hash + this.maxOccupancy;
-            return hash;
-        }
+    public String getDistributionEmail() {
+        return this.distributionEmail;
+    }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Location other = (Location) obj;
-            if (this.locationId != other.locationId) {
-                return false;
-            }
-            if (this.maxOccupancy != other.maxOccupancy) {
-                return false;
-            }
-            if (!Objects.equals(this.cityName, other.cityName)) {
-                return false;
-            }
+    public void setDistributionEmail(String distributionEmail) {
+        this.distributionEmail = distributionEmail;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
+        if (!(o instanceof Location)) {
+            return false;
         }
+        Location location = (Location) o;
+        return locationId == location.locationId && Objects.equals(cityName, location.cityName) && maxOccupancy == location.maxOccupancy && Objects.equals(distributionEmail, location.distributionEmail);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(locationId, cityName, maxOccupancy, distributionEmail);
+    }
+    
 }
