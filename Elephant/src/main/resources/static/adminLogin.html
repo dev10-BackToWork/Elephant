@@ -719,9 +719,72 @@
                             <input type="text" name="guestmisc" id="guest-misc" class="form-control" style="text-align:center;"/>
                         </div>
                     </div>
+                 </div>
+                     <div class="form-group" id="guest-survey-div">
+                         <form id="surveyGuest">
+                             <br>
+                             <div class="row">
+                                <div class="col-12">
+                                    <h5>Please have the guest take their temperature immediately prior to answering the following questions.</h5>
+                                </div>
+                             </div>
+<!--                             Question 1-->
+                             <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q1guest" class="form-check-label">Does the guest have any of the following symptoms:</label>
+                                        <ul>
+                                            <li>Fever (100.4 degrees or higher) or chills </li>
+                                            <li>Cough</li>
+                                            <li>Shortness of breath or difficulty breathing</li>
+                                            <li>Fatigue</li>
+                                            <li>Muscle or body aches</li>
+                                            <li>Headache</li>
+                                            <li>Sore throat</li>
+                                            <li>Congestion or runny nose</li>
+                                            <li>Nausea or vomiting</li>
+                                            <li>Diarrhea</li> 
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-1">
+                                    <br>
+                                    <input id="q1guest" class="form-check-input" name="q1guest" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>    
+                             </div>
+ <!--                             Question 2-->
+                             <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q2guest" class="form-check-label">Has the guest had close contact in the last 14 days with an individual diagnosed with COVID-19? </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <input id="q2guest" class="form-check-input" name="q2guest" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>              
+                             </div>
+ <!--                             Question 3-->
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="form-check">
+                                        <label for="q3guest" class="form-check-label">Has the guest traveled outside the United States or Canada within the last 14 days?</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <input id="q3guest" class="form-check-input" name="q3guest" type="checkbox" data-toggle="toggle"
+                                           data-on="Yes" data-off="No" data-style="android">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <div class="col-lg-12 text-center">
                     <div class="row">
                         <div class="col-md-12 mt-3">
-                            <a class="btn btn-info" id="submitGuestAttendBtn" style="color: white">Submit</a>
+                            <a class="btn btn-primary btn-lg" id="submitGuestAttendBtn" style="color: white">Submit</a>
                         </div>
                     </div>
                 </div>
