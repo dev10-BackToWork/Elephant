@@ -72,5 +72,4 @@ public class Location {
     public int hashCode() {
         return Objects.hash(locationId, cityName, maxOccupancy, distributionEmail);
     }
-    
 }
