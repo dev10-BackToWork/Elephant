@@ -71,6 +71,7 @@ h1 {
 
 h1.heading {
     font-size: 24px;
+    text-align: center;
 }
 
 h2.center {
@@ -213,4 +214,8 @@ h5.table-header {
 
 hr#dateAttendanceTable {
     margin-bottom: 3rem;
+}
+
+#login {
+    align-content: center;
 }

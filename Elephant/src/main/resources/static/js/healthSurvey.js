@@ -1,15 +1,6 @@
-$(document).ready(function () {
-    $("#resetPassword").hide();
-    $("#screener-div").hide();
-    $("#survey-div").hide();
-    $("#screener-bye").hide();
-    $("#survey-not-authorized").hide();
-    $("#survey-authorized").hide();
-    $("#arrival-container").hide();
-    $("#departure-container").hide();
-    $('#time-success').hide();
-    $("#loginErr").hide();
-     
+//
+//this file is old and all JS for the user is now locate in the userLogin.js file ///
+
 var email;
 var password;
 var userId;
@@ -21,12 +12,27 @@ var cityName;
 var allLocations;//for returned list of all location objects
 var attendanceLocation; // for selected location choice
 var newPassword;
-    
+
+$(document).ready(function () {
+    $("#resetPassword").hide();
+    $("#screener-div").hide();
+    $("#survey-div").hide();
+    $("#screener-bye").hide();
+    $("#survey-not-authorized").hide();
+    $("#survey-authorized").hide();
+    $("#arrival-container").hide();
+    $("#departure-container").hide();
+    $('#time-success').hide();
+    $("#loginErr").hide();
+});
+
     $("#submitLoginButton").click(function (e) {
         e.preventDefault();
         password = $("#inputPassword").val();
         email = $("#inputEmail").val();
-
+    
+    //1. get username and password and check to see if it's correct in DB
+   // function checkPassword() {
         $.ajax({
             type: "post",
             url: "http://localhost:8080/api/users/login",
@@ -40,10 +46,10 @@ var newPassword;
                 userId = user.userId;
                 console.log(userId);
                 
+                //2. 
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:8080/api/users/checkChange/"+ userId,
-                    //url: "http://localhost:8080/api/users/checkChange",
                     data: JSON.stringify(user),
 
                     headers: {
@@ -62,7 +68,7 @@ var newPassword;
                         }
                     },
                     error: function (err) {
-                        //$("#resetPassword").show();
+                        //reject(err);
                         $("#resetPasswordErr").show();
                         console.log(err);
                     }
@@ -78,8 +84,7 @@ var newPassword;
                       getAttendanceLocation();
                      $("#login").hide();
                      $("#resetPassword").hide();
-                    
-                    //window.location.replace('/dashboard.html');
+
                 }
                 return false;
             },
@@ -90,17 +95,19 @@ var newPassword;
                 clearLogin();
                 return false;
             }
+       
         });
-        return false;
-    });
 
+    });
+    
     // RESET PASSWORD FUNCTIONALITY 
     $("#reset-password-btn").click(function (e) {
         e.preventDefault();
         resetPassword();
         //function checkPasswordChg();
     });
-     
+    
+    
     function resetPassword() {
         $("#login").hide();
         $("#screener-div").hide();
@@ -128,10 +135,6 @@ var newPassword;
                    $('#resetPasswordErr').show();
                    $('#resetPasswordErr').text("Please enter your password. If you do not know your password, please contact your branch administrator for further assistance.");
                 }
-                        //$("#messages").text("You must select an item");
-                        //resetMessagesStatus();
-                        //$("#messages").addClass("warning");
-                        //console.log(password);
 
                 $.ajax({
                     type: "post",
@@ -473,7 +476,7 @@ function notAuthorized() {
     });
 }
  
-});
+
 
 
 

@@ -39,7 +39,7 @@
 
             <div class="container" id="login">
                 <div class="row">
-                    <h1 class="heading">Gen10 Health App</h1>
+                    <h1 class="heading text-center">Gen10 Health App</h1>
                 </div>
                 <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                     <div class="card card-signin">
@@ -76,11 +76,11 @@
                 <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                     <div class="card card-signin">
                         <div class="card-body">
-                            <h5 class="card-title text-center">Reset Password</h5>
+                            <h5 id='resetHeading' class="card-title text-center">Reset Password</h5>
                             <form onsubmit="resetPassword();" class="form-signin" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
                                 <!--                            <form class="form-signin">-->
                                 <div class="form-label-group">
-                                    <input type="email" id="resetEmail" class="form-control" required autofocus >
+                                    <input type="email" id="resetEmailInput" class="form-control" required autofocus >
                                     <label for="resetEmail">Email address</label>
                                 </div>
 
@@ -347,7 +347,8 @@ crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 <!--<script src="js/login.js"></script>-->
-<script src="js/healthSurvey.js"></script>
+<!--<script src="js/healthSurvey.js"></script>-->
+<script src="js/userLogin.js"></script>
 </body>
 
 </html>
