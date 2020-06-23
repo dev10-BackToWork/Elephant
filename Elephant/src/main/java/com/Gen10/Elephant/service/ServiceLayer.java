@@ -148,13 +148,14 @@ public class ServiceLayer {
         return locationRepo.save(location);
     }
 
-    public Location editCapacity(int id, int num) {
+    public Location editLocation(int id, int num, String dibEmail) {
         // Due to auto-incrementing of locations in database, the specific user object
         // needs to be acquired and altered to prevent duplicate location with different
         // field(s).
         Location existingLocation = findLocationById(id);
 
         existingLocation.setMaxOccupancy(num);
+        existingLocation.setDistributionEmail(dibEmail);
 
         Location editedLocation = locationRepo.save(existingLocation);
 
@@ -241,7 +242,7 @@ public class ServiceLayer {
                     + dbUser.getEmail() + "</strong></span>" + "<br/> &emsp; Your temporary password is: <strong>"
                     + dbUser.getDefaultPW()
                     + "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>"
-                    + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p
+                    + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
         }
 
         return dbUser;
