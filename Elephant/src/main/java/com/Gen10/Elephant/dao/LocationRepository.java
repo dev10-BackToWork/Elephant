@@ -11,7 +11,7 @@ public interface LocationRepository extends JpaRepository<Location, Integer>{
 
 	Location getByLocationId(int id);
 
-	@Query(value = "SELECT SELECT lo.distributionEmail FROM Location lo WHERE lo.locationId = ?", nativeQuery = true)
+	@Query(value = "SELECT lo.distributionEmail FROM Location lo WHERE lo.locationId = ?", nativeQuery = true)
 	String getDistributionEmailByLocation(int id);
 
 }
