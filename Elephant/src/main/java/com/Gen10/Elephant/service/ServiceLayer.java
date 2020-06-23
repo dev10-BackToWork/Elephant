@@ -241,7 +241,7 @@ public class ServiceLayer {
                     + dbUser.getEmail() + "</strong></span>" + "<br/> &emsp; Your temporary password is: <strong>"
                     + dbUser.getDefaultPW()
                     + "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>"
-                    + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p
+                    + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
         }
 
         return dbUser;
