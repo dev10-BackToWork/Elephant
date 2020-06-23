@@ -77,6 +77,6 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT u.email FROM `User` u WHERE u.locationId = ? AND u.roleId = 1", nativeQuery = true)
     List<String> getAdminEmailsByLocation(int id);
     
-    @Query(value = "SELECT u.* FROM `User` u WHERE u.locationId = 15")
+    @Query(value = "SELECT u.* FROM `User` u WHERE u.locationId = 15", nativeQuery = true)
     List<User> findAllMilwaukee();
 }
