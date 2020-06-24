@@ -418,7 +418,7 @@ function clearLogin() {
 //    });
 
 
-    
+
     $('#takeSurveyBtn').click(function (event) {
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
