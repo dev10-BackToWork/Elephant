@@ -1,20 +1,42 @@
+//var email;
+//var password;
+var userId;
+var user;
+var userLocation;
+var locationName;
+var locationId;
+var cityName;
+var allLocations;//for returned list of all location objects
+var attendanceLocation; // for selected location choice
+
+var adminLocation;
+var adminLocationName;
+var allLocations;
+var adminId;
+var adminEmail;
+var adminPassword;
+var user;
+var adminRoleId;
+var guestAnswerOne = false;
+var guestAnswerTwo = false;
+var guestAnswerThree = false;
+
 $(document).ready(function () {
-
-    var adminLocation;
-    var adminLocationName;
-    var allLocations;
-    var adminId;
-    var adminEmail;
-    var adminPassword;
-    var user;
-    var adminRoleId;
-    var guestAnswerOne = false;
-    var guestAnswerTwo = false;
-    var guestAnswerThree = false;
-
-    $("#loginNav").show();
-    $("#adminLoginDiv").show();
+    $("#resetPassword").hide();
+    $("#screener-div").hide();
+    $("#survey-div").hide();
+    $("#screener-bye").hide();
+    $("#survey-not-authorized").hide();
+    $("#survey-authorized").hide();
+    $("#arrival-container").hide();
+    $("#departure-container").hide();
+    $('#time-success').hide();
     $("#loginErr").hide();
+    $("#loginNav").show();
+    
+    
+    //$("#adminLoginDiv").show();
+    //$("#loginErr").hide();
     $("#navBarDiv").hide();
     $("#dashboardDiv").hide();
     $("#allEmployeesDiv").hide();
@@ -40,67 +62,362 @@ $(document).ready(function () {
     $("#reportDiv").hide();
 
 
-    $("#submitLoginButton").click(function (e) {
-        e.preventDefault();
-        var password = $("#inputPassword").val();
-        var email = $("#inputEmail").val();
+$("#submitLoginButton").click(function (e) {
+    e.preventDefault();
+    checkPassword();
+    //password = $("#inputPassword").val();
+    //email = $("#inputEmail").val();
+});
 
-        $.ajax({
-            type: "post",
-            url: "http://localhost:8080/api/users/login",
-            headers: {
-                "email": email,
-                "password": password
-            },
+
+//1. get username and password and check to see if it's correct in DB
+function checkPassword() {
+    adminPassword = $("#inputPassword").val();
+    adminEmail = $("#inputEmail").val();
+
+    $.ajax({
+        type: "post",
+        url: "http://localhost:8080/api/users/login",
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword,
+            "content-type": "application/json"
+        },
             success: function (response) {
-                console.log(response);
-                if (response.role.roleId === 2) {
+                 user = response;
+                 console.log(user);
+                if (user.role.roleId === 2) {
                     let errorMessage = confirm("You have attempted to log in to the Admin Dashboard without admin privileges, you will now be routed to the user login.");
-        
+
                     if (errorMessage === true) {
-                         window.location.replace('/index.html');
-                     }
- 
-                } else if (response.role.roleId === 1 || response.role.roleId === 3) {
-                    adminLocation = response.location.locationId;
-                    adminLocationName = response.location.cityName;
-                    adminId = response.userId;
-                    adminEmail = response.email;
-                    adminPassword = response.defaultPW;
-                    user = response;
-                    adminRoleId = response.role.roleId;
-                    
-                    $.ajax({
-                        type: 'GET',
-                        url: 'http://localhost:8080/api/admin/locations',
-                        headers: {
-                                 'email': adminEmail,
-                                 'password': adminPassword
-                             },
-                        success: function (data) {
-                            allLocations = data;
-                            console.log(allLocations);
-                        },
-                        error: function (http) {
-                            console.log(http);
-                            console.log('An error resulted when attempting to retrieve locations.');
+                        window.location.replace('/index.html');
+                    }
+
+                } else if (user.role.roleId === 1 || user.role.roleId === 3) {
+                    adminLocation = user.location.locationId;
+                    adminLocationName =user.location.cityName;
+                    adminId = user.userId;
+                    //adminEmail = user.email;
+                    //adminPassword = user.defaultPW;
+                    userId = user.userId;
+                    firstName = user.firstName;
+                    adminRoleId = user.role.roleId;
+                    checkChange();
+                }
+            },
+        error: function (err) {
+            console.log(err);
+            $('#loginErr').show();
+            $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+            clearLogin();
+            return false;
+        }
+    });
+};
+
+
+//2. If password was success above, check to see if password has been changed
+function checkChange() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/api/users/checkChange/" + userId,
+        data: JSON.stringify(user),
+
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword,
+            "content-type": "application/json"
+        },
+        success: function (response) {
+
+            if (response === true) {
+                console.log('changed password is ' + response + ' success, password has been changed');
+                password = $("#inputPassword").val();
+               //$('#dashboardBtn').click();
+                getSurveyAttendanceLocation();
+              
+                //$("#screener-div").show();
+                $("#adminLoginDiv").hide();
+                $("#resetPassword").hide();
+                $('#dashboardBtn').click();
+
+            } else if (response === false) {
+                console.log('changed password is ' + response + ' please change password');
+                resetPassword();
+                $("#screener-div").hide();
+                $("#resetHeading").html("Welcome, " + firstName + "! </br> Since it's your first time logging in, please change your password.");
+                $("#resetEmailInput").val(adminEmail);
+                $("#resetPasswordInput").val(adminPassword);
+                $("#resetPasswordErr").hide();
+            }
+        },
+        error: function (err) {
+            $("#resetPasswordErr").show();
+            console.log(err);
+        }
+
+    });
+
+};
+
+// CHANGE PASSWORD FUNCTIONALITY 
+$("#reset-password-btn").click(function (e) {
+    e.preventDefault();
+    resetPassword();
+    $("#resetPasswordErr").empty();
+    $("#resetPasswordErr").hide();
+    //function checkPasswordChg();
+});
+
+// SUBMIT NEW PASSWORD
+$("#submit-reset-btn").click(function (e) {
+    e.preventDefault();
+    validateNewPassword();
+});
+
+function resetPassword() {
+    $("#adminLoginDiv").hide();
+    $("#screener-div").hide();
+    $("#passwordSuccess").hide();
+    $("#resetPassword").show();
+    $("#newPassword").val('');
+    $("#newPasswordConfirm").val('');
+};
+
+$("#newPassword").click(function (e) {
+    $("#resetPasswordErr").empty();
+    $("#resetPasswordErr").hide();
+  });
+
+
+function validateNewPassword() {
+
+    var newPassword = $("#newPassword").val();
+    var newPasswordConfirm = $("#newPasswordConfirm").val();
+    if(newPassword.length >= 8 && newPasswordConfirm.length >= 8){
+    console.log('long enough');
+    
+    var compareNewPasswordInput = newPassword.localeCompare(newPasswordConfirm);
+
+    console.log(compareNewPasswordInput);
+    if (compareNewPasswordInput === 0) {
+        console.log('password input matches - ' + compareNewPasswordInput);
+        // then check if new password string is equal to old password 
+        var validChangedPassword = adminPassword.localeCompare(newPasswordConfirm);
+        if (validChangedPassword === 0) {
+            $("#resetPasswordErr").show();
+            $("#resetPasswordErr").text('You must choose a password that is different from your old password. Please re-enter a new password.');
+            resetPassword();
+        } else {
+            console.log('This is a new password!');
+            user.passwords = $("#newPasswordConfirm").val();
+            console.log(user.passwords);
+            saveNewPassword();
+        }
+
+    } else {
+        $("#resetPasswordErr").show();
+        $("#resetPasswordErr").text('The confirmation password does not match your new password. Please re-enter a new password.');
+        console.log('The confirmation password does not match your new password. Please re-enter a new password.');
+        resetPassword();
+    }
+    } else {
+       $("#resetPasswordErr").show();
+       $("#resetPasswordErr").text('Your password must contain at least 8 characters. Please re-enter a new password.');
+       console.log('Your password must contain at least 8 characters. Please re-enter a new password.');
+       resetPassword(); 
+    }
+};
+
+function saveNewPassword() {
+    //on login success, update password 
+    console.log(adminPassword);
+    console.log(user);
+    //user.passwords = password;
+    console.log(user.passwords);
+     
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/api/users/editUser",
+        data: JSON.stringify(user),
+        headers: {
+            "email": adminEmail,
+            "password": adminPassword,
+            "content-type": "application/json"
+        },
+        success: function (response) {
+            adminPassword = user.passwords;
+            getSurveyAttendanceLocation();
+            console.log(response);
+            $("#passwordSuccess").show('success');
+            $("#resetPassword").hide();
+
+        },
+        error: function (err) {
+            console.log(err);
+            $("#resetPasswordErr").show();
+            $('#loginErr').show();
+            $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
+        }
+    });
+};
+
+function clearLogin() {
+    $('#inputEmail').click(function (e) {
+        $('#loginErr').hide();
+        $('.form-control').val('');
+    });
+};
+
+    function getSurveyAttendanceLocation(){
+        locationId = user.location.locationId;
+        userLocation = user.location.cityName;
+        console.log(locationId);
+        console.log(userLocation);
+        console.log(adminPassword);
+        console.log(adminEmail);
+        
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/users/locations',
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {
+                   $("#screener-div").show();
+                   console.log(data);
+                   allLocations = data;
+                   console.log(allLocations);
+                   
+                    $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", locationId)
+                                .text(userLocation));
+                    $.each(data, function(index, datum) {
+                        //console.log(data);
+                        locationName = data[index].cityName;
+                        //console.log(locationName);
+                        if (datum.cityName !== userLocation) {
+                           $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
                         }
                     });
-                    $('#dashboardBtn').click();
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
                 }
+            });
+        };
 
-            },
-            error: function (err) {
-                console.log(err);
-                $('#loginErr').show();
-                $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
-                clearLogin();
-                return false;
-            }
+//$(document).ready(function () {
 
-        });
-        return false;
-    });
+//    var adminLocation;
+//    var adminLocationName;
+//    var allLocations;
+//    var adminId;
+//    var adminEmail;
+//    var adminPassword;
+//    var user;
+//    var adminRoleId;
+//    var guestAnswerOne = false;
+//    var guestAnswerTwo = false;
+//    var guestAnswerThree = false;
+
+//    $("#loginNav").show();
+//    $("#adminLoginDiv").show();
+//    $("#loginErr").hide();
+//    $("#navBarDiv").hide();
+//    $("#dashboardDiv").hide();
+//    $("#allEmployeesDiv").hide();
+//    $("#reportDiv").hide();
+//    $("#adminGuidelinesDiv").hide();
+//    $("#createAccountDiv").hide();
+//    $("#createGuestDiv").hide();
+//    $("#createLocationDiv").hide();
+//    $("#employeeInfoDiv").hide();
+//    $("#guestAttendingDiv").hide();
+//    $("#healthSurveyDiv").hide();
+//    $("#overall-success").hide();
+//    $("#screener-div").hide();
+//    $("#survey-div").hide();
+//    $("#screener-bye").hide();
+//    $("#survey-bye").hide();
+//    $("#deleteEmployeeDiv").hide();
+//    $("#locationInfoDiv").hide();
+//    $('#time-success').hide();
+//    $("#loginErr").hide();
+//    $("#resetPasswordAdmin").hide();
+//    $("#edit-hashed-password").hide();
+//    $("#reportDiv").hide();
+
+
+//    $("#submitLoginButton").click(function (e) {
+//        e.preventDefault();
+//        var password = $("#inputPassword").val();
+//        var email = $("#inputEmail").val();
+//
+//        $.ajax({
+//            type: "post",
+//            url: "http://localhost:8080/api/users/login",
+//            headers: {
+//                "email": email,
+//                "password": password
+//            },
+//            success: function (response) {
+//                console.log(response);
+//                if (response.role.roleId === 2) {
+//                    let errorMessage = confirm("You have attempted to log in to the Admin Dashboard without admin privileges, you will now be routed to the user login.");
+//        
+//                    if (errorMessage === true) {
+//                         window.location.replace('/index.html');
+//                     }
+// 
+//                } else if (response.role.roleId === 1 || response.role.roleId === 3) {
+//                    adminLocation = response.location.locationId;
+//                    adminLocationName = response.location.cityName;
+//                    adminId = response.userId;
+//                    adminEmail = response.email;
+//                    adminPassword = response.defaultPW;
+//                    user = response;
+//                    adminRoleId = response.role.roleId;
+//                    
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: 'http://localhost:8080/api/admin/locations',
+//                        headers: {
+//                                 'email': adminEmail,
+//                                 'password': adminPassword
+//                             },
+//                        success: function (data) {
+//                            allLocations = data;
+//                            console.log(allLocations);
+//                        },
+//                        error: function (http) {
+//                            console.log(http);
+//                            console.log('An error resulted when attempting to retrieve locations.');
+//                        }
+//                    });
+//                    $('#dashboardBtn').click();
+//                }
+//
+//            },
+//            error: function (err) {
+//                console.log(err);
+//                $('#loginErr').show();
+//                $('#loginErr').text("Either your username or password is incorrect. Please contact your branch administrator if you need assistance.");
+//                clearLogin();
+//                return false;
+//            }
+//
+//        });
+//        return false;
+//    });
+
+
     
     $('#takeSurveyBtn').click(function (event) {
         $("#loginNav").hide();
@@ -192,8 +509,6 @@ $('#dashboardBtn').click(function (event) {
         
         $('#dashLocationOption').empty();
 
-        var locationId = adminLocation;
-        
         if (adminRoleId === 3) {
             $.ajax({
                 type: 'GET',
@@ -1937,7 +2252,7 @@ $("#q1No").on("click", function (e) {
 
 //if user is coming in to the office, show health survey questions:
 $("#q1Yes").on("click", function () {
-    getAttendanceLocation();
+    //getSurveyAttendanceLocation();
     $("#screener-div").hide();
     $("#survey-div").show();
     $("#survey-bye").hide();
@@ -2849,15 +3164,10 @@ function showGuidelines() {
 
 
 var adminLocation;
-//var adminLocationName;
-//var allLocations;
-//var adminId;
-var adminEmail;
-var adminPassword;
-//var user;
-//var adminRoleId;
+//var adminEmail;
+//var adminPassword;
 var option;
-var locationId;
+//var locationId;
 var nameInput;
 var allLocations;
 var locationName;
@@ -2887,10 +3197,10 @@ var selectedLocationId;
                 type: "GET",
                 url: "http://localhost:8080/api/admin/users/" + locationId,
                 headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
-//                    'email': adminEmail,
-//                    'password': adminPassword
+                 //'email': 'user@user.com',
+                 //'password': 'password'
+                    'email': adminEmail,
+                    'password': adminPassword
             },
             success: function (data, status) {
             console.log(data);
@@ -2919,10 +3229,9 @@ var selectedLocationId;
                 type: "GET",
                 url: "http://localhost:8080/api/admin/guests/" + locationId,
                 headers: {
-//                'email': adminEmail,
-//                'password': adminPassword
-                    'email': 'user@user.com',
-                    'password': 'password'
+                'email': adminEmail,
+                'password': adminPassword
+
                 },
             success: function (data, status) {
             console.log(data);
@@ -2959,8 +3268,8 @@ var selectedLocationId;
                 type: 'GET',
                 url: 'http://localhost:8080/api/users/locations',
                 headers: {
-                    "email": 'user@user.com',
-                    "password": 'password'
+                    "email": adminEmail,
+                    "password": adminPassword
                 },
                 success: function (data) {
                 locationName = data[selectedLocationId].cityName; 
@@ -3012,8 +3321,8 @@ function getAttendance(userId) {
         type: 'GET',
         url: 'http://localhost:8080/api/admin/datesPresent/' + userId,
         headers: {
-            'email': 'user@user.com',
-            'password': 'password'
+            "email": adminEmail,
+            "password": adminPassword
         },
         success: function (data) {
             console.log(data);
@@ -3216,8 +3525,8 @@ function getAttendance(userId) {
         type: 'GET',
         url: 'http://localhost:8080/api/admin/user/' + userId,
         headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+            "email": adminEmail,
+            "password": adminPassword
             },
         success: function(data, status) {
                $("#myInput").val('');
@@ -3249,7 +3558,7 @@ function getAttendance(userId) {
         $('#guestReportSummaryTableDiv').empty();
         selectedLocationId = $('#reportLocationOption').val();
         cityName = getAllLocations(selectedLocationId);
-        console.log(cityName);
+        //console.log(cityName);
         //console.log(allLocations);
         $("#myList").hide();
         $("#attendance-message").empty();
@@ -3318,8 +3627,8 @@ var attendanceLocationId;
              url: 'http://localhost:8080/api/admin/attendanceReport/' + selectedUserId + '/' + specifiedDate,
              
              headers: {
-                 'email': 'user@user.com',
-                 'password': 'password'
+                "email": adminEmail,
+                "password": adminPassword
              },
 
             success: function (response) {
@@ -3441,8 +3750,8 @@ function getEmployeesByDateRange(attendanceLocationId) {
         url: 'http://localhost:8080/api/admin/attendanceDuringRangeSummary/' + attendanceLocationId + '/' + startDate + '/' + endDate,
 
         headers: {
-            'email': 'user@user.com',
-            'password': 'password'
+            "email": adminEmail,
+            "password": adminPassword
         },
 
         success: function (response) {
@@ -3522,8 +3831,8 @@ function getEmployeesByDateRange(attendanceLocationId) {
         type: 'GET',
         url: 'http://localhost:8080/api/admin/attendanceDuringRange/' + locationId + '/' + startDate + '/' + endDate,
         headers: {
-            'email': 'user@user.com',
-            'password': 'password'
+            "email": adminEmail,
+            "password": adminPassword
         },
         success: function (response) {
             console.log(response);
