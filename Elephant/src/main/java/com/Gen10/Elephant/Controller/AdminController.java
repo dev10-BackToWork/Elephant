@@ -234,6 +234,18 @@ public class AdminController {
             return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/capacity/{id}/{num}")
+    public ResponseEntity<Location> editCapacity(@PathVariable int id, @PathVariable int num,
+            @RequestHeader("email") String email, @RequestHeader("password") String password) {
+        try {
+            service.checkAdmin(email, password);
+            return new ResponseEntity<Location>(service.editCapacity(id, num), HttpStatus.OK);
+        } catch (invalidCredentialsException e) {
+            return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/resetPassword/{id}")
