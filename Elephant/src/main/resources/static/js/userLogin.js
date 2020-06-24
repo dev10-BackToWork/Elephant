@@ -26,6 +26,7 @@ $(document).ready(function () {
 $("#submitLoginButton").click(function (e) {
     e.preventDefault();
     checkPassword();
+    $('#loadingMsg').show();
     //password = $("#inputPassword").val();
     //email = $("#inputEmail").val();
 });
@@ -52,6 +53,7 @@ function checkPassword() {
         },
         error: function (err) {
             console.log(err);
+            $('#loadingMsg').hide();
             $('#loginErr').show();
             $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
             clearLogin();
@@ -76,7 +78,8 @@ function checkChange() {
         success: function (response) {
 
             if (response === true) {
-                console.log('changed password is ' + response + ' success, password has been changed');
+               
+                //console.log('changed password is ' + response + ' success, password has been changed');
                 password = $("#inputPassword").val();
                 getAttendanceLocation();
                 //$("#screener-div").show();
@@ -84,7 +87,7 @@ function checkChange() {
                 $("#resetPassword").hide();
 
             } else if (response === false) {
-                console.log('changed password is ' + response + ' please change password');
+                //console.log('changed password is ' + response + ' please change password');
                 resetPassword();
                 $("#screener-div").hide();
                 $("#resetHeading").html("Welcome, " + firstName + "! </br> Since it's your first time logging in, please change your password.");
@@ -94,7 +97,7 @@ function checkChange() {
             }
         },
         error: function (err) {
-           
+           $('#loadingMsg').hide();
             $("#resetPasswordErr").show();
             console.log(err);
         }
@@ -115,10 +118,12 @@ $("#reset-password-btn").click(function (e) {
 // SUBMIT NEW PASSWORD
 $("#submit-reset-btn").click(function (e) {
     e.preventDefault();
+    //$('#loadingMsg').show();
     validateNewPassword();
 });
 
 function resetPassword() {
+    $('#loadingMsg').hide();
     $("#login").hide();
     $("#screener-div").hide();
     $("#passwordSuccess").hide();
@@ -134,6 +139,7 @@ $("#newPassword").click(function (e) {
 
 
 function validateNewPassword() {
+     $('#loadingMsg').show();
 //    email = $("#resetEmailInput").val();
 //    password = $("#resetPasswordInput").val();
     var newPassword = $("#newPassword").val();
@@ -149,6 +155,7 @@ function validateNewPassword() {
         // then check if new password string is equal to old password 
         var validChangedPassword = password.localeCompare(newPasswordConfirm);
         if (validChangedPassword === 0) {
+            $('#loadingMsg').hide();
             $("#resetPasswordErr").show();
             $("#resetPasswordErr").text('You must choose a password that is different from your old password. Please re-enter a new password.');
             resetPassword();
@@ -160,12 +167,14 @@ function validateNewPassword() {
         }
 
     } else {
+        $('#loadingMsg').hide();
         $("#resetPasswordErr").show();
         $("#resetPasswordErr").text('The confirmation password does not match your new password. Please re-enter a new password.');
         console.log('The confirmation password does not match your new password. Please re-enter a new password.');
         resetPassword();
     }
     } else {
+       $('#loadingMsg').hide();
        $("#resetPasswordErr").show();
        $("#resetPasswordErr").text('Your password must contain at least 8 characters. Please re-enter a new password.');
        console.log('Your password must contain at least 8 characters. Please re-enter a new password.');
@@ -174,6 +183,7 @@ function validateNewPassword() {
 };
 
 function saveNewPassword() {
+     $('#loadingMsg').hide();
     //on login success, update password 
     console.log(password);
     console.log(user);
@@ -190,13 +200,13 @@ function saveNewPassword() {
             "content-type": "application/json"
         },
         success: function (response) {
-            loadingMsg();
+            
             password = user.passwords;
             getAttendanceLocation();
             console.log(response);
             $("#passwordSuccess").show('success');
             $("#resetPassword").hide();
-
+           
         },
         error: function (err) {
             console.log(err);
@@ -207,10 +217,13 @@ function saveNewPassword() {
     });
 };
 
-function loadingMsg() {
-       $('#loadingMsg').show();
-       //$('.form-control').val('');
-};
+            
+//function loadingMsg() {
+//    $('#loadingMsg').show();
+//    //setTimeout(function() {
+//    //   $('#loadingMsg').fadeOut('fast');
+//    //}, 1000); 
+//};
 
 function clearLogin() {
     $('#inputEmail').click(function (e) {
@@ -220,6 +233,7 @@ function clearLogin() {
 };
 
     function getAttendanceLocation(){
+        
         locationId = user.location.locationId;
         userLocation = user.location.cityName;
         console.log(locationId);
@@ -235,6 +249,7 @@ function clearLogin() {
                     'password': password
                 },
                 success: function (data) {
+                   $('#loadingMsg').hide();
                    $("#screener-div").show();
                    console.log(data);
                    allLocations = data;
