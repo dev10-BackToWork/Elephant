@@ -20,6 +20,7 @@ $(document).ready(function () {
     $("#departure-container").hide();
     $('#time-success').hide();
     $("#loginErr").hide();
+    $('#loadingMsg').hide();
 });
 
 $("#submitLoginButton").click(function (e) {
@@ -189,6 +190,7 @@ function saveNewPassword() {
             "content-type": "application/json"
         },
         success: function (response) {
+            $('#loadingMsg').show();
             password = user.passwords;
             getAttendanceLocation();
             console.log(response);
@@ -203,6 +205,11 @@ function saveNewPassword() {
             $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
         }
     });
+};
+
+function loadingMsg() {
+       $('#loadingMsg').show();
+       //$('.form-control').val('');
 };
 
 function clearLogin() {
