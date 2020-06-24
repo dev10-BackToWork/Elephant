@@ -148,13 +148,14 @@ public class ServiceLayer {
         return locationRepo.save(location);
     }
 
-    public Location editCapacity(int id, int num) {
+    public Location editLocation(int id, int num, String dibEmail) {
         // Due to auto-incrementing of locations in database, the specific user object
         // needs to be acquired and altered to prevent duplicate location with different
         // field(s).
         Location existingLocation = findLocationById(id);
 
         existingLocation.setMaxOccupancy(num);
+        existingLocation.setDistributionEmail(dibEmail);
 
         Location editedLocation = locationRepo.save(existingLocation);
 

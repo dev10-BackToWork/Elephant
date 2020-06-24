@@ -4220,7 +4220,33 @@ function prepCSVRow(arr, columnCount, initial) {
     //     });
 
     // });
+
+
+    // // @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    // // @PostMapping("/location/{id}/{num}/{dibEmail}")
     
+    // $('#editLocation').click(function(event) {
+
+    //     var locationId = "6"
+    //     var maxOccupancyField = "26"
+    //     var distributionEmailField = "email@changedagain.com"
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/api/admin/location/' + locationId + '/' + maxOccupancyField + '/' + distributionEmailField,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function(data) {
+    //             console.log(data);
+    //         },
+    //         error: function(http) {
+    //             console.log(http);
+    //         }
+    //     });
+
+    // });
 
 
     // // ********** Preparing Ajax calls End
