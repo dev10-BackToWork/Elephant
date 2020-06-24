@@ -390,7 +390,7 @@ function notAuthorized() {
                 "isAttending": true,
                 "isAuthorized": false,
                 user: user,
-                location : locationObj,
+                location : locationObj
             }),
 
         headers: {
