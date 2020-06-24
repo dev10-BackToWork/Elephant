@@ -190,7 +190,7 @@ function saveNewPassword() {
             "content-type": "application/json"
         },
         success: function (response) {
-            $('#loadingMsg').show();
+            loadingMsg();
             password = user.passwords;
             getAttendanceLocation();
             console.log(response);
