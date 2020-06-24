@@ -33,7 +33,7 @@ $(document).ready(function () {
     $('#time-success').hide();
     $("#loginErr").hide();
     $("#loginNav").show();
-    
+    $('#loadingMsg').hide();
     
     //$("#adminLoginDiv").show();
     //$("#loginErr").hide();
@@ -65,6 +65,7 @@ $(document).ready(function () {
 $("#submitLoginButton").click(function (e) {
     e.preventDefault();
     checkPassword();
+    
     //password = $("#inputPassword").val();
     //email = $("#inputEmail").val();
 });
@@ -72,6 +73,7 @@ $("#submitLoginButton").click(function (e) {
 
 //1. get username and password and check to see if it's correct in DB
 function checkPassword() {
+    $('#loadingMsg').show();
     adminPassword = $("#inputPassword").val();
     adminEmail = $("#inputEmail").val();
 
@@ -84,16 +86,20 @@ function checkPassword() {
             "content-type": "application/json"
         },
             success: function (response) {
+                
                  user = response;
                  console.log(user);
                 if (user.role.roleId === 2) {
+                     $('#loadingMsg').hide();
                     let errorMessage = confirm("You have attempted to log in to the Admin Dashboard without admin privileges, you will now be routed to the user login.");
 
                     if (errorMessage === true) {
+                        $('#loadingMsg').hide();
                         window.location.replace('/index.html');
                     }
 
                 } else if (user.role.roleId === 1 || user.role.roleId === 3) {
+                    $('#loadingMsg').hide();
                     adminLocation = user.location.locationId;
                     adminLocationName =user.location.cityName;
                     adminId = user.userId;
@@ -106,6 +112,7 @@ function checkPassword() {
                 }
             },
         error: function (err) {
+            $('#loadingMsg').hide();
             console.log(err);
             $('#loginErr').show();
             $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
@@ -131,11 +138,10 @@ function checkChange() {
         success: function (response) {
 
             if (response === true) {
-                console.log('changed password is ' + response + ' success, password has been changed');
+                //console.log('changed password is ' + response + ' success, password has been changed');
                 password = $("#inputPassword").val();
-               //$('#dashboardBtn').click();
+                //$('#loadingMsg').hide();
                 getSurveyAttendanceLocation();
-              
                 //$("#screener-div").show();
                 $("#adminLoginDiv").hide();
                 $("#resetPassword").hide();
@@ -172,8 +178,16 @@ $("#reset-password-btn").click(function (e) {
 // SUBMIT NEW PASSWORD
 $("#submit-reset-btn").click(function (e) {
     e.preventDefault();
+    $('#loadingMsg').show();
     validateNewPassword();
 });
+
+//function loadingMsg() {
+   // $('#loadingMsg').show();
+  //  setTimeout(function() {
+   //    $('#loadingMsg').fadeOut('fast');
+   // }, 1000); 
+//};
 
 function resetPassword() {
     $("#adminLoginDiv").hide();
@@ -191,7 +205,7 @@ $("#newPassword").click(function (e) {
 
 
 function validateNewPassword() {
-
+     
     var newPassword = $("#newPassword").val();
     var newPasswordConfirm = $("#newPasswordConfirm").val();
     if(newPassword.length >= 8 && newPasswordConfirm.length >= 8){
@@ -205,6 +219,7 @@ function validateNewPassword() {
         // then check if new password string is equal to old password 
         var validChangedPassword = adminPassword.localeCompare(newPasswordConfirm);
         if (validChangedPassword === 0) {
+             $('#loadingMsg').hide();
             $("#resetPasswordErr").show();
             $("#resetPasswordErr").text('You must choose a password that is different from your old password. Please re-enter a new password.');
             resetPassword();
@@ -217,11 +232,13 @@ function validateNewPassword() {
 
     } else {
         $("#resetPasswordErr").show();
+        $('#loadingMsg').hide();
         $("#resetPasswordErr").text('The confirmation password does not match your new password. Please re-enter a new password.');
         console.log('The confirmation password does not match your new password. Please re-enter a new password.');
         resetPassword();
     }
     } else {
+       $('#loadingMsg').hide();
        $("#resetPasswordErr").show();
        $("#resetPasswordErr").text('Your password must contain at least 8 characters. Please re-enter a new password.');
        console.log('Your password must contain at least 8 characters. Please re-enter a new password.');
@@ -246,7 +263,9 @@ function saveNewPassword() {
             "content-type": "application/json"
         },
         success: function (response) {
+            $('#loadingMsg').show();
             adminPassword = user.passwords;
+            $('#dashboardBtn').click();
             getSurveyAttendanceLocation();
             console.log(response);
             $("#passwordSuccess").show('success');
@@ -255,6 +274,7 @@ function saveNewPassword() {
         },
         error: function (err) {
             console.log(err);
+            $('#loadingMsg').hide();
             $("#resetPasswordErr").show();
             $('#loginErr').show();
             $('#loginErr').text("Either your username or password are incorrect. Please contact your branch administrator if you need assitance.");
@@ -266,6 +286,7 @@ function clearLogin() {
     $('#inputEmail').click(function (e) {
         $('#loginErr').hide();
         $('.form-control').val('');
+        $('#loadingMsg').hide();
     });
 };
 
@@ -286,6 +307,7 @@ function clearLogin() {
                 },
                 success: function (data) {
                    $("#screener-div").show();
+                   $('#loadingMsg').hide();
                    console.log(data);
                    allLocations = data;
                    console.log(allLocations);
@@ -474,6 +496,10 @@ function clearLogin() {
     });
     
 $('#dashboardBtn').click(function (event) {
+        locationId = user.location.locationId;
+        userLocation = user.location.cityName;
+        $('#loadingMsg').hide();
+        
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
