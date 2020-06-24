@@ -9,7 +9,6 @@ var cityName;
 var allLocations;//for returned list of all location objects
 var attendanceLocation; // for selected location choice
 
-
 $(document).ready(function () {
     $("#resetPassword").hide();
     $("#screener-div").hide();
