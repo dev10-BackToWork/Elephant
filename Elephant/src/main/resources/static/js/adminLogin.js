@@ -1565,13 +1565,22 @@ $('#dashboardBtn').click(function (event) {
                          'password': adminPassword
                     },
                     success: function (data) {
-                        console.log(data);
-                        $.each(data, function(index, datum) {
-                            $('#locationAddGuest')
-                                .append($("<option></option>")
-                                    .attr("value", index + 1)
-                                    .text(datum.cityName));
-                        });
+                        
+                        
+                    $('#locationAddGuest')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName));
+                    $.each(data, function(index, datum) {
+//                        console.log(data);
+                        if (datum.cityName !== adminLocationName) {
+                           $('#locationAddGuest')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                        }
+                    });
+
                     },
                     error: function (http) {
                         console.log(http);
