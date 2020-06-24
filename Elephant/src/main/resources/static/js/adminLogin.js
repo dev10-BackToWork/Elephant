@@ -133,13 +133,13 @@ function checkChange() {
             if (response === true) {
                 console.log('changed password is ' + response + ' success, password has been changed');
                 password = $("#inputPassword").val();
-                $('#dashboardBtn').click();
+               //$('#dashboardBtn').click();
                 getSurveyAttendanceLocation();
               
                 //$("#screener-div").show();
                 $("#adminLoginDiv").hide();
                 $("#resetPassword").hide();
-                
+                $('#dashboardBtn').click();
 
             } else if (response === false) {
                 console.log('changed password is ' + response + ' please change password');
@@ -247,7 +247,6 @@ function saveNewPassword() {
         },
         success: function (response) {
             adminPassword = user.passwords;
-            $('#dashboardBtn').click();
             getSurveyAttendanceLocation();
             console.log(response);
             $("#passwordSuccess").show('success');
@@ -475,9 +474,6 @@ function clearLogin() {
     });
     
 $('#dashboardBtn').click(function (event) {
-        locationId = user.location.locationId;
-        userLocation = user.location.cityName;
-        
         $("#loginNav").hide();
         $("#adminLoginDiv").hide();
         $("#loginErr").hide();
@@ -2606,6 +2602,9 @@ var attendanceLocation;
                 });
 
                 $('#edit-role').val(currentRoleIndex);
+
+                // $("#edit-role option[value='4']").remove();
+                $("#edit-role option:contains('ROLE_GUEST')").remove();
             },
             error: function (http) {
                 console.log(http);
