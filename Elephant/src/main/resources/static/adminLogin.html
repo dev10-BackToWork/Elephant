@@ -666,36 +666,77 @@
         
     <!-- Create Location Div -->
     <div class="container" id="createLocationDiv">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h1 class="mt-5">Create New Location</h1>
-            </div>
-        </div>
+        <ul class="list-group text-center" style="margin-bottom: 15px" id="createLocErrorMessages"></ul>
+        <h1 class="heading">Create Office</h1>
         <div class="row">
             <div class="col-md-12 text-center">
-                <div class="card">
-                    <div class="card-header">
-                        New Location
-                    </div>
-                    <div class="card-body">
-                        <form class="form-inline">
-                            <div class="form-group mx-2">
-                                    <label for="locationName">Location Name: </label>
-                                    <input type="text" name="locationName" id="locationName" class="form-control" placeholder="Location Name..."/>
-                            </div>
-                            <div class="form-group mx-2">
-                                <label for="maxCapacity">Maximum Capacity: </label>
-                                <input type="number" min="0" name="locationCap" id="locationCap" class="form-control" placeholder="Max Capacity..."/>
-                            </div>
-                                    <button class="btn btn-primary ml-3" id="createLocationSubmitBtn">
-                                        Create Location
-                                    </button>
-                            </div>
-                        </form>
-                    </div>
+              <div class="card">
+                <div class="card-header">
+                  Office Information
                 </div>
+                <div class="card-body">
+                  <form>
+                    <div class="row my-2">
+                      <div class="col-3">
+                      </div>
+                      <div class="col-6">
+                        <label for="officeCity" style="margin-bottom: 2px;">City</label>
+                        <input
+                          type="text"
+                          name="officeCity"
+                          id="new-office-city"
+                          class="form-control"
+                        />
+                      </div>
+                      <div class="col-3">
+                      </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-3">
+                      </div>
+                      <div class="col-6">
+                        <label for="officeOccupancy">Max Occupancy</label>
+                        <input
+                          type="number"
+                          name="officeOccupancy"
+                          id="new-office-occupancy"
+                          class="form-control"
+                        />
+                      </div>
+                        <div class="col-3">
+                      </div>
+                    </div>
+                      <div class="row my-2">
+                      <div class="col-3"></div>
+                      <div class="col-6">
+                        <label for="officeEmail">Distribution Email</label>
+                        <input
+                          type="text"
+                          name="officeEmail"
+                          id="new-office-email"
+                          class="form-control"
+                        />
+                      </div>
+                      <div class="col-3"></div>
+                    </div>
+
+                    <div class="row mt-4">
+                      <div class="col">
+                        <button class="btn btn-primary" id="confirmOfficeBtn" type="button">
+                          Create Office
+                        </button>
+                        <br />
+                        <button class="btn btn-primary mt-3" id="cancelOfficeBtn" type="button">
+                            Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
-        </div>
+          </div> 
+        </div> 
 
         <!-- Employee Info Div -->   
         <div class="container" id="employeeInfoDiv">
@@ -1010,37 +1051,83 @@
         <div class="row" id="overall-success" style="font-size: 1.2em"></div>
     </div>
         
-        <!-- Location Info Div -->   
+        <!-- Location Info Div -->  
         <div class="container" id="locationInfoDiv">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="col-md-12 text-center">
-                        <ul class="list-group" id="editLocErrorMessages"></ul>
+            <div class="container" id="locationOfficePage">
+                <div class="row" style="margin-top: 15px">
+                    <div class="col-md-4">
                     </div>
-                    <h3 class="mt-5">Office Information</h3>
-                    <div class="row">
-                        <div class="col-md-3">
-                        </div>
-                        <div class="col-md-6" style="margin-bottom: 15px">
-                            <label for="cityname">City</label>
-                            <input type="text" name="cityname" id="edit-city-name" class="form-control" placeholder="City" style="text-align:center;" readonly/>
-                        </div> 
-                        <div class="col-md-3">
-                        </div>
+                     <div class="col-md-3">
+                         <select id="officeLocationOption" name="officeLocOption" class="form-control" >
+                         </select>   
+                    </div> 
+                    <div class="col-md-1">
+                        <button class="btn btn-primary" id="submitOfficeLocOption">Submit</button>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                        </div>
-                        <div class="col-md-6" style="margin-bottom: 15px">
-                            <label for="occupancy">Max Occupancy</label>
-                            <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" style="text-align:center;" required/>
-                        </div>
-                        <div class="col-md-3">
-                        </div>
+                    <div class="col-md-4">
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a class="btn btn-info" id="submitLocationInfoBtn" style="color: white">Submit</a>
+                </div>
+                <div class="row text-center" style="margin-top: 20px">
+                    <div class="col-md-4">
+                    </div>
+                     <div class="col-md-4">
+                         <button class="btn btn-primary" id="addOfficeBtn">Add New Office</button> 
+                    </div> 
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="officeInfoDiv">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="col-md-12 text-center" style="margin-top: 20px; margin-bottom: 20px;">
+                            <ul class="list-group" id="editLocErrorMessages"></ul>
+                        </div>
+                        <h3>Office Information</h3>
+                        <div class="row" style="display: none;">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 15px">
+                                <label for="locationid">Location ID</label>
+                                <input type="text" name="locationid" id="edit-location-id" class="form-control" style="text-align:center;" readonly/>
+                            </div> 
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 15px">
+                                <label for="cityname">City</label>
+                                <input type="text" name="cityname" id="edit-city-name" class="form-control" style="text-align:center;" readonly/>
+                            </div> 
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 15px">
+                                <label for="occupancy">Max Occupancy</label>
+                                <input type="number" min="0" step="1" name="occupancy" id="edit-occupancy" class="form-control" style="text-align:center;" required/>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 15px">
+                                <label for="distEmail">Distribution Email</label>
+                                <input type="text" name="distEmail" id="edit-dist-email" class="form-control" style="text-align:center;" required/>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-info" id="submitLocationInfoBtn" style="color: white">Submit</a>
+                            </div>
                         </div>
                     </div>
                 </div>
