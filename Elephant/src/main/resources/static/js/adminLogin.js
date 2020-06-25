@@ -534,6 +534,7 @@ $('#dashboardBtn').click(function (event) {
         var arrivalRows = $('#arrivalRows');
         
         $('#dashLocationOption').empty();
+        $('#dashboardAlerts').empty();
 
         if (adminRoleId === 3) {
             $.ajax({
@@ -549,7 +550,6 @@ $('#dashboardBtn').click(function (event) {
                                 .attr("value", adminLocation)
                                 .text(adminLocationName));
                     $.each(data, function(index, datum) {
-//                        console.log(data);
                         if (datum.cityName !== adminLocationName) {
                            $('#dashLocationOption')
                             .append($("<option></option>")
@@ -559,8 +559,10 @@ $('#dashboardBtn').click(function (event) {
                     });
                 },
                 error: function (http) {
-                    console.log(http);
-                    console.log('An error resulted when attempting to retrieve locations.');
+                    $('#dashboardAlerts')
+                   .append($('<li>')
+                   .attr({class: 'list-group-item list-group-item-danger'})
+                   .text('An error has occurred.'));
                 }
             });
 
@@ -917,7 +919,6 @@ $('#dashboardBtn').click(function (event) {
                                 .attr("value", adminLocation)
                                 .text(adminLocationName)); 
                     $.each(data, function(index, datum) {
-                        // console.log(data);
                         if (datum.cityName !== adminLocationName) {
                         $('#employeeLocationOption')
                             .append($("<option></option>")
@@ -1508,6 +1509,10 @@ $('#dashboardBtn').click(function (event) {
         $('#createAccountErrorMessages').empty();
 
         $('#locationAddUser').empty();
+        
+        $('#firstNameAddUser').val("");
+        $('#lastNameAddUser').val("");
+        $('#emailAddUser').val("");
 
         $.ajax({
                     type: 'GET',
@@ -1516,13 +1521,18 @@ $('#dashboardBtn').click(function (event) {
                         'email': adminEmail,
                          'password': adminPassword
                     },
-                    success: function (data) {
-                        console.log(data);
+                    success: function (data) { 
+                        $('#locationAddUser')
+                                .append($("<option></option>")
+                                    .attr("value", adminLocation)
+                                    .text(adminLocationName));
                         $.each(data, function(index, datum) {
-                            $('#locationAddUser')
+                            if (datum.cityName !== adminLocationName) {
+                               $('#locationAddUser')
                                 .append($("<option></option>")
                                     .attr("value", index + 1)
                                     .text(datum.cityName));
+                            }
                         });
                     },
                     error: function (http) {
@@ -1530,7 +1540,6 @@ $('#dashboardBtn').click(function (event) {
                         console.log('An error resulted when attempting to retrieve locations.');
                     }
                 });
-
     });
     
     $('#createGuestBtn').click(function (event) {
@@ -1557,6 +1566,13 @@ $('#dashboardBtn').click(function (event) {
         
         $('#createGuestErrorMessages').empty();
         
+        $('#firstNameAddGuest').val("");
+        $('#lastNameAddGuest').val("");
+        $('#emailAddGuest').val("");
+        $('#phoneAddGuest').val("");
+        $('#add-guest-visiting').val("");
+        $('#add-guest-misc').val("");
+        
         guestAnswerOne = false;
         guestAnswerTwo = false;
         guestAnswerThree = false;
@@ -1566,16 +1582,13 @@ $('#dashboardBtn').click(function (event) {
         function toggleNewGuest() {
             $('#q1newGuest').change(function () {
                 guestAnswerOne = $(this).prop('checked');
-                console.log("Q1 Guest: " + guestAnswerOne);
             });
 
             $('#q2newGuest').change(function () {
                 guestAnswerTwo = $(this).prop('checked');
-                console.log("Q2 Guest: " + guestAnswerTwo);
             });
             $('#q3newGuest').change(function () {
                 guestAnswerThree = $(this).prop('checked');
-                console.log("Q3 Guest: " + guestAnswerThree);
             });
         }
 
@@ -1586,15 +1599,12 @@ $('#dashboardBtn').click(function (event) {
                         'email': adminEmail,
                          'password': adminPassword
                     },
-                    success: function (data) {
-                        
-                        
+                    success: function (data) {   
                     $('#locationAddGuest')
                             .append($("<option></option>")
                                 .attr("value", adminLocation)
                                 .text(adminLocationName));
                     $.each(data, function(index, datum) {
-//                        console.log(data);
                         if (datum.cityName !== adminLocationName) {
                            $('#locationAddGuest')
                             .append($("<option></option>")
@@ -1633,6 +1643,40 @@ $('#dashboardBtn').click(function (event) {
         $("#reportDiv").hide();
         
         $("#editLocErrorMessages").hide();
+        
+        $('#officeLocationOption').empty();
+        
+        if (adminRoleId === 3) {
+            $('#locationOfficePage').show();
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/admin/locations',
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function (data) {
+                    $('#officeLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", adminLocation)
+                                .text(adminLocationName)); 
+                    $.each(data, function(index, datum) {
+                        if (datum.cityName !== adminLocationName) {
+                        $('#officeLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", index + 1)
+                                .text(datum.cityName));
+                        }
+                    });
+                },
+                error: function (http) {
+                    console.log(http);
+                    console.log('An error resulted when attempting to retrieve locations.');
+                }
+            });
+        } else if (adminRoleId === 1) {
+            $('#locationOfficePage').hide();
+        }
 
         var userId = adminId;
 
@@ -1644,8 +1688,10 @@ $('#dashboardBtn').click(function (event) {
              'password': adminPassword
          },
         success: function(data, status) {
+              $('#edit-location-id').val(data.location.locationId);
               $('#edit-city-name').val(data.location.cityName);
               $('#edit-occupancy').val(data.location.maxOccupancy);
+              $('#edit-dist-email').val(data.location.distributionEmail);
           },
           error: function() {
             $('#editLocErrorMessages')
@@ -1655,6 +1701,142 @@ $('#dashboardBtn').click(function (event) {
           }
         });
 
+    });
+    
+    $('#submitOfficeLocOption').click(function (event) {  
+       var option = $('#officeLocationOption').val();
+       $('#editLocErrorMessages').empty();
+       
+       $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + option,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                 $('#edit-location-id').val(data.locationId);
+                 $('#edit-city-name').val(data.cityName);
+                 $('#edit-occupancy').val(data.maxOccupancy);
+                 $('#edit-dist-email').val(data.distributionEmail);
+             }, 
+             error: function(data) {
+                  $('#editLocErrorMessages')
+               .append($('<li>')
+               .attr({class: 'list-group-item list-group-item-danger'})
+               .text('An error has occurred.  Please try again later.'));
+             }
+         });
+   });
+   
+    $('#addOfficeBtn').click(function (event) {
+        $("#loginNav").hide();
+        $("#adminLoginDiv").hide();
+        $("#loginErr").hide();
+        $("#navBarDiv").show();
+        $("#dashboardDiv").hide();
+        $("#allEmployeesDiv").hide();
+        $("#reportDiv").hide();
+        $("#adminGuidelinesDiv").hide();
+        $("#createAccountDiv").hide();
+        $("#createGuestDiv").hide();
+        $("#createLocationDiv").show();
+        $("#employeeInfoDiv").hide();
+        $("#guestAttendingDiv").hide();
+        $("#healthSurveyDiv").hide();
+        $("#deleteEmployeeDiv").hide();
+        $("#locationInfoDiv").hide();
+        $("#overall-success").hide();
+        
+        $("#new-office-city").val("");
+        $("#new-office-occupancy").val("");
+        $("#new-office-email").val("");
+        
+        $("#createLocErrorMessages").empty();
+        
+    });
+    
+    $('#confirmOfficeBtn').click(function (event) {
+        
+        var city = $("#new-office-city").val();
+        var occupancy = $("#new-office-occupancy").val();
+        var email = $("#new-office-email").val();
+        
+        var errorCount = 0;
+        
+        $("#createLocErrorMessages").empty();
+        
+        if (city === "") {
+            $('#createLocErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('A City is required.'));
+            $("#createLocErrorMessages").show();
+            errorCount += 1;
+        } if (occupancy < 0) {
+            $('#createLocErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('Max Occupancy cannot be a negative number.'));
+            $("#createLocErrorMessages").show();
+            errorCount += 1;
+        } if (occupancy === "") {
+            $('#createLocErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('Max Occupancy must have a value.'));
+            $("#createLocErrorMessages").show();
+            errorCount += 1;
+        } if (occupancy.includes(".")) {
+            $('#createLocErrorMessages')
+                    .append($('<li>')
+                    .attr({class: 'list-group-item list-group-item-danger'})
+                    .text('Max Occupancy must be a whole number.'));
+            $("#createLocErrorMessages").show();
+            errorCount += 1;
+        } if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email === "") {
+            $('#createLocErrorMessages').append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger' })
+                .text('A valid Distribution Email is required.'));
+            $("#createLocErrorMessages").show();
+            errorCount += 1;
+        }
+        
+        if (errorCount == 0) {
+            
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/admin/addLocation',
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({
+                    "cityName": city,
+                    "maxOccupancy": occupancy,
+                    "distributionEmail": email
+                }),
+                success: function(data) {
+                    console.log(data);
+                    $("#locationBtn").click();
+                },
+                error: function(http) {
+                    console.log(http);
+                    $('#createLocErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger'})
+                        .text('An error has occurred while trying to create the office.  Please try again later.'));
+                }
+            });
+            
+            
+        }
+       
+    });
+    
+    $('#cancelOfficeBtn').click(function (event) {
+        $("#locationBtn").click();
     });
     
     $('#logoutBtn').click(function (event) {
@@ -1691,8 +1873,6 @@ $('#dashboardBtn').click(function (event) {
         var password = $("#inputPassword").val();
         var email = $("#inputEmail").val();
         var locationId = $('#locationAddUser').val();
-
-        console.log(locationId);
 
         var firstNameField = $('#firstNameAddUser').val();
         var lastNameField = $('#lastNameAddUser').val();
@@ -1954,19 +2134,6 @@ $('#dashboardBtn').click(function (event) {
                           }
                         });
                     
-
-
-
-
-
-
-
-
-
-
-
-
-                    
                 },
                 error: function (http) {
                     console.log(http);
@@ -2114,9 +2281,7 @@ $('#dashboardBtn').click(function (event) {
                     "roleId": roleIdField,
                     "name": roleNameField
                 }
-            }
-
-            console.log(userObj);
+            };
 
             $.ajax({
                 type: 'POST',
@@ -2195,53 +2360,68 @@ $('#dashboardBtn').click(function (event) {
     $('#submitLocationInfoBtn').click(function (event) {
         
         var occupancy = $('#edit-occupancy').val();
+        var email = $('#edit-dist-email').val();
+        var id = $('#edit-location-id').val();
+        
+        var errorCount = 0;
+        
+        $("#editLocErrorMessages").empty();
         
         if (occupancy < 0) {
-            $("#editLocErrorMessages").empty();
             $('#editLocErrorMessages')
                     .append($('<li>')
                     .attr({class: 'list-group-item list-group-item-danger'})
                     .text('Max Occupancy cannot be a negative number.'));
             $("#editLocErrorMessages").show();
-        } else if (occupancy === "") {
-            $("#editLocErrorMessages").empty();
+            errorCount += 1;
+        } if (occupancy === "") {
             $('#editLocErrorMessages')
                     .append($('<li>')
                     .attr({class: 'list-group-item list-group-item-danger'})
                     .text('Max Occupancy must have a value.'));
             $("#editLocErrorMessages").show();
-        } else if (occupancy.includes(".")) {
-            $("#editLocErrorMessages").empty();
+            errorCount += 1;
+        } if (occupancy.includes(".")) {
             $('#editLocErrorMessages')
                     .append($('<li>')
                     .attr({class: 'list-group-item list-group-item-danger'})
                     .text('Max Occupancy must be a whole number.'));
             $("#editLocErrorMessages").show();
-        } else {
-
+            errorCount += 1;
+        } if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email === "") {
+            $('#editLocErrorMessages').append($('<li>')
+                .attr({class: 'list-group-item list-group-item-danger' })
+                .text('A valid Distribution Email is required.'));
+            $("#editLocErrorMessages").show();
+            errorCount += 1;
+        }
+        if (errorCount == 0) {
+            
             $.ajax({
-            type: 'POST',
-            url: "http://localhost:8080/api/admin/capacity/" + adminLocation + "/" + occupancy,
-            headers: {
-                'email': adminEmail,
-                'password': adminPassword
-            },
-            success: function (data) {
-                console.log(data);
-                console.log('Location capacity was updated');
+                type: 'POST',
+                url: 'http://localhost:8080/api/admin/location/' + id + '/' + occupancy + '/' + email,
+                headers: {
+                    'email': adminEmail,
+                    'password': adminPassword
+                },
+                success: function(data) {
+                    console.log(data);
                 
-                $("#editLocErrorMessages").empty();
+                    $("#editLocErrorMessages").empty();
 
-                $('#editLocErrorMessages')
-                    .append($('<li>')
-                    .attr({class: 'list-group-item list-group-item-success'})
-                    .text('The office has been successfully updated.'));
-                $("#editLocErrorMessages").show();
-
-            },
-            error: function (http) {
-                console.log('An error resulted when attempting to edit the location capacity.')
-            }
+                    $('#editLocErrorMessages')
+                        .append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-success'})
+                        .text('The office has been successfully updated.'));
+                    $("#editLocErrorMessages").show();
+                    
+                },
+                error: function(http) {
+                    console.log(http);
+                    $('#editErrorMessages').append($('<li>')
+                        .attr({class: 'list-group-item list-group-item-danger' })
+                        .text('An error resulted when attempting to edit the location.'));
+                }
             });
         }
     });
@@ -2302,16 +2482,13 @@ var answerThree = false;
 function toggle() {
     $('#q1').change(function () {
         answerOne = $(this).prop('checked');
-        console.log("Q1: " + answerOne);
     });
 
     $('#q2').change(function () {
         answerTwo = $(this).prop('checked');
-        console.log("Q2: " + answerTwo);
     });
     $('#q3').change(function () {
         answerThree = $(this).prop('checked');
-        console.log("Q3: " + answerThree);
     });
 }
 
@@ -2673,16 +2850,13 @@ var attendanceLocation;
         function toggleGuest() {
             $('#q1guest').change(function () {
                 guestAnswerOne = $(this).prop('checked');
-                console.log("Q1 Guest: " + guestAnswerOne);
             });
 
             $('#q2guest').change(function () {
                 guestAnswerTwo = $(this).prop('checked');
-                console.log("Q2 Guest: " + guestAnswerTwo);
             });
             $('#q3guest').change(function () {
                 guestAnswerThree = $(this).prop('checked');
-                console.log("Q3 Guest: " + guestAnswerThree);
             });
         }
        
