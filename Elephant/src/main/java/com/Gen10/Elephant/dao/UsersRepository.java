@@ -1,5 +1,6 @@
 package com.Gen10.Elephant.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.Gen10.Elephant.dto.Location;
@@ -69,13 +70,17 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     List<User> findFlaggedUsersByLocation(int id);
     
     @Query(value = "SELECT a.locationId FROM User u INNER JOIN Attendance a ON u.userId = a.userId WHERE u.userId = ?1 AND a.attendanceDate = ?2", nativeQuery = true)
-    int findUserLocationIdOnDate(int id, String date);
+    int findUserLocationIdOnDate(int id, LocalDate date);
 
     @Query(value = "SELECT u.* FROM `User` u LEFT OUTER JOIN Attendance a ON u.userId = a.userId WHERE u.roleId = 4 AND a.isAttending IS NULL", nativeQuery = true)
     List<User> findAllOldGuestsByAge(int maxAge);
     
     @Query(value = "SELECT u.email FROM `User` u WHERE u.locationId = ? AND u.roleId = 1", nativeQuery = true)
     List<String> getAdminEmailsByLocation(int id);
-    @Query(value = "SELECT u.* FROM `User` u WHERE u.locationId = 15", nativeQuery = true)
-    List<User> findAllMilwaukee();
+    
+    @Query(value = "SELECT u.* FROM `User` u WHERE u.locationId = 15 AND u.roldId <> 4", nativeQuery = true)
+    List<User> findAllMilwaukeeEmployees();
+
+    @Query(value = "SELECT u.* FROM `User` u WHERE u.roldId <> 4", nativeQuery = true)
+    List<User> findAllEmployees();
 }

@@ -72,7 +72,7 @@ public class ServiceLayer {
 
     public List<Attendance> generateAttendanceReport(int id, String date) {
         LocalDate specifiedDate = LocalDate.parse(date);
-        int locIdOnDate = usersRepo.findUserLocationIdOnDate(id, date);
+        int locIdOnDate = usersRepo.findUserLocationIdOnDate(id, specifiedDate);
         List<Attendance> attendanceList = attendanceRepo.findAttendanceAuthorizedOnDate(locIdOnDate, specifiedDate);
 
         return attendanceList.stream()
@@ -480,7 +480,7 @@ public class ServiceLayer {
 
     public Boolean generateAllPasswords() {
         try {
-            for (User user : usersRepo.findAllMilwaukee()) {
+            for (User user : usersRepo.findAllEmployees()) {
                 String password = generatePassword();
                 user.setDefaultPW(password);
 
