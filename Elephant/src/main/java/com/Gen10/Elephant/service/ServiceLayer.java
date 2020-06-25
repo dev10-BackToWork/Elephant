@@ -130,7 +130,7 @@ public class ServiceLayer {
     // **********
     // Location
     public List<Location> getAllLocations() {
-        return locationRepo.findAll();
+        return locationRepo.findAllOrdered();
     }
 
     public Location findLocationById(int locationId) {
