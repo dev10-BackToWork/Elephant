@@ -4289,4 +4289,28 @@ $('#refreshDashboardBtn').click(function(event) {
     // });
 
 
+    // // @GetMapping("/location/{id}")
+
+    // $('#getLocation').click(function(event) {
+
+    //     var locationId = 10;
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://localhost:8080/api/admin/location/' + locationId,
+    //         headers: {
+    //             'email': 'user@user.com',
+    //             'password': 'password'
+    //         },
+    //         success: function(data) {
+    //             console.log(data);
+    //         },
+    //         error: function(data) {
+
+    //         }
+    //     });
+
+    // });
+
+
     // // ********** Preparing Ajax calls End

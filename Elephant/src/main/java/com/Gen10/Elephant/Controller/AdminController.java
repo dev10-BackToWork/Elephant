@@ -150,6 +150,19 @@ public class AdminController {
             return new ResponseEntity<List<Location>>(new ArrayList<Location>(), HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @GetMapping("/location/{id}")
+    public ResponseEntity<Location> getLocation(@PathVariable int id, @RequestHeader("email") String email,
+            @RequestHeader("password") String password) {
+        try {
+            service.checkAdmin(email, password);
+            return new ResponseEntity<Location>(service.getLocationById(id), HttpStatus.OK);
+        } catch (invalidCredentialsException e) {
+            String message = "There was an error while attempting to retrieve the requested location.";
+            return new ResponseEntity(message, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/addLocation")
