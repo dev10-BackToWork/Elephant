@@ -150,10 +150,11 @@ public class AdminController {
             return new ResponseEntity<List<Location>>(new ArrayList<Location>(), HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     @CrossOrigin(origins = "https://044db60.netsolhost.com")
     @PostMapping("/addLocation")
-    public ResponseEntity<Location> addLocation(@RequestBody Location location, @RequestHeader("email") String email, @RequestHeader("password") String password) {
+    public ResponseEntity<Location> addLocation(@RequestBody Location location, @RequestHeader("email") String email,
+            @RequestHeader("password") String password) {
         try {
             service.checkAdmin(email, password);
             return new ResponseEntity<Location>(service.addLocation(location), HttpStatus.OK);
@@ -220,6 +221,19 @@ public class AdminController {
             return new ResponseEntity<Attendance>(savedAttendance, HttpStatus.OK);
         } catch (invalidCredentialsException e) {
             return new ResponseEntity<Attendance>(attendance, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @CrossOrigin(origins = "https://044db60.netsolhost.com")
+    @PostMapping("/location/{id}/{num}/{dibEmail}")
+    public ResponseEntity<Location> editLocation(@PathVariable int id, @PathVariable int num,
+            @PathVariable String dibEmail, @RequestHeader("email") String email,
+            @RequestHeader("password") String password) {
+        try {
+            service.checkAdmin(email, password);
+            return new ResponseEntity<Location>(service.editLocation(id, num, dibEmail), HttpStatus.OK);
+        } catch (invalidCredentialsException e) {
+            return new ResponseEntity<Location>(new Location(), HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -367,5 +381,5 @@ public class AdminController {
             return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
 }
