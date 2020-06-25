@@ -4010,7 +4010,9 @@ function prepCSVRow(arr, columnCount, initial) {
 }
 
 
-
+$('#refreshDashboardBtn').click(function(event) {
+    $('#dashboardBtn').click();
+});
 
 
 
