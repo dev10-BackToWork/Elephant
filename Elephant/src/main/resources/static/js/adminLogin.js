@@ -2640,6 +2640,12 @@ var attendanceLocation;
         var cityNameField;
         var maxOccupancyField;
         var distributionEmailField;
+        var locationObj = {
+                    "locationId": " ",
+                    "cityName": " ",
+                    "maxOccupancy": " ",
+                    "distributionEmail": " "
+                };
         
         $.ajax({
              type: 'GET',
@@ -2653,44 +2659,44 @@ var attendanceLocation;
                 cityNameField = data.cityName;
                 maxOccupancyField = data.maxOccupancy;
                 distributionEmailField = data.distributionEmail;
-             },
-             error: function(data) {
-             }
-         });
-         
-         var locationObj = {
+                
+                locationObj = {
                     "locationId": attendanceLocation,
                     "cityName": cityNameField,
                     "maxOccupancy": maxOccupancyField,
                     "distributionEmail": distributionEmailField
-            };
-        
-        console.log(locationObj);
+                };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/coming",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify({
+                        "isAttending": true,
+                        "isAuthorized": false,
+                        location : locationObj,
+                        user: user
+                    }),
 
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify({
-                "isAttending": true,
-                "isAuthorized": false,
-                location : locationObj,
-                user: user
-            }),
+                    headers: {
+                        "email": adminEmail,
+                        "password": adminPassword
+                    },
+                    success: function (response, status) {
+                        $("#survey-not-authorized").show();
+                        console.log(response);
+                    },
+                    error: function (err) {
+                        console.log(err);
 
-        headers: {
-            "email": adminEmail,
-            "password": adminPassword
-        },
-        success: function (response, status) {
-            $("#survey-not-authorized").show();
-            console.log(response);
-        },
-        error: function (err) {
-            console.log(err);
+                    }
+                });
+                
+             },
+             error: function(data) {
+             }
+         });
 
-        }
-    });
 }
 //var startTime;
 
@@ -2706,6 +2712,12 @@ var attendanceLocation;
         var cityNameField;
         var maxOccupancyField;
         var distributionEmailField;
+        var locationObj = {
+                    "locationId": " ",
+                    "cityName": " ",
+                    "maxOccupancy": " ",
+                    "distributionEmail": " "
+                };
         
         $.ajax({
              type: 'GET',
@@ -2719,45 +2731,47 @@ var attendanceLocation;
                 cityNameField = data.cityName;
                 maxOccupancyField = data.maxOccupancy;
                 distributionEmailField = data.distributionEmail;
-             },
-             error: function(data) {
-             }
-         });
-         
-         var locationObj = {
+              
+                locationObj = {
                     "locationId": attendanceLocation,
                     "cityName": cityNameField,
                     "maxOccupancy": maxOccupancyField,
                     "distributionEmail": distributionEmailField
-            };
+                };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/users/coming",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify({
+                             "isAttending": true,
+                             "isAuthorized": true,
+                             location : locationObj,
+                             user: user
+                    }),
+                    headers: {
+                        "email": adminEmail,
+                        "password": adminPassword
+                    },
+                    success: function (response) {
+                         console.log(response);
+                         $("#survey-authorized").show();
+                         $("#survey-authorized-text").html('You are authorized to come in to the ' + response.location.cityName + ' office today.');
 
-        console.log(locationObj);
+                    },
+                    error: function (err) {
+                        //alert('error' + err);
+                        console.log(err);
+                    }
+                });
+                
+                        
+             },
+             error: function(data) {
+             }
+         });
 
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/api/users/coming",
-            contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify({
-                     "isAttending": true,
-                     "isAuthorized": true,
-                     location : locationObj,
-                     user: user
-                }),
-        headers: {
-            "email": adminEmail,
-            "password": adminPassword
-        },
-        success: function (response) {
-             console.log(response);
-             $("#survey-authorized").show();
-             $("#survey-authorized-text").html('You are authorized to come in to the ' + response.location.cityName + ' office today.');
-           
-        },
-        error: function (err) {
-            //alert('error' + err);
-            console.log(err);
-        }
-        });
+
     }
 
     deleteUser = function(userId) {  
