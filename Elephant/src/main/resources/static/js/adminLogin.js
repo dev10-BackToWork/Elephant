@@ -2236,9 +2236,12 @@ $('#dashboardBtn').click(function (event) {
 
         if(roleIdField == 1) {
             roleNameField = "ROLE_ADMIN";
-        } else {
-            roleIdField = 2;
+        } else if (roleIdField == 2) {
             roleNameField = "ROLE_USER";
+        } else if (roleIdField == 3) {
+            roleNameField = "ROLE_SUPERADMIN"
+        } else {
+            console.log("The role id/designation is not recognized. Additional roles may have been added to the database. Search the adminLogin.js file for this message and add statements for new roles, if applicable.");
         }
 
         if (firstNameField.length < 1 || firstNameField.length > 25) {
