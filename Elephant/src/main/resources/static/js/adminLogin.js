@@ -466,6 +466,41 @@ function clearLogin() {
         $('#time-success').hide();
         $("#loginErr").hide();  
         
+        $('#userLocationOption').empty();
+        
+        $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/api/users/locations',
+                headers: {
+                    "email": adminEmail,
+                    "password": adminPassword
+                },
+                success: function (data) {
+                   console.log(data);
+                   allLocations = data;
+                   console.log(allLocations);
+                   
+                    $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", locationId)
+                                .text(userLocation));
+                    $.each(data, function(index, datum) {
+                        //console.log(data);
+                        //locationName = data[index].cityName;
+                        //console.log(locationName);
+                        if (datum.cityName !== userLocation) {
+                           $('#userLocationOption')
+                            .append($("<option></option>")
+                                .attr("value", datum.locationId)
+                                .text(datum.cityName));
+                        }
+                    });
+                },
+                error: function (http) {
+                console.log("An error resulted when trying to get locations.")
+                }
+            });
+        
     });
     
     $('#adminGuidelinesBtn').click(function (event) {
@@ -3074,7 +3109,7 @@ var attendanceLocation;
                                 .text(userLocation));
                     $.each(data, function(index, datum) {
                         //console.log(data);
-                        locationName = data[index].cityName;
+                        //locationName = data[index].cityName;
                         //console.log(locationName);
                         if (datum.cityName !== userLocation) {
                            $('#userLocationOption')
