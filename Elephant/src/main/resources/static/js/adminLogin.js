@@ -323,7 +323,7 @@ function clearLogin() {
                         if (datum.cityName !== userLocation) {
                            $('#userLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -553,7 +553,7 @@ $('#dashboardBtn').click(function (event) {
                         if (datum.cityName !== adminLocationName) {
                            $('#dashLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -922,7 +922,7 @@ $('#dashboardBtn').click(function (event) {
                         if (datum.cityName !== adminLocationName) {
                         $('#employeeLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -1455,7 +1455,7 @@ $('#dashboardBtn').click(function (event) {
                         if (datum.cityName !== adminLocationName) {
                             $('#reportLocationOption')
                                 .append($("<option></option>")
-                                    .attr("value", index + 1)
+                                    .attr("value", datum.locationId)
                                     .text(datum.cityName));
                         }
                     });
@@ -1530,7 +1530,7 @@ $('#dashboardBtn').click(function (event) {
                             if (datum.cityName !== adminLocationName) {
                                $('#locationAddUser')
                                 .append($("<option></option>")
-                                    .attr("value", index + 1)
+                                    .attr("value", datum.locationId)
                                     .text(datum.cityName));
                             }
                         });
@@ -1608,7 +1608,7 @@ $('#dashboardBtn').click(function (event) {
                         if (datum.cityName !== adminLocationName) {
                            $('#locationAddGuest')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -1664,7 +1664,7 @@ $('#dashboardBtn').click(function (event) {
                         if (datum.cityName !== adminLocationName) {
                         $('#officeLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -1820,6 +1820,23 @@ $('#dashboardBtn').click(function (event) {
                 success: function(data) {
                     console.log(data);
                     $("#locationBtn").click();
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8080/api/users/locations',
+                        headers: {
+                            'email': adminEmail,
+                            'password': adminPassword
+                        },
+                        success: function (data) {
+                           console.log("NEW DATA" + data);
+                           allLocations = data;
+                           console.log(allLocations);
+                        },
+                        error: function (http) {
+                            console.log(http);
+                            console.log('An error resulted when attempting to retrieve locations.');
+                        }
+                    });
                 },
                 error: function(http) {
                     console.log(http);
@@ -1878,14 +1895,35 @@ $('#dashboardBtn').click(function (event) {
         var lastNameField = $('#lastNameAddUser').val();
         var emailField = $('#emailAddUser').val();
         var locationIdField = $('#locationAddUser').val();
-        var cityNameField = allLocations[locationId - 1].cityName;
-        var timeIncrementField = allLocations[locationId - 1].timeIncrement;
-        var maxOccupancyField = allLocations[locationId - 1].maxOccupancy;
-        var beginningTimeField = allLocations[locationId - 1].beginningTime;
-        var endTimeField = allLocations[locationId - 1].endTime;
+//        var cityNameField = allLocations[locationId].cityName;
+//        var timeIncrementField = allLocations[locationId].timeIncrement;
+//        var maxOccupancyField = allLocations[locationId].maxOccupancy;
+//        var beginningTimeField = allLocations[locationId].beginningTime;
+//        var endTimeField = allLocations[locationId].endTime;
         var roleIdField = $('#roleAddUser').val();
         var roleNameField;
         var isActiveField = true;
+        
+        var cityNameField;
+        var maxOccupancyField;
+        var distributionEmailField;
+        
+        $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + locationIdField,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                console.log(data);
+                cityNameField = data.cityName;
+                maxOccupancyField = data.maxOccupancy;
+                distributionEmailField = data.distributionEmail;
+             },
+             error: function(data) {
+             }
+         });
         
         if(roleIdField == 1) {
             roleNameField = "ROLE_ADMIN";
@@ -1924,10 +1962,8 @@ $('#dashboardBtn').click(function (event) {
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
-                    "timeIncrement": timeIncrementField,
                     "maxOccupancy": maxOccupancyField,
-                    "beginningTime": beginningTimeField,
-                    "endTime": endTimeField
+                    "distributionEmail": distributionEmailField
             },
                 "role": {
                     "roleId": roleIdField,
@@ -1983,11 +2019,32 @@ $('#dashboardBtn').click(function (event) {
         var locationIdField = $('#locationAddGuest').val();
         var host = $('#add-guest-visiting').val();
         var misc = $('#add-guest-misc').val();
-        var cityNameField = allLocations[locationId - 1].cityName;
-        var timeIncrementField = allLocations[locationId - 1].timeIncrement;
-        var maxOccupancyField = allLocations[locationId - 1].maxOccupancy;
-        var beginningTimeField = allLocations[locationId - 1].beginningTime;
-        var endTimeField = allLocations[locationId - 1].endTime;
+//        var cityNameField = allLocations[locationId].cityName;
+//        var timeIncrementField = allLocations[locationId].timeIncrement;
+//        var maxOccupancyField = allLocations[locationId].maxOccupancy;
+//        var beginningTimeField = allLocations[locationId].beginningTime;
+//        var endTimeField = allLocations[locationId].endTime;
+        var cityNameField;
+        var maxOccupancyField;
+        var distributionEmailField;
+        
+        $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + locationIdField,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                console.log(data);
+                cityNameField = data.cityName;
+                maxOccupancyField = data.maxOccupancy;
+                distributionEmailField = data.distributionEmail;
+             },
+             error: function(data) {
+             }
+         });
+
         var roleIdField = 4;
         var roleNameField = "ROLE_GUEST";
         var isActiveField = true;
@@ -2055,10 +2112,8 @@ $('#dashboardBtn').click(function (event) {
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
-                    "timeIncrement": timeIncrementField,
                     "maxOccupancy": maxOccupancyField,
-                    "beginningTime": beginningTimeField,
-                    "endTime": endTimeField
+                    "distributionEmail": distributionEmailField,
             },
                 "role": {
                     "roleId": roleIdField,
@@ -2226,13 +2281,34 @@ $('#dashboardBtn').click(function (event) {
         var lastNameField = $('#edit-last-name').val();
         var emailField = $('#edit-email').val();
         var locationIdField = $('#edit-location').val();
-        var cityNameField = allLocations[locationIdField - 1].cityName;
-        var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
-        var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
-        var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
-        var endTimeField = allLocations[locationIdField - 1].endTime;
+//        var cityNameField = allLocations[locationIdField - 1].cityName;
+//        var timeIncrementField =  allLocations[locationIdField - 1].timeIncrement;
+//        var maxOccupancyField = allLocations[locationIdField - 1].maxOccupancy;
+//        var beginningTimeField = allLocations[locationIdField - 1].beginningTime;
+//        var endTimeField = allLocations[locationIdField - 1].endTime;
         var roleIdField = $('#edit-role').val();
         var roleNameField;
+        
+        var cityNameField;
+        var maxOccupancyField;
+        var distributionEmailField;
+        
+        $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + locationIdField,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                console.log(data);
+                cityNameField = data.cityName;
+                maxOccupancyField = data.maxOccupancy;
+                distributionEmailField = data.distributionEmail;
+             },
+             error: function(data) {
+             }
+         });
 
         if(roleIdField == 1) {
             roleNameField = "ROLE_ADMIN";
@@ -2272,10 +2348,8 @@ $('#dashboardBtn').click(function (event) {
                 "location": {
                     "locationId": locationIdField,
                     "cityName": cityNameField,
-                    "timeIncrement": timeIncrementField,
                     "maxOccupancy": maxOccupancyField,
-                    "beginningTime": beginningTimeField,
-                    "endTime": endTimeField
+                    "distributionEmail": distributionEmailField
                 },
                 "role": {
                     "roleId": roleIdField,
@@ -2561,7 +2635,36 @@ var attendanceLocation;
     function notAuthorized() {
         console.log(user);
         attendanceLocation = $('#userLocationOption').val();
-        var locationObj = allLocations[(attendanceLocation - 1)];
+        //var locationObj = allLocations[(attendanceLocation - 1)];
+        
+        var cityNameField;
+        var maxOccupancyField;
+        var distributionEmailField;
+        
+        $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + attendanceLocation,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                console.log(data);
+                cityNameField = data.cityName;
+                maxOccupancyField = data.maxOccupancy;
+                distributionEmailField = data.distributionEmail;
+             },
+             error: function(data) {
+             }
+         });
+         
+         var locationObj = {
+                    "locationId": attendanceLocation,
+                    "cityName": cityNameField,
+                    "maxOccupancy": maxOccupancyField,
+                    "distributionEmail": distributionEmailField
+            };
+        
         console.log(locationObj);
 
         $.ajax({
@@ -2597,8 +2700,37 @@ var attendanceLocation;
         attendanceLocation = $('#userLocationOption').val();
         console.log(attendanceLocation);
         
-        console.log(allLocations[attendanceLocation - 1]);
-        var locationObj = allLocations[(attendanceLocation - 1)];
+//        console.log(allLocations[attendanceLocation - 1]);
+//        var locationObj = allLocations[(attendanceLocation - 1)];
+
+        var cityNameField;
+        var maxOccupancyField;
+        var distributionEmailField;
+        
+        $.ajax({
+             type: 'GET',
+             url: 'http://localhost:8080/api/admin/location/' + attendanceLocation,
+             headers: {
+                 'email': adminEmail,
+                 'password': adminPassword
+             },
+             success: function(data) {
+                console.log(data);
+                cityNameField = data.cityName;
+                maxOccupancyField = data.maxOccupancy;
+                distributionEmailField = data.distributionEmail;
+             },
+             error: function(data) {
+             }
+         });
+         
+         var locationObj = {
+                    "locationId": attendanceLocation,
+                    "cityName": cityNameField,
+                    "maxOccupancy": maxOccupancyField,
+                    "distributionEmail": distributionEmailField
+            };
+
         console.log(locationObj);
 
         $.ajax({
@@ -2761,11 +2893,11 @@ var attendanceLocation;
                 $.each(data, function(index, datum) {
                     $('#edit-location')
                         .append($("<option></option>")
-                            .attr("value", index + 1)
+                            .attr("value", datum.locationId)
                             .text(datum.cityName));
 
                     if(datum.cityName == currentCityName) {
-                        currentCityIndex = index + 1;
+                        currentCityIndex = datum.locationId;
                     }
                 });
 
@@ -2933,7 +3065,7 @@ var attendanceLocation;
                         if (datum.cityName !== userLocation) {
                            $('#userLocationOption')
                             .append($("<option></option>")
-                                .attr("value", index + 1)
+                                .attr("value", datum.locationId)
                                 .text(datum.cityName));
                         }
                     });
@@ -3829,7 +3961,7 @@ var attendanceLocationId;
         console.log('date in get empl function: ' + btnIdString);
         var specifiedDate = btnIdString;
         //userId = selectedUserId;
-        console.log(selectedUserId);
+        console.log("SELECTED USER ID: " + selectedUserId);
         $('#isAttendingRows').empty();
         
         var reportAttendanceRow = $('.reportAttendanceRow');
