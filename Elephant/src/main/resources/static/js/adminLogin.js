@@ -1962,8 +1962,10 @@ $('#dashboardBtn').click(function (event) {
         
         if(roleIdField == 1) {
             roleNameField = "ROLE_ADMIN";
-        } else {
+        } else if (roleIdField == 2){
             roleNameField = "ROLE_USER";
+        } else if (roleIdField == 3){
+            roleNameField = "ROLE_SUPERADMIN";
         };
 
         if (firstNameField.length < 1 || firstNameField.length > 25) {
