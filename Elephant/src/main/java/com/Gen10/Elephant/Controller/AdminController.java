@@ -306,6 +306,7 @@ public class AdminController {
             @RequestHeader("email") String email, @RequestHeader("password") String password) {
         try {
             service.checkAdmin(email, password);
+            System.out.println(id + "  " + date);
             return new ResponseEntity<List<Attendance>>(service.generateAttendanceReport(id, date), HttpStatus.OK);
         } catch (invalidCredentialsException e) {
             String message = "There was an error while generating the attendance report.";
