@@ -65,7 +65,7 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             + "AND u.roleId <> 4\n"
             + "AND a.isAttending = 1\n"
             + "AND a.isAuthorized = 0\n"
-            + "AND u.locationId = ?1\n"
+            + "AND a.locationId = ?1\n"
             + "ORDER BY u.lastName;", nativeQuery = true)
     List<User> findFlaggedUsersByLocation(int id);
     
