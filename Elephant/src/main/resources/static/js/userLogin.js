@@ -21,6 +21,8 @@ $(document).ready(function () {
     $('#time-success').hide();
     $("#loginErr").hide();
     $('#loadingMsg').hide();
+    $('#userNavbarFull').hide();
+    $('#userLoginNav').show();
 });
 
 $("#submitLoginButton").click(function (e) {
@@ -85,6 +87,8 @@ function checkChange() {
                 //$("#screener-div").show();
                 $("#login").hide();
                 $("#resetPassword").hide();
+                $('#userLoginNav').hide();
+                $('#userNavbarFull').show();
 
             } else if (response === false) {
                 //console.log('changed password is ' + response + ' please change password');
@@ -206,6 +210,8 @@ function saveNewPassword() {
             console.log(response);
             $("#passwordSuccess").show('success');
             $("#resetPassword").hide();
+            $('#userNavbarFull').show();
+            $('#userLoginNav').hide();
            
         },
         error: function (err) {
@@ -481,3 +487,19 @@ function showGuidelines() {
     }
 };
 
+    $('#userLogoutBtn').click(function (event) {
+        $("#resetPassword").hide();
+        $("#screener-div").hide();
+        $("#survey-div").hide();
+        $("#screener-bye").hide();
+        $("#survey-not-authorized").hide();
+        $("#survey-authorized").hide();
+        $("#arrival-container").hide();
+        $("#departure-container").hide();
+        $('#time-success').hide();
+        $("#loginErr").hide();
+        $('#loadingMsg').hide();
+        $('#userNavbarFull').hide();
+        $('#userLoginNav').show();
+        location.reload();
+    });
