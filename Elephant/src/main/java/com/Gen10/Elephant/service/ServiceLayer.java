@@ -49,7 +49,8 @@ public class ServiceLayer {
 
     private LocalDate lastCleanDate = LocalDate.now();
 
-    private String emailPW = "gwgdtdanxxqwrlts";
+    private String sendEmail = "healthapporeply@genesis10.com";
+    private String emailPW = "G10p@$$!";
 
     // **********
     // Attendance
@@ -249,7 +250,7 @@ public class ServiceLayer {
         User dbUser = usersRepo.save(user);
 
         if (dbUser != null) {
-            Mailer.send("noreply.dev10@gmail.com", emailPW, user.getEmail(), "Account Created", "<p>Hello "
+            Mailer.send(sendEmail, emailPW, dbUser.getEmail(), "Account Created", "<p>Hello "
                     + dbUser.getFirstName()
                     + ", </p><p> &emsp; A new account has been created for you with the username: <span style=\"text-decoration: none; color: inherit;\"><strong>"
                     + dbUser.getEmail() + "</strong></span>" + "<br/> &emsp; Your temporary password is: <strong>"
@@ -319,7 +320,6 @@ public class ServiceLayer {
 
     public Attendance markAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
 
         if (attendance.getIsAttending() == true && attendance.getIsAuthorized() == false) {
@@ -327,7 +327,7 @@ public class ServiceLayer {
             adminEmails.add("hr@genesis10.com");
             adminEmails.add(locationRepo.getDistributionEmailByLocation(attendance.getLocation().getLocationId()));
             for (String email : adminEmails) {
-                Mailer.send("noreply.dev10@gmail.com", emailPW, email,
+                Mailer.send(sendEmail, emailPW, email,
                         "Authorization Pending for " + attendance.getUser().getFirstName() + " "
                                 + attendance.getUser().getLastName(),
                         "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName()
@@ -342,7 +342,7 @@ public class ServiceLayer {
         if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
             List<String> adminEmails = usersRepo.getAdminEmailsByLocation(attendance.getLocation().getLocationId());
             for (String email : adminEmails) {
-                Mailer.send("noreply.dev10@gmail.com", emailPW, email, "Max Capacity Warning",
+                Mailer.send(sendEmail, emailPW, email, "Max Capacity Warning",
                         "<p> More people than currently recommended by your max capacity of <strong>"
                                 + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
                                 + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
@@ -372,7 +372,7 @@ public class ServiceLayer {
         if (usersInOffice.size() == location.getMaxOccupancy() + 1) {
             List<String> adminEmails = usersRepo.getAdminEmailsByLocation(attendance.getLocation().getLocationId());
             for (String email : adminEmails) {
-                Mailer.send("noreply.dev10@gmail.com", emailPW, email, "Max Capacity Warning",
+                Mailer.send(sendEmail, emailPW, email, "Max Capacity Warning",
                         "<p> More people than currently recommended by your max capacity of <strong>"
                                 + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
                                 + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
@@ -456,7 +456,7 @@ public class ServiceLayer {
         User savedUser = usersRepo.save(existingUser);
 
         if (savedUser != null) {
-            Mailer.send("noreply.dev10@gmail.com", emailPW, existingUser.getEmail(),
+            Mailer.send(sendEmail, emailPW, existingUser.getEmail(),
                     "Reset Password for " + existingUser.getEmail(),
                     "<p>Hi " + savedUser.getFirstName()
                             + ",</p>&emsp; We received a password reset request for your account from your branch manager."
@@ -490,7 +490,7 @@ public class ServiceLayer {
 
                 if (savedUser.getRole().getName().equals("ROLE_SUPERADMIN")
                         || savedUser.getRole().getName().equals("ROLE_ADMIN")) {
-                    Mailer.send("noreply.dev10@gmail.com", emailPW, user.getEmail(), "Account Ready", "<p>Hi "
+                    Mailer.send(sendEmail, emailPW, user.getEmail(), "Account Ready", "<p>Hi "
                             + user.getFirstName()
                             + ",</p>&emsp; Your account is now ready to use at https://044db60.netsolhost.com/adminLogin.html."
                             + "<br/>&emsp; Your username is: <strong>" + savedUser.getEmail() + "</strong></p>"
@@ -498,7 +498,7 @@ public class ServiceLayer {
                             + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
 
                 } else {
-                    Mailer.send("noreply.dev10@gmail.com", emailPW, user.getEmail(), "Account Ready", "<p>Hi "
+                    Mailer.send(sendEmail, emailPW, user.getEmail(), "Account Ready", "<p>Hi "
                             + user.getFirstName()
                             + ",</p>&emsp; Your account is now ready to use at https://044db60.netsolhost.com/index.html."
                             + "<br/>&emsp; Your username is: <strong>" + savedUser.getEmail() + "</strong></p>"
