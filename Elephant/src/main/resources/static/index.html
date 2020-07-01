@@ -28,12 +28,27 @@
     <body>
         <main>
             
-            <!-- Navigation -->
-            <nav class="navbar navbar-expand-sm navbar-light static-top">
+            <nav class="navbar navbar-expand-sm navbar-light static-top" id="userLoginNav">
                 <div class="container">
-                    <a href="#" class="navbar-brand">
+                    <a href="/" class="navbar-brand">
+                        <img class="logo" src="images/logo.png" alt="Genesis10">
+                    </a>
+                </div>
+            </nav>
+            
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-sm navbar-light static-top" id="userNavbarFull">
+                <div class="container">
+                    <a href="/" class="navbar-brand">
                         <img class="logo" src="../images/logo.png" alt="Genesis10">
                     </a>
+                    <div class="collapse navbar-collapse" id="userNavbarResponsive">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" id="userLogoutBtn">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
 
