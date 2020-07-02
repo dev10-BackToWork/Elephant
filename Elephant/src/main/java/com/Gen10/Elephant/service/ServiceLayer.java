@@ -52,6 +52,15 @@ public class ServiceLayer {
     private String sendEmail = "healthapporeply@genesis10.com";
     private String emailPW = "G10p@$$!";
 
+    /* FOR LAUNCH
+    Change DB info
+    add .PlusDays(1) to mark attendance save, search, and modify
+    ^ to mark guest attendance
+    ^ to date range report
+    Enable Mailer
+    Change ajax routes
+    */
+
     // **********
     // Attendance
     public List<Attendance> findAllAttendance() {
@@ -256,7 +265,7 @@ public class ServiceLayer {
                     + dbUser.getEmail() + "</strong></span>" + "<br/> &emsp; Your temporary password is: <strong>"
                     + dbUser.getDefaultPW()
                     + "</p><p style=\"color:red\"></strong> &emsp; Note that you will be required to change your password upon logging in for the first time.</p>"
-                    + "<p>This is an automatically generated email from  <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>"
+                    + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>"
                     );
         }
         return dbUser;
@@ -333,7 +342,7 @@ public class ServiceLayer {
                         "<p>" + attendance.getUser().getFirstName() + " " + attendance.getUser().getLastName()
                                 + " has selected 'yes' for one of the authorization questions. <br/> Please follow up with them at "
                                 + attendance.getUser().getEmail() + " for more information.</p>"
-                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
             }
         }
 
@@ -347,7 +356,7 @@ public class ServiceLayer {
                                 + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
                                 + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
                                 + "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>"
-                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
             }
         }
 
@@ -377,7 +386,7 @@ public class ServiceLayer {
                                 + location.getMaxOccupancy() + "</strong> are currently signed up to come in today."
                                 + "<br/> Please take any necessary actions to ensure the safety of the employees at your location."
                                 + "<br/> You can view the people currently coming into the office by signing into your account and scrolling down to the <strong>\"Today's Attendance\"<strong section</p>"
-                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                                + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
             }
         }
 
@@ -461,7 +470,7 @@ public class ServiceLayer {
                     "<p>Hi " + savedUser.getFirstName()
                             + ",</p>&emsp; We received a password reset request for your account from your branch manager."
                             + "<br/>&emsp; Your new password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>"
-                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
         }
 
         return savedUser;
@@ -495,7 +504,7 @@ public class ServiceLayer {
                             + ",</p>&emsp; Your account is now ready to use at https://044db60.netsolhost.com/adminLogin.html."
                             + "<br/>&emsp; Your username is: <strong>" + savedUser.getEmail() + "</strong></p>"
                             + "<br/>&emsp; Your temporary password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>"
-                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
 
                 } else {
                     Mailer.send(sendEmail, emailPW, user.getEmail(), "Account Ready", "<p>Hi "
@@ -503,7 +512,7 @@ public class ServiceLayer {
                             + ",</p>&emsp; Your account is now ready to use at https://044db60.netsolhost.com/index.html."
                             + "<br/>&emsp; Your username is: <strong>" + savedUser.getEmail() + "</strong></p>"
                             + "<br/>&emsp; Your temporary password is: <strong>" + savedUser.getDefaultPW() + "</strong></p>"
-                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Back-To-Work <strong></span> application.</p>");
+                            + "<p>This is an automatically generated email from the <span style=\"color: rgb(228,112,31)\"><strong> Gen10 Health App</strong></span>.</p>");
                 }
             }
             return true;
