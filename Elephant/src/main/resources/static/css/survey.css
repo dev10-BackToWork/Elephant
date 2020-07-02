@@ -1,9 +1,5 @@
    /* toggle button syntax  */
-.container {
-    margin-right: 40px !important;   
-}
-   
-   .toggle.android { 
+.toggle.android { 
   border-radius: 0px;
 }
 .toggle.android .toggle-handle { 
