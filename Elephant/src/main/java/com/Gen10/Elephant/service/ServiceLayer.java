@@ -52,15 +52,6 @@ public class ServiceLayer {
     private String sendEmail = "healthapporeply@genesis10.com";
     private String emailPW = "G10p@$$!";
 
-    /* FOR LAUNCH
-    Change DB info
-    add .PlusDays(1) to mark attendance save, search, and modify
-    ^ to mark guest attendance
-    ^ to date range report
-    Enable Mailer
-    Change ajax routes
-    */
-
     // **********
     // Attendance
     public List<Attendance> findAllAttendance() {
@@ -361,6 +352,7 @@ public class ServiceLayer {
         }
 
         if (todaysAttendance != null) {
+            todaysAttendance.setAttendanceDate(todaysAttendance.getAttendanceDate());
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             todaysAttendance.setIsAuthorized(attendance.getIsAuthorized());
             todaysAttendance.setVisitingHost(attendance.getVisitingHost());
@@ -391,6 +383,7 @@ public class ServiceLayer {
         }
 
         if (todaysAttendance != null) {
+            todaysAttendance.setAttendanceDate(todaysAttendance.getAttendanceDate());
             todaysAttendance.setIsAttending(attendance.getIsAttending());
             return attendanceRepo.save(todaysAttendance);
         } else {
