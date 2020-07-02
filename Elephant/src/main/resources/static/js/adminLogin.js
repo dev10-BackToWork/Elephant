@@ -4224,7 +4224,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
         }
     });
 
-var date;
+
 
     $.ajax({
         type: 'GET',
@@ -4309,7 +4309,7 @@ var date;
     
    
   //export to CSV
- $("#export-" + date).click(function() {
+ $("#export").click(function() {
   var titles = [];
   var data = [];
 
