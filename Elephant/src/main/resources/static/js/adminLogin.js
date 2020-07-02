@@ -4224,6 +4224,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
         }
     });
 
+var date;
 
     $.ajax({
         type: 'GET',
@@ -4247,9 +4248,9 @@ function getEmployeesByDateRange(attendanceLocationId) {
                 var reportTitle = date;
                 //console.log(reportDate);
                 var reportSummaryTable = '<h5 class="table-header" id="reportSummaryTableHeader">'+ locationName +' Office Attendance for '+ reportTitle+'</h5>';
-                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export">Export To CSV</button></div>';
+//                reportSummaryTable += '<div class="float-right"><button class="btn btn-primary export" id="export-'+ date +'">Export To CSV</button></div>';
                 reportSummaryTable += '<div class="col-12">';
-                reportSummaryTable += '<table class="table table-striped" style="table-layout:fixed;" id="reportSummary' + date + 'Table">';
+                reportSummaryTable += '<table class="table table-striped dataTable" style="table-layout:fixed;" id="reportSummary' + date + 'Table">';
                 reportSummaryTable += '<thead>';
                 reportSummaryTable += '<tr>';
                 reportSummaryTable += '<th>First Name</th>';
@@ -4308,7 +4309,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
     
    
   //export to CSV
- $("#export").click(function() {
+ $("#export-" + date).click(function() {
   var titles = [];
   var data = [];
 

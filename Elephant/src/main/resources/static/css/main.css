@@ -16,7 +16,7 @@ main {
 }
 
 .row {
-    max-width: 100%;
+/*    max-width: 100%;*/
     /* display: -ms-flexbox; */
     /* display: flex;
     -ms-flex-wrap: wrap; */
@@ -218,4 +218,17 @@ hr#dateAttendanceTable {
 
 #login {
     align-content: center;
+}
+
+#guidelinesDiv{
+    width: 92vw;
+}
+
+
+.form-label-group {
+    margin: 5px 0px 10px 0px;
+}
+
+label {
+    margin-bottom: 3px;
 }
