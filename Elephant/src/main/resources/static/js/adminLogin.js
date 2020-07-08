@@ -4163,18 +4163,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
 
             if (response.length > 0) {
                 $('#export-btn').show();
-                //console.log("There are no attendance records for the date range selected.");
-//                    $("#attendanceNameTableHeader").show();
-//                    $("#attendanceNameTableHeader").html(startDate + ' through ' + endDate);
-//                    $("#attendanceTableHeader").empty();
-//                    $("#attendanceTableHeader").hide();
-//                    $("#attendance-message").show();
-//                    $("#attendance-message").text("There are no attendance records on the date selected.");
-//                    $("#isAttendingTable").hide();
-                // var dateAttendanceTableDiv;
-//                var exportBtn = '<button class="btn btn-primary float-right" id="export-btn">Export To CSV</button>';
-//                $('#dateSummaryTableDiv').prepend(exportBtn);
-                
+
                 var dateAttendanceTable = '<h5 class="table-header" id="dateAttendanceSummaryTableHeader"> Summary of ' + locationName + ' Office Attendance<br>' + startDate + ' through ' + endDate + '</h5>';
                 dateAttendanceTable += '<div class="col-12">';
 //              dateAttendanceTable += '<button class="btn btn-primary" id="export">Export To CSV</button>';
@@ -4199,13 +4188,14 @@ function getEmployeesByDateRange(attendanceLocationId) {
                         var firstName = response[i].firstName;
                         var lastName = response[i].lastName;
                         var userEmail = response[i].email;
-                        var userLocation = response[i].location.cityName;
-
+                        var userLocation = response[i].location.cityName.slice(4,20);
+                       // locationName.slice(4, 20);
+                        
                         var dateSummaryRow = '<tr>';
                         dateSummaryRow += '<td class="data-summary-row">' + firstName + '</td>';
                         dateSummaryRow += '<td class="data-summary-row">' + lastName + '</td>';
                         dateSummaryRow += '<td class="data-summary-row">' + userEmail + '</td>';
-                        dateSummaryRow += '<td class="data-summary-row">' + locationName + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + locationName.slice(4,20) + '</td>';
                         dateSummaryRow += '<td class="data-summary-row">' + userLocation + '</td>';
                         dateSummaryRow += '</tr>';
 
@@ -4291,7 +4281,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
                         lastName = userObj.lastName;
                         email = userObj.email;
                         location = userObj.location.cityName;
-
+                        
                         row = '<tr>';
                         row = '<tr>';
                         row += '<td>' + firstName + '</td>';
@@ -4355,7 +4345,7 @@ console.log(reportTitle);
 
 function prepCSVRow(arr, columnCount, initial) {
   var row = ''; // this will hold data
-  var delimeter = ';'; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+  var delimeter = ','; // data slice separator, in excel it's `;`, in usual CSv it's `,`
   var newLine = '\r\n'; // newline separator for CSV row
 
   function splitArray(_arr, _count) {
