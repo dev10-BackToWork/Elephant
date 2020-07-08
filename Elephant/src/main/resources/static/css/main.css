@@ -212,7 +212,7 @@ hr#dateAttendanceTable {
 
 
 .form-label-group {
-    margin: 5px 0px 10px 0px;
+    margin: 10px 0px 10px 0px;
 }
 
 label {
@@ -221,3 +221,7 @@ label {
 #survey-container {
     margin-right: 35px !important;   
 }
+
+/*#export-btn {
+   align-self: right;
+}*/

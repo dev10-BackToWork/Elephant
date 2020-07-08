@@ -287,6 +287,7 @@ function clearLogin() {
         $('#loginErr').hide();
         $('.form-control').val('');
         $('#loadingMsg').hide();
+        
     });
 };
 
@@ -3071,6 +3072,7 @@ var attendanceLocation;
 
     loadReportDiv = function(){
         console.log(adminLocation);
+            $('#export-btn').hide();
             $("#myList").hide();
             $("#noAttendees").hide();
             $("#isAttendingTable").hide();
@@ -3142,6 +3144,7 @@ var attendanceLocation;
 
 function clearLogin() {
     $('#inputEmail').click(function (e) {
+        $('#export-btn').hide();
         $('#loginErr').hide();
         $('.form-control').val('');
     });
@@ -3581,6 +3584,7 @@ var selectedLocationId;
             $("#reportSummaryTableDiv").empty();
             $("#attendanceTableHeader").empty();
             console.log(locationId);
+           
        });
        
         function getUsersByLocation() {
@@ -3995,6 +3999,7 @@ function getAttendance(userId) {
         $("#attendance-message").empty();
         $("#attendanceNameTableHeader").empty();
         $('#guestReportSummaryTableDiv').empty();
+        $('#export-btn').hide();
         //$("#attendanceTableHeader").hide();               
         //$("#attendanceNameTableHeader").empty();
        //$("#attendanceNameTableHeader").hide();
@@ -4157,7 +4162,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
             console.log(response);
 
             if (response.length > 0) {
-
+                $('#export-btn').show();
                 //console.log("There are no attendance records for the date range selected.");
 //                    $("#attendanceNameTableHeader").show();
 //                    $("#attendanceNameTableHeader").html(startDate + ' through ' + endDate);
@@ -4167,16 +4172,20 @@ function getEmployeesByDateRange(attendanceLocationId) {
 //                    $("#attendance-message").text("There are no attendance records on the date selected.");
 //                    $("#isAttendingTable").hide();
                 // var dateAttendanceTableDiv;
+//                var exportBtn = '<button class="btn btn-primary float-right" id="export-btn">Export To CSV</button>';
+//                $('#dateSummaryTableDiv').prepend(exportBtn);
+                
                 var dateAttendanceTable = '<h5 class="table-header" id="dateAttendanceSummaryTableHeader"> Summary of ' + locationName + ' Office Attendance<br>' + startDate + ' through ' + endDate + '</h5>';
                 dateAttendanceTable += '<div class="col-12">';
-                dateAttendanceTable += '<table class="table table-striped" style="table-layout:fixed;" id="dateAttendanceSummaryTable">';
+//              dateAttendanceTable += '<button class="btn btn-primary" id="export">Export To CSV</button>';
+                dateAttendanceTable += '<table class="table table-striped dataTable" style="table-layout:fixed;" id="dateAttendanceSummaryTable">';
                 dateAttendanceTable += '<thead>';
                 dateAttendanceTable += '<tr>';
-                dateAttendanceTable += '<th>First Name</th>';
-                dateAttendanceTable += '<th>Last Name</th>';
-                dateAttendanceTable += '<th>Email</th>';
-                dateAttendanceTable += '<th>Office Attended</th>';
-                dateAttendanceTable += '<th>Home Office</th>';
+                dateAttendanceTable += '<th class="data-summary-th">First Name</th>';
+                dateAttendanceTable += '<th class="data-summary-th">Last Name</th>';
+                dateAttendanceTable += '<th class="data-summary-th">Email</th>';
+                dateAttendanceTable += '<th class="data-summary-th">Office Attended</th>';
+                dateAttendanceTable += '<th class="data-summary-th">Home Office</th>';
                 dateAttendanceTable += '</tr>';
                 dateAttendanceTable += '</thead>';
                 dateAttendanceTable += '<tbody id="dateAttendanceRowTable"></tbody>';
@@ -4193,19 +4202,23 @@ function getEmployeesByDateRange(attendanceLocationId) {
                         var userLocation = response[i].location.cityName;
 
                         var dateSummaryRow = '<tr>';
-                        dateSummaryRow += '<td>' + firstName + '</td>';
-                        dateSummaryRow += '<td>' + lastName + '</td>';
-                        dateSummaryRow += '<td>' + userEmail + '</td>';
-                        dateSummaryRow += '<td>' + locationName + '</td>';
-                        dateSummaryRow += '<td>' + userLocation + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + firstName + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + lastName + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + userEmail + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + locationName + '</td>';
+                        dateSummaryRow += '<td class="data-summary-row">' + userLocation + '</td>';
                         dateSummaryRow += '</tr>';
 
                         $('#dateAttendanceRowTable').append(dateSummaryRow);
 
                     });
+                
+//                
+//                var exportBtn = '<button class="btn btn-primary float-right" id="export-btn">Export To CSV</button>';
+//                $('#dateSummaryTableDiv').prepend(exportBtn);
                 }
-
                 if (response.length <= 0) {
+                    $('#export-btn').hide();
                     $("#attendance-message").show();
                     $("#attendance-message").text("There are no attendance records on the date selected.");
                     //isAttendingRows.append("There are no attendance records for the date selected");
@@ -4309,15 +4322,15 @@ function getEmployeesByDateRange(attendanceLocationId) {
     
    
   //export to CSV
- $("#export").click(function() {
+ $("#export-btn").click(function() {
   var titles = [];
   var data = [];
 
-  $('.dataTable th').each(function() {
+  $('.data-summary-th').each(function() {
     titles.push($(this).text());
   });
 
-  $('.dataTable td').each(function() {
+  $('.data-summary-row').each(function() {
     data.push($(this).text());
   });
   
@@ -4325,7 +4338,7 @@ function getEmployeesByDateRange(attendanceLocationId) {
   var CSVString = prepCSVRow(titles, titles.length, '');
   CSVString = prepCSVRow(data, titles.length, CSVString);
 
-var reportTitle = $("#attendanceTableHeader").text();
+var reportTitle = $("#dateAttendanceSummaryTableHeader").text();
 console.log(reportTitle);
 //Make CSV downloadable
   var downloadLink = document.createElement("a");
