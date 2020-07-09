@@ -38,14 +38,14 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE attendance a SET\n"
+    @Query(value = "UPDATE Attendance a SET\n"
             + "	a.departedEarly = 1\n"
             + "WHERE a.userId = ?1\n"
             + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
     void markAttendanceDepartedEarly(int id);
 
     @Query(value = "SELECT *\n"
-            + "FROM attendance a\n"
+            + "FROM Attendance a\n"
             + "WHERE a.userId = ?1\n"
             + "AND a.attendanceDate = CURDATE();", nativeQuery = true)
     Attendance findAttendanceDepartedEarly(int id);

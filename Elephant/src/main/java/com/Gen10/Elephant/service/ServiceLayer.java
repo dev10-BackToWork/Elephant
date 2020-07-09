@@ -365,7 +365,6 @@ public class ServiceLayer {
 
     public Attendance markGuestAttendance(Attendance attendance) {
         attendance.setAttendanceDate(LocalDate.now());
-        // attendance.setAttendanceDate(LocalDate.now().minusDays(1));
         Attendance todaysAttendance = attendanceRepo.findTodayByUser(attendance.getUser().getUserId(), LocalDate.now());
 
         Location location = attendance.getUser().getLocation();
