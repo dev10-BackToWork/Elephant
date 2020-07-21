@@ -7,7 +7,7 @@ $(document).ready(function () {
 	
 		$.ajax({
 			type: "post",
-			url: "http://localhost:8080/api/users/login",
+			url: "https://back-towork.herokuapp.com/",
 			headers: {
 				"email": email,
 				"password": password
