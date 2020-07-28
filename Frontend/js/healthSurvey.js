@@ -24,11 +24,11 @@ $("#q1No").on("click", function(){
   //send response to database to note that user logged in but will not be coming to office today
 })
 
-// $("#submit-survey-btn").on("click", function (e) {
-//   e.preventDefault();
-//   var response = $(".survey").val();
-//   //var input = $("#item-input");
-//   console.log("survey response: " + response);
+$("#submit-survey-btn").on("click", function (e) {
+  e.preventDefault();
+  var response = $(".survey").val();
+  //var input = $("#item-input");
+  console.log("survey response: " + response);
 
 
-// })
+})

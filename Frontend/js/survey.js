@@ -13,7 +13,7 @@ $(document).ready(function () {
         }
 
       });
-     //$("#q1").trigger("change");
+     $("#q1").trigger("change");
 });
 
 });
