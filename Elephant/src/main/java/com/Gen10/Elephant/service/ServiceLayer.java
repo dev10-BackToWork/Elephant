@@ -50,7 +50,7 @@ public class ServiceLayer {
     private LocalDate lastCleanDate = LocalDate.now();
 
     private String sendEmail = "healthapporeply@genesis10.com";
-    private String emailPW = "G10p@$$!";
+    private String emailPW = "HAnp8!MgBP";
 
     // **********
     // Attendance
